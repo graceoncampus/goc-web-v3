@@ -7,6 +7,7 @@ const App = () => {
     <div className="webTeamMembers">
       <span> Web Team Members! </span>
       <span> Ricky Guo :) </span> 
+      <span> Jasper Edbrooke (: </span>
     </div>
   );
 }
