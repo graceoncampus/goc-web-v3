@@ -12,6 +12,7 @@ const App = () => {
       <span> James Wang :) </span>
       <span> Jasper Edbrooke (: </span>
       <span> Daniel Branda :( </span>
+      <span> Tim Tie :) </span>
       <span> Maggie Yan :)) </span>
     </div>
   );
