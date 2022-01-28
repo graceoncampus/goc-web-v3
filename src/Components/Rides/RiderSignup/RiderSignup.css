@@ -5,3 +5,8 @@
 .time-label-subheading {
   font-size: 0.9rem;
 }
+
+.apartment-radio-text-input {
+  display: flex;
+  flex-direction: row;
+}
