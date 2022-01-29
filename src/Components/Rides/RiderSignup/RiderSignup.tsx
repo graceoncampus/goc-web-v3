@@ -36,7 +36,7 @@ export const RiderSignup = () => {
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'riderTurnaround'}>
-                <Form.Label className={'signup-form-label'}> Turnaround * </Form.Label>
+                <Form.Label className={'signup-form-label'}> Pickup Location * </Form.Label>
                 {
                   Turnarounds.map((turnaroundName: string) => {
                     return (
@@ -44,6 +44,7 @@ export const RiderSignup = () => {
                             name={'rider-turnaround'}
                             type={'radio'}
                             id={`${turnaroundName}-turnaround-radio`}
+                            className={'signup-form-radio-button'}
                             label={
                               <span className={'signup-form-radio-text'}> {turnaroundName} </span>
                             }
@@ -57,7 +58,7 @@ export const RiderSignup = () => {
 
                 <div className={'apartment-radio-text-input'}>
                   <Form.Check
-                      className={'pe-3'}
+                      className={'pe-3 signup-form-radio-button'}
                       name={'rider-turnaround'}
                       type={'radio'}
                       id={'apartment-turnaround-radio'}
@@ -85,6 +86,7 @@ export const RiderSignup = () => {
                   name={'rider-time'}
                   type={'radio'}
                   id={'morning-time-radio'}
+                  className={'signup-form-radio-button'}
                   label={
                     <div className={'time-label'}>
                       <span className={'signup-form-radio-text'}> Morning </span>
@@ -97,6 +99,7 @@ export const RiderSignup = () => {
                   name={'rider-time'}
                   type={'radio'}
                   id={'evening-time-radio'}
+                  className={'signup-form-radio-button'}
                   label={
                     <div className={'time-label'}>
                       <span className={'signup-form-radio-text'}> Evening </span>
@@ -109,6 +112,7 @@ export const RiderSignup = () => {
                   name={'rider-time'}
                   type={'radio'}
                   id={'staying-time-radio'}
+                  className={'signup-form-radio-button'}
                   label={
                     <div className={'time-label'}>
                       <span className={'signup-form-radio-text'}> Morning </span>
@@ -121,6 +125,7 @@ export const RiderSignup = () => {
                   name={'rider-time'}
                   type={'radio'}
                   id={'morning-evening-time-radio'}
+                  className={'signup-form-radio-button'}
                   label={
                     <div className={'time-label'}>
                       <span className={'signup-form-radio-text'}> Morning & Evening </span>

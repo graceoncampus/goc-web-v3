@@ -2,6 +2,7 @@
   Styling specific to our forms - should be unified.
  */
 
+@use 'src/styles/colors';
 @use 'src/styles/font-sizes';
 @use 'src/styles/font-weights';
 @use 'src/styles/dimensions';
@@ -27,4 +28,21 @@
 .signup-form-radio-subheading {
   font-size: font-sizes.$form-radio-subheading;
   font-weight: font-weights.$form-radio-subheading;
+}
+
+/**
+  Component styling.
+ */
+.signup-form-radio-button .form-check-input {
+  border: 1px solid colors.$black;
+  height: dimensions.$radio-normal-height-width;
+  width: dimensions.$radio-normal-height-width;
+}
+
+.signup-form-radio-button .form-check-input:checked {
+  background-color: colors.$white;
+}
+
+.signup-form-radio-button .form-check-input:checked[type=radio] {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23000'/%3e%3c/svg%3e");
 }
