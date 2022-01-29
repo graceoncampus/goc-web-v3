@@ -1,0 +1,11 @@
+/**
+  This file stores commonly used font sizes across components.
+ */
+
+@use '~sass-rem' as rem;
+
+$form-title: rem.convert(36px);
+$form-label: rem.convert(14px);
+$form-radio-text: rem.convert(18px);
+$form-radio-subheading: rem.convert(12px);
+$form-button: rem.convert(18px);

@@ -1,9 +1,24 @@
 /*
-  Global styling to store overrides for bootstrap.
+  Styling overrides/additions for bootstrap.
  */
 
-@import "node_modules/bootstrap/scss/bootstrap";
+@use 'src/styles/colors';
+@use 'src/styles/font-sizes';
+@use 'src/styles/font-weights';
+@use 'src/styles/dimensions';
+@use 'src/styles/misc';
 
-/*
-  TODO: Add color palette as variables here.
+@import 'node_modules/bootstrap/scss/bootstrap';
+
+/**
+  Button variants.
  */
+.btn-submit {
+  background-color: colors.$goc-blue;
+  color: colors.$white;
+  border-radius: misc.$form-button-border-radius;
+  font-size: font-sizes.$form-button;
+  font-weight: font-weights.$form-button;
+  max-width: dimensions.$button-normal-width;
+  width: 100%;
+}

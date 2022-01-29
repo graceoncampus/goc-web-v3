@@ -1,0 +1,14 @@
+/**
+  Rider signup form styling.
+ */
+
+@use '~sass-rem' as rem;
+
+.time-label {
+  line-height: rem.convert(18px);
+}
+
+.apartment-radio-text-input {
+  display: flex;
+  flex-direction: row;
+}
