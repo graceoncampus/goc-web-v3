@@ -1,0 +1,30 @@
+/**
+  Styling specific to our forms - should be unified.
+ */
+
+@use 'src/styles/font-sizes';
+@use 'src/styles/font-weights';
+@use 'src/styles/dimensions';
+
+/**
+  Typography.
+ */
+.signup-form-title {
+  font-size: font-sizes.$form-title;
+  font-weight: font-weights.$form-title;
+}
+
+.signup-form-label {
+  font-size: font-sizes.$form-label;
+  font-weight: font-weights.$form-label;
+}
+
+.signup-form-radio-text {
+  font-size: font-sizes.$form-radio-text;
+  font-weight: font-weights.$form-radio-text;
+}
+
+.signup-form-radio-subheading {
+  font-size: font-sizes.$form-radio-subheading;
+  font-weight: font-weights.$form-radio-subheading;
+}
