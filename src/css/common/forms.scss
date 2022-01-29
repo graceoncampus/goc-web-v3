@@ -35,6 +35,8 @@
  */
 .signup-form-radio-button .form-check-input {
   border: 1px solid colors.$black;
+  height: dimensions.$radio-normal-height-width;
+  width: dimensions.$radio-normal-height-width;
 }
 
 .signup-form-radio-button .form-check-input:checked {
