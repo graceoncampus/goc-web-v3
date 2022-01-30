@@ -14,7 +14,7 @@ export const RiderSignup = () => {
 
   return (
     <Container>
-      <Col className={'mx-auto text-center'} lg={'6'}>
+      <Col className={'mx-auto text-center'} lg={'8'}>
         <span className={'signup-form-title'}>Sign up for a ride to Church!</span>
 
         <Form className={'text-center'}>
@@ -46,7 +46,7 @@ export const RiderSignup = () => {
                             id={`${turnaroundName}-turnaround-radio`}
                             className={'signup-form-radio-button'}
                             label={
-                              <span className={'signup-form-radio-text'}> {turnaroundName} </span>
+                              <span className={'signup-form-radio-text'}> {turnaroundName} Turnaround </span>
                             }
                             onClick={(turnaroundClickEvent) => {
                               setDisableApartmentTurnaroundTextInput(true);
@@ -63,7 +63,7 @@ export const RiderSignup = () => {
                       type={'radio'}
                       id={'apartment-turnaround-radio'}
                       label={
-                        <span className={'signup-form-radio-text'}> Apartment </span>
+                        <span className={'signup-form-radio-text'}> Off&nbsp;Campus </span>
                       }
                       onClick={(apartmentClickEvent) => {
                         setDisableApartmentTurnaroundTextInput(false);
@@ -115,7 +115,7 @@ export const RiderSignup = () => {
                   className={'signup-form-radio-button'}
                   label={
                     <div className={'time-label'}>
-                      <span className={'signup-form-radio-text'}> Morning </span>
+                      <span className={'signup-form-radio-text'}> Staying </span>
                       <div className={'signup-form-radio-subheading'}>9am - 7:30pm</div>
                     </div>
                   }
