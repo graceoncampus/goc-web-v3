@@ -22,17 +22,17 @@ export const RiderSignup = () => {
             <Col lg={'6'}>
               <Form.Group className={'mb-3'} controlId={'riderName'}>
                 <Form.Label className={'signup-form-label'}> Name * </Form.Label>
-                <Form.Control placeholder={'Enter your name'} />
+                <Form.Control placeholder={'Enter your name'} required={true} />
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'riderEmail'}>
                 <Form.Label className={'signup-form-label'}> Email * </Form.Label>
-                <Form.Control type={'email'} placeholder={'Enter your email'} />
+                <Form.Control type={'email'} placeholder={'Enter your email'} required={true} />
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'riderPhoneNumber'}>
                 <Form.Label className={'signup-form-label'}> Phone Number * </Form.Label>
-                <Form.Control placeholder={'Enter your phone number'} />
+                <Form.Control placeholder={'Enter your phone number'} required={true} />
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'riderTurnaround'}>
@@ -51,6 +51,7 @@ export const RiderSignup = () => {
                             onClick={(turnaroundClickEvent) => {
                               setDisableApartmentTurnaroundTextInput(true);
                             }}
+                            required={true}
                         />
                     );
                   })
@@ -74,6 +75,7 @@ export const RiderSignup = () => {
                       type={'text'}
                       size={'sm'}
                       disabled={disableApartmentTurnaroundTextInput}
+                      required={true}
                   />
                 </div>
               </Form.Group>
@@ -93,6 +95,7 @@ export const RiderSignup = () => {
                       <div className={'signup-form-radio-subheading'}>9am - 12:30pm</div>
                     </div>
                   }
+                  required={true}
                 ></Form.Check>
 
                 <Form.Check
