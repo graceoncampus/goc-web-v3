@@ -8,7 +8,8 @@
 @use 'src/styles/dimensions';
 @use 'src/styles/misc';
 
-$font-family-sans-serif: 'Poppins', sans-serif !default;
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+$font-family-sans-serif: 'Poppins', sans-serif;
 
 @import 'node_modules/bootstrap/scss/bootstrap';
 
