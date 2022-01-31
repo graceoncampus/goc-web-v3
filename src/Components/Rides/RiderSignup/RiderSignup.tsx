@@ -2,48 +2,27 @@
  * Rider signup form.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Turnarounds } from '../../../Constants/RidesConstants';
-import { useNavigate } from 'react-router-dom';
 
 import './RiderSignup.scss';
 import 'css/common/forms.scss';
 
 export const RiderSignup = () => {
-  const navigate = useNavigate();
-
   const [
     disableApartmentTurnaroundTextInput,
     setDisableApartmentTurnaroundTextInput,
   ] = useState(true);
-  const [formSubmitted, setFormSubmitted] = useState(false);
-
-  const handleSubmit = () => {
-    // if validated then submit form
-    setFormSubmitted(true);
-  };
-
-  useEffect(() => {
-    let timer = setTimeout(() => {
-      if (formSubmitted) {
-        navigate('/');
-      }
-    }, 4000);
-    return () => clearTimeout(timer);
-  }, [formSubmitted, navigate]);
-
-  if (formSubmitted) {
-    // insert thank you page
-    return <div>Thank You!</div>;
-  }
 
   return (
     <Container>
       <Col className={'mx-auto text-center'} lg={'8'}>
-        <span className={'signup-form-title'}>Sign up for a ride to Church!</span>
+        <span className={'signup-form-title'}>
+          Sign up for a ride to Church!
+        </span>
 
-        <Form className={'text-center'} onSubmit={handleSubmit}>
+        <Form className={'text-center'}>
           <Row className={'text-start gx-5'}>
             <Col lg={'6'}>
               <Form.Group className={'mb-3'} controlId={'riderName'}>
@@ -71,25 +50,29 @@ export const RiderSignup = () => {
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'riderTurnaround'}>
-                <Form.Label className={'signup-form-label'}> Pickup Location * </Form.Label>
-                {
-                  Turnarounds.map((turnaroundName: string) => {
-                    return (
-                        <Form.Check
-                            name={'rider-turnaround'}
-                            type={'radio'}
-                            id={`${turnaroundName}-turnaround-radio`}
-                            className={'signup-form-radio-button'}
-                            label={
-                              <span className={'signup-form-radio-text'}> {turnaroundName} Turnaround </span>
-                            }
-                            onClick={(turnaroundClickEvent) => {
-                              setDisableApartmentTurnaroundTextInput(true);
-                            }}
-                        />
-                    );
-                  })
-                }
+                <Form.Label className={'signup-form-label'}>
+                  {' '}
+                  Pickup Location *{' '}
+                </Form.Label>
+                {Turnarounds.map((turnaroundName: string) => {
+                  return (
+                    <Form.Check
+                      name={'rider-turnaround'}
+                      type={'radio'}
+                      id={`${turnaroundName}-turnaround-radio`}
+                      className={'signup-form-radio-button'}
+                      label={
+                        <span className={'signup-form-radio-text'}>
+                          {' '}
+                          {turnaroundName} Turnaround{' '}
+                        </span>
+                      }
+                      onClick={turnaroundClickEvent => {
+                        setDisableApartmentTurnaroundTextInput(true);
+                      }}
+                    />
+                  );
+                })}
 
                 <div className={'apartment-radio-text-input'}>
                   <Form.Check
@@ -166,8 +149,13 @@ export const RiderSignup = () => {
                   className={'signup-form-radio-button'}
                   label={
                     <div className={'time-label'}>
-                      <span className={'signup-form-radio-text'}> Staying </span>
-                      <div className={'signup-form-radio-subheading'}>9am - 7:30pm</div>
+                      <span className={'signup-form-radio-text'}>
+                        {' '}
+                        Staying{' '}
+                      </span>
+                      <div className={'signup-form-radio-subheading'}>
+                        9am - 7:30pm
+                      </div>
                     </div>
                   }
                 />
