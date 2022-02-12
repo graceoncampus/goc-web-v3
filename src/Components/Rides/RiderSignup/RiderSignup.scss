@@ -12,3 +12,37 @@
   display: flex;
   flex-direction: row;
 }
+/* Pickup Location Image */
+.pickupLocationsImage {
+  position: relative;
+  display: block;
+  margin: auto auto;
+  max-height: 100%;
+  max-width: 100%;
+}
+/* Close Button */
+.closeModal {
+  color: #fff;
+  background-color: #999;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 10px;
+  border: 2px solid #333;
+  z-index: 1000;
+}
+.closeModal:hover,
+.closeModal:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.helpCircle {
+  color: grey;
+}
+
+.helpCircle:hover {
+  color: blue;
+}

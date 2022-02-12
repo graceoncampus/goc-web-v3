@@ -4,13 +4,17 @@
 
 import React, { useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import ReactModal from 'react-modal';
+import { IconContext } from 'react-icons/lib';
+import { BiHelpCircle } from 'react-icons/bi';
 import { Turnarounds } from '../../../Constants/RidesConstants';
-
+import pickupLocations from '../../../images/pickupLocations.png';
 import './RiderSignup.scss';
 import 'css/common/forms.scss'
 
 export const RiderSignup = () => {
   const [disableApartmentTurnaroundTextInput, setDisableApartmentTurnaroundTextInput] = useState(true);
+  const [pickupLocationsHover, setpickupLocationsHover] = useState(false);
 
   return (
     <Container>
@@ -36,7 +40,22 @@ export const RiderSignup = () => {
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'riderTurnaround'}>
-                <Form.Label className={'signup-form-label'}> Pickup Location * </Form.Label>
+                <div onMouseDown={(event) => setpickupLocationsHover(!pickupLocationsHover)}>
+                  <Form.Label className={'signup-form-label'}> Pickup Location * </Form.Label>
+                  <IconContext.Provider value={{ className: 'helpCircle' }}>
+                      <BiHelpCircle />
+                  </IconContext.Provider>
+                </div>
+                <ReactModal 
+                  isOpen={pickupLocationsHover} 
+                  onRequestClose={() => setpickupLocationsHover(false)}
+                >
+                  <button type="button" className="closeModal" data-dismiss="modal" aria-label="Close"
+                          onClick={() => setpickupLocationsHover(false)}>
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <img src={pickupLocations} className='pickupLocationsImage'/>
+                </ReactModal> 
                 {
                   Turnarounds.map((turnaroundName: string) => {
                     return (
@@ -148,7 +167,7 @@ export const RiderSignup = () => {
             Sign Up
           </Button>
         </Form>
-      </Col>
+      </Col>   
     </Container>
   );
 };
