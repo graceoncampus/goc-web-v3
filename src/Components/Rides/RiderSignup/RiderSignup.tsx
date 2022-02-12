@@ -2,43 +2,22 @@
  * Rider signup form.
  */
 
-import React, { ChangeEvent, useState } from 'react';
+import React, {useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Turnarounds } from '../../../Constants/RidesConstants';
 
 import './RiderSignup.scss';
-import 'css/common/forms.scss'
-
-var initialPhoneNumber = "";
+import 'css/common/forms.scss';
 
 
 export const RiderSignup = () => {
   const [disableApartmentTurnaroundTextInput, setDisableApartmentTurnaroundTextInput] = useState(true);
-
-  // const [formData, updateFormData] = React.useState(initialFormData);
-
-  const handleChange = (e: { target: { value: string; }; }) => {
-    initialPhoneNumber = e.target.value;
-  };
-
-  
-  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    let form = e.currentTarget;
-    let riderPhoneNumberInput = form.elements.namedItem("riderPhoneNumber");
-    if(riderPhoneNumberInput instanceof Element) {
-      console.log(initialPhoneNumber);
-      riderPhoneNumberInput.setAttribute("value","foo");
-    }
-
-  };
-
   return (
     <Container>
       <Col className={'mx-auto text-center'} lg={'6'}>
         <span className={'signup-form-title'}>Sign up for a ride to Church!</span>
 
-        <Form className={'text-center'} onSubmit={handleSubmit}>
+        <Form className={'text-center'}>
           <Row className={'text-start gx-5'}>
             <Col lg={'6'}>
               <Form.Group className={'mb-3'} controlId={'riderName'}>
@@ -53,7 +32,7 @@ export const RiderSignup = () => {
 
               <Form.Group className={'mb-3'} controlId={'riderPhoneNumber'}>
                 <Form.Label className={'signup-form-label'}> Phone Number * </Form.Label>
-                <Form.Control placeholder={'Enter your phone number'} type={'tel'} onChange={handleChange} name={"riderPhoneNumber"} required/>
+                <Form.Control placeholder={'Enter your phone number'} type={'tel'} name={"riderPhoneNumber"} required/>
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'riderTurnaround'}>
