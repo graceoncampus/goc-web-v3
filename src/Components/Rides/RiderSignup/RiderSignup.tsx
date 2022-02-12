@@ -2,37 +2,58 @@
  * Rider signup form.
  */
 
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Turnarounds } from '../../../Constants/RidesConstants';
 
 import './RiderSignup.scss';
 import 'css/common/forms.scss'
 
+var initialPhoneNumber = "";
+
+
 export const RiderSignup = () => {
   const [disableApartmentTurnaroundTextInput, setDisableApartmentTurnaroundTextInput] = useState(true);
+
+  // const [formData, updateFormData] = React.useState(initialFormData);
+
+  const handleChange = (e: { target: { value: string; }; }) => {
+    initialPhoneNumber = e.target.value;
+  };
+
+  
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    let form = e.currentTarget;
+    let riderPhoneNumberInput = form.elements.namedItem("riderPhoneNumber");
+    if(riderPhoneNumberInput instanceof Element) {
+      console.log(initialPhoneNumber);
+      riderPhoneNumberInput.setAttribute("value","foo");
+    }
+
+  };
 
   return (
     <Container>
       <Col className={'mx-auto text-center'} lg={'6'}>
         <span className={'signup-form-title'}>Sign up for a ride to Church!</span>
 
-        <Form className={'text-center'}>
+        <Form className={'text-center'} onSubmit={handleSubmit}>
           <Row className={'text-start gx-5'}>
             <Col lg={'6'}>
               <Form.Group className={'mb-3'} controlId={'riderName'}>
                 <Form.Label className={'signup-form-label'}> Name * </Form.Label>
-                <Form.Control placeholder={'Enter your name'} required={true} />
+                <Form.Control placeholder={'Enter your name'} required />
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'riderEmail'}>
                 <Form.Label className={'signup-form-label'}> Email * </Form.Label>
-                <Form.Control type={'email'} placeholder={'Enter your email'} required={true} />
+                <Form.Control type={'email'} placeholder={'Enter your email'} required />
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'riderPhoneNumber'}>
                 <Form.Label className={'signup-form-label'}> Phone Number * </Form.Label>
-                <Form.Control placeholder={'Enter your phone number'} required={true} />
+                <Form.Control placeholder={'Enter your phone number'} type={'tel'} onChange={handleChange} name={"riderPhoneNumber"} required/>
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'riderTurnaround'}>
@@ -51,7 +72,7 @@ export const RiderSignup = () => {
                             onClick={(turnaroundClickEvent) => {
                               setDisableApartmentTurnaroundTextInput(true);
                             }}
-                            required={true}
+                            required
                         />
                     );
                   })
@@ -95,7 +116,7 @@ export const RiderSignup = () => {
                       <div className={'signup-form-radio-subheading'}>9am - 12:30pm</div>
                     </div>
                   }
-                  required={true}
+                  required
                 ></Form.Check>
 
                 <Form.Check
