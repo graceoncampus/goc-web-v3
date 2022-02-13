@@ -30,7 +30,7 @@ export const RiderSignup = () => {
                   {' '}
                   Name *{' '}
                 </Form.Label>
-                <Form.Control placeholder={'Enter your name'} />
+                <Form.Control placeholder={'Enter your name'} required/>
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'riderEmail'}>
@@ -38,7 +38,7 @@ export const RiderSignup = () => {
                   {' '}
                   Email *{' '}
                 </Form.Label>
-                <Form.Control type={'email'} placeholder={'Enter your email'} />
+                <Form.Control type={'email'} placeholder={'Enter your email'} required/>
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'riderPhoneNumber'}>
@@ -46,7 +46,7 @@ export const RiderSignup = () => {
                   {' '}
                   Phone Number *{' '}
                 </Form.Label>
-                <Form.Control placeholder={'Enter your phone number'} />
+                <Form.Control type={"tel"} placeholder={'Enter your phone number'} required/>
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'riderTurnaround'}>
@@ -70,6 +70,7 @@ export const RiderSignup = () => {
                       onClick={turnaroundClickEvent => {
                         setDisableApartmentTurnaroundTextInput(true);
                       }}
+                      required
                     />
                   );
                 })}
@@ -89,12 +90,14 @@ export const RiderSignup = () => {
                     onClick={apartmentClickEvent => {
                       setDisableApartmentTurnaroundTextInput(false);
                     }}
+                    required
                   />
 
                   <Form.Control
                     type={'text'}
                     size={'sm'}
                     disabled={disableApartmentTurnaroundTextInput}
+                    required
                   />
                 </div>
               </Form.Group>
@@ -122,6 +125,7 @@ export const RiderSignup = () => {
                       </div>
                     </div>
                   }
+                  required
                 ></Form.Check>
 
                 <Form.Check
