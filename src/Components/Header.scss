@@ -1,0 +1,43 @@
+/**
+* Header styling.
+*/
+
+@use '~sass-rem' as rem;
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.nav-bar {
+    margin-left: rem.convert(250px);
+    margin-right: 10%;
+    margin-top: rem.convert(25px);
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.goc-header {
+    position: absolute;
+    top: 0;
+    width: rem.convert(200px);
+    height: auto;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+}
+
+.account-sign-up-button {
+    background-color: #D9BA68;
+    height: rem.convert(45px);
+    width: rem.convert(110px);
+    border-width: rem.convert(0px);
+    border-radius: rem.convert(18px);
+}
+
+.account-sign-up-button:hover, .account-sign-up-button:focus {
+    background-color: #96751a;
+}

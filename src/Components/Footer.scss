@@ -1,0 +1,52 @@
+/**
+* Footer styling.
+*/
+
+@use '~sass-rem' as rem;
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.footer {
+    width: 100%;
+    padding: rem.convert(50px);
+    padding-left: rem.convert(150px);
+    padding-right: rem.convert(150px);
+    margin: 0;
+    background-color: #f6f6f6;
+}
+
+.gcc-logo {
+    width: 70%;
+    height: auto;
+}
+
+.logo-icon {
+    width: rem.convert(25px);
+    height: auto;
+    margin: rem.convert(6px);
+}
+
+.footer-label {
+    font-size: rem.convert(14px);
+    font-weight: 500;
+    color: #afafaf;
+}
+
+.footer-text {
+    font-weight: 300;
+}
+
+.newcomer-form-label {
+    font-size: rem.convert(13px);
+    font-weight: 200;
+    margin-bottom: 0;
+}
+
+.newcomer-form-submit {
+    font-size: rem.convert(13px);
+    border-radius: rem.convert(14px);
+    margin-top: rem.convert(12px);
+}
