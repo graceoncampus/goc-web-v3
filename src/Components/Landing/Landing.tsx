@@ -11,6 +11,9 @@ export const Landing = () => {
       <button onClick={() => navigate('/rides/rider/signup')}>
         go to rider signup
       </button>
+      <button onClick={() => navigate('/rides/driver/signup')}>
+        go to driver signup
+      </button>
     </div>
   );
 };
