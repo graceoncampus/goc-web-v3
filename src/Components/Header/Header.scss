@@ -2,7 +2,7 @@
 * Header styling.
 */
 
-@use '~sass-rem' as rem;
+@use 'node_modules/sass-rem/index' as rem;
 
 * {
     margin: 0;
