@@ -6,6 +6,7 @@
 @use 'src/styles/font-sizes';
 @use 'src/styles/font-weights';
 @use 'src/styles/dimensions';
+@use 'src/styles/misc.scss';
 
 /**
   Typography.
@@ -30,6 +31,10 @@
   font-weight: font-weights.$form-radio-subheading;
 }
 
+.signup-form-time-label {
+  line-height: misc.$signup-form-time-label-line-height;
+}
+
 /**
   Component styling.
  */
@@ -45,4 +50,26 @@
 
 .signup-form-radio-button .form-check-input:checked[type=radio] {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23000'/%3e%3c/svg%3e");
+}
+
+/**
+  Misc.
+ */
+ .apartment-radio-text-input {
+  display: flex;
+  flex-direction: row;
+}
+ 
+ textarea {
+  resize: none;
+ }
+
+ .thank-you-heading {
+  font-size: font-sizes.$thank-you-heading;
+  font-weight: font-weights.$thank-you-heading;
+}
+
+.thank-you-text {
+  font-size: font-sizes.$thank-you-text;
+  font-weight: font-weights.$thank-you-text;
 }
