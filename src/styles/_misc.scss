@@ -5,3 +5,5 @@
 @use '~sass-rem' as rem;
 
 $form-button-border-radius: rem.convert(20px);
+
+$signup-form-time-label-line-height: rem.convert(18px);
