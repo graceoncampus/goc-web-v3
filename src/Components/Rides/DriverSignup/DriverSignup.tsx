@@ -1,5 +1,5 @@
 /**
- * Rider signup higher order conditional rendering component.
+ * Driver signup higher order conditional rendering component.
  */
 
  import React, { useState } from 'react';
