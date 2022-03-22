@@ -194,7 +194,7 @@ export const RiderSignup = () => {
           </Row>
 
           <Button variant={'submit'} type={'submit'}>
-            Sign Up
+            SIGN UP
           </Button>
         </Form>
       </Col>
