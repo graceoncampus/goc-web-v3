@@ -7,6 +7,7 @@ import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Turnarounds } from '../../../Constants/RidesConstants';
 
 import 'css/common/forms.scss';
+import { PickupLocationPopup } from "./PickupLocationPopup/PickupLocationPopup";
 
 interface RiderSignupFormProps {
   setRiderSignupCompleted: (riderSignupValue: boolean) => void;
@@ -57,10 +58,14 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'riderTurnaround'}>
-                <Form.Label className={'signup-form-label'}>
-                  {' '}
-                  Pickup Location *{' '}
-                </Form.Label>
+                <div>
+                  <Form.Label className={'signup-form-label'}>
+                      {' '}
+                      Pickup Location *{' '}
+                  </Form.Label>
+
+                  <PickupLocationPopup />
+                </div>
                 {Turnarounds.map((turnaroundName: string) => {
                   return (
                     <Form.Check
