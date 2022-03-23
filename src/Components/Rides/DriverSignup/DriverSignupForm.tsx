@@ -29,7 +29,7 @@ export const DriverSignupForm = (driverSignupFormProps: DriverSignupFormProps) =
                   {' '}
                   Name *{' '}
                 </Form.Label>
-                <Form.Control placeholder={'Enter your name'} />
+                <Form.Control placeholder={'Enter your name'} required/>
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'driverEmail'}>
@@ -37,7 +37,7 @@ export const DriverSignupForm = (driverSignupFormProps: DriverSignupFormProps) =
                   {' '}
                   Email *{' '}
                 </Form.Label>
-                <Form.Control type={'email'} placeholder={'Enter your email'} />
+                <Form.Control type={'email'} placeholder={'Enter your email'} required/>
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'driverPhoneNumber'}>
@@ -45,7 +45,7 @@ export const DriverSignupForm = (driverSignupFormProps: DriverSignupFormProps) =
                   {' '}
                   Phone Number *{' '}
                 </Form.Label>
-                <Form.Control placeholder={'Enter your phone number'} />
+                <Form.Control placeholder={'Enter your phone number'} required/>
               </Form.Group>
               <Form.Group className={'mb-3'} controlId={'driverTime'}>
                 <Form.Label className={'signup-form-label'}>
@@ -68,6 +68,7 @@ export const DriverSignupForm = (driverSignupFormProps: DriverSignupFormProps) =
                       </div>
                     </div>
                   }
+                  required
                 ></Form.Check>
 
                 <Form.Check
@@ -132,7 +133,7 @@ export const DriverSignupForm = (driverSignupFormProps: DriverSignupFormProps) =
                   {' '}
                   Address *{' '}
                 </Form.Label>
-                <Form.Control placeholder={'Enter your address'} />
+                <Form.Control placeholder={'Enter your address'} required/>
               </Form.Group>
               <Form.Group className={'mb-3'} controlId={'driverPhoneNumber'}>
                 <Form.Label className={'signup-form-label'}>
@@ -141,6 +142,7 @@ export const DriverSignupForm = (driverSignupFormProps: DriverSignupFormProps) =
                 </Form.Label>
                 <Form.Control
                   placeholder={'Enter number of spots in your car'}
+                  required
                 />
               </Form.Group>
               <Form.Group className={'mb-3'} controlId={'driverComments'}>
