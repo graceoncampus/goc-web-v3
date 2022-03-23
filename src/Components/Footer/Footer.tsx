@@ -12,15 +12,15 @@
          <Container fluid className={'footer'}>
              <Row className={'footer-content'}>
                 <Col xs={4}>
-                    <a href={'https://www.gracechurch.org/'}><img className={'gcc-logo'} src={'./assets/logo-gcc.png'} alt={'Grace Community Church'}></img></a>
+                    <a href={'https://www.gracechurch.org/'}><img className={'gcc-logo'} src={'/assets/logo-gcc.png'} alt={'Grace Community Church'}></img></a>
                     <br />
                     <br />
                     <span className={'footer-label'}>&nbsp;FOLLOW US</span>
                     <br />
-                    <img className={'logo-icon'} src={'./assets/logo-facebook.png'} alt={'Facebook'}></img>
-                    <img className={'logo-icon'} src={'./assets/logo-instagram.png'} alt={'Instagram'}></img>
-                    <img className={'logo-icon'} src={'./assets/logo-vimeo.png'} alt={'Vimeo'}></img>
-                    <img className={'logo-icon'} src={'./assets/logo-wordpress.png'} alt={'Wordpress'}></img>
+                    <img className={'logo-icon'} src={'/assets/logo-facebook.png'} alt={'Facebook'}></img>
+                    <img className={'logo-icon'} src={'/assets/logo-instagram.png'} alt={'Instagram'}></img>
+                    <img className={'logo-icon'} src={'/assets/logo-vimeo.png'} alt={'Vimeo'}></img>
+                    <img className={'logo-icon'} src={'/assets/logo-wordpress.png'} alt={'Wordpress'}></img>
                 </Col>
                 <Col>
                     <span className={'footer-label'}>GRACE ON CAMPUS</span>
