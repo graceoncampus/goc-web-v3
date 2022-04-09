@@ -1,0 +1,7 @@
+@use '~sass-rem' as rem;
+
+@use 'src/styles/font-sizes';
+
+.riders-landing-button {
+    line-height: rem.convert(18px);
+  }
