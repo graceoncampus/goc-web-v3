@@ -46,7 +46,7 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 To learn React, check out the [React documentation](https://reactjs.org/).
 
 ## Local Setup Instructions
-# Pre-requisites.
+### Pre-requisites.
 - Have an Amplify Studio Account set up
 
 ### `amplify pull --appId ${AppId} --envName dev`
