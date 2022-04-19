@@ -2,18 +2,50 @@
  * Driver signup form.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { CreateDriverInput, RideSignupStatus } from 'Api';
+import { createDriver } from 'graphql/mutations';
 
 import 'css/common/forms.scss';
+
+import { API, graphqlOperation } from 'aws-amplify';
 
 interface DriverSignupFormProps {
   setDriverSignupCompleted: (driverSignupValue: boolean) => void;
 }
 
 export const DriverSignupForm = (driverSignupFormProps: DriverSignupFormProps) => {
-  const handleFormSubmit = () => {
-    driverSignupFormProps.setDriverSignupCompleted(true);
+  const [driverName, setDriverName] = useState('');
+  const [driverEmail, setDriverEmail] = useState('');
+  const [driverPhoneNumber, setDriverPhoneNumber] = useState('');
+  const [driverEventTime, setDriverEventTime] = useState('');
+  const [driverAddress, setDriverAddress] = useState('');
+  const [driverNumRiderSpots, setDriverNumRiderSpots] = useState(0);
+  const [driverComments, setDriverComments] = useState('');
+
+  const handleFormSubmit = async (event: any) => {
+    event.preventDefault();
+
+    const driverSignupData: CreateDriverInput = {
+      eventId: 'EVENT_ID',
+      driverName: driverName,
+      driverEmail: driverEmail,
+      driverPhoneNumber: driverPhoneNumber,
+      driverEventTime: driverEventTime,
+      driverAddress: driverAddress,
+      driverNumRiderSeats: driverNumRiderSpots,
+      driverComments: driverComments,
+      driverSignupStatus: RideSignupStatus.IN_PROGRESS
+    };
+
+    const createDriverSignupResult = await (API.graphql(graphqlOperation(createDriver, {
+      input: driverSignupData
+    })) as Promise<any>).then((result) => {
+      driverSignupFormProps.setDriverSignupCompleted(true);
+    }).catch((reason => {
+      console.log(reason); // Log failure to the client - this will help us trace issues.
+    }));
   }
 
   return (
@@ -29,7 +61,9 @@ export const DriverSignupForm = (driverSignupFormProps: DriverSignupFormProps) =
                   {' '}
                   Name *{' '}
                 </Form.Label>
-                <Form.Control placeholder={'Enter your name'} required/>
+                <Form.Control placeholder={'Enter your name'}
+                              onChange={({target: {value}}) => setDriverName(value)}
+                              required />
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'driverEmail'}>
@@ -37,7 +71,9 @@ export const DriverSignupForm = (driverSignupFormProps: DriverSignupFormProps) =
                   {' '}
                   Email *{' '}
                 </Form.Label>
-                <Form.Control type={'email'} placeholder={'Enter your email'} required/>
+                <Form.Control type={'email'} placeholder={'Enter your email'}
+                              onChange={({target: {value}}) => setDriverEmail(value)}
+                              required />
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'driverPhoneNumber'}>
@@ -45,9 +81,11 @@ export const DriverSignupForm = (driverSignupFormProps: DriverSignupFormProps) =
                   {' '}
                   Phone Number *{' '}
                 </Form.Label>
-                <Form.Control placeholder={'Enter your phone number'} required/>
+                <Form.Control placeholder={'Enter your phone number'}
+                              onChange={({target: {value}}) => setDriverPhoneNumber(value)}
+                              required />
               </Form.Group>
-              <Form.Group className={'mb-3'} controlId={'driverTime'}>
+              <Form.Group className={'mb-3'} controlId={'driverEventTime'}>
                 <Form.Label className={'signup-form-label'}>
                   {' '}
                   Time *{' '}
@@ -68,8 +106,8 @@ export const DriverSignupForm = (driverSignupFormProps: DriverSignupFormProps) =
                       </div>
                     </div>
                   }
-                  required
-                ></Form.Check>
+                  onChange={({target: {value}}) => setDriverEventTime('morning')}
+                  required />
 
                 <Form.Check
                   name={'radio-time'}
@@ -87,7 +125,8 @@ export const DriverSignupForm = (driverSignupFormProps: DriverSignupFormProps) =
                       </div>
                     </div>
                   }
-                />
+                  onChange={({target: {value}}) => setDriverEventTime('evening')}
+                  required />
 
                 <Form.Check
                   name={'radio-time'}
@@ -105,7 +144,8 @@ export const DriverSignupForm = (driverSignupFormProps: DriverSignupFormProps) =
                       </div>
                     </div>
                   }
-                />
+                  onChange={({target: {value}}) => setDriverEventTime('staying')}
+                  required />
 
                 <Form.Check
                   name={'radio-time'}
@@ -123,34 +163,40 @@ export const DriverSignupForm = (driverSignupFormProps: DriverSignupFormProps) =
                       </div>
                     </div>
                   }
-                />
+                  onChange={({target: {value}}) => setDriverEventTime('morning-evening')}
+                  required />
               </Form.Group>
             </Col>
 
             <Col lg={'6'}>
-              <Form.Group className={'mb-3'} controlId={'driverPhoneNumber'}>
+              <Form.Group className={'mb-3'} controlId={'driverAddress'}>
                 <Form.Label className={'signup-form-label'}>
                   {' '}
                   Address *{' '}
                 </Form.Label>
-                <Form.Control placeholder={'Enter your address'} required/>
+                <Form.Control placeholder={'Enter your address'}
+                              onChange={({target: {value}}) => setDriverAddress(value)}
+                              required />
               </Form.Group>
-              <Form.Group className={'mb-3'} controlId={'driverPhoneNumber'}>
+              <Form.Group className={'mb-3'} controlId={'driverNumRiderSpots'}>
                 <Form.Label className={'signup-form-label'}>
                   {' '}
                   Number of spots (excluding you) *{' '}
                 </Form.Label>
                 <Form.Control
                   placeholder={'Enter number of spots in your car'}
-                  required
-                />
+                  onChange={({target: {value}}) => setDriverNumRiderSpots(parseInt(value))}
+                  required />
               </Form.Group>
               <Form.Group className={'mb-3'} controlId={'driverComments'}>
                 <Form.Label className={'signup-form-label'}>
                   {' '}
                   Comments{' '}
                 </Form.Label>
-                <Form.Control as={'textarea'} rows={4} />
+                <Form.Control
+                    as={'textarea'}
+                    rows={4}
+                    onChange={({target: {value}}) => setDriverComments(value)} />
               </Form.Group>
             </Col>
           </Row>

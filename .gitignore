@@ -5,6 +5,11 @@
 /.pnp
 .pnp.js
 
+# source
+./src/aws-exports.js
+./src/Api.*
+./src/graphql
+
 # testing
 /coverage
 
