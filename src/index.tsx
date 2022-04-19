@@ -7,6 +7,11 @@ import { RiderSignup } from './Components/Rides/RiderSignup/RiderSignup';
 import { DriverSignup } from './Components/Rides/DriverSignup/DriverSignup';
 import { Landing } from './Components/Landing/Landing';
 
+import Amplify from 'aws-amplify';
+import awsconfig from './aws-exports';
+
+Amplify.configure(awsconfig);
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
