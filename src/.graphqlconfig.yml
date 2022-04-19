@@ -1,0 +1,15 @@
+projects:
+  gocbackendv3:
+    schemaPath: amplify/backend/api/gocbackendv3/build/schema.graphql
+    includes:
+      - src/graphql/**/*.ts
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: typescript
+        generatedFileName: src/Api.tsx
+        docsFilePath: src/graphql
+extensions:
+  amplify:
+    version: 3
