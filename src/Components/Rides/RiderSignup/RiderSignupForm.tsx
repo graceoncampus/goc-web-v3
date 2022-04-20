@@ -32,8 +32,6 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
   const [riderPhoneNumber, setRiderPhoneNumber] = useState<string>('');
   const [riderEventPickupLocation, setRiderEventPickupLocation] = useState<string>('');
   const [riderEventTime, setRiderEventTime] = useState<string>('');
-  const [riderAddress, setRiderAddress] = useState<string>('');
-  const [riderNumRiderSpots, setRiderNumRiderSpots] = useState<number>(0);
   const [riderComments, setRiderComments] = useState<string>('');
 
   const [

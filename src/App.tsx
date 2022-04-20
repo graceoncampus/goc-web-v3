@@ -1,19 +1,23 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { RiderSignup } from './Components/Rides/RiderSignup/RiderSignup';
+import { DriverSignup } from './Components/Rides/DriverSignup/DriverSignup';
+import { Landing } from './Components/Landing/Landing';
+
 import './App.css';
+import './css/bootstrap.scss';
 
 const App = () => {
   return (
-    <div className="webTeamMembers">
-      <span> Web Team Members! </span>
-      <span> Ricky Guo :) </span>
-      <span> Isaac Li :0</span>
-      <span> Jon Chan :S </span>
-      <span> James Wang :) </span>
-      <span> Jasper Edbrooke (: </span>
-      <span> Daniel Branda :( </span>
-      <span> Tim Tie :) </span>
-      <span> Maggie Yan :)) </span>
-    </div>
+      <React.StrictMode>
+          <BrowserRouter>
+              <Routes>
+                  <Route path="/" element={<Landing />}></Route>
+                  <Route path="rides/rider/signup" element={<RiderSignup />}></Route>
+                  <Route path="rides/driver/signup" element={<DriverSignup />}></Route>
+              </Routes>
+          </BrowserRouter>
+      </React.StrictMode>
   );
 };
 
