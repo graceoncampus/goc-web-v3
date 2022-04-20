@@ -2,33 +2,69 @@
  * Driver signup form.
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
-import { CreateDriverInput, RideSignupStatus } from 'Api';
+import { useSearchParams } from 'react-router-dom';
+import { EventTimeOption, CreateDriverInput, RideSignupStatus } from 'Api';
+import { getEventsByEventId } from 'graphql/queries';
 import { createDriver } from 'graphql/mutations';
+
+import { API, graphqlOperation } from 'aws-amplify';
 
 import 'css/common/forms.scss';
 
-import { API, graphqlOperation } from 'aws-amplify';
 
 interface DriverSignupFormProps {
   setDriverSignupCompleted: (driverSignupValue: boolean) => void;
 }
 
 export const DriverSignupForm = (driverSignupFormProps: DriverSignupFormProps) => {
-  const [driverName, setDriverName] = useState('');
-  const [driverEmail, setDriverEmail] = useState('');
-  const [driverPhoneNumber, setDriverPhoneNumber] = useState('');
-  const [driverEventTime, setDriverEventTime] = useState('');
-  const [driverAddress, setDriverAddress] = useState('');
-  const [driverNumRiderSpots, setDriverNumRiderSpots] = useState(0);
-  const [driverComments, setDriverComments] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  const [eventId, setEventId] = useState<string>('');
+  const [eventName, setEventName] = useState<string>('');
+  const [eventTimes, setEventTimes] = useState<EventTimeOption[]>([]);
+
+  const [driverName, setDriverName] = useState<string>('');
+  const [driverEmail, setDriverEmail] = useState<string>('');
+  const [driverPhoneNumber, setDriverPhoneNumber] = useState<string>('');
+  const [driverEventTime, setDriverEventTime] = useState<string>('');
+  const [driverAddress, setDriverAddress] = useState<string>('');
+  const [driverNumRiderSpots, setDriverNumRiderSpots] = useState<number>(0);
+  const [driverComments, setDriverComments] = useState<string>('');
+
+  /**
+   * Get search params from url (fires on render).
+   */
+  useEffect(() => {
+    setEventId(searchParams.get('eventId') || '');
+  }, [searchParams]);
+
+  useEffect(() => {
+    const fetchEventData = async () => {
+      await (API.graphql(graphqlOperation(getEventsByEventId, {
+        eventId: eventId
+      })) as Promise<any>).then((result) => {
+        const eventData = result.data.getEventsByEventId.items[0];
+
+        setEventName(eventData['eventName']);
+        setEventTimes(eventData['eventTimes']);
+      }).catch((reason => {
+        console.log(reason); // Log failure to the client - this will help us trace issues.
+      }));
+    };
+
+    fetchEventData();
+  }, [eventId]);
+
+  /**
+   * Pull event data from GraphQL backend (fires only when eventId changes).
+   */
   const handleFormSubmit = async (event: any) => {
     event.preventDefault();
 
     const driverSignupData: CreateDriverInput = {
-      eventId: 'EVENT_ID',
+      eventId: eventId,
       driverName: driverName,
       driverEmail: driverEmail,
       driverPhoneNumber: driverPhoneNumber,
@@ -39,19 +75,46 @@ export const DriverSignupForm = (driverSignupFormProps: DriverSignupFormProps) =
       driverSignupStatus: RideSignupStatus.IN_PROGRESS
     };
 
-    const createDriverSignupResult = await (API.graphql(graphqlOperation(createDriver, {
+    await (API.graphql(graphqlOperation(createDriver, {
       input: driverSignupData
     })) as Promise<any>).then((result) => {
       driverSignupFormProps.setDriverSignupCompleted(true);
     }).catch((reason => {
       console.log(reason); // Log failure to the client - this will help us trace issues.
     }));
-  }
+  };
+
+  const eventTimesRadioButtons = eventTimes.map((eventTime: EventTimeOption) => {
+    const eventTimeHeading = eventTime.timeHeading;
+    const eventTimeSubtext = eventTime.timeSubtext;
+
+    return (
+        <Form.Check
+            key={eventTimeHeading}
+            name={'radio-time'}
+            type={'radio'}
+            id={`${eventTimeHeading}-radio`}
+            className={'signup-form-radio-button'}
+            label={
+              <div className={'time-label'}>
+                    <span className={'signup-form-radio-text'}>
+                      {eventTimeHeading}
+                    </span>
+                <div className={'signup-form-radio-subheading'}>
+                  {eventTimeSubtext}
+                </div>
+              </div>
+            }
+            onChange={({target: {value}}) => setDriverEventTime(eventTimeHeading)}
+            required
+        />
+    );
+  });
 
   return (
     <Container>
       <Col className={'mx-auto text-center'} lg={'8'}>
-        <span className={'signup-form-title'}>Sign up to drive to Church!</span>
+        <span className={'signup-form-title'}>Sign up to drive to {eventName}!</span>
 
         <Form className={'text-center'} onSubmit={handleFormSubmit}>
           <Row className={'text-start gx-5'}>
@@ -90,81 +153,8 @@ export const DriverSignupForm = (driverSignupFormProps: DriverSignupFormProps) =
                   {' '}
                   Time *{' '}
                 </Form.Label>
-                <Form.Check
-                  name={'radio-time'}
-                  type={'radio'}
-                  id={'morning-time-radio'}
-                  className={'signup-form-radio-button'}
-                  label={
-                    <div className={'time-label'}>
-                      <span className={'signup-form-radio-text'}>
-                        {' '}
-                        Morning{' '}
-                      </span>
-                      <div className={'signup-form-radio-subheading'}>
-                        9am - 12:30pm
-                      </div>
-                    </div>
-                  }
-                  onChange={({target: {value}}) => setDriverEventTime('morning')}
-                  required />
 
-                <Form.Check
-                  name={'radio-time'}
-                  type={'radio'}
-                  id={'evening-time-radio'}
-                  className={'signup-form-radio-button'}
-                  label={
-                    <div className={'time-label'}>
-                      <span className={'signup-form-radio-text'}>
-                        {' '}
-                        Evening{' '}
-                      </span>
-                      <div className={'signup-form-radio-subheading'}>
-                        6pm - 7:30pm
-                      </div>
-                    </div>
-                  }
-                  onChange={({target: {value}}) => setDriverEventTime('evening')}
-                  required />
-
-                <Form.Check
-                  name={'radio-time'}
-                  type={'radio'}
-                  id={'staying-time-radio'}
-                  className={'signup-form-radio-button'}
-                  label={
-                    <div className={'time-label'}>
-                      <span className={'signup-form-radio-text'}>
-                        {' '}
-                        Staying{' '}
-                      </span>
-                      <div className={'signup-form-radio-subheading'}>
-                        9am - 7:30pm
-                      </div>
-                    </div>
-                  }
-                  onChange={({target: {value}}) => setDriverEventTime('staying')}
-                  required />
-
-                <Form.Check
-                  name={'radio-time'}
-                  type={'radio'}
-                  id={'morning-evening-time-radio'}
-                  className={'signup-form-radio-button'}
-                  label={
-                    <div className={'time-label'}>
-                      <span className={'signup-form-radio-text'}>
-                        {' '}
-                        Morning & Evening{' '}
-                      </span>
-                      <div className={'signup-form-radio-subheading'}>
-                        9am - 12:30pm |<strong>RETURN</strong>| 6pm - 7:30pm
-                      </div>
-                    </div>
-                  }
-                  onChange={({target: {value}}) => setDriverEventTime('morning-evening')}
-                  required />
+                {eventTimesRadioButtons}
               </Form.Group>
             </Col>
 

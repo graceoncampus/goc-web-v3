@@ -55,16 +55,16 @@
 /**
   Misc.
  */
- .apartment-radio-text-input {
+ .off-campus-radio-text-input {
   display: flex;
   flex-direction: row;
 }
  
- textarea {
+textarea {
   resize: none;
- }
+}
 
- .thank-you-heading {
+.thank-you-heading {
   font-size: font-sizes.$thank-you-heading;
   font-weight: font-weights.$thank-you-heading;
 }
