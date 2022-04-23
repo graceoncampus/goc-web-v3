@@ -3,13 +3,14 @@
  */
 
 import React, { useState } from 'react';
+import { HeaderNavbarActiveKey } from 'Components/Header/Header'
 import { RiderSignupThankYou } from './RiderSignupThankYou';
 import { RiderSignupForm } from './RiderSignupForm';
 import { Template } from 'Components/Template/Template';
 
 export const RiderSignup = () => {
     return (
-        <Template headerBackgroundImagePath={'/images/RidesBackgroundHeader.png'} body={<RiderSignupBody />} />
+        <Template activeKey={HeaderNavbarActiveKey.RIDES} body={<RiderSignupBody />} />
     );
 }
 

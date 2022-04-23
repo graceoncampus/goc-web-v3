@@ -4,29 +4,22 @@
 
 @use 'node_modules/sass-rem/index' as rem;
 
-* {
-    margin: 0;
-    padding: 0;
-}
+@import 'src/css/bootstrap.scss';
 
 .footer {
-    width: 100%;
-    padding: rem.convert(50px);
-    padding-left: rem.convert(150px);
-    padding-right: rem.convert(150px);
-    margin: 0;
+    padding: rem.convert(40px) 0;
     background-color: #f6f6f6;
 }
 
 .gcc-logo {
-    width: 70%;
-    height: auto;
+    width: rem.convert(268px);
+    height: rem.convert(128px);
 }
 
-.logo-icon {
-    width: rem.convert(25px);
-    height: auto;
-    margin: rem.convert(6px);
+
+.row .logo-icon {
+    width: rem.convert(35px);
+    height: rem.convert(35px);
 }
 
 .footer-label {
@@ -39,10 +32,13 @@
     font-weight: 300;
 }
 
+.footer-form-group {
+    max-width: rem.convert(272px);
+}
+
 .newcomer-form-label {
     font-size: rem.convert(13px);
     font-weight: 200;
-    margin-bottom: 0;
 }
 
 .newcomer-form-submit {

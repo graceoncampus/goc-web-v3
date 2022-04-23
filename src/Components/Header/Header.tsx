@@ -3,56 +3,66 @@
  */
 
 import React from 'react';
-import { Button, Row, Col, Container, Image } from 'react-bootstrap';
+import { Button, Row, Col, Container, Image, Nav, Navbar } from 'react-bootstrap';
 
 import './Header.scss'
 
+export enum HeaderNavbarActiveKey {
+    NONE = '',
+    ABOUT = 'About',
+    RESOURCES = 'Resources',
+    SMALL_GROUPS = 'Small Groups',
+    RIDES = 'Rides'
+}
+
+
 interface HeaderProps {
-    headerBackgroundImagePath: string
+    activeKey: HeaderNavbarActiveKey
 }
 
 export const Header = (headerProps: HeaderProps) => {
     return (
-        <Container style={{
-            backgroundImage: `url(${headerProps.headerBackgroundImagePath})`,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat'
-        }} className={'header'} fluid>
-            <Row>
-                <Col md={6}>
-                    <Image className={'goc-header'} src={'/assets/goc-header.png'} alt={'GOC'} />
-                </Col>
+        <Navbar className={'goc-navbar'} bg={'white'} fixed={'top'} expand={'lg'} collapseOnSelect>
+            <Container fluid>
+                <Navbar.Brand href={'/'}>
+                    <Image
+                        src={'/assets/goc-header.svg'}
+                        // className={'d-inline-block align-top'}
+                        alt={'Grace On Campus Logo'}
+                    />
+                </Navbar.Brand>
 
-                <Col md={6}>
-                    <Row className={'align-self-end'}>
-                        <Col>
-                            <a className={'nav-link'} href={''}>About</a>
-                        </Col>
+                <Navbar.Toggle aria-controls={'basic-navbar-nav'} />
 
-                        <Col>
-                            <a className={'nav-link'} href={''}>Resources</a>
-                        </Col>
+                <Container fluid>
+                    <Navbar.Collapse className={'justify-content-end'}>
+                        <Nav activeKey={headerProps.activeKey}>
+                            <Nav.Item className={'px-2'}>
+                                <Nav.Link className={'header-navbar-link'} eventKey={'About'} href={'/'}>
+                                    About
+                                </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item className={'px-2'}>
+                                <Nav.Link className={'header-navbar-link'} eventKey={'Resources'} href={'/'}>
+                                    Resources
+                                </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item className={'px-2'}>
+                                <Nav.Link className={'header-navbar-link'} eventKey={'Small Groups'} href={'/'}>
+                                    Small Groups
+                                </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item className={'px-2'}>
+                                <Nav.Link className={'header-navbar-link'} eventKey={'Rides'} href={'/'}>
+                                    Rides
+                                </Nav.Link>
+                            </Nav.Item>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Container>
+        </Navbar>
 
-                        <Col>
-                            <a className={'nav-link'} href={''}>Small Groups</a>
-                        </Col>
 
-                        <Col>
-                            <a className={'nav-link'} href={''}>Rides</a>
-                        </Col>
-
-                        <Col>
-                            <a className={'nav-link'} href={''}>Login</a>
-                        </Col>
-
-                        <Col>
-                            <Button variant={'primary'} className={'account-sign-up-button'}>
-                                SIGN UP
-                            </Button>
-                        </Col>
-                    </Row>
-                </Col>
-            </Row>
-        </Container>
     );
 };

@@ -3,21 +3,21 @@
  */
 
 import React from 'react';
-import { Header } from 'Components/Header/Header';
+import { HeaderNavbarActiveKey, Header } from 'Components/Header/Header';
 import { Footer } from 'Components/Footer/Footer';
 import { Container } from 'react-bootstrap';
 
 import './Template.scss';
 
 interface TemplateProps {
-    headerBackgroundImagePath: string,
-    body: React.ReactNode;
-}
+    activeKey: HeaderNavbarActiveKey,
+    body: React.ReactNode
+};
 
 export const Template = (templateProps: TemplateProps) => {
     return (
         <div>
-            <Header headerBackgroundImagePath={templateProps.headerBackgroundImagePath}/>
+            <Header activeKey={templateProps.activeKey} />
             <Container fluid className={'body-container'}>
                 {templateProps.body}
             </Container>
