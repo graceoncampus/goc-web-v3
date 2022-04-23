@@ -7,6 +7,7 @@ import { NotFound as UserNotFound } from 'Components/User/NotFound/NotFound';
 
 import { Landing as MinistryTeamLanding } from 'Components/MinistryTeams/Landing/Landing';
 import { StubbedRidesPage } from 'Components/MinistryTeams/Rides/StubbedRidesPage';
+import { CreateEventSignupForm } from 'Components/MinistryTeams/Rides/CreateEventSignupForm/CreateEventSignupForm';
 import { NotFound as MinistryTeamNotFound } from 'Components/MinistryTeams/NotFound/NotFound';
 import './App.css';
 import './css/bootstrap.scss';
@@ -20,19 +21,29 @@ import './css/bootstrap.scss';
  */
 const App = () => {
   return (
-      <React.StrictMode>
-          <BrowserRouter>
-              <Routes>
-                  <Route path={'*'} element={<UserNotFound />} />   {/* 404 */}
-                  <Route path={'/'} element={<UserLanding />} />
-                  <Route path={'/rides/rider/signup'} element={<RiderSignup />} />
-                  <Route path={'/rides/driver/signup'} element={<DriverSignup />} />
-                  <Route path={'/ministry_teams'} element={<MinistryTeamLanding />}/>
-                  <Route path={'/ministry_teams/rides'} element={<StubbedRidesPage />} />
-                  <Route path={'/ministry_teams/*'} element={<MinistryTeamNotFound />} />
-              </Routes>
-          </BrowserRouter>
-      </React.StrictMode>
+    <React.StrictMode>
+      <BrowserRouter>
+        <Routes>
+          <Route path={'*'} element={<UserNotFound />} /> {/* 404 */}
+          <Route path={'/'} element={<UserLanding />} />
+          <Route path={'/rides/rider/signup'} element={<RiderSignup />} />
+          <Route path={'/rides/driver/signup'} element={<DriverSignup />} />
+          <Route path={'/ministry_teams'} element={<MinistryTeamLanding />} />
+          <Route
+            path={'/ministry_teams/rides'}
+            element={<StubbedRidesPage />}
+          />
+          <Route
+            path={'/ministry_teams/rides/create_event_form'}
+            element={<CreateEventSignupForm />}
+          />
+          <Route
+            path={'/ministry_teams/*'}
+            element={<MinistryTeamNotFound />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </React.StrictMode>
   );
 };
 

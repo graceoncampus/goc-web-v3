@@ -1,0 +1,83 @@
+/**
+  Template styling.
+ */
+@use 'src/styles/colors';
+@use '~sass-rem' as rem;
+
+.form-creator {
+  border-color: black;
+  border-style: solid;
+  border-radius: 1.5rem;
+  padding: 2rem;
+}
+
+.rounded-button {
+  border-radius: 1.5rem;
+  cursor: pointer;
+}
+
+.add-options {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.title-input {
+  border-width: 0;
+  width: 75%;
+}
+
+.sub-input {
+  border-width: 0;
+  width: 150px;
+}
+
+.bold-text {
+  font-weight: 500;
+}
+
+.utility {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.signups {
+  background-color: #afacac;
+  color: white;
+  padding: 1rem;
+  border-radius: 15;
+  margin-bottom: 2.5rem;
+}
+
+.create-rides {
+  background-color: #d4e6f4;
+  border-radius: 1rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  width: fit-content;
+  padding: 2rem;
+  color: black;
+  cursor: pointer;
+}
+
+.page {
+  padding: 2.5rem;
+}
+
+.form-title {
+  font-size: rem.convert(26px);
+}
+
+.panel {
+  margin-top: 75px;
+}
+
+.signups {
+  font-size: 1.25rem;
+  border-radius: 1rem;
+  width: fit-content;
+  padding-left: 3.5rem;
+  padding-right: 3.5rem;
+  margin-bottom: 3.5rem;
+}
