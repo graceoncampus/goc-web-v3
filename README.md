@@ -49,7 +49,7 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 ### Pre-requisites.
 - Have an Amplify Studio Account set up
 
-### `amplify pull --appId ${AppId} --envName dev`
+### `amplify pull --appId d1afaiv4wnjkx7 --envName dev`
 Pulls amplify things into your local github repo under src. Replace `${AppId}` with the app id found in Amplify Studio or ask Web Team Leader.
 
 ### `amplify codegen`
