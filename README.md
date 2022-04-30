@@ -50,7 +50,7 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 - Have an Amplify Studio Account set up
 
 ### `amplify pull --appId d1afaiv4wnjkx7 --envName dev`
-Pulls amplify things into your local github repo under src. Replace `${AppId}` with the app id found in Amplify Studio or ask Web Team Leader.
+Pulls amplify things into your local github repo under src.
 
 ### `amplify codegen`
 Auto-generates all the graphql models.
