@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { RiderSignup } from './Components/Rides/RiderSignup/RiderSignup';
 import { DriverSignup } from './Components/Rides/DriverSignup/DriverSignup';
+import { PrayerForm } from './Components/Prayer/PrayerForm';  
 import { Landing } from './Components/Landing/Landing';
 
 import './App.css';
@@ -22,6 +23,7 @@ const App = () => {
                   <Route path='/' element={<Landing />}></Route>
                   <Route path='/rides/rider/signup' element={<RiderSignup />}></Route>
                   <Route path='/rides/driver/signup' element={<DriverSignup />}></Route>
+                  <Route path='/prayer/request' element={<PrayerForm/>}></Route>
               </Routes>
           </BrowserRouter>
       </React.StrictMode>

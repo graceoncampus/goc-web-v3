@@ -1,0 +1,73 @@
+schema {
+    query: Query,
+    mutation: Mutation,
+    subscription: Subscription,
+}
+
+type Query {
+    a : Boolean,
+}
+
+type Mutation {
+    b : Boolean,
+}
+
+type Subscription {
+    c : Boolean,
+}
+
+enum EventStatus {
+    ACTIVE,
+    CLOSED
+}
+
+enum RideSignupStatus {
+    IN_PROGRESS,
+    MATCHED,
+}
+
+type EventTimeOption {
+    timeHeading: String!,
+    timeSubtext: String!
+}
+
+type Driver
+    @model
+    @key(name: "EventId", fields: ["eventId"], queryField: "getDriversByEventId")
+    @key(name: "EventIdAndSignupStatus", fields: ["eventId", "driverSignupStatus"], queryField: "getDriversByEventIdAndSignupStatus")
+    @key(name: "EventIdAndEmail", fields: ["eventId", "driverEmail"], queryField: "getDriversByEventIdAndEmail") {
+    eventId: ID!,
+    driverName: String!,
+    driverEmail: String!,
+    driverPhoneNumber: String!,
+    driverEventTime: String!,
+    driverAddress: String!,
+    driverNumRiderSeats: Int!,
+    driverComments: String!,
+    driverSignupStatus: RideSignupStatus!,
+}
+
+type Rider
+    @model
+    @key(name: "EventId", fields: ["eventId"], queryField: "getRidersByEventId")
+    @key(name: "EventIdAndSignupStatus", fields: ["eventId", "riderSignupStatus"], queryField: "getRidersByEventIdAndSignupStatus")
+    @key(name: "EventIdAndEmail", fields: ["eventId", "riderEmail"], queryField: "getRidersByEventIdAndEmail") {
+    eventId: ID!,
+    riderName: String!,
+    riderEmail: String!,
+    riderPhoneNumber: String!,
+    riderEventPickupLocation: String!,
+    riderEventTime: String!,
+    riderComments: String,
+    riderSignupStatus: RideSignupStatus!,
+}
+
+type Event
+    @model
+    @key(name: "EventId", fields: ["eventId"], queryField: "getEventsByEventId") {
+    eventId: ID!,
+    eventName: String!,
+    eventPickupLocations: [String]!,
+    eventTimes: [EventTimeOption]!
+    eventStatus: EventStatus!
+}

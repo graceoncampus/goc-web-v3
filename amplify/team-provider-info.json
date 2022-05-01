@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-gocwebv3-dev-150706-authRole",
+      "UnauthRoleArn": "arn:aws:iam::271755560601:role/amplify-gocwebv3-dev-150706-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::271755560601:role/amplify-gocwebv3-dev-150706-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-gocwebv3-dev-150706-deployment",
+      "UnauthRoleName": "amplify-gocwebv3-dev-150706-unauthRole",
+      "StackName": "amplify-gocwebv3-dev-150706",
+      "StackId": "arn:aws:cloudformation:us-west-2:271755560601:stack/amplify-gocwebv3-dev-150706/bebb78a0-2ba8-11ec-b9cd-0a04ec863665",
+      "AmplifyAppId": "d1afaiv4wnjkx7"
+    },
+    "categories": {
+      "function": {
+        "RiderSignupFunction": {
+          "deploymentBucketName": "amplify-gocwebv3-dev-150706-deployment",
+          "s3Key": "amplify-builds/RiderSignupFunction-6e544445485150387a59-build.zip"
+        }
+      }
+    }
+  }
+}
