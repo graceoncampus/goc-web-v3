@@ -6,14 +6,41 @@
 
 @import 'src/css/bootstrap.scss';
 
+$footer-y-padding: rem.convert(40px);
+$footer-x-padding-phone: rem.convert(55px);
+$footer-x-padding-desktop: rem.convert(255px);
+
 .footer {
-    padding: rem.convert(40px) 0;
+    padding-top: $footer-y-padding;
+    padding-bottom: $footer-y-padding;
     background-color: #f6f6f6;
 }
 
+@include media-breakpoint-down(lg) {
+    .footer {
+        padding-left: $footer-x-padding-phone;
+        padding-right: $footer-x-padding-phone;
+    }
+
+    .follow-us-col-1 {
+        display: none;
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    .footer {
+        padding-left: $footer-x-padding-desktop;
+        padding-right: $footer-x-padding-desktop;
+    }
+
+    .follow-us-col-3 {
+        display: none;
+    }
+}
+
 .gcc-logo {
-    width: rem.convert(268px);
-    height: rem.convert(128px);
+    max-width: rem.convert(268px);
+    //height: rem.convert(128px);
 }
 
 

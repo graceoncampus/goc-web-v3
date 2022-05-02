@@ -16,27 +16,29 @@
          <Container className={'footer-container'} fluid>
              <Row className={'footer gx-4'}>
                 <Col sm={'4'} className={'pb-3'}>
-                    <Row className={'gcc-logo'}>
+                    <Row className={'gcc-logo pb-3'}>
                         <a href={'https://www.gracechurch.org/'}>
                             <Image fluid src={'/assets/logo-gcc.png'} alt={'Grace Community Church'}/>
                         </a>
                     </Row>
 
-                    <Row className={'pb-1'}>
-                        <span className={'footer-label'}>
-                            &nbsp;FOLLOW US
-                        </span>
-                    </Row>
+                    <div className={'follow-us-col-1'}>
+                        <Row className={'pb-1'}>
+                            <span className={'footer-label'}>
+                                &nbsp;FOLLOW US
+                            </span>
+                        </Row>
 
-                    <Row sm={'auto'} className={'gx-0'}>
-                        <Image className={'logo-icon me-2'} src={'/assets/logo-facebook.png'} alt={'Facebook'}/>
-                        <Image className={'logo-icon me-2'} src={'/assets/logo-instagram.png'} alt={'Instagram'}/>
-                        <Image className={'logo-icon me-2'} src={'/assets/logo-vimeo.png'} alt={'Vimeo'}/>
-                        <Image className={'logo-icon'} src={'/assets/logo-wordpress.png'} alt={'Wordpress'}/>
-                    </Row>
+                        <Row sm={'auto'} className={'gx-0'}>
+                            <Image className={'logo-icon me-2'} src={'/assets/logo-facebook.png'} alt={'Facebook'}/>
+                            <Image className={'logo-icon me-2'} src={'/assets/logo-instagram.png'} alt={'Instagram'}/>
+                            <Image className={'logo-icon me-2'} src={'/assets/logo-vimeo.png'} alt={'Vimeo'}/>
+                            <Image className={'logo-icon'} src={'/assets/logo-wordpress.png'} alt={'Wordpress'}/>
+                        </Row>
+                    </div>
                 </Col>
 
-                <Col sm={'4'} className={'justify-content-center pb-5'}>
+                <Col sm={'4'} className={'pb-5'}>
                     <Row>
                         <span className={'footer-label'}>GRACE ON CAMPUS</span>
                     </Row>
@@ -90,6 +92,21 @@
                             </Button>
                         </Form>
                     </Row>
+
+                    <div className={'follow-us-col-3'}>
+                        <Row className={'pt-3 pb-1'}>
+                            <span className={'footer-label'}>
+                                &nbsp;FOLLOW US
+                            </span>
+                        </Row>
+
+                        <Row sm={'auto'} className={'gx-0'}>
+                            <Image className={'logo-icon me-2'} src={'/assets/logo-facebook.png'} alt={'Facebook'}/>
+                            <Image className={'logo-icon me-2'} src={'/assets/logo-instagram.png'} alt={'Instagram'}/>
+                            <Image className={'logo-icon me-2'} src={'/assets/logo-vimeo.png'} alt={'Vimeo'}/>
+                            <Image className={'logo-icon'} src={'/assets/logo-wordpress.png'} alt={'Wordpress'}/>
+                        </Row>
+                    </div>
                 </Col>
              </Row>
 
