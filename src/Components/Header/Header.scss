@@ -10,6 +10,12 @@ $header-link-font-size: rem.convert(14px);
 $header-link-font-weight: 500;
 $header-link-underline-thickness: rem.convert(4px);
 
+.navbar-light .navbar-toggler,
+.navbar-light .navbar-toggler:focus {
+  border: none;
+  box-shadow: none;
+}
+
 .navbar-light .navbar-nav .nav-item .header-navbar-link {
   color: black;
   font-weight: $header-link-font-weight;
