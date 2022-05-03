@@ -1,0 +1,96 @@
+/**
+* Event Styling
+*/
+
+@use '~sass-rem' as rem;
+
+@use 'src/styles/colors';
+
+$font-family: 'Poppins', sans-serif;
+
+.event-outer-container {
+    position: relative;
+    width: 100%;
+    padding: rem.convert(50px);
+    border-radius: rem.convert(20px);
+    background-color: #c4c4c4;
+}
+
+.event-inner-container-left {
+    position: relative;
+    height: rem.convert(170px);
+    left: 0%;
+    width: 55%;
+    padding: rem.convert(20px);
+    padding-left: rem.convert(50px);
+    border-radius: rem.convert(20px);
+    background-color: white;
+}
+
+.event-inner-container-right {
+    position: relative;
+    height: rem.convert(170px);
+    left: 45%;
+    width: 55%;
+    padding: rem.convert(20px);
+    padding-left: rem.convert(50px);
+    border-radius: rem.convert(20px);
+    background-color: white;
+}
+
+.vertical-line-blue {
+    display: inline-block;
+    position: relative;
+    width: rem.convert(4px);
+    height: rem.convert(27px);
+    margin-right: rem.convert(20px);
+    border: 1px solid colors.$goc-blue;
+    border-radius: rem.convert(20px);
+    background-color: colors.$goc-blue;
+}
+
+.event-purpose {
+    display: inline-block;
+    position: relative;
+    top: rem.convert(-8px);
+    color: #adadad;
+    font-weight: 700;
+    font-size: rem.convert(18px);
+}
+
+.event-text {
+    position: relative;
+    color: black;
+    font-weight: 700;
+    font-size: rem.convert(40px);
+}
+
+.event-action-btn {
+    all: unset;
+    position: absolute;
+    right: rem.convert(20px);
+    bottom: rem.convert(20px);
+    padding: 0 rem.convert(10px);
+    color: colors.$goc-blue;
+}
+
+.event-action-btn-text {
+    display: inline-block;
+    position: relative;
+    font-family: $font-family;
+    font-weight: 700;
+    font-size: rem.convert(18px);
+}
+
+.event-action-btn-arrow {
+    display: inline-block;
+    position: relative;
+    top: rem.convert(5px);
+    left: rem.convert(15px);
+    width: 0;
+    height: 0;
+    border-top: rem.convert(10px) solid transparent;
+    border-bottom: rem.convert(10px) solid transparent;
+    border-left: rem.convert(10px) solid colors.$goc-blue;
+    border-radius: rem.convert(20px);
+}
