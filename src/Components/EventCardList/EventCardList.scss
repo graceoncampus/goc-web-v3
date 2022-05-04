@@ -4,7 +4,8 @@
 
 @use '~sass-rem' as rem;
 
-#event-list-container {
+/* All devices */
+.event-list-container {
     width: 100%;
     height: 100%;
     margin: auto;
