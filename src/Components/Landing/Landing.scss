@@ -16,13 +16,13 @@ html {
 
 @include media-breakpoint-up(md) {
     html {
-        font-size: 9px;
+        font-size: 10px;
     }
 }
 
 @include media-breakpoint-up(xl) {
     html {
-        font-size: 12px;
+        font-size: 16px;
     }
 }
 
@@ -144,7 +144,7 @@ html {
     justify-content: center;
     position: relative;
     width: 100%;
-    margin: rem.convert(100px) 0;
+    margin: rem.convert(300px) 0 rem.convert(100px) 0;
 }
 
 .landing-welcome-paragraph-title {
@@ -177,13 +177,6 @@ html {
     background-color: black;
 }
 
-/* Laptop */
-@include media-breakpoint-down(xl) {
-    .landing-welcome-paragraph-container {
-        margin: rem.convert(200px) 0;
-    }
-}
-
 /* Phone and Tablet */
 @include media-breakpoint-down(md) {
     .landing-welcome-image-container {
@@ -199,9 +192,5 @@ html {
 
     .landing-facebook-btn {
         width: 70%;
-    }
-
-    .landing-welcome-paragraph-container {
-        margin: rem.convert(300px) 0 rem.convert(100px) 0;
     }
 }
