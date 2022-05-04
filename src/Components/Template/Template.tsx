@@ -16,11 +16,13 @@ interface TemplateProps {
 
 export const Template = (templateProps: TemplateProps) => {
     return (
-        <div>
+        <div className={'page-container'}>
             <Header activeKey={templateProps.activeKey} />
+
             <Container fluid className={'body-container'}>
                 {templateProps.body}
             </Container>
+
             <Footer />
         </div>
     );

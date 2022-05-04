@@ -4,37 +4,36 @@
 
 @use '~sass-rem' as rem;
 
-@use 'src/styles/dimensions';
-@use 'src/styles/font-sizes';
-@use 'src/styles/font-weights';
 @use 'src/styles/colors';
+@import 'src/css/bootstrap.scss';
 
 $rounded-box-radius: rem.convert(20px);
 $rounded-submit-button-radius: rem.convert(14px);
-$font-family: 'Poppins', sans-serif;
-$breakpoint-1: 1200px;
-$breakpoint-2: 900px;
-$breakpoint-3: 600px;
 
-@media screen and (max-width: $breakpoint-1) {
-    html {
-        font-size: 12px;
-    }
+html {
+    font-size: 8px;
 }
 
-@media screen and (max-width: $breakpoint-2) {
+@include media-breakpoint-up(md) {
     html {
         font-size: 9px;
     }
 }
 
-@media screen and (max-width: $breakpoint-3) {
+@include media-breakpoint-up(xl) {
     html {
-        font-size: 8px;
+        font-size: 12px;
+    }
+}
+
+@include media-breakpoint-up(xxl) {
+    html {
+        font-size: 18px;
     }
 }
     
-#container {
+/* All devices (some may be overriden later) */
+.landing-container {
     width: 100%;
     height: 100%;
     margin: auto;
@@ -44,12 +43,12 @@ $breakpoint-3: 600px;
     justify-content: center;
 }
 
-#top-container {
+.landing-top-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
-    padding: rem.convert(100px);
+    padding: rem.convert(130px);
     width: 100%;
     height: rem.convert(1000px);
     overflow: visible;
@@ -57,7 +56,7 @@ $breakpoint-3: 600px;
     gap: rem.convert(50px);
 }
 
-#bottom-container {
+.landing-bottom-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -67,7 +66,7 @@ $breakpoint-3: 600px;
     background-color: white;
 }
 
-#rounded-blue-box {
+.landing-rounded-blue-box {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -80,25 +79,23 @@ $breakpoint-3: 600px;
     background-color: colors.$goc-blue;
 }
 
-#welcome-title {
+.landing-welcome-title {
     position: relative;
-    font-family: $font-family;
     font-weight: 600;
     font-size: rem.convert(64px);
     color: white;
     text-align: center;
 }
 
-#welcome-subtitle {
+.landing-welcome-subtitle {
     position: relative;
-    font-family: $font-family;
     font-weight: 500;
     font-size: rem.convert(20px);
     color: white;
     text-align: center;
 }
 
-#learn-more-btn {
+.landing-learn-more-btn {
     margin-top: rem.convert(20px);
     padding: rem.convert(10px) rem.convert(30px);
     border: 1px solid white;
@@ -108,32 +105,30 @@ $breakpoint-3: 600px;
     cursor: pointer;
 }
 
-#welcome-image-container {
+.landing-welcome-image-container {
     position: relative;
     width: 100%;
 }
 
-#welcome-image {
+.landing-welcome-image {
     position: relative;
     width: 100%;
-    height: auto;
     border-radius: $rounded-box-radius;
     z-index: 1;
 }
 
-#facebook-btn {
+.landing-facebook-btn {
     all: unset;
-    position: absolute;
+    position: relative;
+    top: -10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
-    font-family: $font-family;
     font-weight: 500;
     font-size: rem.convert(18px);
     overflow: hidden;
-    padding: rem.convert(14px) rem.convert(40px);
-    top: 80%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 20%;
+    padding: rem.convert(10px) rem.convert(30px);
+    width: 25%;
     height: 10%;
     border-color: white;
     border-radius: $rounded-submit-button-radius;
@@ -142,7 +137,7 @@ $breakpoint-3: 600px;
     cursor: pointer;
 }
 
-#welcome-paragraph-container {
+.landing-welcome-paragraph-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -150,21 +145,18 @@ $breakpoint-3: 600px;
     position: relative;
     width: 100%;
     margin: rem.convert(100px) 0;
-    padding: rem.convert(50px);
 }
 
-#welcome-paragraph-title {
+.landing-welcome-paragraph-title {
     position: relative;
-    font-family: $font-family;
     font-weight: 400;
     font-size: rem.convert(45px);
     color: black;
     text-align: center;
 }
 
-#welcome-paragraph-body {
+.landing-welcome-paragraph-body {
     position: relative;
-    font-family: $font-family;
     font-weight: 400;
     font-size: rem.convert(18px);
     color: black;
@@ -173,15 +165,43 @@ $breakpoint-3: 600px;
     margin: auto;
 }
 
-#what-we-believe-btn {
+.landing-what-we-believe-btn {
     position: relative;
     margin-top: rem.convert(20px);
     padding: rem.convert(10px) rem.convert(30px);
-    font-family: $font-family;
     font-weight: 500;
     font-size: rem.convert(18px);
     border: 1px solid black;
     color: white;
     border-radius: $rounded-submit-button-radius;
     background-color: black;
+}
+
+/* Laptop */
+@include media-breakpoint-down(xl) {
+    .landing-welcome-paragraph-container {
+        margin: rem.convert(200px) 0;
+    }
+}
+
+/* Phone and Tablet */
+@include media-breakpoint-down(md) {
+    .landing-welcome-image-container {
+        position: relative;
+        width: 100%;
+    }
+    
+    .landing-welcome-image {
+        height: rem.convert(500px);
+        background-position: bottom;
+        object-fit: cover;
+    }
+
+    .landing-facebook-btn {
+        width: 70%;
+    }
+
+    .landing-welcome-paragraph-container {
+        margin: rem.convert(300px) 0 rem.convert(100px) 0;
+    }
 }

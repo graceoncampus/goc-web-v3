@@ -14,21 +14,9 @@ export interface EventCardListProps {
 
 
 export const EventCardList = (eventCardListProps: EventCardListProps) => {
-    let last = 'right';
-
-    const getJustification = () => {
-        if (last === 'left') {
-            last = 'right';
-            return 'right';
-        } else {
-            last = 'left';
-            return 'left';
-        }
-    }
-
     return (
-        <div id='event-list-container'>
-            {eventCardListProps.events.map((eventCardProps: EventCardProps) => {
+        <div className={'event-list-container'}>
+            {eventCardListProps.events.map((eventCardProps: EventCardProps, index: number) => {
                 return (
                     <EventCard
                         key={eventCardProps.text}
@@ -36,7 +24,7 @@ export const EventCardList = (eventCardListProps: EventCardListProps) => {
                         text={eventCardProps.text}
                         action={eventCardProps.action}
                         link={eventCardProps.link}
-                        justifyContent={getJustification()}
+                        justifyContent={index % 2 === 0 ? 'left' : 'right'}
                     />
                 );
             })}
