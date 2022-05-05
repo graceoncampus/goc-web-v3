@@ -6,6 +6,8 @@
 
 @use 'src/styles/colors';
 
+@import 'src/css/bootstrap.scss';
+
 $header-link-font-size: rem.convert(14px);
 $header-link-font-weight: 500;
 $header-link-underline-thickness: rem.convert(4px);

@@ -20,15 +20,8 @@ interface HeaderProps {
     activeKey: HeaderNavbarActiveKey
 }
 
-const hamburgerMenuCollapsedIconImagePath = '/assets/hamburger-menu-icon-expand.svg';
-const hamburgerMenuExpandedIconImagePath = '/assets/hamburger-menu-icon-collapse.svg';
-const hamburgerMenuCollapsedIconAltText = 'Hamburger Menu Expand Icon';
-const hamburgerMenuExpandedIconAltText = 'Hamburger Menu Collapse Icon';
-
 export const Header = (headerProps: HeaderProps) => {
-    const [isHamburgerMenuExpanded, setIsHamburgerMenuExpanded] = useState(false);
-    const [hamburgerMenuIconImagePath, setHamburgerMenuIconImagePath] = useState(hamburgerMenuCollapsedIconImagePath);
-    const [hamburgerMenuIconAltText, setHamburgerMenuIconAltText] = useState(hamburgerMenuExpandedIconAltText);
+    const [showExpandIcon, setShowExpandIcon] = useState(true);
 
     return (
         <Navbar className={'goc-navbar'} bg={'white'} fixed={'top'} expand={'lg'} collapseOnSelect>
@@ -40,23 +33,32 @@ export const Header = (headerProps: HeaderProps) => {
                     />
                 </Navbar.Brand>
 
-                <Navbar.Toggle aria-controls={'basic-navbar-nav'}>
-                    <Image
-                        src={hamburgerMenuIconImagePath}
-                        alt={hamburgerMenuIconAltText}
-                        onClick={(event) => {
-                            if (isHamburgerMenuExpanded) {
-                                setIsHamburgerMenuExpanded(false);
-                                setHamburgerMenuIconImagePath(hamburgerMenuCollapsedIconImagePath);
-                                setHamburgerMenuIconAltText(hamburgerMenuCollapsedIconAltText);
-                            } else {
-                                setIsHamburgerMenuExpanded(true);
-                                setHamburgerMenuIconImagePath(hamburgerMenuExpandedIconImagePath);
-                                setHamburgerMenuIconAltText(hamburgerMenuExpandedIconAltText);
-                            }
-                        }}
-                    />
-                </Navbar.Toggle>
+                {
+                    showExpandIcon
+                    ?
+                    <Navbar.Toggle
+                        className={'navbar-expand-icon'}
+                        aria-controls={'basic-navbar-nav'}
+                        onClick={() => setShowExpandIcon(false)}
+                    >
+                        <Image
+                            src={'/assets/hamburger-menu-icon-expand.svg'}
+                            alt={'Hamburger Menu Expand Icon'}
+                        />
+                    </Navbar.Toggle>
+
+                    :
+                    <Navbar.Toggle
+                        className={'navbar-collapse-icon'}
+                        aria-controls={'basic-navbar-nav'}
+                        onClick={() => setShowExpandIcon(true)}
+                    >
+                        <Image
+                            src={'/assets/hamburger-menu-icon-collapse.svg'}
+                            alt={'Hamburger Menu Collapse Icon'}
+                        />
+                    </Navbar.Toggle>
+                }
 
                 <Container fluid>
                     <Navbar.Collapse className={'justify-content-end'}>
