@@ -50,6 +50,7 @@ const LandingBody = () => {
     return (
         <div className={'landing-container'}>
             <div className={'landing-top-container'}>
+                <div className={'landing-black-background'}/>
                 <div className={'landing-rounded-blue-box'}>
                     <div className={'landing-welcome-title'}>Welcome to Grace on Campus!</div>
                     <div className={'landing-welcome-subtitle'}>Fridays at 7pm, Rolfe 1200</div>
