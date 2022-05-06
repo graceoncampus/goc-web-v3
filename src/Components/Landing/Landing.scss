@@ -50,10 +50,6 @@ html {
     position: relative;
     padding: rem.convert(130px);
     width: 100%;
-    height: rem.convert(1000px);
-    overflow: visible;
-    background-color: black;
-    gap: rem.convert(50px);
 }
 
 .landing-bottom-container {
@@ -62,8 +58,19 @@ html {
     align-items: center;
     position: relative;
     padding: rem.convert(130px);
+    padding-top: 0;
     width: 100%;
     background-color: white;
+}
+
+.landing-black-background {
+    background-color: black;
+    width: 100%;
+    height: 70%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
 }
 
 .landing-rounded-blue-box {
@@ -75,6 +82,7 @@ html {
     width: 100%;
     padding: rem.convert(100px);
     padding-bottom: rem.convert(80px);
+    margin-bottom: rem.convert(50px);
     border-radius: $rounded-box-radius;
     background-color: colors.$goc-blue;
 }
@@ -114,15 +122,14 @@ html {
     position: relative;
     width: 100%;
     border-radius: $rounded-box-radius;
-    z-index: 1;
 }
 
 .landing-facebook-btn {
     all: unset;
     position: relative;
-    top: -10%;
+    top: rem.convert(-60px);
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0);
     text-align: center;
     font-weight: 500;
     font-size: rem.convert(18px);
@@ -133,8 +140,8 @@ html {
     border-color: white;
     border-radius: $rounded-submit-button-radius;
     background-color: white;
-    z-index: 2;
     cursor: pointer;
+    z-index: 1;
 }
 
 .landing-welcome-paragraph-container {
@@ -144,7 +151,7 @@ html {
     justify-content: center;
     position: relative;
     width: 100%;
-    margin: rem.convert(300px) 0 rem.convert(100px) 0;
+    padding-bottom: rem.convert(130px);
 }
 
 .landing-welcome-paragraph-title {
