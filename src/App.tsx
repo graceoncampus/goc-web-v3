@@ -1,9 +1,13 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { RiderSignup } from './Components/Rides/RiderSignup/RiderSignup';
-import { DriverSignup } from './Components/Rides/DriverSignup/DriverSignup';
-import { Landing } from './Components/Landing/Landing';
-import { NotFound } from './Components/NotFound/NotFound';
+import { RiderSignup } from 'Components/User/Rides/RiderSignup/RiderSignup';
+import { DriverSignup } from 'Components/User/Rides/DriverSignup/DriverSignup';
+import { Landing as UserLanding } from 'Components/User/Landing/Landing';
+import { NotFound as UserNotFound } from 'Components/User/NotFound/NotFound';
+
+import { Landing as MinistryTeamLanding } from 'Components/MinistryTeams/Landing/Landing';
+import { StubbedRidesPage } from 'Components/MinistryTeams/Rides/StubbedRidesPage';
+import { NotFound as MinistryTeamNotFound } from 'Components/MinistryTeams/NotFound/NotFound';
 import './App.css';
 import './css/bootstrap.scss';
 
@@ -19,10 +23,13 @@ const App = () => {
       <React.StrictMode>
           <BrowserRouter>
               <Routes>
-                  <Route path='*' element={<NotFound />}></Route>   {/* 404 */}
-                  <Route path='/' element={<Landing />}></Route>
-                  <Route path='/rides/rider/signup' element={<RiderSignup />}></Route>
-                  <Route path='/rides/driver/signup' element={<DriverSignup />}></Route>
+                  <Route path={'*'} element={<UserNotFound />} />   {/* 404 */}
+                  <Route path={'/'} element={<UserLanding />} />
+                  <Route path={'/rides/rider/signup'} element={<RiderSignup />} />
+                  <Route path={'/rides/driver/signup'} element={<DriverSignup />} />
+                  <Route path={'/ministry_teams'} element={<MinistryTeamLanding />}/>
+                  <Route path={'/ministry_teams/rides'} element={<StubbedRidesPage />} />
+                  <Route path={'/ministry_teams/*'} element={<MinistryTeamNotFound />} />
               </Routes>
           </BrowserRouter>
       </React.StrictMode>

@@ -1,0 +1,74 @@
+/**
+* Footer styling.
+*/
+
+@use 'node_modules/sass-rem/index' as rem;
+
+@import 'src/css/bootstrap';
+
+$footer-y-padding: rem.convert(40px);
+$footer-x-padding-phone: rem.convert(55px);
+$footer-x-padding-desktop: rem.convert(255px);
+
+.footer {
+    padding-top: $footer-y-padding;
+    padding-bottom: $footer-y-padding;
+    background-color: #f6f6f6;
+}
+
+@include media-breakpoint-down(lg) {
+    .footer {
+        padding-left: $footer-x-padding-phone;
+        padding-right: $footer-x-padding-phone;
+    }
+
+    .follow-us-col-1 {
+        display: none;
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    .footer {
+        padding-left: $footer-x-padding-desktop;
+        padding-right: $footer-x-padding-desktop;
+    }
+
+    .follow-us-col-3 {
+        display: none;
+    }
+}
+
+.gcc-logo {
+    max-width: rem.convert(268px);
+}
+
+
+.row .logo-icon {
+    width: rem.convert(35px);
+    height: rem.convert(35px);
+}
+
+.footer-label {
+    font-size: rem.convert(14px);
+    font-weight: 500;
+    color: #afafaf;
+}
+
+.footer-text {
+    font-weight: 300;
+}
+
+.footer-form-group {
+    max-width: rem.convert(272px);
+}
+
+.newcomer-form-label {
+    font-size: rem.convert(13px);
+    font-weight: 200;
+}
+
+.newcomer-form-submit {
+    font-size: rem.convert(13px);
+    border-radius: rem.convert(14px);
+    margin-top: rem.convert(12px);
+}
