@@ -59,11 +59,11 @@ export const PrayerRequestForm = (prayerRequestFormProps: PrayerRequestFormProps
    return (
      <Container>
        <Col className={'mx-auto text-center'} lg={'8'}>
-         <span className={'signup-form-title'}>How can we be praying for you? </span>
+         <span className={'signup-form-title'}>How can we be praying for you?</span>
  
          <Form className={'text-center'} onSubmit={handleFormSubmit}>
            <Row className={'text-start gx-5'}>
-             <Col className={'mx-auto text-center'}lg={'6'}>
+             <Col className={'mx-auto text-center'} lg={'6'}>
                <Form.Group className={'mb-3'} controlId={'prayerName'}>
                  <Form.Label as={Row} className={'signup-form-label position-relative m-0'}> 
                    {' '}
