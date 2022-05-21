@@ -1,0 +1,85 @@
+/**
+  Template styling.
+ */
+@use 'src/styles/colors';
+@use '~sass-rem' as rem;
+
+.form-creator {
+  border-color: black;
+  border-style: solid;
+  border-radius: rem.convert(15px);
+  padding: rem.convert(32px) rem.convert(38px);
+}
+
+.rounded-button {
+  border-radius: rem.convert(15px);
+  cursor: pointer;
+}
+
+.add-options {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.delete-button {
+  cursor: pointer;
+}
+
+.title-input {
+  border-width: 0;
+  width: 75%;
+}
+
+.sub-input {
+  border-width: 0;
+}
+
+.bold-text {
+  font-weight: 500;
+}
+
+.utility {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.create-rides {
+  background-color: #d4e6f4;
+  border-radius: rem.convert(15px);
+  font-size: rem.convert(26px);
+  font-weight: 500;
+  width: fit-content;
+  padding: rem.convert(36px);
+  color: black;
+  cursor: pointer;
+}
+
+.page {
+  padding: rem.convert(60px) 0;
+}
+
+.page > .row {
+  padding: 0 rem.convert(60px);
+}
+
+.form-title {
+  font-size: rem.convert(26px);
+}
+
+.panel {
+  margin-top: rem.convert(72px);
+}
+
+.signups {
+  background-color: #afacac;
+  color: white;
+  font-size: rem.convert(20px);
+  border-radius: rem.convert(15px);
+  width: fit-content;
+  padding: rem.convert(14px);
+  padding-left: rem.convert(48px);
+  padding-right: rem.convert(48px);
+  margin-bottom: rem.convert(48px);
+}
