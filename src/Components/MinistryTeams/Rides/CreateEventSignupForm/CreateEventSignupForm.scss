@@ -21,6 +21,10 @@
   cursor: pointer;
 }
 
+.delete-button {
+  cursor: pointer;
+}
+
 .title-input {
   border-width: 0;
   width: 75%;
@@ -28,7 +32,6 @@
 
 .sub-input {
   border-width: 0;
-  // width: 100%;
 }
 
 .bold-text {
@@ -40,14 +43,6 @@
   margin-bottom: 2rem;
   width: fit-content;
   cursor: pointer;
-}
-
-.signups {
-  background-color: #afacac;
-  color: white;
-  padding: 1rem;
-  border-radius: rem.convert(15px);
-  margin-bottom: 2.5rem;
 }
 
 .create-rides {
@@ -78,10 +73,13 @@
 }
 
 .signups {
-  font-size: 1.25rem;
-  border-radius: 1rem;
+  background-color: #afacac;
+  color: white;
+  font-size: rem.convert(20px);
+  border-radius: rem.convert(15px);
   width: fit-content;
-  padding-left: 3.5rem;
-  padding-right: 3.5rem;
-  margin-bottom: 3.5rem;
+  padding: rem.convert(14px);
+  padding-left: rem.convert(48px);
+  padding-right: rem.convert(48px);
+  margin-bottom: rem.convert(48px);
 }

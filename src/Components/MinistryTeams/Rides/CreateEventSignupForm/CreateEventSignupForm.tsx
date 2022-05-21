@@ -111,7 +111,7 @@ const SignupFormCreator = () => {
                       onClick={() =>
                         setTimeChoices(timeChoices.filter((_, i) => index != i))
                       }
-                      style={{ alignSelf: 'center', cursor: 'pointer' }}
+                      className={'delete-button'}
                     />
                   </IconContext.Provider>
                 </div>
