@@ -65,12 +65,12 @@ const SignupFormCreator = () => {
             {timeChoices.map((timeChoice: TimeChoice, index: number) => {
               return (
                 <div className={'d-flex justify-content-start'} key={index}>
-                  <div style={{ width: '50%' }}>
+                  <div>
                     Heading:{' '}
                     <input
                       required
                       value={timeChoice.heading}
-                      placeholder={'Enter heading'}
+                      placeholder={'heading'}
                       onChange={e =>
                         setTimeChoices(
                           timeChoices.map((tc, i) =>
@@ -83,14 +83,14 @@ const SignupFormCreator = () => {
                           ),
                         )
                       }
-                      className={'sub-input bold-text'}
+                      className={'sub-input bold-text w-50'}
                     />
                   </div>
-                  <div style={{ width: '50%' }}>
+                  <div>
                     Subtext:{' '}
                     <input
                       value={timeChoice.subtext}
-                      placeholder={'Enter time range'}
+                      placeholder={'time range'}
                       onChange={e =>
                         setTimeChoices(
                           timeChoices.map((tc, i) =>
@@ -103,7 +103,7 @@ const SignupFormCreator = () => {
                           ),
                         )
                       }
-                      className={'sub-input bold-text'}
+                      className={'sub-input bold-text w-50'}
                     />
                   </div>
                   <IconContext.Provider value={{ size: '26' }}>
@@ -205,13 +205,13 @@ export const CreateEventSignupForm = () => {
   return (
     <Container className={'page'} fluid>
       <Row>
-        <Col lg={6}>
+        <Col md={6} lg={6}>
           <SignupFormCreator />
         </Col>
-        <Col lg={3}>
+        <Col md={3} lg={3}>
           <Utilities />
         </Col>
-        <Col lg={3}>
+        <Col md={3} lg={3}>
           <SidePanel
             signupNotifications={signupNotifications}
             numSignups={numSignups}

@@ -7,12 +7,12 @@
 .form-creator {
   border-color: black;
   border-style: solid;
-  border-radius: 1.5rem;
-  padding: 2rem;
+  border-radius: rem.convert(15px);
+  padding: rem.convert(32px) rem.convert(38px);
 }
 
 .rounded-button {
-  border-radius: 1.5rem;
+  border-radius: rem.convert(15px);
   cursor: pointer;
 }
 
@@ -28,7 +28,7 @@
 
 .sub-input {
   border-width: 0;
-  width: 150px;
+  // width: 100%;
 }
 
 .bold-text {
@@ -46,23 +46,27 @@
   background-color: #afacac;
   color: white;
   padding: 1rem;
-  border-radius: 15;
+  border-radius: rem.convert(15px);
   margin-bottom: 2.5rem;
 }
 
 .create-rides {
   background-color: #d4e6f4;
-  border-radius: 1rem;
-  font-size: 1.5rem;
+  border-radius: rem.convert(15px);
+  font-size: rem.convert(26px);
   font-weight: 500;
   width: fit-content;
-  padding: 2rem;
+  padding: rem.convert(36px);
   color: black;
   cursor: pointer;
 }
 
 .page {
-  padding: 2.5rem;
+  padding: rem.convert(60px) 0;
+}
+
+.page > .row {
+  padding: 0 rem.convert(60px);
 }
 
 .form-title {
@@ -70,7 +74,7 @@
 }
 
 .panel {
-  margin-top: 75px;
+  margin-top: rem.convert(72px);
 }
 
 .signups {
