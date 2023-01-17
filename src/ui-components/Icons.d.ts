@@ -4,10 +4,29 @@
  * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/
 
-import React from "react";
+import * as React from "react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { ViewProps } from "@aws-amplify/ui-react";
+import { IconProps, ViewProps } from "@aws-amplify/ui-react";
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type IconsOverridesProps = {
+    Icons?: PrimitiveOverrideProps<ViewProps>;
+    "sandwich menu"?: PrimitiveOverrideProps<ViewProps>;
+    Vectoruzy?: PrimitiveOverrideProps<IconProps>;
+    Vectorfti?: PrimitiveOverrideProps<IconProps>;
+    Vectorvbl?: PrimitiveOverrideProps<IconProps>;
+    rides?: PrimitiveOverrideProps<IconProps>;
+    "small group"?: PrimitiveOverrideProps<ViewProps>;
+    Vectorvuh?: PrimitiveOverrideProps<IconProps>;
+    Vectorubw?: PrimitiveOverrideProps<IconProps>;
+    Vectorkhb?: PrimitiveOverrideProps<IconProps>;
+    Vectorkgr?: PrimitiveOverrideProps<IconProps>;
+    Vectorzld?: PrimitiveOverrideProps<IconProps>;
+    Vectorour?: PrimitiveOverrideProps<IconProps>;
+    sermons?: PrimitiveOverrideProps<ViewProps>;
+    Vectorlrv?: PrimitiveOverrideProps<IconProps>;
+    Vectorwkh?: PrimitiveOverrideProps<IconProps>;
+} & EscapeHatchProps;
 export declare type IconsProps = React.PropsWithChildren<Partial<ViewProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: IconsOverridesProps | undefined | null;
 }>;
 export default function Icons(props: IconsProps): React.ReactElement;

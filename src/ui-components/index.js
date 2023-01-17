@@ -18,3 +18,4 @@ export { default as Mobileheader } from "./Mobileheader";
 export { default as Icons } from "./Icons";
 export { default as Navbar } from "./Navbar";
 export { default as Infocard } from "./Infocard";
+export { default as studioTheme } from "./studioTheme";

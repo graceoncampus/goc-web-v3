@@ -5,7 +5,7 @@
  **************************************************************************/
 
 /* eslint-disable */
-import React from "react";
+import * as React from "react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Icon, Text, View } from "@aws-amplify/ui-react";
 export default function Mobilefooter(props) {
@@ -16,8 +16,8 @@ export default function Mobilefooter(props) {
       height="812px"
       position="relative"
       padding="0px 0px 0px 0px"
-      {...rest}
       {...getOverrideProps(overrides, "Mobilefooter")}
+      {...rest}
     >
       <View
         width="375px"

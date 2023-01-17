@@ -5,7 +5,7 @@
  **************************************************************************/
 
 /* eslint-disable */
-import React from "react";
+import * as React from "react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Text, View } from "@aws-amplify/ui-react";
 export default function Signupbutton(props) {
@@ -16,8 +16,8 @@ export default function Signupbutton(props) {
       height="50px"
       position="relative"
       padding="0px 0px 0px 0px"
-      {...rest}
       {...getOverrideProps(overrides, "Signupbutton")}
+      {...rest}
     >
       <View
         width="122px"

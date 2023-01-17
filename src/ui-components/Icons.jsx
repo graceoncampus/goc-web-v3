@@ -5,7 +5,7 @@
  **************************************************************************/
 
 /* eslint-disable */
-import React from "react";
+import * as React from "react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Icon, View } from "@aws-amplify/ui-react";
 export default function Icons(props) {
@@ -16,8 +16,8 @@ export default function Icons(props) {
       height="30.017166137695312px"
       position="relative"
       padding="0px 0px 0px 0px"
-      {...rest}
       {...getOverrideProps(overrides, "Icons")}
+      {...rest}
     >
       <View
         padding="0px 0px 0px 0px"

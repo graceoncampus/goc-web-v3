@@ -4,10 +4,20 @@
  * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/
 
-import React from "react";
+import * as React from "react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { ViewProps } from "@aws-amplify/ui-react";
+import { IconProps, ViewProps } from "@aws-amplify/ui-react";
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type MobileheaderOverridesProps = {
+    Mobileheader?: PrimitiveOverrideProps<ViewProps>;
+    "Rectangle 38"?: PrimitiveOverrideProps<ViewProps>;
+    "sandwich menu"?: PrimitiveOverrideProps<ViewProps>;
+    Vectorffd?: PrimitiveOverrideProps<IconProps>;
+    Vectorolr?: PrimitiveOverrideProps<IconProps>;
+    Vectorurk?: PrimitiveOverrideProps<IconProps>;
+    Vector?: PrimitiveOverrideProps<IconProps>;
+} & EscapeHatchProps;
 export declare type MobileheaderProps = React.PropsWithChildren<Partial<ViewProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: MobileheaderOverridesProps | undefined | null;
 }>;
 export default function Mobileheader(props: MobileheaderProps): React.ReactElement;

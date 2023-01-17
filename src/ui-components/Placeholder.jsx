@@ -5,7 +5,7 @@
  **************************************************************************/
 
 /* eslint-disable */
-import React from "react";
+import * as React from "react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Icon, View } from "@aws-amplify/ui-react";
 export default function Placeholder(props) {
@@ -16,8 +16,8 @@ export default function Placeholder(props) {
       height="284px"
       position="relative"
       padding="0px 0px 0px 0px"
-      {...rest}
       {...getOverrideProps(overrides, "Placeholder")}
+      {...rest}
     >
       <View
         width="375px"

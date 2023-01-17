@@ -4,10 +4,17 @@
  * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/
 
-import React from "react";
+import * as React from "react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { ViewProps } from "@aws-amplify/ui-react";
+import { IconProps, ViewProps } from "@aws-amplify/ui-react";
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PlaceholderOverridesProps = {
+    Placeholder?: PrimitiveOverrideProps<ViewProps>;
+    "Rectangle 2"?: PrimitiveOverrideProps<ViewProps>;
+    "Line 1"?: PrimitiveOverrideProps<IconProps>;
+    "Line 2"?: PrimitiveOverrideProps<IconProps>;
+} & EscapeHatchProps;
 export declare type PlaceholderProps = React.PropsWithChildren<Partial<ViewProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: PlaceholderOverridesProps | undefined | null;
 }>;
 export default function Placeholder(props: PlaceholderProps): React.ReactElement;

@@ -5,7 +5,7 @@
  **************************************************************************/
 
 /* eslint-disable */
-import React from "react";
+import * as React from "react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Flex, Text } from "@aws-amplify/ui-react";
 export default function Navbar(props) {
@@ -17,8 +17,8 @@ export default function Navbar(props) {
       alignItems="flex-start"
       position="relative"
       padding="0px 0px 0px 0px"
-      {...rest}
       {...getOverrideProps(overrides, "Navbar")}
+      {...rest}
     >
       <Text
         fontFamily="Poppins"

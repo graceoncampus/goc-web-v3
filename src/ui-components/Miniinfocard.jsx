@@ -5,7 +5,7 @@
  **************************************************************************/
 
 /* eslint-disable */
-import React from "react";
+import * as React from "react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Image, Text, View } from "@aws-amplify/ui-react";
 export default function Miniinfocard(props) {
@@ -16,8 +16,8 @@ export default function Miniinfocard(props) {
       height="114px"
       position="relative"
       padding="0px 0px 0px 0px"
-      {...rest}
       {...getOverrideProps(overrides, "Miniinfocard")}
+      {...rest}
     >
       <Image
         width="414px"

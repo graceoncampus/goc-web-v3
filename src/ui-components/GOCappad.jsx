@@ -5,7 +5,7 @@
  **************************************************************************/
 
 /* eslint-disable */
-import React from "react";
+import * as React from "react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Text, View } from "@aws-amplify/ui-react";
 export default function GOCappad(props) {
@@ -16,8 +16,8 @@ export default function GOCappad(props) {
       height="512px"
       position="relative"
       padding="0px 0px 0px 0px"
-      {...rest}
       {...getOverrideProps(overrides, "GOCappad")}
+      {...rest}
     >
       <View
         width="1440px"

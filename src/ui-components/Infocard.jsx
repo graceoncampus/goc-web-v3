@@ -5,7 +5,7 @@
  **************************************************************************/
 
 /* eslint-disable */
-import React from "react";
+import * as React from "react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Icon, Image, Text, View } from "@aws-amplify/ui-react";
 export default function Infocard(props) {
@@ -17,8 +17,8 @@ export default function Infocard(props) {
       position="relative"
       boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
       padding="0px 0px 0px 0px"
-      {...rest}
       {...getOverrideProps(overrides, "Infocard")}
+      {...rest}
     >
       <Image
         width="372px"
