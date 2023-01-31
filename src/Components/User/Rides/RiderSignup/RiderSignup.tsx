@@ -9,6 +9,10 @@ import { RiderSignupThankYou } from './RiderSignupThankYou';
 import { RiderSignupForm } from './RiderSignupForm';
 import { Template } from 'Components/User/Template/Template';
 
+// just to test driver email form
+import { DriverEmailForm } from '../DriverEmail/DriverEmailForm';
+import { Container } from 'react-bootstrap';
+
 export const RiderSignup = () => {
     return (
         <Template activeKey={HeaderNavbarActiveKey.RIDES} body={<RiderSignupBody />} />
@@ -22,8 +26,12 @@ const RiderSignupBody = () => {
     ] = useState(false);
 
     return (
-        riderSignupCompleted
+        <Container>
+        {riderSignupCompleted
         ? <RiderSignupThankYou />
-        : <RiderSignupForm setRiderSignupCompleted={setRiderSignupCompleted} />
+        : <RiderSignupForm setRiderSignupCompleted={setRiderSignupCompleted} />}
+
+        <DriverEmailForm/>
+        </Container>
     );
 }
