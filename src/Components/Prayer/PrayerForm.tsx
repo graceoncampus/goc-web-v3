@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { PrayerRequestForm } from './PrayerRequestForm';
 // make page for prayer request confirmation. 
-
 import { HeaderNavbarActiveKey } from 'Components/Header/Header'
 
 import { Template } from 'Components/Template/Template';
@@ -27,5 +26,4 @@ const PrayerFormBody = () => {
     return (
         <PrayerRequestForm setPrayerRequestCompleted={setPrayerRequestCompleted} />
     )
-    }
-       
+}
