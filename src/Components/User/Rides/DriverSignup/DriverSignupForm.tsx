@@ -90,6 +90,7 @@ export const DriverSignupForm = (driverSignupFormProps: DriverSignupFormProps) =
     const eventTimeHeading = eventTime.timeHeading;
     const eventTimeSubtext = eventTime.timeSubtext;
 
+    
     return (
         <Form.Check
             key={eventTimeHeading}

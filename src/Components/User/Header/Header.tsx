@@ -12,7 +12,8 @@ export enum HeaderNavbarActiveKey {
     ABOUT = 'About',
     RESOURCES = 'Resources',
     SMALL_GROUPS = 'Small Groups',
-    RIDES = 'Rides'
+    RIDES = 'Rides',
+    PRAYER = 'Prayer'
 }
 
 
@@ -81,6 +82,11 @@ export const Header = (headerProps: HeaderProps) => {
                             <Nav.Item className={'px-2'}>
                                 <Nav.Link className={'header-navbar-link'} eventKey={'Rides'} href={'/'}>
                                     Rides
+                                </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item className={'px-2'}>
+                                <Nav.Link className={'header-navbar-link'} eventKey={'Prayer'} href={'/prayer/request'}>
+                                    Prayer Requests
                                 </Nav.Link>
                             </Nav.Item>
                         </Nav>
