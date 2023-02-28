@@ -5,7 +5,7 @@
  import React, { useEffect, useState } from 'react';
  import { Button, Col, Container, Form, Row } from 'react-bootstrap';
  import { useSearchParams } from 'react-router-dom';
- import { CreatePrayerInput } from 'Api';
+//  import { CreatePrayerInput } from 'Api';
 
  //import { getEventsByEventId } from 'graphql/queries';
  //import { createDriver } from 'graphql/mutations';
@@ -50,13 +50,19 @@ export const PrayerRequestForm = (prayerRequestFormProps: PrayerRequestFormProps
     
     const handleFormSubmit = async (event: any) => {
         event.preventDefault();
+        const prayerSignup = {
+          prayerName,
+          prayerEmail,
+          prayerComments
+        }
+        console.log(prayerSignup)
     
-        const prayerSingupData: CreatePrayerInput = {
-          prayerName: prayerName,
-          prayerEmail: prayerEmail,       
-          prayerComments: prayerComments,
+        // const prayerSingupData: CreatePrayerInput = {
+        //   prayerName: prayerName,
+        //   prayerEmail: prayerEmail,       
+        //   prayerComments: prayerComments,
 
-        };
+        // };
     };
     prayerRequestFormProps.setPrayerRequestCompleted(true);
    return (
