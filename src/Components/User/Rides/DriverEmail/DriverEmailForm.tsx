@@ -14,6 +14,7 @@
    const [recipientOptions, setRecipientOptions] = useState<string[]>([]);
    const [recipientList, setRecipientList] = useState<string[]>([]);
    const [message, setMessage] = useState<string>('');
+   const [btnClicked, setBtnClicked] = useState<string>('');
 
    const list = [ 
      { email: 'jpan287@ucla.edu', name: 'Johnny Pan' },
@@ -25,18 +26,37 @@
 
    useEffect(() => {
     setRecipientOptions([]);
-   });
+   }, []);
+
+   const handleFormSubmit = async (event: any) => {
+    event.preventDefault();
+
+    switch (btnClicked) {
+      case 'send':
+        console.log("Send");
+        break;
+      case 'save':
+        console.log("Save");
+        break;
+      case 'discard':
+        console.log("Discard");
+        break;
+      default:
+        console.log("Error");
+        break;
+    }
+   }
 
    return (
      <Container>
        <Col className={'mx-auto text-left'} lg={'8'}>
-         <Form className={'text-left'}>
+         <Form className={'text-left'} onSubmit={handleFormSubmit}>
            <span className={'signup-form-title'}>Driver Email</span>
            <Form.Group className={'mb-3'}>
              <Form.Label className={'signup-form-radio-text'}>Recipients:</Form.Label>
              <Autocomplete
                multiple
-               id="tags-filled"
+               id="emailAutocomplete"
                options={list.map((option) => option.email)}
                freeSolo
                onChange={(event, newValue) => {
@@ -44,14 +64,14 @@
                }}
                renderTags={(value: readonly string[], getTagProps) =>
                  value.map((option: string, index: number) => (
-                   <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                   <Chip variant="filled" label={option} {...getTagProps({ index })} />
                  ))
                }
                renderInput={(params) => (
                  <TextField
                    {...params}
-                   variant="filled"
-                   placeholder="Enter emails..."
+                   hiddenLabel
+                   label="Enter emails..."
                  />
                )}
              />
@@ -66,9 +86,9 @@
                            required/>
            </Form.Group>
 
-          <Button className={'ms-3 float-end'} type='button'>Send Email</Button>
-          <Button className={'ms-3 float-end'} type='button'>Save Draft</Button>
-          <Button className={'ms-3 float-end'} type='submit'>Discard</Button>
+          <Button className={'ms-3 float-end'} onClick={() => setBtnClicked('send')} type='submit' name='sendBtn'>Send Email</Button>
+          <Button className={'ms-3 float-end'} onClick={() => setBtnClicked('save')} type='submit' name='saveBtn'>Save Draft</Button>
+          <Button className={'ms-3 float-end'} onClick={() => setBtnClicked('discard')} type='submit' name='discardBtn'>Discard</Button>
          </Form>
        </Col>
      </Container>
