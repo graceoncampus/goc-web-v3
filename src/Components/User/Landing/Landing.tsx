@@ -1,5 +1,4 @@
-/**
- * Landing Page
+ /* Landing Page
  */
 
 import React from 'react';
@@ -49,36 +48,31 @@ const LandingBody = () => {
 
     return (
         <div className={'landing-container'}>
-            <div className={'landing-top-container'}>
-                <div className={'landing-black-background'}/>
-                <div className={'landing-rounded-blue-box'}>
-                    <div className={'landing-welcome-title'}>Welcome to Grace on Campus!</div>
-                    <div className={'landing-welcome-subtitle'}>Fridays at 7pm, Rolfe 1200</div>
-                    <button className={'landing-learn-more-btn'} onClick={() => navigate('/rides/rider/signup')}>
-                        Learn more
-                    </button>
-                </div>
-                <div className={'landing-welcome-image-container'}>
-                    <img className={'landing-welcome-image'} src='/images/LandingPhoto.png' alt='Grace on Campus'/>
-                    <button className={'landing-facebook-btn'} onClick={() => navigate('/rides/rider/signup')}>
-                        Join our Facebook group
-                    </button>
-                </div>
+            <div className={'landing-rounded-blue-box'}>
+                <div className={'landing-welcome-title'}>Welcome to Grace on Campus!</div>
+                <div className={'landing-welcome-subtitle'}>Fridays at 7pm, Rolfe 1200</div>
+                <button className={'landing-learn-more-btn'} onClick={() => navigate('/rides/rider/signup')}>
+                    Learn more
+                </button>
             </div>
-            <div className={'landing-bottom-container'}>
-                <div className={'landing-welcome-paragraph-container'}>
-                    <div className={'landing-welcome-paragraph-title'}>Welcome!</div>
-                    <div className={'landing-welcome-paragraph-body'}>
-                        Grace on Campus is a Christian fellowship at UCLA. As a ministry of Grace Community Church, 
-                        we focus on Bible teaching, leadership training, evangelism, and discipleship. Join our Facebook 
-                        group to attend our weekly Bible study, every Friday at 7pm.
-                    </div>
-                    <button className={'landing-what-we-believe-btn'} onClick={() => navigate('/rides/rider/signup')}>
-                        What we believe
-                    </button>
-                </div>
-                <EventCardList events={events}/>
+            <div className={'landing-welcome-image-container'}>
+                <img className={'landing-welcome-image'} src='/images/LandingPhoto.png' alt='Grace on Campus'/>
+                <button className={'landing-facebook-btn'} onClick={() => navigate('/rides/rider/signup')}>
+                    Join our Facebook group
+                </button>
             </div>
+            <div className={'landing-welcome-paragraph-container'}>
+                <div className={'landing-welcome-paragraph-title'}>Welcome!</div>
+                <div className={'landing-welcome-paragraph-body'}>
+                    Grace on Campus is a Christian fellowship at UCLA. As a ministry of Grace Community Church, 
+                    we focus on Bible teaching, leadership training, evangelism, and discipleship. Join our Facebook 
+                    group to attend our weekly Bible study, every Friday at 7pm.
+                </div>
+                <button className={'landing-what-we-believe-btn'} onClick={() => navigate('/rides/rider/signup')}>
+                    What we believe
+                </button>
+            </div>
+            <EventCardList events={events}/>
         </div>
     )
 }
