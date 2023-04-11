@@ -11,6 +11,7 @@ import { StubbedRidesPage } from 'Components/MinistryTeams/Rides/StubbedRidesPag
 import { NotFound as MinistryTeamNotFound } from 'Components/MinistryTeams/NotFound/NotFound';
 import './App.css';
 import './css/bootstrap.scss';
+import { AboutUs } from 'Components/User/AboutUs/AboutUs';
 
 /**
  * Curse Amplify's routing - we need to add trailing slashes to our paths for now!
@@ -26,6 +27,7 @@ const App = () => {
               <Routes>
                   <Route path={'*'} element={<UserNotFound />} />   {/* 404 */}
                   <Route path={'/'} element={<UserLanding />} />
+                  <Route path={'/about'} element={<AboutUs />} />
                   <Route path={'/rides/rider/signup'} element={<RiderSignup />} />
                   <Route path={'/rides/driver/signup'} element={<DriverSignup />} />
                   <Route path={'/ministry_teams'} element={<MinistryTeamLanding />}/>
