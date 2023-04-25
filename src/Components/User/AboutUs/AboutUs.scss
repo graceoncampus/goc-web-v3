@@ -1,7 +1,19 @@
-.aboutUs {
+.about-us-container {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.about-us {
     position: relative;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -500%);
     color: white;
+}
+
+.about-us-body {
+    width: 80%;
+    text-align: center;
 }
