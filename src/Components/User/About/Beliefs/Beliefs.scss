@@ -1,0 +1,43 @@
+/**
+* Beliefs page styling.
+*/
+
+@use '~sass-rem' as rem;
+
+@use 'src/styles/colors';
+
+@import 'src/css/bootstrap';
+
+.beliefs-title-overlay {
+  position: absolute;
+  width: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  background: #C4C4C4;
+  text-align: center;
+}
+
+.beliefs-title-text {
+  position: absolute;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-size: rem.convert(75px);
+  line-height: 106.5%;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  letter-spacing: -0.065em;
+  color: white;
+}
+
+.header-text {
+  border-bottom: 2px solid #C4C4C4;
+  padding-bottom: rem.convert(4px);
+  font-family: 'Poppins';
+  font-size: rem.convert(56px)
+}
+
+.body-text {
+  padding-top: rem.convert(4px);
+}
