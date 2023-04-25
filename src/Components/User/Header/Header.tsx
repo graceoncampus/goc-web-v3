@@ -65,7 +65,7 @@ export const Header = (headerProps: HeaderProps) => {
                     <Navbar.Collapse className={'justify-content-end'}>
                         <Nav activeKey={headerProps.activeKey}>
                             <Nav.Item className={'px-2'}>
-                                <Nav.Link className={'header-navbar-link'} eventKey={'About'} href={'/'}>
+                                <Nav.Link className={'header-navbar-link'} eventKey={'About'} href={'/about'}>
                                     About
                                 </Nav.Link>
                             </Nav.Item>
