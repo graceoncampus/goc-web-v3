@@ -17,11 +17,11 @@
 }
 
 .about-us-body {
-    padding: 50px; 
+    padding: rem.convert(50px); 
     width: 70%;
     text-align: center;
 }
 
 .about-us-video {
-    padding: 80px;
+    padding: rem.convert(80px);
 }
