@@ -22,7 +22,7 @@ const AboutUsBody = () => {
     return (
         <div className='text-center'>
             <Image fluid rounded src={'/images/AboutUsBackground.png'}/>
-            <h1 className="aboutUs">About Us</h1>
+            <h1 className="aboutUs"> <strong> About Us </strong></h1>
             <h2>Who We Are</h2>
             <p>
                 We are a ministry of Grace Community Church on the UCLA campus. We are a student group that exists to glorify God and spread a passion for His glory by making disciples, shepherding them to value Jesus Christ above all else, and training up the next generation of Christian leaders. In other words, we exist to edify and equip the saints, evangelize the lost, and exalt the Lord Jesus Christ in all things.
