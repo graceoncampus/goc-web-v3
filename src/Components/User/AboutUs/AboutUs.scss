@@ -6,14 +6,16 @@
 }
 
 .about-us {
+    padding: 10px;
     position: relative;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -500%);
+    transform: translate(-50%, -350%);
     color: white;
 }
 
 .about-us-body {
-    width: 80%;
+    padding: 50px;
+    width: 70%;
     text-align: center;
 }
