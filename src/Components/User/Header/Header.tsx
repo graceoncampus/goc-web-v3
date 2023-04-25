@@ -71,7 +71,7 @@ export const Header = (headerProps: HeaderProps) => {
                             </Nav.Item>
                             <Nav.Item className={'px-2'}>
                                 <NavDropdown
-                                    id="header-navbar-link"
+                                    className="header-navbar-link"
                                     title="Resources"
                                     >
                                     <NavDropdown.Item href="/sermons">Sermons</NavDropdown.Item>
