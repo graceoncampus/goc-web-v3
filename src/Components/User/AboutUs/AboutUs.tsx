@@ -37,6 +37,14 @@ const AboutUsBody = () => {
             <Button variant='dark'>
                 Welcome Packet
             </Button>
+            <div className='about-us-video'>
+                <iframe
+                    src="https://www.youtube.com/embed/5T5BY1j2MkE"
+                    title="YouTube video"
+                    width="560"
+                    height="315"
+                ></iframe>
+            </div>
         </div>
     );
 }
