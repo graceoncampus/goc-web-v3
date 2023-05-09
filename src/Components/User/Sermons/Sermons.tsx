@@ -61,6 +61,8 @@ const SermonItem = (prop: SermonItemProps) => {
                     {prop.speaker} | {prop.passage_reference} | {prop.date.toDateString()}
                 </div>
             </div>
+            <audio className='sermon-audio' src=" " controls />
+
         </ListGroup.Item>
     );
 }
