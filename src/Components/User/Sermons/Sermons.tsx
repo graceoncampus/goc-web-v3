@@ -53,10 +53,14 @@ export const Sermons = () => {
 const SermonItem = (prop: SermonItemProps) => {
     return (
         <ListGroup.Item className='sermon-item mt-5 border'>
-            <h1>
-                {prop.title}
-            </h1>
-            {prop.date.toDateString()}
+            <div className='sermon-info'>
+                <h2 className='sermon-title'>
+                    {prop.title}
+                </h2>
+                <div>
+                    {prop.speaker} | {prop.passage_reference} | {prop.date.toDateString()}
+                </div>
+            </div>
         </ListGroup.Item>
     );
 }
