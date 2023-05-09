@@ -52,16 +52,18 @@ export const Sermons = () => {
 
 const SermonItem = (prop: SermonItemProps) => {
     return (
-        <ListGroup.Item className='sermon-item mt-5 border'>
-            <div className='sermon-info'>
-                <h2 className='sermon-title'>
-                    {prop.title}
-                </h2>
-                <div>
-                    {prop.speaker} | {prop.passage_reference} | {prop.date.toDateString()}
+        <ListGroup.Item className='sermon-item mt-5 border rounded'>
+            <div className='sermon-item-container'>
+                <div className='sermon-info'>
+                    <h2 className='sermon-title'>
+                        {prop.title}
+                    </h2>
+                    <div>
+                        {prop.speaker} | {prop.passage_reference} | {prop.date.toDateString()}
+                    </div>
                 </div>
+                <audio className='sermon-audio' src=" " controls />
             </div>
-            <audio className='sermon-audio' src=" " controls />
 
         </ListGroup.Item>
     );

@@ -14,11 +14,15 @@
     padding: rem.convert(50px);
 }
 
+.sermon-item-container {
+    margin: rem.convert(30px);
+}
+
 .sermon-info {
     text-align: left;
 }
 
 .sermon-audio {
-    margin: rem.convert(20px);
+    margin: rem.convert(20px) 0 0 0;
     width: 99%;
 }
