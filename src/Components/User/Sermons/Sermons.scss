@@ -1,0 +1,11 @@
+@use '~sass-rem' as rem;
+
+.sermons {
+    background-color: #C4C4C4;
+    color: white;
+    height: rem.convert(250px);
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

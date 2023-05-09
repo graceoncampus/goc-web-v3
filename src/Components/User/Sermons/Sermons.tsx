@@ -3,23 +3,57 @@
  */
 
 import React, { useState } from 'react';
-import { Image } from "react-bootstrap";
+import { Image, ListGroup } from "react-bootstrap";
 
 import './Sermons.scss'
     
 import { Template } from 'Components/User/Template/Template';
 import { HeaderNavbarActiveKey } from '../Header/Header';
 
+const sermons = [
+    {
+        title: 'Sermon Title',
+        speaker: 'Speaker Name',
+        passage_reference: 'Passage Reference',
+        date: 'date'
+    },
+    {
+        title: 'Sermon Title',
+        speaker: 'Speaker Name',
+        passage_reference: 'Passage Reference',
+        date: 'date'
+    },
+    {
+        title: 'Sermon Title',
+        speaker: 'Speaker Name',
+        passage_reference: 'Passage Reference',
+        date: 'date'
+    },
+    {
+        title: 'Sermon Title',
+        speaker: 'Speaker Name',
+        passage_reference: 'Passage Reference',
+        date: 'date'
+    },
+]
+
 export const Sermons = () => {
     return (
-        <Template activeKey={HeaderNavbarActiveKey.ABOUT} body={<SermonsBody />} />
+        <Template activeKey={HeaderNavbarActiveKey.SERMONS} body={<SermonsBody />} />
     );
 }
 
 const SermonsBody = () => {
     return (
         <div className='text-center'>
-            <h1 className="about-us"> <strong> Sermons </strong> </h1>
+            <h1 className="sermons"> <strong> Sermons </strong> </h1>
+            <ListGroup>
+                <ListGroup.Item>item 1</ListGroup.Item>
+                <ListGroup.Item>item 2</ListGroup.Item>
+                <ListGroup.Item>item 3</ListGroup.Item>
+                <ListGroup.Item>item 4</ListGroup.Item>
+                <ListGroup.Item>item 5</ListGroup.Item>
+            </ListGroup>
         </div>
     );
 }
