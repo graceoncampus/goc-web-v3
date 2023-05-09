@@ -18,19 +18,19 @@ const sermons = [
         date: new Date()
     },
     {
-        title: 'Sermon Title',
+        title: 'Sermon Title 1',
         speaker: 'Speaker Name',
         passage_reference: 'Passage Reference',
         date: new Date()
     },
     {
-        title: 'Sermon Title',
+        title: 'Sermon Title 2',
         speaker: 'Speaker Name',
         passage_reference: 'Passage Reference',
         date: new Date()
     },
     {
-        title: 'Sermon Title',
+        title: 'Sermon Title 3',
         speaker: 'Speaker Name',
         passage_reference: 'Passage Reference',
         date: new Date()
@@ -52,8 +52,11 @@ export const Sermons = () => {
 
 const SermonItem = (prop: SermonItemProps) => {
     return (
-        <ListGroup.Item>
-            test
+        <ListGroup.Item className='sermon-item mt-5 border'>
+            <h1>
+                {prop.title}
+            </h1>
+            {prop.date.toDateString()}
         </ListGroup.Item>
     );
 }
