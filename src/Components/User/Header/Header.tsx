@@ -3,7 +3,7 @@
  */
 
 import React, { useState } from 'react';
-import { Container, Image, Nav, Navbar } from 'react-bootstrap';
+import { Container, Dropdown, Image, Nav, NavDropdown, Navbar } from 'react-bootstrap';
 
 import './Header.scss'
 
@@ -70,9 +70,16 @@ export const Header = (headerProps: HeaderProps) => {
                                 </Nav.Link>
                             </Nav.Item>
                             <Nav.Item className={'px-2'}>
-                                <Nav.Link className={'header-navbar-link'} eventKey={'Resources'} href={'/'}>
-                                    Resources
-                                </Nav.Link>
+                                <NavDropdown
+                                    className="header-navbar-link"
+                                    title="Resources"
+                                    >
+                                    <NavDropdown.Item href="/sermons">Sermons</NavDropdown.Item>
+                                    <NavDropdown.Item href="/classes">
+                                        Classes
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item href="/john_study_guide">John Study Guide</NavDropdown.Item>
+                                </NavDropdown>
                             </Nav.Item>
                             <Nav.Item className={'px-2'}>
                                 <Nav.Link className={'header-navbar-link'} eventKey={'Small Groups'} href={'/'}>
