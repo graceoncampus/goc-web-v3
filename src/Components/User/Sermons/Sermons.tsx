@@ -15,25 +15,25 @@ const sermons = [
         title: 'Sermon Title',
         speaker: 'Speaker Name',
         passage_reference: 'Passage Reference',
-        date: 'date'
+        date: new Date()
     },
     {
         title: 'Sermon Title',
         speaker: 'Speaker Name',
         passage_reference: 'Passage Reference',
-        date: 'date'
+        date: new Date()
     },
     {
         title: 'Sermon Title',
         speaker: 'Speaker Name',
         passage_reference: 'Passage Reference',
-        date: 'date'
+        date: new Date()
     },
     {
         title: 'Sermon Title',
         speaker: 'Speaker Name',
         passage_reference: 'Passage Reference',
-        date: 'date'
+        date: new Date()
     },
 ]
 
@@ -63,11 +63,13 @@ const SermonsBody = () => {
         <div className='text-center'>
             <h1 className="sermons"> <strong> Sermons </strong> </h1>
             <ListGroup className='sermons-container'>
-                <ListGroup.Item>item 1</ListGroup.Item>
-                <ListGroup.Item>item 2</ListGroup.Item>
-                <ListGroup.Item>item 3</ListGroup.Item>
-                <ListGroup.Item>item 4</ListGroup.Item>
-                <ListGroup.Item>item 5</ListGroup.Item>
+                {sermons && sermons.map((sermon) => 
+                    <SermonItem 
+                        title={sermon.title} 
+                        speaker={sermon.speaker} 
+                        passage_reference={sermon.passage_reference} 
+                        date={sermon.date} />
+                )}
             </ListGroup>
         </div>
     );
