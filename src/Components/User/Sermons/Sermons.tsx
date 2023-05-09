@@ -47,7 +47,7 @@ const SermonsBody = () => {
     return (
         <div className='text-center'>
             <h1 className="sermons"> <strong> Sermons </strong> </h1>
-            <ListGroup>
+            <ListGroup className='sermons-container'>
                 <ListGroup.Item>item 1</ListGroup.Item>
                 <ListGroup.Item>item 2</ListGroup.Item>
                 <ListGroup.Item>item 3</ListGroup.Item>
