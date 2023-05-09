@@ -73,15 +73,18 @@ const SermonsBody = () => {
     return (
         <div className='text-center'>
             <h1 className="sermons"> <strong> Sermons </strong> </h1>
-            <ListGroup className='sermons-container'>
-                {sermons && sermons.map((sermon) => 
-                    <SermonItem 
-                        title={sermon.title} 
-                        speaker={sermon.speaker} 
-                        passage_reference={sermon.passage_reference} 
-                        date={sermon.date} />
-                )}
-            </ListGroup>
+            <div className='sermons-body-container'>
+                <input placeholder='Search'/>
+                <ListGroup className='sermons-container'>
+                    {sermons && sermons.map((sermon) => 
+                        <SermonItem 
+                            title={sermon.title} 
+                            speaker={sermon.speaker} 
+                            passage_reference={sermon.passage_reference} 
+                            date={sermon.date} />
+                    )}
+                </ListGroup>
+                </div>
         </div>
     );
 }
