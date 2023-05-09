@@ -1,5 +1,5 @@
- /* Landing Page
- */
+/* Landing Page
+*/
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +13,7 @@ import './Landing.scss';
 const LandingBody = () => {
     const navigate = useNavigate();
 
-    {/* JUST TESTING RIGHT NOW */}
+    {/* JUST TESTING RIGHT NOW */ }
     const events = [
         {
             purpose: 'GET CONNECTED',
@@ -32,11 +32,11 @@ const LandingBody = () => {
             text: 'UPCOMING EVENTS',
             action: 'TAKE A LOOK',
             link: '/rides/rider/signup',
-        },{
+        }, {
             purpose: 'GET CONNECTED',
             text: 'PRAYER REQUESTS',
             action: 'LOREUM IPSUM',
-            link: '/rides/rider/signup',
+            link: '/prayer/request',
         },
         {
             purpose: 'GET CONNECTED',
@@ -46,33 +46,35 @@ const LandingBody = () => {
         },
     ];
 
+    const externalLink = document.getElementById('external-link');
+
     return (
         <div className={'landing-container'}>
             <div className={'landing-rounded-blue-box'}>
                 <div className={'landing-welcome-title'}>Welcome to Grace on Campus!</div>
                 <div className={'landing-welcome-subtitle'}>Fridays at 7pm, Rolfe 1200</div>
-                <button className={'landing-learn-more-btn'} onClick={() => navigate('/rides/rider/signup')}>
+                <button className={'landing-learn-more-btn'} onClick={() => navigate('/about')}>
                     Learn more
                 </button>
             </div>
             <div className={'landing-welcome-image-container'}>
-                <img className={'landing-welcome-image'} src='/images/LandingPhoto.png' alt='Grace on Campus'/>
-                <button className={'landing-facebook-btn'} onClick={() => navigate('/rides/rider/signup')}>
+                <img className={'landing-welcome-image'} src='/images/LandingPhoto.png' alt='Grace on Campus' />
+                <button className={'landing-facebook-btn'} onClick={() => window.location.href = 'https://www.facebook.com/groups/gocatucla'}>
                     Join our Facebook group
                 </button>
             </div>
             <div className={'landing-welcome-paragraph-container'}>
                 <div className={'landing-welcome-paragraph-title'}>Welcome!</div>
                 <div className={'landing-welcome-paragraph-body'}>
-                    Grace on Campus is a Christian fellowship at UCLA. As a ministry of Grace Community Church, 
-                    we focus on Bible teaching, leadership training, evangelism, and discipleship. Join our Facebook 
+                    Grace on Campus is a Christian fellowship at UCLA. As a ministry of Grace Community Church,
+                    we focus on Bible teaching, leadership training, evangelism, and discipleship. Join our Facebook
                     group to attend our weekly Bible study, every Friday at 7pm.
                 </div>
-                <button className={'landing-what-we-believe-btn'} onClick={() => navigate('/rides/rider/signup')}>
+                <button className={'landing-what-we-believe-btn'} onClick={() => navigate('/ourbeliefs')}>
                     What we believe
                 </button>
             </div>
-            <EventCardList events={events}/>
+            <EventCardList events={events} />
         </div>
     )
 }
