@@ -37,9 +37,24 @@ const sermons = [
     },
 ]
 
+export interface SermonItemProps { 
+    title: string,
+    speaker: string,
+    passage_reference: string
+    date: Date
+}
+
 export const Sermons = () => {
     return (
         <Template activeKey={HeaderNavbarActiveKey.SERMONS} body={<SermonsBody />} />
+    );
+}
+
+const SermonItem = (prop: SermonItemProps) => {
+    return (
+        <ListGroup.Item>
+            test
+        </ListGroup.Item>
     );
 }
 
