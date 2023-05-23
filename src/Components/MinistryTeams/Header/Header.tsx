@@ -13,7 +13,8 @@ import { handleLogout } from 'Auth/Utilities/HandleLogout';
 export enum HeaderNavbarActiveKey {
     NONE = '',
     RIDES = 'Rides',
-    PRAYER = 'Prayer'
+    PRAYER = 'Prayer',
+    SMALL_GROUPS = 'Small Groups'
 }
 
 interface HeaderProps {
@@ -89,7 +90,5 @@ export const Header = (headerProps: HeaderProps) => {
                 </Container>
             </Container>
         </Navbar>
-
-
     );
 };
