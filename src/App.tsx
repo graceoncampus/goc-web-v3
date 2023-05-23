@@ -5,6 +5,10 @@ import { DriverSignup } from 'Components/User/Rides/DriverSignup/DriverSignup';
 import { Landing as UserLanding } from 'Components/User/Landing/Landing';
 import { NotFound as UserNotFound } from 'Components/User/NotFound/NotFound';
 import { PrayerForm } from './Components/Prayer/PrayerForm';  
+import { SmallGroup } from './Components/SmallGroup/SmallGroup';
+import ReactDOM from 'react-dom';
+// import Viewer from './Components/Viewer/Viewer';
+
 
 import { Landing as MinistryTeamLanding } from 'Components/MinistryTeams/Landing/Landing';
 import { StubbedRidesPage } from 'Components/MinistryTeams/Rides/StubbedRidesPage';
@@ -35,11 +39,12 @@ const App = () => {
                   <Route path={'/ministry_teams'} element={<MinistryTeamLanding />}/>
                   <Route path={'/ministry_teams/rides'} element={<StubbedRidesPage />} />
                   <Route path={'/ministry_teams/*'} element={<MinistryTeamNotFound />} />
-                  <Route path='/prayer/request' element={<PrayerForm/>}></Route>
+                  <Route path='/prayer/request' element={<PrayerForm/>} />
+                  <Route path='/smallgroups' element={<SmallGroup/>}></Route>
               </Routes>
           </BrowserRouter>
       </React.StrictMode>
   );
-};
+};  
 
 export default App;
