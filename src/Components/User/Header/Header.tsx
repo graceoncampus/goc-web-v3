@@ -75,7 +75,7 @@ export const Header = (headerProps: HeaderProps) => {
                                 </Nav.Link>
                             </Nav.Item>
                             <Nav.Item className={'px-2'}>
-                                <Nav.Link className={'header-navbar-link'} eventKey={'Small Groups'} href={'/'}>
+                                <Nav.Link className={'header-navbar-link'} eventKey={'Small Groups'} href={'/smallgroups'}>
                                     Small Groups
                                 </Nav.Link>
                             </Nav.Item>
