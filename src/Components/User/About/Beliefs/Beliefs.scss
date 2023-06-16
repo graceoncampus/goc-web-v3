@@ -9,33 +9,37 @@
 @import 'src/css/bootstrap';
 
 .beliefs-title-overlay {
-  position: absolute;
-  width: 100%;
+  display: flex;
   margin: 0 auto;
+  width: 100%;
   justify-content: center;
+  height: rem.convert(300px);
   background: #C4C4C4;
   text-align: center;
+  flex-direction: column;
+  position: relative;
 }
 
 .beliefs-title-text {
-  position: absolute;
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: rem.convert(75px);
-  line-height: 106.5%;
-  display: flex;
-  align-items: center;
-  text-align: center;
   letter-spacing: -0.065em;
   color: white;
 }
 
+.body-container {
+  max-width: 60%;
+  clear: both;
+}
+
 .header-text {
-  border-bottom: 2px solid #C4C4C4;
+  margin-top: rem.convert(75px);
+  border-bottom: rem.convert(2px) solid #C4C4C4;
   padding-bottom: rem.convert(4px);
   font-family: 'Poppins';
-  font-size: rem.convert(56px)
+  font-size: rem.convert(54px)
 }
 
 .body-text {

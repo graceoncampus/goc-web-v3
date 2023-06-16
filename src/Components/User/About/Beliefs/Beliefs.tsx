@@ -12,11 +12,16 @@ const BeliefsBody = () => {
     const navigate = useNavigate();
 
     return (
-        <Container fluid>
-            <Container className={'beliefs-title-overlay'}>
-                <span className={'beliefs-title-text'}>Our Beliefs</span>
+        <div>
+            <Container fluid className={'beliefs-title-overlay'}>
+                <Row className="justify-content-center">
+                    <Col md={8} className="text-center">
+                        <h1 className={'beliefs-title-text'}>Our Beliefs</h1>
+                    </Col>
+                </Row>
+                {/* <span className={'beliefs-title-text'}>Our Beliefs</span> */}
             </Container>
-            <Container>
+            <Container className={'body-container'}>
                 <div className={'header-text'}>
                     <h1>The Sinfulness of Man</h1>
                 </div>
@@ -32,7 +37,7 @@ const BeliefsBody = () => {
                 </div>
                 <p className={'body-text'}>Saving faith in Christ is a gracious gift of God where the Holy Spirit transforms a person’s heart and opens his/her eyes to the gospel. At the same time, God calls every person to wholeheartedly repent from their sin, to believe in and commit his/her life to Jesus Christ. (Romans 10:10-13, John 3:36, John 14:6, Ephesians 2:8-9, Romans 1:16)</p>
             </Container>
-        </Container>
+        </div>
     )
 }
 
