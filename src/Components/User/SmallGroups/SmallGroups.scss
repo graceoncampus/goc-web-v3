@@ -1,0 +1,41 @@
+@use '~sass-rem' as rem;
+
+.overlay {
+  background: no-repeat center;
+  background-size: cover;
+  height: 24rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  h1 {
+    font-size: 6rem;
+    position: relative;
+    color: rgb(255, 255, 255);
+  }
+}
+
+.sg-container {
+  padding: 4rem 30% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upper-body {
+  margin-bottom: 4rem;
+}
+
+.lower-body {
+  margin-bottom: .5rem;
+}
+
+.button {
+  width: fit-content;
+  margin: .5rem;
+}
+
+#small-groups {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url('../../../assets/AboutUsBackground.png');
+}
