@@ -19,7 +19,7 @@ const LandingBody = () => {
             purpose: 'GET CONNECTED',
             text: 'SMALL GROUP',
             action: 'CHECK\'EM OUT',
-            link: '/rides/rider/signup',
+            link: '/smallgroups',
         },
         {
             purpose: 'GET CONNECTED',
