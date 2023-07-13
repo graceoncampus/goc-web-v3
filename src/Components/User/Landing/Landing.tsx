@@ -51,7 +51,7 @@ const LandingBody = () => {
             <div className={'landing-rounded-blue-box'}>
                 <div className={'landing-welcome-title'}>Welcome to Grace on Campus!</div>
                 <div className={'landing-welcome-subtitle'}>Fridays at 7pm, Rolfe 1200</div>
-                <button className={'landing-learn-more-btn'} onClick={() => navigate('/rides/rider/signup')}>
+                <button className={'landing-learn-more-btn'} onClick={() => navigate('/about')}>
                     Learn more
                 </button>
             </div>
