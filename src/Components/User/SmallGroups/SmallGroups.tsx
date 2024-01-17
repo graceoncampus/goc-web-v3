@@ -5,7 +5,6 @@ import { Button } from 'react-bootstrap';
 
 import 'css/common/forms.scss';
 import './SmallGroups.scss';
-import mensg from './sgl_men.pdf';
 interface TemplateProps {
   activeKey: HeaderNavbarActiveKey;
   body: React.ReactNode;
@@ -43,10 +42,10 @@ const SmallGroupsBody = () => {
           following links, along with a quick intro so you can get to know them
           better.
         </div>
-        <Button variant="dark" className="button" href={mensg} target="_blank">
+        <Button variant="dark" className="button" href="/docs/sgl-men.pdf" target="_blank">
           Men's Small Group Leaders
         </Button>
-        <Button className="button" variant="dark" href={mensg} target="_blank">
+        <Button className="button" variant="dark" href="/docs/sgl-women.pdf" target="_blank">
           Women's Small Group Leaders
         </Button>
       </div>
