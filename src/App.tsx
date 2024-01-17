@@ -6,6 +6,7 @@ import { Landing as UserLanding } from 'Components/User/Landing/Landing';
 import { NotFound as UserNotFound } from 'Components/User/NotFound/NotFound';
 import { PrayerForm } from './Components/Prayer/PrayerForm';  
 import { SmallGroups } from './Components/User/SmallGroups/SmallGroups';
+import ScrollToTop from 'Hooks/ScrollToTop';
 import ReactDOM from 'react-dom';
 // import Viewer from './Components/Viewer/Viewer';
 
@@ -30,6 +31,7 @@ const App = () => {
   return (
       <React.StrictMode>
           <BrowserRouter>
+            <ScrollToTop/>
               <Routes>
                   <Route path={'*'} element={<UserNotFound />} />   {/* 404 */}
                   <Route path={'/'} element={<UserLanding />} />
