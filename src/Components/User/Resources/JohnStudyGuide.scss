@@ -62,6 +62,8 @@ h2 {
 
 p {
     font-size: 20px;
+    margin-left: 10px;
+
 }
 
 .container {
@@ -72,7 +74,6 @@ p {
     font-size: 20px;
     text-decoration: underline;
     font-weight: bold;
-
 }
 
 .list-group-item a {
@@ -95,6 +96,7 @@ p {
     transition: background-color 0.3s ease, transform 0.3s ease;
     border: none;
     cursor: pointer;
+    margin-left: 8px;
 }
 
 .btn-btn-primary:hover,
@@ -123,8 +125,9 @@ p {
 
 .contaiser-mt-4 {
     margin-top: 30px;
-    margin-left: 100px;
+    margin-left: 225px;
 }
+
 
 .overlay h1 {
     font-size: 120px;
@@ -143,7 +146,6 @@ p {
     &-header {
         background-color: transparent;
         border-bottom: none;
-        /* This removes the bottom border if it exists */
 
     }
 
