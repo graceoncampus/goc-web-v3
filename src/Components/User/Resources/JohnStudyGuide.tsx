@@ -1,8 +1,6 @@
-import React from 'react';
 import { Template } from 'Components/User/Template/Template';
 import { HeaderNavbarActiveKey } from '../Header/Header';
-import './JohnStudyGuide.scss'; // Make sure to create a corresponding CSS file for styling
-import ResourcePhoto from './resources.jpeg';
+import './JohnStudyGuide.scss';
 
 export const StudyGuide = () => {
     return (
