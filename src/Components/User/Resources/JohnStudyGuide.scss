@@ -56,7 +56,8 @@ h1 {
 }
 
 h2 {
-    font-size: 20px;
+    font-size: 50px;
+    margin-bottom: 20px;
 }
 
 p {
@@ -69,6 +70,15 @@ p {
 
 .card-header {
     font-size: 20px;
+    text-decoration: underline;
+}
+
+.list-group-item a {
+    text-decoration: none;
+}
+
+.list-group {
+    list-style-type: disc;
 }
 
 .btn-btn-primary {
@@ -95,6 +105,10 @@ p {
 .btn-btn-primary:active {
     background-color: #004085;
     transform: scale(0.98);
+}
+
+.section-title {
+    margin-bottom: 25px;
 }
 
 .btn-btn-primary {
@@ -126,6 +140,9 @@ p {
 
     &-header {
         background-color: transparent;
+        border-bottom: none;
+        /* This removes the bottom border if it exists */
+
     }
 
     .list-group {
