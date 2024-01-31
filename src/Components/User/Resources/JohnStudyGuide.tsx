@@ -20,9 +20,10 @@ export const StudyGuideBody = () => {
                 <div className="section-title">
                     <h2>The Gospel of John</h2>
                     <p>A study through the "I am" statements of Jesus</p>
-                    <a href="/docs/john-study-guide.pdf" target="_blank" rel="noopener noreferrer">
-                        <button className="btn-btn-primary">View Study Guide</button>
+                    <a href="/docs/john-study-guide.pdf" target="_blank" rel="noopener noreferrer" className="btn-btn-primary">
+                        View Study Guide
                     </a>
+
                 </div>
                 <p className="study-paragraph">Use the following resources to complement your study.</p>
                 <div className="sections">
