@@ -74,13 +74,15 @@ export const Header = (headerProps: HeaderProps) => {
                 </NavDropdown>
               </Nav.Item>
               <Nav.Item className={'px-2'}>
-                <Nav.Link
+                <NavDropdown
+                  title={'Resources'}
+                  id={'resources-dropdown'}
                   className={'header-navbar-link'}
-                  eventKey={'Resources'}
-                  href={'/'}
                 >
-                  Resources
-                </Nav.Link>
+                  <NavDropdown.Item href={'/JohnStudyGuide'}>
+                    John Study Guide
+                  </NavDropdown.Item>
+                </NavDropdown>
               </Nav.Item>
               <Nav.Item className={'px-2'}>
                 <Nav.Link

@@ -1,0 +1,94 @@
+.study-guide-body {
+    font-family: 'Palatino, URW Palladio L', serif;
+}
+
+.study-guide-header {
+    background-color: black;
+    background-size: cover;
+    background-position: center;
+    padding: 160px 20px;
+    color: rgb(255, 254, 254);
+    font-variant: small-caps;
+}
+
+.study-guide-header {
+    position: relative;
+    background-image: url('./resources.jpeg');
+    background-size: cover;
+}
+
+.study-guide-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    /* Adjust the last value for opacity */
+    z-index: 1;
+}
+
+.study-guide-title {
+    display: flex;
+    justify-content: center;
+    /* Centers children horizontally */
+    align-items: center;
+    /* Centers children vertically */
+    position: relative;
+    z-index: 2;
+    font-size: 80px;
+}
+
+.study-paragraph {
+    margin-top: 20px;
+}
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+p {
+    font-size: 1.5rem;
+}
+
+.container {
+    margin-top: -100px;
+}
+
+.card-header {
+    font-size: 15px;
+}
+
+
+.btn-btn-primary {
+    font-size: 20px;
+}
+
+.list-group-item {
+    font-size: 12px;
+}
+
+.contaiser-mt-4 {
+    margin-top: 30px;
+    margin-left: 50px;
+}
+
+.overlay h1 {
+    font-size: 120px;
+    /* Adjust the value as needed */
+}
+
+.feedback-link {
+    display: block;
+    margin-top: 20px;
+}
