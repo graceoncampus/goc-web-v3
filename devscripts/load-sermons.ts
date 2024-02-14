@@ -56,21 +56,21 @@ const cleanupSermons = async () => {
   const createInput = {
     "AttributeDefinitions": [
       {
-        "AttributeName": "URI",
+        "AttributeName": "id",
         "AttributeType": "S",
       },
       {
-        "AttributeName": "Date",
+        "AttributeName": "date",
         "AttributeType": "S",
-      },
+      }
     ],
     "KeySchema": [
       {
-        "AttributeName": "URI",
+        "AttributeName": "id",
         "KeyType": "HASH",
       },
       {
-        "AttributeName": "Date",
+        "AttributeName": "date",
         "KeyType": "RANGE",
       },
     ],
@@ -83,7 +83,8 @@ const cleanupSermons = async () => {
     await client.send(createCommand);
     console.log("Sermons Table being created.");
   } catch (err) {
-    console.error("Sermons Table already exists, not recreated.");
+    console.log(err)
+    // console.error("Sermons Table already exists, not recreated.");
   }
 }
 
@@ -101,10 +102,11 @@ const createSermons = async (sermons) => {
       status = response.Table.TableStatus;
       tries += 1;
     } catch (e) {
-      console.log("Table Does not exist");
+      // console.log(e);
     }
   }
 
+  let id = 0;
   sermons.forEach(async (sermon) => {
     const {
       title,
@@ -116,16 +118,19 @@ const createSermons = async (sermons) => {
     const putInput = {
       "TableName": "Sermons",
       "Item": {
-        "Title": {
+        "id": {
+          "S": id.toString(),
+        },
+        "title": {
           "S": title,
         },
-        "Date": {
+        "date": {
           "S": date,
         },
-        "Speaker": {
+        "speaker": {
           "S": speaker,
         },
-        "Passage": {
+        "passage": {
           "S": passage,
         },
         "URI": {
@@ -134,11 +139,13 @@ const createSermons = async (sermons) => {
       },
     }
     const putCommand = new PutItemCommand(putInput);
+    id += 1
 
     try {
       await client.send(putCommand);
     } catch (err) {
       console.error(`Failed to add Sermon: ${passage}`);
+      console.log(err)
     }
   });
 }
