@@ -85,6 +85,15 @@ p {
     list-style-type: disc;
 }
 
+
+.list-group-item {
+    list-style-type: disc;
+    display: list-item;
+    margin-left: 28px;
+    padding-left: 1px;
+}
+
+
 .btn-btn-primary {
     display: inline-block;
     padding: 10px 20px;
@@ -100,14 +109,6 @@ p {
     margin-left: 8px;
 
 }
-
-.card-header {
-    margin-bottom: 0;
-    /* Adjust or remove bottom margin */
-    padding-bottom: 0;
-    /* Adjust or remove bottom padding */
-}
-
 
 
 .btn-btn-primary:hover,
@@ -133,6 +134,8 @@ p {
 
 .list-group-item {
     font-size: 15px;
+    list-style-type: disc;
+
 }
 
 .contaiser-mt-4 {
