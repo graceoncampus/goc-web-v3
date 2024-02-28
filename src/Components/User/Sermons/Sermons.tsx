@@ -3,9 +3,9 @@
  */
 
 import React, { useEffect, useState } from "react";
-import { Image, ListGroup } from "react-bootstrap";
+import { Image, ListGroup, Pagination } from "react-bootstrap";
 import { listSermons } from "graphql/queries";
-import { API, graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation } from "aws-amplify";
 
 import "./Sermons.scss";
 
@@ -26,13 +26,14 @@ export const Sermons = () => {
     const fetchSermons = async () => {
       await (API.graphql(graphqlOperation(listSermons)) as Promise<any>)
         .then((result) => {
-          const sermonData = result.data.listSermons.items.sort((a: any, b: any) =>
-            new Date(b['date']).getTime() - new Date(a['date']).getTime()
+          const sermonData = result.data.listSermons.items.sort(
+            (a: any, b: any) =>
+              new Date(b["date"]).getTime() - new Date(a["date"]).getTime()
           );
-          
+
           setSermons(
             sermonData.map((sermon: any) => {
-              const convertedDate = new Date(sermon['date']).toLocaleString(
+              const convertedDate = new Date(sermon["date"]).toLocaleString(
                 "en-US",
                 {
                   month: "short",
@@ -42,23 +43,23 @@ export const Sermons = () => {
               );
 
               const item = {
-                title: sermon['title'],
-                speaker: sermon['speaker'],
-                passage: sermon['passage'],
+                title: sermon["title"],
+                speaker: sermon["speaker"],
+                passage: sermon["passage"],
                 date: convertedDate,
-                URI: sermon['URI']
+                URI: sermon["URI"],
               };
               return item;
             })
-
-          )
-        }).catch(reason => {
-          console.log(reason);
+          );
         })
-    }
+        .catch((reason) => {
+          console.log(reason);
+        });
+    };
 
     fetchSermons();
-  }, [])
+  }, []);
 
   return (
     <Template
@@ -75,8 +76,7 @@ const SermonItem = (props: SermonItem) => {
         <div className="sermon-info">
           <h2 className="sermon-title">{props.title}</h2>
           <div>
-            {props.speaker} | {props.passage} |{" "}
-            {props.date}
+            {props.speaker} | {props.passage} | {props.date}
           </div>
         </div>
         <audio className="sermon-audio" src={props.URI} controls />
@@ -90,6 +90,14 @@ interface SermonBodyProps {
 }
 
 const SermonsBody = (props: SermonBodyProps) => {
+  const PAGE_SIZE = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+  const sermons = props.sermons.slice(currentPage, currentPage + PAGE_SIZE);
+  const totalPages = Math.ceil(props.sermons.length / PAGE_SIZE);
+  const pageNumbers = Array.from(
+    { length: totalPages },
+    (_, index) => index + 1
+  );
 
   return (
     <div className="text-center">
@@ -100,8 +108,8 @@ const SermonsBody = (props: SermonBodyProps) => {
       <div className="sermons-body-container">
         <input placeholder="Search" />
         <ListGroup className="sermons-container">
-          {props.sermons &&
-            props.sermons.map((sermon) => (
+          {sermons &&
+            sermons.map((sermon) => (
               <SermonItem
                 title={sermon.title}
                 speaker={sermon.speaker}
@@ -111,6 +119,20 @@ const SermonsBody = (props: SermonBodyProps) => {
               />
             ))}
         </ListGroup>
+        <div className="sermons-pagination-container">
+          <Pagination className="sermons-pagination">
+            {pageNumbers.map((number) => (
+              <Pagination.Item
+                key={number}
+                active={number === currentPage}
+                onClick={() => setCurrentPage(number)}
+                className="sermons-pagination-item"
+              >
+                {number}
+              </Pagination.Item>
+            ))}
+          </Pagination>
+        </div>
       </div>
     </div>
   );

@@ -1,28 +1,28 @@
-@use '~sass-rem' as rem;
+@use "~sass-rem" as rem;
 
 .sermons {
-    background-color: #C4C4C4;
-    color: white;
-    height: rem.convert(250px);
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  background-color: #c4c4c4;
+  color: white;
+  height: rem.convert(250px);
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sermons-body-container {
-    padding: rem.convert(50px);
+  padding: rem.convert(50px);
 }
 
 .sermon-item-container {
-    margin: rem.convert(30px);
+  margin: rem.convert(30px);
 }
 
 .sermon-info {
-    text-align: left;
+  text-align: left;
 }
 
 .sermon-audio {
-    margin: rem.convert(20px) 0 0 0;
-    width: 99%;
+  margin: rem.convert(20px) 0 0 0;
+  width: 99%;
 }
