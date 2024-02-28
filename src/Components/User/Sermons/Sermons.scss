@@ -1,0 +1,47 @@
+@use "~sass-rem" as rem;
+
+.sermons {
+  background-color: #c4c4c4;
+  color: white;
+  height: rem.convert(250px);
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sermons-search-container {
+  display: flex;
+  align-items: center;
+}
+
+.sermons-search {
+  border: 2px solid #ccc;
+  border-radius: 20px;
+  padding: 10px;
+  width: rem.convert(350px);
+  max-height: rem.convert(40px);
+  max-width: rem.convert(350px);
+  font-size: 1rem;
+}
+
+.sermons-body-container {
+  padding: rem.convert(50px);
+}
+
+.sermon-item-container {
+  margin: rem.convert(30px);
+}
+
+.sermons-pagination {
+  margin-top: rem.convert(20px);
+}
+
+.sermon-info {
+  text-align: left;
+}
+
+.sermon-audio {
+  margin: rem.convert(20px) 0 0 0;
+  width: 99%;
+}
