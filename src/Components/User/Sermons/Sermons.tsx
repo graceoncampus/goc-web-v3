@@ -59,8 +59,11 @@ export const Sermons = () => {
     fetchSermons();
   }, []);
 
-  const filteredSermons = sermons.filter((sermon) =>
-    sermon.title.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredSermons = sermons.filter(
+    (sermon) =>
+      sermon.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      sermon.speaker.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      sermon.passage.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
