@@ -37,7 +37,7 @@ html {
     width: 100%;
     height: 100%;
     margin: auto;
-    padding: 0 rem.convert(130px);
+    padding: 0 15%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -54,8 +54,8 @@ html {
     justify-content: center;
     position: relative;
     width: 100%;
-    padding: rem.convert(100px);
-    padding-bottom: rem.convert(80px);
+    padding: rem.convert(50px);
+    // padding-bottom: rem.convert(60px);
     margin-bottom: rem.convert(50px);
     border-radius: $rounded-box-radius;
     background-color: colors.$goc-blue;
@@ -63,7 +63,7 @@ html {
 
 .landing-welcome-title {
     position: relative;
-    font-weight: 600;
+    font-weight: 500;
     font-size: rem.convert(64px);
     color: white;
     text-align: center;
@@ -77,8 +77,12 @@ html {
     text-align: center;
 }
 
-.landing-learn-more-btn {
+.landing-rounded-blue-box .btn-container {
     margin-top: rem.convert(20px);
+
+}
+
+.landing-rounded-blue-box .btn-container button{
     padding: rem.convert(10px) rem.convert(30px);
     border: 1px solid white;
     color: white;
@@ -87,35 +91,35 @@ html {
     cursor: pointer;
 }
 
+.landing-facebook-btn {
+    margin-top: rem.convert(20px);
+    padding: rem.convert(10px) rem.convert(30px);
+    border: 1px solid white;
+    color: white;
+    border-radius: $rounded-submit-button-radius;
+    background-color: colors.$goc-blue;
+    cursor: pointer;
+    text-decoration: none;
+}
+.landing-facebook-btn:hover {
+    color: white;
+}
+
+a:hover {
+    transform: translateY(-1px);
+}
+
+
 .landing-welcome-image-container {
     position: relative;
     width: 100%;
+    margin-bottom: rem.convert(30px);
 }
 
 .landing-welcome-image {
     position: relative;
     width: 100%;
     border-radius: $rounded-box-radius;
-}
-
-.landing-facebook-btn {
-    all: unset;
-    position: relative;
-    top: rem.convert(-60px);
-    left: 50%;
-    transform: translate(-50%, 0);
-    text-align: center;
-    font-weight: 500;
-    font-size: rem.convert(18px);
-    overflow: hidden;
-    padding: rem.convert(10px) rem.convert(30px);
-    width: 25%;
-    height: 10%;
-    border-color: white;
-    border-radius: $rounded-submit-button-radius;
-    background-color: white;
-    cursor: pointer;
-    z-index: 1;
 }
 
 .landing-welcome-paragraph-container {
@@ -125,37 +129,66 @@ html {
     justify-content: center;
     position: relative;
     width: 100%;
-    padding-bottom: rem.convert(130px);
+    padding-bottom: rem.convert(30px);
 }
 
 .landing-welcome-paragraph-title {
     position: relative;
     font-weight: 400;
-    font-size: rem.convert(45px);
+    font-size: rem.convert(40px);
     color: black;
     text-align: center;
 }
 
 .landing-welcome-paragraph-body {
     position: relative;
-    font-weight: 400;
+    font-weight: 300;
     font-size: rem.convert(18px);
     color: black;
     text-align: center;
-    width: 50%;
+    width: 66%;
     margin: auto;
+    a {
+        text-decoration: none;
+        color: colors.$goc-blue;
+    }
 }
+
 
 .landing-what-we-believe-btn {
     position: relative;
     margin-top: rem.convert(20px);
+    margin-left: rem.convert(10px);
+    margin-right: rem.convert(10px);
     padding: rem.convert(10px) rem.convert(30px);
     font-weight: 500;
     font-size: rem.convert(18px);
     border: 1px solid black;
     color: white;
-    border-radius: $rounded-submit-button-radius;
     background-color: black;
+}
+
+.landing-welcome-paragraph-container button:hover {
+    background-color: black;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+.landing-welcome-paragraph-container .btn-container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    button {
+        color: white;
+        background-color: black;
+        border-color: transparent;
+        border-radius: $rounded-submit-button-radius;
+        margin: rem.convert(10px);
+        width: 20%;
+    }
 }
 
 /* Phone and Tablet */

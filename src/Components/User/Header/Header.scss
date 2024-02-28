@@ -23,7 +23,7 @@ $header-link-underline-thickness: rem.convert(4px);
   font-weight: $header-link-font-weight;
 }
 
-.navbar-light .navbar-nav .nav-item .header-navbar-link.nav-link.active {
+.navbar-light .navbar-nav .nav-item .header-navbar-link.nav-link.active{
   text-decoration: underline;  // underline
   text-underline-position: under; //the 'p', 'y', 'q' of "Prayer Request" segments the underline. this solves that
   text-decoration-color: colors.$goc-blue; // Minimal support - must find another option
