@@ -100,18 +100,42 @@ const SermonsBody = (props: SermonBodyProps) => {
     (_, index) => index + 1
   );
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1);
+  };
+
   const pagination = (
     <Pagination className="sermons-pagination justify-content-end">
-      {pageNumbers.map((number) => (
-        <Pagination.Item
-          key={number}
-          active={number === currentPage}
-          onClick={() => setCurrentPage(number)}
-          className="sermons-pagination-item"
-        >
-          {number}
-        </Pagination.Item>
-      ))}
+      <Pagination.Prev
+        onClick={() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))}
+      />
+      {pageNumbers.map((number) => {
+        if (
+          number === 1 ||
+          number === totalPages ||
+          (number >= currentPage - 1 && number <= currentPage + 1)
+        ) {
+          return (
+            <Pagination.Item
+              key={number}
+              active={number === currentPage}
+              onClick={() => setCurrentPage(number)}
+              className="sermons-pagination-item"
+            >
+              {number}
+            </Pagination.Item>
+          );
+        } else if (number === currentPage - 2 || number === currentPage + 2) {
+          return <Pagination.Ellipsis key={number} />;
+        }
+        return null;
+      })}
+      <Pagination.Next
+        onClick={() =>
+          setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages))
+        }
+      />
     </Pagination>
   );
 
@@ -128,7 +152,7 @@ const SermonsBody = (props: SermonBodyProps) => {
               className="sermons-search"
               placeholder="search by title, speaker, or passage"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleSearch}
             />
           </div>
           {pagination}
