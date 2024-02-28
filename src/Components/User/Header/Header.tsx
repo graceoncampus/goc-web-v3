@@ -63,7 +63,7 @@ export const Header = (headerProps: HeaderProps) => {
         <Container fluid>
           <Navbar.Collapse className={'justify-content-end'}>
             <Nav activeKey={headerProps.activeKey}>
-              <Nav.Item>
+              <Nav.Item className={'px-2'}>
                 <NavDropdown className={'header-navbar-link'} title={'About'} >
                   <NavDropdown.Item className={'px-2 header-navbar-link'} href={'/about'}>
                     About Us
@@ -73,15 +73,21 @@ export const Header = (headerProps: HeaderProps) => {
                   </NavDropdown.Item>
                 </NavDropdown>
               </Nav.Item>
+
               <Nav.Item className={'px-2'}>
-                <Nav.Link
-                  className={'header-navbar-link'}
-                  eventKey={'Resources'}
-                  href={'/'}
-                >
-                  Resources
-                </Nav.Link>
+                <NavDropdown className={'header-navbar-link'} title={'Resources'} >
+                  <NavDropdown.Item className={'px-2 header-navbar-link'} href={'/sermons'}>
+                    Sermons
+                  </NavDropdown.Item>
+                  <NavDropdown.Item className={'px-2 header-navbar-link'} href={'/classes'}>
+                    Classes
+                  </NavDropdown.Item>
+                  <NavDropdown.Item className={'px-2 header-navbar-link'} href={'/resources'}>
+                    John Study Guide
+                  </NavDropdown.Item>
+                </NavDropdown>
               </Nav.Item>
+
               <Nav.Item className={'px-2'}>
                 <Nav.Link
                   className={'header-navbar-link'}
@@ -91,6 +97,13 @@ export const Header = (headerProps: HeaderProps) => {
                   Small Groups
                 </Nav.Link>
               </Nav.Item>
+
+              <Nav.Item className={'px-2'}>
+                <Nav.Link className={'header-navbar-link'} eventKey={'Small Groups'} href={'/events'}>
+                  Events
+                </Nav.Link>
+              </Nav.Item>
+
               <Nav.Item className={'px-2'}>
                 <Nav.Link
                   className={'header-navbar-link'}
