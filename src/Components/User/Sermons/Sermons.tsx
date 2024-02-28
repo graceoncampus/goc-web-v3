@@ -104,11 +104,14 @@ const SermonsBody = (props: SermonBodyProps) => {
         <strong> Sermons </strong>{" "}
       </h1>
       <div className="sermons-body-container">
-        <input
-          placeholder="Search"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+        <div className="sermons-search-container">
+          <input
+            className="sermons-search"
+            placeholder="Search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
         <ListGroup className="sermons-container">
           {sermonsToDisplay.map((sermon) => (
             <SermonItem

@@ -10,6 +10,20 @@
   justify-content: center;
 }
 
+.sermons-search-container {
+  display: flex;
+}
+
+.sermons-search {
+  border: 2px solid #ccc;
+  border-radius: 20px;
+  padding: 10px;
+  width: 100%;
+  max-height: rem.convert(40px);
+  max-width: rem.convert(350px);
+  font-size: 1rem;
+}
+
 .sermons-body-container {
   padding: rem.convert(50px);
 }
