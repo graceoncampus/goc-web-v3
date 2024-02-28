@@ -78,23 +78,17 @@ export const Header = (headerProps: HeaderProps) => {
                   >
                     Our Beliefs
                   </NavDropdown.Item>
+                </NavDropdown>
+              </Nav.Item>
+              <Nav.Item>
+                <NavDropdown className={"header-navbar-link"} title="Resources">
                   <NavDropdown.Item
-                    activeKey={headerProps.activeKey}
                     className={"px-2 header-navbar-link"}
-                    href="/sermons"
+                    href={"/sermons"}
                   >
                     Sermons
                   </NavDropdown.Item>
                 </NavDropdown>
-              </Nav.Item>
-              <Nav.Item className={"px-2"}>
-                <Nav.Link
-                  className={"header-navbar-link"}
-                  eventKey={"Resources"}
-                  href={"/"}
-                >
-                  Resources
-                </Nav.Link>
               </Nav.Item>
               <Nav.Item className={"px-2"}>
                 <Nav.Link
