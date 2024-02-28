@@ -1,7 +1,3 @@
-/**
- * Rider signup higher order conditional rendering component.
- */
-
 import React, { useEffect, useState } from "react";
 import { Image, ListGroup, Pagination } from "react-bootstrap";
 import { listSermons } from "graphql/queries";
@@ -11,6 +7,7 @@ import "./Sermons.scss";
 
 import { Template } from "Components/User/Template/Template";
 import { HeaderNavbarActiveKey } from "../Header/Header";
+
 export interface SermonItem {
   title: string;
   speaker: string;
@@ -21,6 +18,7 @@ export interface SermonItem {
 
 export const Sermons = () => {
   const [sermons, setSermons] = useState<SermonItem[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchSermons = async () => {
@@ -61,39 +59,39 @@ export const Sermons = () => {
     fetchSermons();
   }, []);
 
+  const filteredSermons = sermons.filter((sermon) =>
+    sermon.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <Template
       activeKey={HeaderNavbarActiveKey.SERMONS}
-      body={<SermonsBody sermons={sermons} />}
+      body={
+        <SermonsBody
+          sermons={filteredSermons}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
+      }
     />
-  );
-};
-
-const SermonItem = (props: SermonItem) => {
-  return (
-    <ListGroup.Item className="sermon-item mt-5 border rounded">
-      <div className="sermon-item-container">
-        <div className="sermon-info">
-          <h2 className="sermon-title">{props.title}</h2>
-          <div>
-            {props.speaker} | {props.passage} | {props.date}
-          </div>
-        </div>
-        <audio className="sermon-audio" src={props.URI} controls />
-      </div>
-    </ListGroup.Item>
   );
 };
 
 interface SermonBodyProps {
   sermons: SermonItem[];
+  searchQuery: string;
+  setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const SermonsBody = (props: SermonBodyProps) => {
+  const { sermons, searchQuery, setSearchQuery } = props;
   const PAGE_SIZE = 5;
   const [currentPage, setCurrentPage] = useState(1);
-  const sermons = props.sermons.slice(currentPage, currentPage + PAGE_SIZE);
-  const totalPages = Math.ceil(props.sermons.length / PAGE_SIZE);
+  const sermonsToDisplay = sermons.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
+  const totalPages = Math.ceil(sermons.length / PAGE_SIZE);
   const pageNumbers = Array.from(
     { length: totalPages },
     (_, index) => index + 1
@@ -106,18 +104,22 @@ const SermonsBody = (props: SermonBodyProps) => {
         <strong> Sermons </strong>{" "}
       </h1>
       <div className="sermons-body-container">
-        <input placeholder="Search" />
+        <input
+          placeholder="Search"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
         <ListGroup className="sermons-container">
-          {sermons &&
-            sermons.map((sermon) => (
-              <SermonItem
-                title={sermon.title}
-                speaker={sermon.speaker}
-                passage={sermon.passage}
-                URI={sermon.URI}
-                date={sermon.date}
-              />
-            ))}
+          {sermonsToDisplay.map((sermon) => (
+            <SermonItem
+              key={sermon.title}
+              title={sermon.title}
+              speaker={sermon.speaker}
+              passage={sermon.passage}
+              URI={sermon.URI}
+              date={sermon.date}
+            />
+          ))}
         </ListGroup>
         <div className="sermons-pagination-container">
           <Pagination className="sermons-pagination">
@@ -135,5 +137,21 @@ const SermonsBody = (props: SermonBodyProps) => {
         </div>
       </div>
     </div>
+  );
+};
+
+const SermonItem = (props: SermonItem) => {
+  return (
+    <ListGroup.Item className="sermon-item mt-5 border rounded">
+      <div className="sermon-item-container">
+        <div className="sermon-info">
+          <h2 className="sermon-title">{props.title}</h2>
+          <div>
+            {props.speaker} | {props.passage} | {props.date}
+          </div>
+        </div>
+        <audio className="sermon-audio" src={props.URI} controls />
+      </div>
+    </ListGroup.Item>
   );
 };
