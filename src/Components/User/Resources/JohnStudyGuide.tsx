@@ -19,7 +19,7 @@ export const StudyGuideBody = () => {
                     <h2>The Gospel of John</h2>
                     <p>A study through the "I am" statements of Jesus</p>
                     <a href="/docs/john-study-guide.pdf" target="_blank" rel="noopener noreferrer" className="btn-btn-primary">
-                        View Study Guide
+                        View The Study Guide
                     </a>
 
                 </div>
