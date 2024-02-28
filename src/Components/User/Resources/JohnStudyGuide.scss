@@ -44,6 +44,7 @@
 
 .study-paragraph {
     margin-top: 20px;
+    font-weight: bold;
 }
 
 .overlay {
@@ -87,7 +88,7 @@ p {
 .btn-btn-primary {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #0c81ff;
+    background-color: #0a509c;
     color: white;
     text-align: center;
     text-decoration: none;
@@ -97,13 +98,24 @@ p {
     border: none;
     cursor: pointer;
     margin-left: 8px;
+
 }
+
+.card-header {
+    margin-bottom: 0;
+    /* Adjust or remove bottom margin */
+    padding-bottom: 0;
+    /* Adjust or remove bottom padding */
+}
+
+
 
 .btn-btn-primary:hover,
 .btn-btn-primary:focus {
     background-color: #0056b3;
     transform: scale(.85);
     outline: none;
+    color: white;
 }
 
 .btn-btn-primary:active {
@@ -116,7 +128,7 @@ p {
 }
 
 .btn-btn-primary {
-    font-size: 12px;
+    font-size: px;
 }
 
 .list-group-item {
@@ -125,7 +137,7 @@ p {
 
 .contaiser-mt-4 {
     margin-top: 30px;
-    margin-left: 225px;
+    margin-left: 125px;
 }
 
 
