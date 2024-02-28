@@ -12,13 +12,14 @@
 
 .sermons-search-container {
   display: flex;
+  align-items: center;
 }
 
 .sermons-search {
   border: 2px solid #ccc;
   border-radius: 20px;
   padding: 10px;
-  width: 100%;
+  width: rem.convert(350px);
   max-height: rem.convert(40px);
   max-width: rem.convert(350px);
   font-size: 1rem;

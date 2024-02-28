@@ -97,6 +97,21 @@ const SermonsBody = (props: SermonBodyProps) => {
     (_, index) => index + 1
   );
 
+  const pagination = (
+    <Pagination className="sermons-pagination justify-content-end">
+      {pageNumbers.map((number) => (
+        <Pagination.Item
+          key={number}
+          active={number === currentPage}
+          onClick={() => setCurrentPage(number)}
+          className="sermons-pagination-item"
+        >
+          {number}
+        </Pagination.Item>
+      ))}
+    </Pagination>
+  );
+
   return (
     <div className="text-center">
       <h1 className="sermons">
@@ -104,13 +119,16 @@ const SermonsBody = (props: SermonBodyProps) => {
         <strong> Sermons </strong>{" "}
       </h1>
       <div className="sermons-body-container">
-        <div className="sermons-search-container">
-          <input
-            className="sermons-search"
-            placeholder="Search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+        <div className="d-flex justify-content-between align-items-centerd">
+          <div className="sermons-search-container">
+            <input
+              className="sermons-search"
+              placeholder="search by title, speaker, or passage"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          {pagination}
         </div>
         <ListGroup className="sermons-container">
           {sermonsToDisplay.map((sermon) => (
@@ -124,20 +142,7 @@ const SermonsBody = (props: SermonBodyProps) => {
             />
           ))}
         </ListGroup>
-        <div className="sermons-pagination-container">
-          <Pagination className="sermons-pagination">
-            {pageNumbers.map((number) => (
-              <Pagination.Item
-                key={number}
-                active={number === currentPage}
-                onClick={() => setCurrentPage(number)}
-                className="sermons-pagination-item"
-              >
-                {number}
-              </Pagination.Item>
-            ))}
-          </Pagination>
-        </div>
+        <div className="sermons-pagination-container">{pagination}</div>
       </div>
     </div>
   );
@@ -145,7 +150,7 @@ const SermonsBody = (props: SermonBodyProps) => {
 
 const SermonItem = (props: SermonItem) => {
   return (
-    <ListGroup.Item className="sermon-item mt-5 border rounded">
+    <ListGroup.Item className="sermon-item mt-2 border rounded">
       <div className="sermon-item-container">
         <div className="sermon-info">
           <h2 className="sermon-title">{props.title}</h2>
