@@ -65,15 +65,18 @@ export const Header = (headerProps: HeaderProps) => {
           <Navbar.Collapse className={"justify-content-end"}>
             <Nav activeKey={headerProps.activeKey}>
               <Nav.Item>
-                <NavDropdown className={"header-navbar-link"} title={"About"}>
+                <NavDropdown
+                  className={"px-2 header-navbar-link"}
+                  title={"About"}
+                >
                   <NavDropdown.Item
-                    className={"px-2 header-navbar-link"}
+                    className={"header-navbar-link"}
                     href={"/about"}
                   >
                     About Us
                   </NavDropdown.Item>
                   <NavDropdown.Item
-                    className={"px-2 header-navbar-link"}
+                    className={"header-navbar-link"}
                     href={"/ourbeliefs"}
                   >
                     Our Beliefs
@@ -81,9 +84,12 @@ export const Header = (headerProps: HeaderProps) => {
                 </NavDropdown>
               </Nav.Item>
               <Nav.Item>
-                <NavDropdown className={"header-navbar-link"} title="Resources">
+                <NavDropdown
+                  className={"px-2 header-navbar-link"}
+                  title="Resources"
+                >
                   <NavDropdown.Item
-                    className={"px-2 header-navbar-link"}
+                    className={"header-navbar-link"}
                     href={"/sermons"}
                   >
                     Sermons
