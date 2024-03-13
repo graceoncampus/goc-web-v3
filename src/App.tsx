@@ -6,6 +6,7 @@ import { Landing as UserLanding } from "Components/User/Landing/Landing";
 import { NotFound as UserNotFound } from "Components/User/NotFound/NotFound";
 import { PrayerForm } from "./Components/Prayer/PrayerForm";
 import { SmallGroups } from "./Components/User/SmallGroups/SmallGroups";
+import { Events } from "./Components/User/Events/Events";
 import ScrollToTop from "Hooks/ScrollToTop";
 import ReactDOM from "react-dom";
 // import Viewer from './Components/Viewer/Viewer';
@@ -52,6 +53,7 @@ const App = () => {
           />
           <Route path="/prayer/request" element={<PrayerForm />} />
           <Route path={"/smallgroups"} element={<SmallGroups />}></Route>
+          <Route path={"/events"} element={<Events />}></Route>
         </Routes>
       </BrowserRouter>
     </React.StrictMode>

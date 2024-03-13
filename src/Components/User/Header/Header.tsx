@@ -15,6 +15,7 @@ export enum HeaderNavbarActiveKey {
   RIDES = "Rides",
   PRAYER = "Prayer",
   SERMONS = "Sermons",
+  EVENTS = "EVENTS",
 }
 
 interface HeaderProps {
@@ -103,6 +104,15 @@ export const Header = (headerProps: HeaderProps) => {
                   href={"/smallgroups"}
                 >
                   Small Groups
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item className={"px-2"}>
+                <Nav.Link
+                  className={"header-navbar-link"}
+                  eventKey={"Events"}
+                  href={"/events"}
+                >
+                  Events
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item className={"px-2"}>
