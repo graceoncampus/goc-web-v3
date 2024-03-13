@@ -1,1 +1,11 @@
 @use "~sass-rem" as rem;
+
+.events {
+  background-color: #c4c4c4;
+  color: white;
+  height: rem.convert(250px);
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

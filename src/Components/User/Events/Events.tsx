@@ -1,6 +1,8 @@
 import { HeaderNavbarActiveKey } from "Components/User/Header/Header";
 import { Template } from "Components/User/Template/Template";
 
+import "./Events.scss";
+
 export const Events = () => {
   return (
     <Template
@@ -11,5 +13,11 @@ export const Events = () => {
 };
 
 const EventsBody = () => {
-  return <div className={"text-center"}>i love issaac li</div>;
+  return (
+    <div className={"text-center"}>
+      <h1 className="events">
+        <strong> Events </strong>
+      </h1>
+    </div>
+  );
 };
