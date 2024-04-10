@@ -60,6 +60,7 @@ const EventsBody: React.FC<{ events: Event[] }> = ({ events }) => {
                       {event.date.toDateString()}
                     </p>
                   </div>
+                  <div className="d-flex align-items-center"></div>
                 </div>
               </Accordion.Header>
               <Accordion.Body>{event.description}</Accordion.Body>
