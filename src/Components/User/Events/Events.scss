@@ -9,3 +9,13 @@
   align-items: center;
   justify-content: center;
 }
+
+.event-description {
+  display: flex;
+  justify-content: center;
+}
+
+.event-description-text {
+  margin: 20px;
+  text-align: left;
+}
