@@ -1,3 +1,9 @@
+@use '~sass-rem' as rem;
+
+@use 'src/styles/colors';
+
+@import 'src/css/bootstrap';
+
 .study-guide-body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -43,27 +49,27 @@
 }
 
 .study-paragraph {
-    margin-top: 20px;
+    margin-top: rem.convert(20px);
     font-weight: bold;
 }
 
 .overlay {
     background-color: rgba(0, 0, 0, 0.5);
-    padding: 20px;
+    padding: rem.convert(20px);
 }
 
 h1 {
-    font-size: 20px;
+    font-size: rem.convert(20px);
 }
 
 h2 {
-    font-size: 50px;
-    margin-bottom: 20px;
+    font-size: rem.convert(50px);
+    margin-bottom: rem.convert(20px);
 }
 
 p {
-    font-size: 20px;
-    margin-left: 10px;
+    font-size: rem.convert(20px);
+    margin-left: rem.convert(10px);
 
 }
 
@@ -150,7 +156,7 @@ p {
 
 .feedback-link {
     display: block;
-    margin-top: 20px;
+    margin-top: rem.convert(20px);
 }
 
 .card {
@@ -163,12 +169,21 @@ p {
         border-bottom: none;
 
     }
-
     .list-group {
+        line-height: 0.5;
 
         .list-group-item {
             background-color: transparent;
             border: none;
         }
     }
+}
+
+a {
+    color: #0a509c;
+    font-weight: 500;
+}
+
+a:hover{
+    text-decoration: underline;
 }
