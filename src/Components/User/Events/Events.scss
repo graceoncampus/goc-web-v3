@@ -16,7 +16,7 @@
 }
 
 .logo-icon {
-  margin-right: 5px;
+  margin-right: rem.convert(5px);
   width: rem.convert(25px);
   height: rem.convert(25px);
 }
@@ -27,11 +27,11 @@
 }
 
 .event-description-text {
-  margin: 20px;
+  margin: rem.convert(20px);
   text-align: left;
 }
 
 .event-description-text p {
-  width: 300px;
+  width: rem.convert(300px);
   text-wrap: wrap;
 }
