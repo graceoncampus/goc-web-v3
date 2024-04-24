@@ -1,5 +1,16 @@
 @use "~sass-rem" as rem;
 
+.event-title {
+  font-size: rem.convert(60px);
+}
+
+.short-date-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
 .events {
   background-color: #c4c4c4;
   color: white;
