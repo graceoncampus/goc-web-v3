@@ -16,11 +16,11 @@ const mockEvents: Event[] = [
       "https://cdn.britannica.com/66/103066-050-B89D5EAF/Will-Smith-actor-musician-2006.jpg",
   },
   {
-    title: "Broomball",
+    title: "Fall Retreat",
     startDate: new Date(2025, 3, 22, 9),
     endDate: new Date(2025, 3, 22, 11),
     price: 10,
-    location: "Sac",
+    location: "Los Angeles",
     description:
       "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     imageLink:
@@ -147,7 +147,7 @@ const EventsBody: React.FC<{ events: Event[] }> = ({ events }) => {
               <Accordion.Body>
                 <div className="event-description">
                   <div className="d-flex">
-                    <img
+                    <Image
                       width={"300px"}
                       height={"300px"}
                       style={{ borderRadius: "20px" }}
@@ -158,20 +158,22 @@ const EventsBody: React.FC<{ events: Event[] }> = ({ events }) => {
                         <h1 className="event-title">{event.title}</h1>
                         <p>
                           <p>{event.description}</p>
-                          <p>
-                            {formatEventDate(event.startDate, event.endDate)}
-                          </p>
-                          <div className="location-info">
-                            <Image
-                              className="logo-icon"
-                              src={"/assets/location.png"}
-                            />
-                            <p>{event.location}</p>
-                            <Image
-                              className="logo-icon"
-                              src={"/assets/dollar.png"}
-                            />
-                            <p>{event.price === 0 ? "free" : event.price}</p>
+                          <div className="event-info">
+                            <p>
+                              {formatEventDate(event.startDate, event.endDate)}
+                            </p>
+                            <div className="location-info">
+                              <Image
+                                className="logo-icon"
+                                src={"/assets/location.png"}
+                              />
+                              <p>{event.location}</p>
+                              <Image
+                                className="logo-icon"
+                                src={"/assets/dollar.png"}
+                              />
+                              <p>{event.price === 0 ? "free" : event.price}</p>
+                            </div>
                           </div>
                         </p>
                       </div>

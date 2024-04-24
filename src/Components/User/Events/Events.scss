@@ -32,9 +32,13 @@
   height: rem.convert(25px);
 }
 
+.event-info {
+  font-weight: bold;
+}
+
 .event-description {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .event-description-text {
