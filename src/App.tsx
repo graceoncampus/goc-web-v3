@@ -6,6 +6,7 @@ import { Landing as UserLanding } from 'Components/User/Landing/Landing';
 import { NotFound as UserNotFound } from 'Components/User/NotFound/NotFound';
 import { PrayerForm } from './Components/Prayer/PrayerForm';  
 import { SmallGroups } from './Components/User/SmallGroups/SmallGroups';
+import { MinistryTeams } from './Components/User/MinistryTeams/MinistryTeams' // TODO: change to ministryteams
 import ScrollToTop from 'Hooks/ScrollToTop';
 import ReactDOM from 'react-dom';
 // import Viewer from './Components/Viewer/Viewer';
@@ -45,6 +46,7 @@ const App = () => {
                   <Route path={'/ministry_teams/*'} element={<MinistryTeamNotFound />} />
                   <Route path='/prayer/request' element={<PrayerForm/>} />
                   <Route path={'/smallgroups'} element={<SmallGroups />}></Route>
+                  <Route path={'/ministryteams'} element={<MinistryTeams />} />
               </Routes>
           </BrowserRouter>
       </React.StrictMode>

@@ -89,13 +89,14 @@ export const Header = (headerProps: HeaderProps) => {
               </Nav.Item>
 
               <Nav.Item className={'px-2'}>
-                <Nav.Link
-                  className={'header-navbar-link'}
-                  eventKey={'Small Groups'}
-                  href={'/smallgroups'}
-                >
-                  Small Groups
-                </Nav.Link>
+                <NavDropdown className={'header-navbar-link'} title={'Get Involved'}>
+                  <NavDropdown.Item className={'px-2 header-navbar-link'} eventKey={'Small Groups'} href={'/smallgroups'}>
+                    Small Groups
+                  </NavDropdown.Item>
+                  <NavDropdown.Item className={'px-2 header-navbar-link'} href={'/ministryteams'}>
+                    Ministry Teams
+                  </NavDropdown.Item>
+                </NavDropdown>
               </Nav.Item>
 
               <Nav.Item className={'px-2'}>
