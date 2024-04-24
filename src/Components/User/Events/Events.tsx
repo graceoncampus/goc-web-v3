@@ -52,6 +52,72 @@ interface Event {
 }
 
 const EventsBody: React.FC<{ events: Event[] }> = ({ events }) => {
+  function formatEventDate(startDate: Date, endDate: Date) {
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const startMonth = months[startDate.getMonth()];
+    const startDay = startDate.getDate();
+    const startYear = startDate.getFullYear();
+    const startHour = startDate.getHours();
+    const startMinute = startDate.getMinutes();
+    const startAMPM = startHour >= 12 ? "pm" : "am";
+    const startFormattedHour = startHour % 12 || 12;
+    const startFormattedMinute = String(startMinute).padStart(2, "0");
+
+    const endHour = endDate.getHours();
+    const endMinute = endDate.getMinutes();
+    const endAMPM = endHour >= 12 ? "pm" : "am";
+    const endFormattedHour = endHour % 12 || 12;
+    const endFormattedMinute = String(endMinute).padStart(2, "0");
+
+    const formattedStartDate = `${startMonth} ${startDay}, ${startYear} • ${startFormattedHour}:${startFormattedMinute}${startAMPM}`;
+    const formattedEndDate = `${endFormattedHour}:${endFormattedMinute}${endAMPM}`;
+
+    return `${formattedStartDate} - ${formattedEndDate}`;
+  }
+
+  function formatEventDateShort(date: Date) {
+    const monthsShort = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const daysOfWeekShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    const monthShort = monthsShort[date.getMonth()];
+    const dayOfMonth = date.getDate();
+    const dayOfWeekShort = daysOfWeekShort[date.getDay()];
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    const ampm = hour >= 12 ? "pm" : "am";
+    const formattedHour = hour % 12 || 12;
+    const formattedMinute = String(minute).padStart(2, "0");
+
+    return `${monthShort} ${dayOfMonth}\n\n${dayOfWeekShort} • ${formattedHour}:${formattedMinute}${ampm}`;
+  }
+
   return (
     <div className={"text-center"}>
       <h1 className="events">
@@ -69,7 +135,7 @@ const EventsBody: React.FC<{ events: Event[] }> = ({ events }) => {
                   </div>
                   <div className="d-flex align-items-center">
                     <p className="m-0 text-center">
-                      {event.startDate.toDateString()}
+                      {formatEventDateShort(event.startDate)}
                     </p>
                   </div>
                   <div className="d-flex align-items-center"></div>
@@ -88,11 +154,7 @@ const EventsBody: React.FC<{ events: Event[] }> = ({ events }) => {
                       <div>
                         <h1>{event.title}</h1>
                         <p>{event.description}</p>
-                        <p>{`${event.startDate.toLocaleString("default", {
-                          month: "long",
-                        })} ${event.startDate.getDay()}, ${event.startDate.getFullYear()} ${new Date(
-                          event.endDate
-                        )}`}</p>
+                        <p>{formatEventDate(event.startDate, event.endDate)}</p>
                       </div>
                     </div>
                   </div>
