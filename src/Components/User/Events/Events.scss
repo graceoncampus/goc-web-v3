@@ -10,6 +10,17 @@
   justify-content: center;
 }
 
+.location-info {
+  display: flex;
+  vertical-align: middle;
+}
+
+.logo-icon {
+  margin-right: 5px;
+  width: rem.convert(25px);
+  height: rem.convert(25px);
+}
+
 .event-description {
   display: flex;
   justify-content: center;

@@ -2,7 +2,7 @@ import { HeaderNavbarActiveKey } from "Components/User/Header/Header";
 import { Template } from "Components/User/Template/Template";
 
 import "./Events.scss";
-import { Accordion } from "react-bootstrap";
+import { Accordion, Image } from "react-bootstrap";
 
 const mockEvents: Event[] = [
   {
@@ -153,8 +153,19 @@ const EventsBody: React.FC<{ events: Event[] }> = ({ events }) => {
                     <div className="event-description-text">
                       <div>
                         <h1>{event.title}</h1>
-                        <p>{event.description}</p>
-                        <p>{formatEventDate(event.startDate, event.endDate)}</p>
+                        <p>
+                          <p>{event.description}</p>
+                          <p>
+                            {formatEventDate(event.startDate, event.endDate)}
+                          </p>
+                          <div className="location-info">
+                            <Image
+                              className="logo-icon"
+                              src={"/assets/location.png"}
+                            />
+                            <p>{event.location}</p>
+                          </div>
+                        </p>
                       </div>
                     </div>
                   </div>
