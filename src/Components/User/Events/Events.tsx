@@ -9,7 +9,7 @@ const mockEvents: Event[] = [
     title: "Event 1",
     startDate: new Date(2025, 3, 5, 7),
     endDate: new Date(2025, 3, 5, 9),
-    price: 10,
+    price: 0,
     location: "Sac",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   },
@@ -164,6 +164,11 @@ const EventsBody: React.FC<{ events: Event[] }> = ({ events }) => {
                               src={"/assets/location.png"}
                             />
                             <p>{event.location}</p>
+                            <Image
+                              className="logo-icon"
+                              src={"/assets/dollar.png"}
+                            />
+                            <p>{event.price === 0 ? "free" : event.price}</p>
                           </div>
                         </p>
                       </div>
