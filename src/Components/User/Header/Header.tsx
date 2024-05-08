@@ -95,6 +95,9 @@ export const Header = (headerProps: HeaderProps) => {
                   >
                     Sermons
                   </NavDropdown.Item>
+                  <NavDropdown.Item href={"/study_guide"}>
+                    John Study Guide
+                  </NavDropdown.Item>
                 </NavDropdown>
               </Nav.Item>
               <Nav.Item className={"px-2"}>

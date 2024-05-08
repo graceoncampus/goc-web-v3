@@ -18,6 +18,7 @@ import "./App.css";
 import "./css/bootstrap.scss";
 import { AboutUs } from "Components/User/AboutUs/AboutUs";
 import { Sermons } from "Components/User/Sermons/Sermons";
+import { StudyGuide } from "Components/User/Resources/JohnStudyGuide";
 import { RidesLanding } from "Components/User/Rides/RidesLanding/RidesLanding";
 import { OurBeliefs } from "Components/User/AboutUs/OurBeliefs/OurBeliefs";
 
@@ -53,6 +54,7 @@ const App = () => {
           />
           <Route path="/prayer/request" element={<PrayerForm />} />
           <Route path={"/smallgroups"} element={<SmallGroups />}></Route>
+          <Route path={"/study_guide"} element={<StudyGuide />} />
           <Route path={"/events"} element={<Events />}></Route>
         </Routes>
       </BrowserRouter>
