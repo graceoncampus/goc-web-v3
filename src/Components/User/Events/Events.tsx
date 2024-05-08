@@ -7,8 +7,8 @@ import { Accordion, Image } from "react-bootstrap";
 const mockEvents: Event[] = [
   {
     title: "Quarter Cookout",
-    startDate: new Date(2025, 3, 5, 7),
-    endDate: new Date(2025, 3, 5, 9),
+    startDate: new Date(2025, 3, 5, 7).toISOString(),
+    endDate: new Date(2025, 3, 5, 9).toISOString(),
     price: 0,
     location: "Sac",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
@@ -17,8 +17,8 @@ const mockEvents: Event[] = [
   },
   {
     title: "Fall Retreat",
-    startDate: new Date(2025, 3, 22, 9),
-    endDate: new Date(2025, 3, 22, 11),
+    startDate: new Date(2025, 3, 22, 9).toISOString(),
+    endDate: new Date(2025, 3, 22, 11).toISOString(),
     price: 10,
     location: "Los Angeles",
     description:
@@ -28,8 +28,8 @@ const mockEvents: Event[] = [
   },
   {
     title: "Spring Retreat",
-    startDate: new Date(2025, 3, 31, 5),
-    endDate: new Date(2025, 3, 31, 10),
+    startDate: new Date(2025, 3, 31, 5).toISOString(),
+    endDate: new Date(2025, 3, 31, 10).toISOString(),
     price: 10,
     location: "Sac",
     description:
@@ -50,8 +50,8 @@ export const Events: React.FC = () => {
 
 interface Event {
   title: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   price: Number;
   location: string;
   description: string;
@@ -59,7 +59,9 @@ interface Event {
 }
 
 const EventsBody: React.FC<{ events: Event[] }> = ({ events }) => {
-  function formatEventDate(startDate: Date, endDate: Date) {
+  function formatEventDate(startDateString: string, endDateString: string) {
+    const startDate = new Date(startDateString);
+    const endDate = new Date(endDateString);
     const formattedStartDate = `${startDate.toLocaleString("en-US", {
       month: "long",
       day: "numeric",
@@ -77,7 +79,8 @@ const EventsBody: React.FC<{ events: Event[] }> = ({ events }) => {
     return `${formattedStartDate} - ${formattedEndDate}`;
   }
 
-  function formatEventDateShort(date: Date) {
+  function formatEventDateShort(dateString: string) {
+    const date = new Date(dateString);
     const monthsShort = [
       "Jan",
       "Feb",
