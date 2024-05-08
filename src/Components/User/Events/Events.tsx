@@ -1,49 +1,17 @@
 import { HeaderNavbarActiveKey } from "Components/User/Header/Header";
 import { Template } from "Components/User/Template/Template";
+import { listGOCEvents } from "graphql/queries";
+import { API, graphqlOperation } from "aws-amplify";
 
 import "./Events.scss";
 import { Accordion, Image } from "react-bootstrap";
-
-const mockEvents: Event[] = [
-  {
-    title: "Quarter Cookout",
-    startDate: new Date(2025, 3, 5, 7).toISOString(),
-    endDate: new Date(2025, 3, 5, 9).toISOString(),
-    price: 0,
-    location: "Sac",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    imageLink:
-      "https://cdn.britannica.com/66/103066-050-B89D5EAF/Will-Smith-actor-musician-2006.jpg",
-  },
-  {
-    title: "Fall Retreat",
-    startDate: new Date(2025, 3, 22, 9).toISOString(),
-    endDate: new Date(2025, 3, 22, 11).toISOString(),
-    price: 10,
-    location: "Los Angeles",
-    description:
-      "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imageLink:
-      "https://cdn.britannica.com/66/103066-050-B89D5EAF/Will-Smith-actor-musician-2006.jpg",
-  },
-  {
-    title: "Spring Retreat",
-    startDate: new Date(2025, 3, 31, 5).toISOString(),
-    endDate: new Date(2025, 3, 31, 10).toISOString(),
-    price: 10,
-    location: "Sac",
-    description:
-      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    imageLink:
-      "https://cdn.britannica.com/66/103066-050-B89D5EAF/Will-Smith-actor-musician-2006.jpg",
-  },
-];
+import { useEffect, useState } from "react";
 
 export const Events: React.FC = () => {
   return (
     <Template
       activeKey={HeaderNavbarActiveKey.SMALL_GROUPS}
-      body={<EventsBody events={mockEvents} />}
+      body={<EventsBody />}
     />
   );
 };
@@ -58,7 +26,39 @@ interface Event {
   imageLink: string;
 }
 
-const EventsBody: React.FC<{ events: Event[] }> = ({ events }) => {
+const EventsBody: React.FC = () => {
+  const [events, setEvents] = useState<Event[]>([]);
+  useEffect(() => {
+    const fetchSermons = async () => {
+      await (API.graphql(graphqlOperation(listGOCEvents)) as Promise<any>)
+        .then((result) => {
+          const eventsData = result.data.listGOCEvents.items.sort(
+            (a: any, b: any) =>
+              new Date(b["startDate"]).getTime() -
+              new Date(a["startDate"]).getTime()
+          );
+          setEvents(
+            eventsData.map((event: any) => {
+              const item = {
+                title: event["title"],
+                startDate: event["startDate"],
+                endDate: event["endDate"],
+                price: event["price"],
+                location: event["location"],
+                description: event["description"],
+                imageLink: event["imageLink"],
+              };
+              return item;
+            })
+          );
+        })
+        .catch((reason) => {
+          console.log(reason);
+        });
+    };
+
+    fetchSermons();
+  }, []);
   function formatEventDate(startDateString: string, endDateString: string) {
     const startDate = new Date(startDateString);
     const endDate = new Date(endDateString);
