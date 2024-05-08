@@ -60,38 +60,19 @@ interface Event {
 
 const EventsBody: React.FC<{ events: Event[] }> = ({ events }) => {
   function formatEventDate(startDate: Date, endDate: Date) {
-    const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-
-    const startMonth = months[startDate.getMonth()];
-    const startDay = startDate.getDate();
-    const startYear = startDate.getFullYear();
-    const startHour = startDate.getHours();
-    const startMinute = startDate.getMinutes();
-    const startAMPM = startHour >= 12 ? "pm" : "am";
-    const startFormattedHour = startHour % 12 || 12;
-    const startFormattedMinute = String(startMinute).padStart(2, "0");
-
-    const endHour = endDate.getHours();
-    const endMinute = endDate.getMinutes();
-    const endAMPM = endHour >= 12 ? "pm" : "am";
-    const endFormattedHour = endHour % 12 || 12;
-    const endFormattedMinute = String(endMinute).padStart(2, "0");
-
-    const formattedStartDate = `${startMonth} ${startDay}, ${startYear} • ${startFormattedHour}:${startFormattedMinute}${startAMPM}`;
-    const formattedEndDate = `${endFormattedHour}:${endFormattedMinute}${endAMPM}`;
+    const formattedStartDate = `${startDate.toLocaleString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    })}`;
+    const formattedEndDate = `${endDate.toLocaleString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    })}`;
 
     return `${formattedStartDate} - ${formattedEndDate}`;
   }
@@ -113,16 +94,15 @@ const EventsBody: React.FC<{ events: Event[] }> = ({ events }) => {
     ];
     const daysOfWeekShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-    const monthShort = monthsShort[date.getMonth()];
-    const dayOfMonth = date.getDate();
-    const dayOfWeekShort = daysOfWeekShort[date.getDay()];
     const hour = date.getHours();
     const minute = date.getMinutes();
     const ampm = hour >= 12 ? "pm" : "am";
     const formattedHour = hour % 12 || 12;
     const formattedMinute = String(minute).padStart(2, "0");
 
-    return `${monthShort} ${dayOfMonth}\n\n${dayOfWeekShort} • ${formattedHour}:${formattedMinute}${ampm}`;
+    return `${monthsShort[date.getMonth()]} ${date.getDate()}\n\n${
+      daysOfWeekShort[date.getDay()]
+    } • ${formattedHour}:${formattedMinute}${ampm}`;
   }
 
   return (
