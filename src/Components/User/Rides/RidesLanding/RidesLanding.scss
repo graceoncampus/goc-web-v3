@@ -10,16 +10,19 @@
   justify-content: center;
   align-items: center;
   text-align: center;
+
   h1 {
     font-size: 3rem;
     position: relative;
     color: rgb(255, 255, 255);
   }
+
   .button {
     padding: 0.5rem 2rem;
     margin: 0.5rem;
   }
 }
+
 .rides-container {
   padding: 4rem 10% 0;
   display: flex;
@@ -50,6 +53,7 @@
   width: 100%;
   padding: 1rem 0.25rem;
 }
+
 .even {
   background-color: #e5e5e5;
 }
@@ -58,4 +62,34 @@
   background-color: #c4c4c4;
   // background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
   //   url('../../../../assets/AboutUsBackground.png');
+}
+
+form,
+input {
+  width: 100%;
+}
+
+div.admin {
+  padding: 4rem 10% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  h1 {
+    align-self: flex-start;
+  }
+}
+
+.rides-input {
+  padding: rem.convert(10px);
+  border-radius: rem.convert(10px);
+  margin-top: rem.convert(5px);
+  margin-bottom: rem.convert(5px);
+}
+
+.upload-rides-button {
+  background-color: #0056b3;
+  padding: rem.convert(10px);
+  border-radius: rem.convert(10px);
 }

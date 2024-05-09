@@ -5,9 +5,9 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
-import { EventTimeOption, CreateRiderInput, RideSignupStatus } from '../../../../Api';
-import { getEventsByEventId } from '../../../../graphql/queries';
-import { createRider } from '../../../../graphql/mutations';
+// import { EventTimeOption, CreateRiderInput, RideSignupStatus } from '../../../../Api';
+// import { getEventsByEventId } from '../../../../graphql/queries';
+// import { createRider } from '../../../../graphql/mutations';
 
 import { useComponentDidUpdateEffect } from 'Hooks/UseComponentDidUpdateEffect';
 
@@ -26,8 +26,10 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
 
   const [eventId, setEventId] = useState<string>('');
   const [eventName, setEventName] = useState<string>('');
-  const [eventPickupLocations, setEventPickupLocations] = useState<string[]>([]);
-  const [eventTimes, setEventTimes] = useState<EventTimeOption[]>([]);
+  const [eventPickupLocations, setEventPickupLocations] = useState<string[]>([
+    'Hedrick Turnaround', 'Holly Turnaround', 'De Neve Turnaround'
+  ]);
+  // const [eventTimes, setEventTimes] = useState<EventTimeOption[]>([]);
 
   const [riderName, setRiderName] = useState<string>('');
   const [riderEmail, setRiderEmail] = useState<string>('');
@@ -40,57 +42,6 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
     disableOffCampusPickupLocationTextInput,
     setDisableOffCampusPickupLocationTextInput,
   ] = useState(true);
-
-  /**
-   * Get search params from url (fires on render).
-   */
-  useEffect(() => {
-    setEventId(searchParams.get('eventId') || '');
-  }, [searchParams]);
-
-  /**
-   * Pull event data from GraphQL backend (fires only when eventId updates).
-   */
-  useComponentDidUpdateEffect(() => {
-    const fetchEventData = async () => {
-      await (API.graphql(graphqlOperation(getEventsByEventId, {
-        eventId: eventId
-      })) as Promise<any>).then((result) => {
-        const eventData = result.data.getEventsByEventId.items[0];
-
-        setEventName(eventData['eventName']);
-        setEventPickupLocations(eventData['eventPickupLocations']);
-        setEventTimes(eventData['eventTimes']);
-      }).catch((reason => {
-        console.error(reason); // Log failure to the client - this will help us trace issues.
-      }));
-    };
-
-    fetchEventData();
-  }, [eventId]);
-
-  const handleFormSubmit = async (event: any) => {
-    event.preventDefault();
-
-    const riderSignupData: CreateRiderInput = {
-      eventId: eventId,
-      riderName: riderName,
-      riderEmail: riderEmail,
-      riderPhoneNumber: riderPhoneNumber,
-      riderEventTime: riderEventTime,
-      riderEventPickupLocation: riderEventPickupLocation,
-      riderComments: riderComments,
-      riderSignupStatus: RideSignupStatus.IN_PROGRESS
-    };
-
-    await (API.graphql(graphqlOperation(createRider, {
-      input: riderSignupData
-    })) as Promise<any>).then((result) => {
-      riderSignupFormProps.setRiderSignupCompleted(true);
-    }).catch((reason) => {
-      console.error(reason); // Log failure to the client - this will help us trace issues.
-    });
-  }
 
   const eventPickupLocationsRadioButtons = eventPickupLocations.map((pickupLocationName: string) => {
     return (
@@ -114,41 +65,14 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
     );
   });
 
-  const eventTimesRadioButtons = eventTimes.map((eventTime: EventTimeOption) => {
-    const eventTimeHeading = eventTime.timeHeading;
-    const eventTimeSubtext = eventTime.timeSubtext;
-
-    return (
-        <Form.Check
-            key={eventTimeHeading}
-            name={'radio-time'}
-            type={'radio'}
-            id={`${eventTimeHeading}-radio`}
-            className={'signup-form-radio-button'}
-            label={
-              <div className={'time-label'}>
-                    <span className={'signup-form-radio-text'}>
-                      {eventTimeHeading}
-                    </span>
-                <div className={'signup-form-radio-subheading'}>
-                  {eventTimeSubtext}
-                </div>
-              </div>
-            }
-            onChange={({target: {value}}) => setRiderEventTime(eventTimeHeading)}
-            required
-        />
-    );
-  });
-
   return (
     <Container>
       <Col className={'mx-auto text-center'} lg={'8'}>
         <span className={'signup-form-title'}>
-          Sign up for a ride to {eventName}!
+          Sign up for a ride to Church!
         </span>
 
-        <Form className={'text-center'} onSubmit={handleFormSubmit}>
+        <Form className={'text-center'} onSubmit={()=>{}}>
           <Row className={'text-start gx-5'}>
             <Col lg={'6'}>
               <Form.Group className={'mb-3'} controlId={'riderName'}>
@@ -228,7 +152,6 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
                   Time *{' '}
                 </Form.Label>
 
-                {eventTimesRadioButtons}
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'riderComments'}>
