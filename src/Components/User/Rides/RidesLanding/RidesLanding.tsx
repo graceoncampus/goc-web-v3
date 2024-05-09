@@ -150,7 +150,7 @@ const RidesList = ({ rides }: RideProps) => {
           We've got you covered.
         </h1>
         <Button
-          className="button"
+          className="request-ride-button"
           variant="dark"
           href="/rides/rider/signup"
           target="_blank"
@@ -158,7 +158,7 @@ const RidesList = ({ rides }: RideProps) => {
           I need a ride
         </Button>
         <Button
-          className="button"
+          className="request-ride-button"
           variant="dark"
           href="/rides/driver/signup"
           target="_blank"
@@ -197,7 +197,7 @@ const RidesSettings = () => {
 
   return <div className="admin">
     <h1>Admin Settings</h1>
-    <form onSubmit={async (e) => {
+    <form className={'admin-form'} onSubmit={async (e) => {
       e.preventDefault();
       await updateRides(url, date, emailMsg);
       window.location.reload();

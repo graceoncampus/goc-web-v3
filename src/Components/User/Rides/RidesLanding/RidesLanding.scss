@@ -10,17 +10,11 @@
   justify-content: center;
   align-items: center;
   text-align: center;
+}
 
-  h1 {
-    font-size: 3rem;
-    position: relative;
-    color: rgb(255, 255, 255);
-  }
-
-  .button {
-    padding: 0.5rem 2rem;
-    margin: 0.5rem;
-  }
+.request-ride-button {
+  padding: 0.5rem 2rem;
+  margin: 0.5rem;
 }
 
 .rides-container {
@@ -61,12 +55,15 @@
 #rides-landing {
   background-color: #c4c4c4;
   // background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-  //   url('../../../../assets/AboutUsBackground.png');
+    // url('../../../../assets/AboutUsBackground.png');
 }
 
-form,
-input {
+
+.admin-form {
   width: 100%;
+  input {
+    width: 100%;
+  }
 }
 
 div.admin {
