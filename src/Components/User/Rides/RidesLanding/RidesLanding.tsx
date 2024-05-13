@@ -119,6 +119,7 @@ const updateRides = async (url: string, date: string, emailMsg: string) => {
 
 export const RidesLanding = () => {
   const [ride, setRide] = useState<Ride>();
+  const [loading, setLoading] = useState<Boolean>(true);
 
   useEffect(() => {
     const fetchRides = async () => {
@@ -127,10 +128,15 @@ export const RidesLanding = () => {
       }).catch((reason => {
         console.error(reason); // Log failure to the client - this will help us trace issues.
       }));
+      setLoading(false);
     }
     fetchRides();
   }, [])
   console.log(ride)
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <Template
