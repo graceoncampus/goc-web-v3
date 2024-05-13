@@ -3,7 +3,7 @@ import { HeaderNavbarActiveKey } from 'Components/User/Header/Header';
 import { Template } from 'Components/User/Template/Template';
 import { API, graphqlOperation } from "aws-amplify";
 import { JWT } from 'google-auth-library';
-import { GoogleSpreadsheet } from 'google-spreadsheet'; // modify gaxios.js in node_modules line 270: new url_1.URL(url) --> new URL(url)
+import { GoogleSpreadsheet } from 'google-spreadsheet'; // modify gaxios.js in node_modules line 270: new url_1.URL(url) --> new url_1.Url(url)
 import { createRide, deleteRide } from 'graphql/mutations';
 import { listRides } from 'graphql/queries';
 import { useEffect, useState } from 'react';
@@ -13,8 +13,8 @@ import './RidesLanding.scss';
 
 const updateRides = async (url: string, date: string, emailMsg: string) => {
   const serviceAccountAuth = new JWT({
-    email: process.env.REACT_APP_CLIENT_EMAIL,
-    key: process.env.REACT_APP_PRIVATE_KEY,
+    email: process.env.REACT_APP_GOOGLE_SERVICE_ACCOUNT_EMAIL,
+    key: process.env.REACT_APP_GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
     scopes: [
       'https://www.googleapis.com/auth/spreadsheets',
     ]
@@ -109,6 +109,8 @@ const updateRides = async (url: string, date: string, emailMsg: string) => {
       console.error(reason); // Log failure to the client - this will help us trace issues.
     }));
 
+    // success
+    window.location.reload();
   } catch (e) {
     console.log(e);
   }
@@ -172,11 +174,11 @@ const RidesList = ({ rides }: RideProps) => {
 
         {rides?.cars?.map((car, i) => {
           return (
-            <div className={i % 2 == 0 ? 'table-row' : 'even table-row'}>
+            <div key={i} className={i % 2 == 0 ? 'table-row' : 'even table-row'}>
               <div className="column-item">{car?.driver_name} </div>
               <div className="column-item">
                 {car?.riders.map((rider, i) => {
-                  return <span>{rider?.name}</span>;
+                  return <span key={i}>{rider?.name}</span>;
                 })}
               </div>
             </div>
@@ -198,7 +200,6 @@ const RidesSettings = () => {
     <form className={'admin-form'} onSubmit={async (e) => {
       e.preventDefault();
       await updateRides(url, date, emailMsg);
-      window.location.reload();
     }}>
       <label>Spreadsheet URL</label><br />
       <input type="url" required className={'rides-input'} value={url} onChange={(e) => setUrl(e.target.value)} /><br />
