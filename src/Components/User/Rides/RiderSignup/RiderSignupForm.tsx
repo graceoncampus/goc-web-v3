@@ -2,17 +2,8 @@
  * Rider signup form.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
-import { useSearchParams } from 'react-router-dom';
-import { EventTimeOption, CreateRiderInput, RideSignupStatus } from '../../../../Api';
-import { getEventsByEventId } from '../../../../graphql/queries';
-import { createRider } from '../../../../graphql/mutations';
-
-import { useComponentDidUpdateEffect } from 'Hooks/UseComponentDidUpdateEffect';
-
-import { API, graphqlOperation } from 'aws-amplify';
-
 import { PickupLocationPopup } from "./PickupLocationPopup/PickupLocationPopup";
 
 import '../../../../css/common/forms.scss';
@@ -21,13 +12,29 @@ interface RiderSignupFormProps {
   setRiderSignupCompleted: (riderSignupValue: boolean) => void;
 }
 
-export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+type EventTimeOption = {
+  heading: string,
+  subtext: string,
+}
 
-  const [eventId, setEventId] = useState<string>('');
-  const [eventName, setEventName] = useState<string>('');
-  const [eventPickupLocations, setEventPickupLocations] = useState<string[]>([]);
-  const [eventTimes, setEventTimes] = useState<EventTimeOption[]>([]);
+export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
+  const [eventPickupLocations, setEventPickupLocations] = useState<string[]>([
+    'Hedrick Turnaround', 'Holly Turnaround', 'De Neve Turnaround'
+  ]);
+  const [eventTimes, setEventTimes] = useState<EventTimeOption[]>([
+    {
+      heading: 'Morning',
+      subtext: '(9am - 12:30pm)'
+    },
+    {
+      heading: 'Evening',
+      subtext: '(6pm - 7:30pm)'
+    },
+    {
+      heading: 'Staying',
+      subtext: '(9am - 7:30pm)'
+    },
+  ]);
 
   const [riderName, setRiderName] = useState<string>('');
   const [riderEmail, setRiderEmail] = useState<string>('');
@@ -40,57 +47,6 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
     disableOffCampusPickupLocationTextInput,
     setDisableOffCampusPickupLocationTextInput,
   ] = useState(true);
-
-  /**
-   * Get search params from url (fires on render).
-   */
-  useEffect(() => {
-    setEventId(searchParams.get('eventId') || '');
-  }, [searchParams]);
-
-  /**
-   * Pull event data from GraphQL backend (fires only when eventId updates).
-   */
-  useComponentDidUpdateEffect(() => {
-    const fetchEventData = async () => {
-      await (API.graphql(graphqlOperation(getEventsByEventId, {
-        eventId: eventId
-      })) as Promise<any>).then((result) => {
-        const eventData = result.data.getEventsByEventId.items[0];
-
-        setEventName(eventData['eventName']);
-        setEventPickupLocations(eventData['eventPickupLocations']);
-        setEventTimes(eventData['eventTimes']);
-      }).catch((reason => {
-        console.error(reason); // Log failure to the client - this will help us trace issues.
-      }));
-    };
-
-    fetchEventData();
-  }, [eventId]);
-
-  const handleFormSubmit = async (event: any) => {
-    event.preventDefault();
-
-    const riderSignupData: CreateRiderInput = {
-      eventId: eventId,
-      riderName: riderName,
-      riderEmail: riderEmail,
-      riderPhoneNumber: riderPhoneNumber,
-      riderEventTime: riderEventTime,
-      riderEventPickupLocation: riderEventPickupLocation,
-      riderComments: riderComments,
-      riderSignupStatus: RideSignupStatus.IN_PROGRESS
-    };
-
-    await (API.graphql(graphqlOperation(createRider, {
-      input: riderSignupData
-    })) as Promise<any>).then((result) => {
-      riderSignupFormProps.setRiderSignupCompleted(true);
-    }).catch((reason) => {
-      console.error(reason); // Log failure to the client - this will help us trace issues.
-    });
-  }
 
   const eventPickupLocationsRadioButtons = eventPickupLocations.map((pickupLocationName: string) => {
     return (
@@ -115,29 +71,30 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
   });
 
   const eventTimesRadioButtons = eventTimes.map((eventTime: EventTimeOption) => {
-    const eventTimeHeading = eventTime.timeHeading;
-    const eventTimeSubtext = eventTime.timeSubtext;
+    const eventTimeHeading = eventTime.heading;
+    const eventTimeSubtext = eventTime.subtext;
+
 
     return (
-        <Form.Check
-            key={eventTimeHeading}
-            name={'radio-time'}
-            type={'radio'}
-            id={`${eventTimeHeading}-radio`}
-            className={'signup-form-radio-button'}
-            label={
-              <div className={'time-label'}>
-                    <span className={'signup-form-radio-text'}>
-                      {eventTimeHeading}
-                    </span>
-                <div className={'signup-form-radio-subheading'}>
-                  {eventTimeSubtext}
-                </div>
-              </div>
-            }
-            onChange={({target: {value}}) => setRiderEventTime(eventTimeHeading)}
-            required
-        />
+      <Form.Check
+        key={eventTimeHeading}
+        name={'radio-time'}
+        type={'radio'}
+        id={`${eventTimeHeading}-radio`}
+        className={'signup-form-radio-button'}
+        label={
+          <div className={'time-label'}>
+            <span className={'signup-form-radio-text'}>
+              {eventTimeHeading}
+            </span>
+            <div className={'signup-form-radio-subheading'}>
+              {eventTimeSubtext}
+            </div>
+          </div>
+        }
+        onChange={({ target: { value } }) => setRiderEventTime(eventTimeHeading)}
+        required
+      />
     );
   });
 
@@ -145,10 +102,10 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
     <Container>
       <Col className={'mx-auto text-center'} lg={'8'}>
         <span className={'signup-form-title'}>
-          Sign up for a ride to {eventName}!
+          Sign up for a ride to Church!
         </span>
 
-        <Form className={'text-center'} onSubmit={handleFormSubmit}>
+        <Form className={'text-center'} onSubmit={() => { }}>
           <Row className={'text-start gx-5'}>
             <Col lg={'6'}>
               <Form.Group className={'mb-3'} controlId={'riderName'}>
@@ -157,8 +114,8 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
                   Name *{' '}
                 </Form.Label>
                 <Form.Control placeholder={'Enter your name'}
-                              onChange={({target: {value}}) => setRiderName(value)}
-                              required/>
+                  onChange={({ target: { value } }) => setRiderName(value)}
+                  required />
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'riderEmail'}>
@@ -167,8 +124,8 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
                   Email *{' '}
                 </Form.Label>
                 <Form.Control type={'email'} placeholder={'Enter your email'}
-                              onChange={({target: {value}}) => setRiderEmail(value)}
-                              required/>
+                  onChange={({ target: { value } }) => setRiderEmail(value)}
+                  required />
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'riderPhoneNumber'}>
@@ -177,15 +134,15 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
                   Phone Number *{' '}
                 </Form.Label>
                 <Form.Control type={"tel"} placeholder={'Enter your phone number'}
-                              onChange={({target: {value}}) => setRiderPhoneNumber(value)}
-                              required/>
+                  onChange={({ target: { value } }) => setRiderPhoneNumber(value)}
+                  required />
               </Form.Group>
 
               <Form.Group className={'mb-3'} controlId={'riderPickupLocation'}>
                 <div>
                   <Form.Label className={'signup-form-label'}>
-                      {' '}
-                      Pickup Location *{' '}
+                    {' '}
+                    Pickup Location *{' '}
                   </Form.Label>
 
                   <PickupLocationPopup />
@@ -227,7 +184,6 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
                   {' '}
                   Time *{' '}
                 </Form.Label>
-
                 {eventTimesRadioButtons}
               </Form.Group>
 
@@ -237,9 +193,9 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
                   Comments{' '}
                 </Form.Label>
                 <Form.Control
-                    as={'textarea'}
-                    rows={4}
-                    onChange={({target: {value}}) => setRiderComments(value)} />
+                  as={'textarea'}
+                  rows={4}
+                  onChange={({ target: { value } }) => setRiderComments(value)} />
               </Form.Group>
             </Col>
           </Row>
