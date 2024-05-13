@@ -1,0 +1,13 @@
+diff --git a/node_modules/gaxios/build/src/gaxios.js b/node_modules/gaxios/build/src/gaxios.js
+index 1932503..ab7ba04 100644
+--- a/node_modules/gaxios/build/src/gaxios.js
++++ b/node_modules/gaxios/build/src/gaxios.js
+@@ -267,7 +267,7 @@ class Gaxios {
+ exports.Gaxios = Gaxios;
+ _a = Gaxios, _Gaxios_instances = new WeakSet(), _Gaxios_urlMayUseProxy = function _Gaxios_urlMayUseProxy(url, noProxy = []) {
+     var _b, _c;
+-    const candidate = new url_1.URL(url);
++    const candidate = new url_1.Url(url);
+     const noProxyList = [...noProxy];
+     const noProxyEnvList = ((_c = ((_b = process.env.NO_PROXY) !== null && _b !== void 0 ? _b : process.env.no_proxy)) === null || _c === void 0 ? void 0 : _c.split(',')) || [];
+     for (const rule of noProxyEnvList) {
