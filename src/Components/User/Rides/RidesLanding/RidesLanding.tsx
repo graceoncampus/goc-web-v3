@@ -11,13 +11,10 @@ import { Button } from 'react-bootstrap';
 
 import './RidesLanding.scss';
 
-import creds from './goc-form-ca6452f3be85.json';
-
-
 const updateRides = async (url: string, date: string, emailMsg: string) => {
   const serviceAccountAuth = new JWT({
-    email: creds.client_email,
-    key: creds.private_key,
+    email: process.env.REACT_APP_CLIENT_EMAIL,
+    key: process.env.REACT_APP_PRIVATE_KEY,
     scopes: [
       'https://www.googleapis.com/auth/spreadsheets',
     ]
@@ -131,6 +128,7 @@ export const RidesLanding = () => {
     }
     fetchRides();
   }, [])
+  console.log(ride)
 
   return (
     <Template
