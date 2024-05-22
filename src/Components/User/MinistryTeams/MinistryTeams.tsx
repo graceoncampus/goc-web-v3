@@ -2,7 +2,6 @@ import { HeaderNavbarActiveKey } from 'Components/User/Header/Header';
 import { Template } from 'Components/User/Template/Template';
 
 import './MinistryTeams.scss';
-import { Accordion } from 'react-bootstrap';
 
 const mockTeams: MinistryTeam[] = [
 	{
@@ -31,7 +30,7 @@ const mockTeams: MinistryTeam[] = [
 export const MinistryTeams: React.FC = () => {
 	return (
 		<Template
-			activeKey={HeaderNavbarActiveKey.SMALL_GROUPS} // TODO: Add constant to template
+			activeKey={HeaderNavbarActiveKey.MINISTRY_TEAMS} // TODO: Add constant to template
 			body={<TeamsBody MinistryTeams={mockTeams} />}
 		/>
 	);
