@@ -82,7 +82,7 @@ const TeamsBody: React.FC<{ MinistryTeams: MinistryTeam[] }> = ({
 				<hr className="mb-4" />
 
 				{MinistryTeams.map((MinistryTeam, index) => (
-					<div key={index} className="left-align mt-5">
+					<div key={index} className="mt-5">
 						<h2 className="anchor" id={slugify(MinistryTeam.title)}>
 							{MinistryTeam.title}
 						</h2>
