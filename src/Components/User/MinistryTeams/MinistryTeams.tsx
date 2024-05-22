@@ -30,7 +30,7 @@ const mockTeams: MinistryTeam[] = [
 export const MinistryTeams: React.FC = () => {
 	return (
 		<Template
-			activeKey={HeaderNavbarActiveKey.MINISTRY_TEAMS} // TODO: Add constant to template
+			activeKey={HeaderNavbarActiveKey.MINISTRY_TEAMS}
 			body={<TeamsBody MinistryTeams={mockTeams} />}
 		/>
 	);
