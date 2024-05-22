@@ -10,9 +10,13 @@ import './Header.scss';
 export enum HeaderNavbarActiveKey {
 	NONE = '',
 	ABOUT = 'About',
-	RESOURCES = 'Resources',
+	BELIEFS = 'Our Beliefs',
+	SERMONS = 'Sermons',
+	CLASSES = 'Classes',
+	STUDY_GUIDE = 'Study Guide',
 	SMALL_GROUPS = 'Small Groups',
 	MINISTRY_TEAMS = 'Ministry Teams',
+	EVENTS = 'Events',
 	RIDES = 'Rides',
 	PRAYER = 'Prayer',
 }
@@ -86,12 +90,14 @@ export const Header = (headerProps: HeaderProps) => {
 								>
 									<NavDropdown.Item
 										className={'px-2 header-navbar-link'}
+										eventKey={'About'}
 										href={'/about'}
 									>
 										About Us
 									</NavDropdown.Item>
 									<NavDropdown.Item
 										className={'px-2 header-navbar-link'}
+										eventKey={'Our Beliefs'}
 										href={'/ourbeliefs'}
 									>
 										Our Beliefs
@@ -106,19 +112,22 @@ export const Header = (headerProps: HeaderProps) => {
 								>
 									<NavDropdown.Item
 										className={'px-2 header-navbar-link'}
+										eventKey={'Sermons'}
 										href={'/sermons'}
 									>
 										Sermons
 									</NavDropdown.Item>
 									<NavDropdown.Item
 										className={'px-2 header-navbar-link'}
+										eventKey={'Classes'}
 										href={'/classes'}
 									>
 										Classes
 									</NavDropdown.Item>
 									<NavDropdown.Item
 										className={'px-2 header-navbar-link'}
-										href={'/resources'}
+										eventKey={'Study Guide'}
+										href={'/study_guide'}
 									>
 										John Study Guide
 									</NavDropdown.Item>
