@@ -19,3 +19,15 @@
 	margin: 20px;
 	text-align: left;
 }
+
+.left-align {
+	text-align: left;
+}
+
+.h2 {
+	font-size: rem.convert(24px);
+}
+
+.anchor {
+	scroll-margin-top: var(--navbar-height);
+}

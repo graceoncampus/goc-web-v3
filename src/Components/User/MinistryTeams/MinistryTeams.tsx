@@ -44,59 +44,59 @@ interface MinistryTeam {
 	contact: string;
 }
 
+function slugify(text: string): string {
+	return text
+		.toString()
+		.toLowerCase()
+		.replace(/\s+/g, '-') // Replace spaces with -
+		.replace(/[^\w\-]+/g, '') // Remove all non-word characters
+		.replace(/\-\-+/g, '-') // Replace multiple - with single -
+		.replace(/^-+/, '') // Trim - from start of text
+		.replace(/-+$/, ''); // Trim - from end of text
+}
+
 const TeamsBody: React.FC<{ MinistryTeams: MinistryTeam[] }> = ({
 	MinistryTeams,
 }) => {
 	return (
 		<div className={'text-center'}>
 			<h1 className="Teams">
-				{/* TODO: Replace with page header */}
+				{/* TODO: Replace with page header component (future work)*/}
 				<strong>Ministry Teams</strong>
 			</h1>
-			<h1 className="m-5">Upcoming Teams</h1>
-			<div className="p-5 m-5 pt-0">
-				<Accordion>
+
+			<div className="col-md-6 mx-auto px-3 py-4 my-2 order-md-1 left-align">
+				<h2>List of Ministry Teams</h2>
+				<hr />
+				<ul>
 					{MinistryTeams.map((MinistryTeam, index) => (
-            // Individual components go here
-            
-						<Accordion.Item key={index} eventKey={index.toString()}>
-							<Accordion.Header>
-								<div className="d-flex align-items-center justify-content-between w-100">
-									<div className="d-flex align-items-center">
-										<h2 className="m-0">
-											{MinistryTeam.title}
-										</h2>
-									</div>
-									<div className="d-flex align-items-center">
-										<p className="m-0 text-center">
-											{MinistryTeam.contact}
-										</p>
-									</div>
-									<div className="d-flex align-items-center"></div>
-								</div>
-							</Accordion.Header>
-							<Accordion.Body>
-								<div className="Team-description">
-									<div className="d-flex">
-										<img
-											width={'200px'}
-											style={{ borderRadius: '20px' }}
-											src=""
-										/>
-										<div className="Team-description-text">
-											<div>
-												<h1>{MinistryTeam.title}</h1>
-												<p>
-													{MinistryTeam.description}
-												</p>
-											</div>
-										</div>
-									</div>
-								</div>
-							</Accordion.Body>
-						</Accordion.Item>
+						<li key={index}>
+							<a
+								href={`#${slugify(MinistryTeam.title)}`}
+								style={{ textDecoration: 'none' }}
+							>
+								{MinistryTeam.title}
+							</a>
+						</li>
 					))}
-				</Accordion>
+				</ul>
+				<hr className="mb-4" />
+
+				{MinistryTeams.map((MinistryTeam, index) => (
+					<div key={index} className="left-align mt-5">
+						<h2 className="anchor" id={slugify(MinistryTeam.title)}>
+							{MinistryTeam.title}
+						</h2>
+						<hr />
+						<p>{MinistryTeam.description}</p>
+						<p>
+							<strong>Leader(s):</strong> {MinistryTeam.leaders}
+						</p>
+						<p>
+							<strong>Contact:</strong> {MinistryTeam.contact}
+						</p>
+					</div>
+				))}
 			</div>
 		</div>
 	);
