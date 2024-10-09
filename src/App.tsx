@@ -17,9 +17,9 @@ import { NotFound as MinistryTeamNotFound } from 'Components/MinistryTeams/NotFo
 import './App.css';
 import './css/bootstrap.scss';
 import { AboutUs } from 'Components/User/AboutUs/AboutUs';
-import { Sermons } from "Components/User/Sermons/Sermons";
+// import { Sermons } from "Components/User/Sermons/Sermons";
 import { StudyGuide } from 'Components/User/Resources/JohnStudyGuide'
-import { RidesLanding } from 'Components/User/Rides/RidesLanding/RidesLanding';
+// import { RidesLanding } from 'Components/User/Rides/RidesLanding/RidesLanding';
 import { OurBeliefs } from 'Components/User/AboutUs/OurBeliefs/OurBeliefs';
 
 /**
@@ -38,9 +38,9 @@ const App = () => {
           <Route path={'*'} element={<UserNotFound />} />   {/* 404 */}
           <Route path={'/'} element={<UserLanding />} />
           <Route path={'/about'} element={<AboutUs />} />
-          <Route path={"/sermons"} element={<Sermons />} />
+          {/* <Route path={"/sermons"} element={<Sermons />} /> */}
           <Route path={'/ourbeliefs'} element={<OurBeliefs />}></Route>
-          <Route path={'/rides'} element={<RidesLanding />} />
+          {/* <Route path={'/rides'} element={<RidesLanding />} /> */}
           <Route path={'/rides/rider/signup'} element={<RiderSignup />} />
           <Route path={'/rides/driver/signup'} element={<DriverSignup />} />
           <Route path={'/ministry_teams'} element={<MinistryTeamLanding />} />
