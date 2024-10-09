@@ -55,7 +55,7 @@ const App = () => {
           />
           <Route path="/prayer/request" element={<PrayerForm />} />
           <Route path={"/smallgroups"} element={<SmallGroups />}></Route>
-          <Route path={"/JohnStudyGuide"} element={<StudyGuide />} />
+          <Route path={"/study_guide"} element={<StudyGuide />} />
         </Routes>
       </BrowserRouter>
     </React.StrictMode>

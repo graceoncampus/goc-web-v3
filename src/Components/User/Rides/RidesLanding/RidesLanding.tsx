@@ -11,14 +11,12 @@ import { Button } from "react-bootstrap";
 
 import "./RidesLanding.scss";
 
-import creds from "./goc-form-ca6452f3be85.json";
-
 const client = generateClient();
 
 const updateRides = async (url: string, date: string, emailMsg: string) => {
   const serviceAccountAuth = new JWT({
-    email: creds.client_email,
-    key: creds.private_key,
+    email: process.env.REACT_APP_GOOGLE_SERVICE_ACCOUNT_EMAIL,
+    key: process.env.REACT_APP_GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
     scopes: ["https://www.googleapis.com/auth/spreadsheets"],
   });
   const re1 = /https:\/\/docs\.google\.com\/spreadsheets\/d\//g;
@@ -135,6 +133,8 @@ const updateRides = async (url: string, date: string, emailMsg: string) => {
       .catch((reason) => {
         console.error(reason); // Log failure to the client - this will help us trace issues.
       });
+    // success
+    window.location.reload();
   } catch (e) {
     console.log(e);
   }
@@ -142,17 +142,18 @@ const updateRides = async (url: string, date: string, emailMsg: string) => {
 
 export const RidesLanding = () => {
   const [ride, setRide] = useState<Ride>();
+  const [loading, setLoading] = useState<Boolean>(true);
 
   useEffect(() => {
     const fetchRides = async () => {
       await (client.graphql({ query: listRides }) as Promise<any>)
-
         .then((result) => {
           setRide(result.data.listRides.items[0]); // assuming only one "rides" in db
         })
         .catch((reason) => {
           console.error(reason); // Log failure to the client - this will help us trace issues.
         });
+      setLoading(false);
     };
     fetchRides();
   }, []);
@@ -200,11 +201,14 @@ const RidesList = ({ rides }: RideProps) => {
 
         {rides?.cars?.map((car, i) => {
           return (
-            <div className={i % 2 == 0 ? "table-row" : "even table-row"}>
+            <div
+              key={i}
+              className={i % 2 == 0 ? "table-row" : "even table-row"}
+            >
               <div className="column-item">{car?.driver_name} </div>
               <div className="column-item">
                 {car?.riders.map((rider, i) => {
-                  return <span>{rider?.name}</span>;
+                  return <span key={i}>{rider?.name}</span>;
                 })}
               </div>
             </div>
@@ -228,7 +232,6 @@ const RidesSettings = () => {
         onSubmit={async (e) => {
           e.preventDefault();
           await updateRides(url, date, emailMsg);
-          window.location.reload();
         }}
       >
         <label>Spreadsheet URL</label>

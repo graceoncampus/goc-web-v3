@@ -1,65 +1,66 @@
 import { HeaderNavbarActiveKey } from "Components/User/Header/Header";
 import { Template } from "Components/User/Template/Template";
+import { listGOCEvents } from "graphql/queries";
+import { generateClient } from "aws-amplify/api";
 
 import "./Events.scss";
 import { Accordion, Image } from "react-bootstrap";
+import { useEffect, useState } from "react";
 
-const mockEvents: Event[] = [
-  {
-    title: "Quarter Cookout",
-    startDate: new Date(2025, 3, 5, 7),
-    endDate: new Date(2025, 3, 5, 9),
-    price: 0,
-    location: "Sac",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    imageLink:
-      "https://cdn.britannica.com/66/103066-050-B89D5EAF/Will-Smith-actor-musician-2006.jpg",
-  },
-  {
-    title: "Fall Retreat",
-    startDate: new Date(2025, 3, 22, 9),
-    endDate: new Date(2025, 3, 22, 11),
-    price: 10,
-    location: "Los Angeles",
-    description:
-      "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imageLink:
-      "https://cdn.britannica.com/66/103066-050-B89D5EAF/Will-Smith-actor-musician-2006.jpg",
-  },
-  {
-    title: "Spring Retreat",
-    startDate: new Date(2025, 3, 31, 5),
-    endDate: new Date(2025, 3, 31, 10),
-    price: 10,
-    location: "Sac",
-    description:
-      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    imageLink:
-      "https://cdn.britannica.com/66/103066-050-B89D5EAF/Will-Smith-actor-musician-2006.jpg",
-  },
-];
+const client = generateClient();
 
 export const Events: React.FC = () => {
   return (
-    <Template
-      activeKey={HeaderNavbarActiveKey.EVENTS}
-      body={<EventsBody events={mockEvents} />}
-    />
+    <Template activeKey={HeaderNavbarActiveKey.EVENTS} body={<EventsBody />} />
   );
 };
 
 interface Event {
   title: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   price: Number;
   location: string;
   description: string;
   imageLink: string;
 }
 
-const EventsBody: React.FC<{ events: Event[] }> = ({ events }) => {
-  function formatEventDate(startDate: Date, endDate: Date) {
+const EventsBody: React.FC = () => {
+  const [events, setEvents] = useState<Event[]>([]);
+  useEffect(() => {
+    const fetchSermons = async () => {
+      await (client.graphql({ query: listGOCEvents }) as Promise<any>)
+        .then((result) => {
+          const eventsData = result.data.listGOCEvents.items.sort(
+            (a: any, b: any) =>
+              new Date(b["startDate"]).getTime() -
+              new Date(a["startDate"]).getTime()
+          );
+          setEvents(
+            eventsData.map((event: any) => {
+              const item = {
+                title: event["title"],
+                startDate: event["startDate"],
+                endDate: event["endDate"],
+                price: event["price"],
+                location: event["location"],
+                description: event["description"],
+                imageLink: event["imageLink"],
+              };
+              return item;
+            })
+          );
+        })
+        .catch((reason) => {
+          console.log(reason);
+        });
+    };
+
+    fetchSermons();
+  }, []);
+  function formatEventDate(startDateString: string, endDateString: string) {
+    const startDate = new Date(startDateString);
+    const endDate = new Date(endDateString);
     const formattedStartDate = `${startDate.toLocaleString("en-US", {
       month: "long",
       day: "numeric",
@@ -77,7 +78,8 @@ const EventsBody: React.FC<{ events: Event[] }> = ({ events }) => {
     return `${formattedStartDate} - ${formattedEndDate}`;
   }
 
-  function formatEventDateShort(date: Date) {
+  function formatEventDateShort(dateString: string) {
+    const date = new Date(dateString);
     const monthsShort = [
       "Jan",
       "Feb",
