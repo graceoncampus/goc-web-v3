@@ -28,8 +28,10 @@ import "./App.css";
 import "./css/bootstrap.scss";
 import { AboutUs } from "Components/User/AboutUs/AboutUs";
 import { Sermons } from "Components/User/Sermons/Sermons";
-import { RidesLanding } from "Components/User/Rides/RidesLanding/RidesLanding";
+import { StudyGuide } from "Components/User/Resources/JohnStudyGuide";
+// import { RidesLanding } from "Components/User/Rides/RidesLanding/RidesLanding";
 import { OurBeliefs } from "Components/User/AboutUs/OurBeliefs/OurBeliefs";
+import { Events } from "Components/User/Events/Events";
 
 /**
  * Curse Amplify's routing - we need to add trailing slashes to our paths for now!
@@ -48,8 +50,9 @@ const App = () => {
           <Route path={"/"} element={<UserLanding />} />
           <Route path={"/about"} element={<AboutUs />} />
           <Route path={"/sermons"} element={<Sermons />} />
+          <Route path={"/events"} element={<Events />} />
           <Route path={"/ourbeliefs"} element={<OurBeliefs />}></Route>
-          <Route path={"/rides"} element={<RidesLanding />} />
+          {/* <Route path={"/rides"} element={<RidesLanding />} /> */}
           <Route path={"/rides/rider/signup"} element={<RiderSignup />} />
           <Route path={"/rides/driver/signup"} element={<DriverSignup />} />
           <Route path={"/ministry_teams"} element={<MinistryTeamLanding />} />
@@ -63,6 +66,7 @@ const App = () => {
           />
           <Route path="/prayer/request" element={<PrayerForm />} />
           <Route path={"/smallgroups"} element={<SmallGroups />}></Route>
+          <Route path={"/study_guide"} element={<StudyGuide />} />
         </Routes>
       </BrowserRouter>
     </React.StrictMode>
