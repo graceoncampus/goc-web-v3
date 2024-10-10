@@ -6,19 +6,9 @@ import { Landing as UserLanding } from "Components/User/Landing/Landing";
 import { NotFound as UserNotFound } from "Components/User/NotFound/NotFound";
 import { PrayerForm } from "./Components/Prayer/PrayerForm";
 import { SmallGroups } from "./Components/User/SmallGroups/SmallGroups";
+import { MinistryTeams } from "Components/User/MinistryTeams/MinistryTeams";
 import ScrollToTop from "Hooks/ScrollToTop";
 import ReactDOM from "react-dom";
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { RiderSignup } from 'Components/User/Rides/RiderSignup/RiderSignup';
-import { DriverSignup } from 'Components/User/Rides/DriverSignup/DriverSignup';
-import { Landing as UserLanding } from 'Components/User/Landing/Landing';
-import { NotFound as UserNotFound } from 'Components/User/NotFound/NotFound';
-import { PrayerForm } from './Components/Prayer/PrayerForm';  
-import { SmallGroups } from './Components/User/SmallGroups/SmallGroups';
-import { MinistryTeams } from './Components/User/MinistryTeams/MinistryTeams' // TODO: change to ministryteams
-import ScrollToTop from 'Hooks/ScrollToTop';
-import ReactDOM from 'react-dom';
 // import Viewer from './Components/Viewer/Viewer';
 
 import { Landing as MinistryTeamLanding } from "Components/MinistryTeams/Landing/Landing";
@@ -56,6 +46,7 @@ const App = () => {
           <Route path={"/rides/rider/signup"} element={<RiderSignup />} />
           <Route path={"/rides/driver/signup"} element={<DriverSignup />} />
           <Route path={"/ministry_teams"} element={<MinistryTeamLanding />} />
+          <Route path={"/ministryteams"} element={<MinistryTeams />} />
           <Route
             path={"/ministry_teams/rides"}
             element={<StubbedRidesPage />}
@@ -65,7 +56,7 @@ const App = () => {
             element={<MinistryTeamNotFound />}
           />
           <Route path="/prayer/request" element={<PrayerForm />} />
-          <Route path={"/smallgroups"} element={<SmallGroups />}></Route>
+          <Route path={"/smallgroups"} element={<SmallGroups />} />
           <Route path={"/study_guide"} element={<StudyGuide />} />
         </Routes>
       </BrowserRouter>
