@@ -1,18 +1,17 @@
 import { HeaderNavbarActiveKey } from "Components/User/Header/Header";
 import { Template } from "Components/User/Template/Template";
 import { listGOCEvents } from "graphql/queries";
-import { API, graphqlOperation } from "aws-amplify";
+import { generateClient } from "aws-amplify/api";
 
 import "./Events.scss";
 import { Accordion, Image } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
+const client = generateClient();
+
 export const Events: React.FC = () => {
   return (
-    <Template
-      activeKey={HeaderNavbarActiveKey.SMALL_GROUPS}
-      body={<EventsBody />}
-    />
+    <Template activeKey={HeaderNavbarActiveKey.EVENTS} body={<EventsBody />} />
   );
 };
 
@@ -30,7 +29,7 @@ const EventsBody: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   useEffect(() => {
     const fetchSermons = async () => {
-      await (API.graphql(graphqlOperation(listGOCEvents)) as Promise<any>)
+      await (client.graphql({ query: listGOCEvents }) as Promise<any>)
         .then((result) => {
           const eventsData = result.data.listGOCEvents.items.sort(
             (a: any, b: any) =>
@@ -155,7 +154,11 @@ const EventsBody: React.FC = () => {
                                 className="logo-icon"
                                 src={"/assets/dollar.png"}
                               />
-                              <p>{event.price === 0 ? "free" : event.price}</p>
+                              <p>
+                                {event.price === 0
+                                  ? "free"
+                                  : event.price.toString()}
+                              </p>
                             </div>
                           </div>
                         </p>

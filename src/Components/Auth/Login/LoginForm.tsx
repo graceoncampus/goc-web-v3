@@ -5,7 +5,7 @@
 import React, { useState } from 'react';
 import { Button, Col, Container, Form } from 'react-bootstrap';
 
-import { handleLogin } from 'Auth/Utilities/HandleLogin';
+// import { handleLogin } from 'Auth/Utilities/HandleLogin';
 
 import 'css/common/forms.scss';
 import './LoginForm.scss';
@@ -21,7 +21,7 @@ export const LoginForm = () => {
             <Form className={'justify-content-center'} onSubmit={(event: any) => {
                 event.preventDefault();
 
-                handleLogin(username, password);
+                // handleLogin(username, password);
             }}>
                 <Col className={'mx-auto'} xs={'6'} sm={'5'} md={'4'} lg={'3'} xl={'2'}>
                     <Form.Group className={'text-start mb-3'} controlId={'username'}>

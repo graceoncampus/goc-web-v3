@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Image, ListGroup, Pagination } from "react-bootstrap";
 import { listSermons } from "graphql/queries";
-import { API, graphqlOperation } from "aws-amplify";
+import { generateClient } from "aws-amplify/api";
 
 import "./Sermons.scss";
 
 import { Template } from "Components/User/Template/Template";
 import { HeaderNavbarActiveKey } from "../Header/Header";
+const client = generateClient();
 
 export interface SermonItem {
   title: string;
@@ -22,13 +23,12 @@ export const Sermons = () => {
 
   useEffect(() => {
     const fetchSermons = async () => {
-      await (API.graphql(graphqlOperation(listSermons)) as Promise<any>)
+      await (client.graphql({ query: listSermons }) as Promise<any>)
         .then((result) => {
           const sermonData = result.data.listSermons.items.sort(
             (a: any, b: any) =>
               new Date(b["date"]).getTime() - new Date(a["date"]).getTime()
           );
-
           setSermons(
             sermonData.map((sermon: any) => {
               const convertedDate = new Date(sermon["date"]).toLocaleString(
@@ -39,7 +39,6 @@ export const Sermons = () => {
                   year: "numeric",
                 }
               );
-
               const item = {
                 title: sermon["title"],
                 speaker: sermon["speaker"],
@@ -55,7 +54,6 @@ export const Sermons = () => {
           console.log(reason);
         });
     };
-
     fetchSermons();
   }, []);
 

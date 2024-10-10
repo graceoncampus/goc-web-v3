@@ -13,7 +13,6 @@
 
  */
  
- //import { API, graphqlOperation } from 'aws-amplify';
  
  import 'css/common/forms.scss';
  

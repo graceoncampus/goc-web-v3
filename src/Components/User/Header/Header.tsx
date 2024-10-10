@@ -15,7 +15,7 @@ export enum HeaderNavbarActiveKey {
   RIDES = "Rides",
   PRAYER = "Prayer",
   SERMONS = "Sermons",
-  EVENTS = "EVENTS",
+  EVENTS = "Events",
 }
 
 interface HeaderProps {

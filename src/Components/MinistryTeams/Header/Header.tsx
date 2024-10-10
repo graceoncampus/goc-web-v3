@@ -8,7 +8,7 @@ import { Button, Container, Image, Nav, Navbar } from 'react-bootstrap';
 import './Header.scss'
 
 import { MINISTRY_TEAMS_LIST } from 'Constants/MinistryTeams';
-import { handleLogout } from 'Auth/Utilities/HandleLogout';
+// import { handleLogout } from 'Auth/Utilities/HandleLogout';
 
 export enum HeaderNavbarActiveKey {
     NONE = '',
@@ -82,7 +82,7 @@ export const Header = (headerProps: HeaderProps) => {
                         <Button className={'navbar-logout-button'} onClick={(event: any) => {
                             event.preventDefault();
 
-                            handleLogout();
+                            // handleLogout();
                         }}>
                             SIGN OUT
                         </Button>
