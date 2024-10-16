@@ -7,6 +7,7 @@
     "npm": ">=6.0.0"
   },
   "dependencies": {
+    "@aws-amplify/backend": "^1.4.0",
     "@aws-amplify/ui-react": "^6.5.2",
     "@aws-sdk/client-dynamodb": "^3.662.0",
     "@testing-library/jest-dom": "^6.5.0",
@@ -17,6 +18,7 @@
     "@types/node": "^22.7.4",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
+    "@types/react-router": "^5.1.20",
     "aws-amplify": "^6.6.3",
     "aws-appsync": "^4.1.10",
     "aws-sdk": "^2.1691.0",
@@ -25,12 +27,15 @@
     "google-auth-library": "9.14.1",
     "google-spreadsheet": "^4.1.4",
     "graphql-tag": "^2.12.6",
+    "mobx": "^6.13.4",
+    "mobx-react-lite": "^4.0.7",
     "node-sass": "9.0.0",
     "patch-package": "^8.0.0",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.5",
     "react-dom": "^18.3.1",
     "react-icons": "^5.3.0",
+    "react-phone-number-input": "^3.4.8",
     "react-router-dom": "^6.26.2",
     "react-scripts": "5.0.1",
     "rss-parser": "^3.13.0",
@@ -67,5 +72,6 @@
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.3.0",
     "tslint-react": "^5.0.0"
-  }
+  },
+  "homepage": "."
 }

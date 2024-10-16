@@ -2,12 +2,16 @@
  * Utility functions to check login.
  */
 
-// import { Auth } from 'aws-amplify';
+import { getCurrentUser } from "aws-amplify/auth";
 
-// export const checkIsLoggedIn = async (setUserLoggedInStatus: React.Dispatch<React.SetStateAction<boolean>>) => {
-//     await Auth.currentAuthenticatedUser().then((value: any) => {
-//         setUserLoggedInStatus(true);
-//     }).catch((reason => {
-//         setUserLoggedInStatus(false);
-//     }));
-// }
+export const checkIsLoggedIn = async (
+  setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  await getCurrentUser()
+    .then((value: any) => {
+      setLoggedIn(true);
+    })
+    .catch((reason) => {
+      setLoggedIn(false);
+    });
+};

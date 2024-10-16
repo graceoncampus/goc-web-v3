@@ -2,9 +2,13 @@
  * Header.
  */
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Container, Image, Nav, NavDropdown, Navbar } from "react-bootstrap";
 
+import { trace } from "mobx";
+import { observer } from "mobx-react-lite";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useStore } from "store/StoreContext";
 import "./Header.scss";
 
 export enum HeaderNavbarActiveKey {
@@ -16,14 +20,20 @@ export enum HeaderNavbarActiveKey {
   PRAYER = "Prayer",
   SERMONS = "Sermons",
   EVENTS = "Events",
+  LOGIN = "Login",
 }
 
 interface HeaderProps {
   activeKey: HeaderNavbarActiveKey;
+  name: string; // logged in user's name
 }
 
-export const Header = (headerProps: HeaderProps) => {
+export const Header = observer((headerProps: HeaderProps) => {
   const [showExpandIcon, setShowExpandIcon] = useState(true);
+  const navigate = useNavigate();
+  const userStore = useStore();
+  trace(true);
+  console.log(userStore.name);
 
   return (
     <Navbar
@@ -34,8 +44,14 @@ export const Header = (headerProps: HeaderProps) => {
       collapseOnSelect
     >
       <Container fluid>
-        <Navbar.Brand href={"/"}>
-          <Image src={"/assets/goc-header.svg"} alt={"Grace On Campus Logo"} />
+        <Navbar.Brand>
+          {/* using NavLink instead of Nav.Link to avoid refresh*/}
+          <NavLink to={"/"}> 
+            <Image
+              src={"/assets/goc-header.svg"}
+              alt={"Grace On Campus Logo"}
+            />
+          </NavLink>
         </Navbar.Brand>
 
         {showExpandIcon ? (
@@ -70,17 +86,18 @@ export const Header = (headerProps: HeaderProps) => {
                   className={"px-2 header-navbar-link"}
                   title={"About"}
                 >
-                  <NavDropdown.Item
-                    className={"header-navbar-link"}
-                    href={"/about"}
-                  >
-                    About Us
+                  <NavDropdown.Item>
+                    <NavLink className={"header-navbar-link"} to={"/about"}>
+                      About Us
+                    </NavLink>
                   </NavDropdown.Item>
-                  <NavDropdown.Item
-                    className={"header-navbar-link"}
-                    href={"/ourbeliefs"}
-                  >
-                    Our Beliefs
+                  <NavDropdown.Item>
+                    <NavLink
+                      className={"header-navbar-link"}
+                      to={"/ourbeliefs"}
+                    >
+                      Our Beliefs
+                    </NavLink>
                   </NavDropdown.Item>
                 </NavDropdown>
               </Nav.Item>
@@ -89,52 +106,67 @@ export const Header = (headerProps: HeaderProps) => {
                   className={"px-2 header-navbar-link"}
                   title="Resources"
                 >
-                  <NavDropdown.Item
-                    className={"header-navbar-link"}
-                    href={"/sermons"}
-                  >
-                    Sermons
+                  <NavDropdown.Item>
+                    <NavLink className={"header-navbar-link"} to={"/sermons"}>
+                      Sermons
+                    </NavLink>
                   </NavDropdown.Item>
-                  <NavDropdown.Item href={"/study_guide"}>
-                    John Study Guide
+                  <NavDropdown.Item>
+                    <NavLink
+                      className={"header-navbar-link"}
+                      to={"/study_guide"}
+                    >
+                      John Study Guide
+                    </NavLink>
                   </NavDropdown.Item>
                 </NavDropdown>
               </Nav.Item>
               <Nav.Item className={"px-2"}>
-                <Nav.Link
-                  className={"header-navbar-link"}
-                  eventKey={"Small Groups"}
-                  href={"/smallgroups"}
-                >
+                <NavLink className={"header-navbar-link"} to={"/smallgroups"}>
                   Small Groups
-                </Nav.Link>
+                </NavLink>
               </Nav.Item>
               <Nav.Item className={"px-2"}>
-                <Nav.Link
-                  className={"header-navbar-link"}
-                  eventKey={"Events"}
-                  href={"/events"}
-                >
+                <NavLink className={"header-navbar-link"} to={"/events"}>
                   Events
-                </Nav.Link>
+                </NavLink>
               </Nav.Item>
               <Nav.Item className={"px-2"}>
-                <Nav.Link
-                  className={"header-navbar-link"}
-                  eventKey={"Rides"}
-                  href={"/rides"}
-                >
+                <NavLink className={"header-navbar-link"} to={"/rides"}>
                   Rides
-                </Nav.Link>
+                </NavLink>
               </Nav.Item>
               <Nav.Item className={"px-2"}>
-                <Nav.Link
+                <NavLink
                   className={"header-navbar-link"}
-                  eventKey={"Prayer"}
-                  href={"/prayer/request"}
+                  to={"/prayer/request"}
                 >
                   Prayer Requests
-                </Nav.Link>
+                </NavLink>
+              </Nav.Item>
+              <Nav.Item className={"px-2"}>
+                {!userStore.name ? (
+                  <NavLink className={"header-navbar-link"} to={"/login"}>
+                    Login
+                  </NavLink>
+                ) : (
+                  <Nav.Item>
+                    <NavDropdown
+                      className={"px-2 header-navbar-link"}
+                      title={userStore.name}
+                    >
+                      <NavDropdown.Item
+                        className={"header-navbar-link"}
+                        eventKey={"Login"}
+                        onClick={() => {
+                          userStore.logout();
+                        }}
+                      >
+                        Logout
+                      </NavDropdown.Item>
+                    </NavDropdown>
+                  </Nav.Item>
+                )}
               </Nav.Item>
             </Nav>
           </Navbar.Collapse>
@@ -142,4 +174,4 @@ export const Header = (headerProps: HeaderProps) => {
       </Container>
     </Navbar>
   );
-};
+});
