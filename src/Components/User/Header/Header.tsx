@@ -149,7 +149,7 @@ export const Header = (headerProps: HeaderProps) => {
 									<NavDropdown.Item
 										className={"px-2 header-navbar-link"}
 										eventKey={"Ministry Teams"}
-										href={"/ministryteams"}
+										href={"/ministry-teams"}
 									>
 										Ministry Teams
 									</NavDropdown.Item>

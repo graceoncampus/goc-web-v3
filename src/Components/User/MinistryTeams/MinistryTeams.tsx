@@ -1,5 +1,6 @@
 import { HeaderNavbarActiveKey } from 'Components/User/Header/Header';
 import { Template } from 'Components/User/Template/Template';
+import React, { useEffect, useState } from 'react';
 
 import './MinistryTeams.scss';
 
@@ -28,10 +29,24 @@ const mockTeams: MinistryTeam[] = [
 ];
 
 export const MinistryTeams: React.FC = () => {
+	const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
+
+	// Fire only on refresh/load
+	useEffect(() => {
+		const userLoginCheck = async () => {
+			// Replace with actual login check logic
+			// const loggedIn = await checkIsLoggedIn(); // Example API call
+			// setIsUserLoggedIn(loggedIn);
+		};
+
+		userLoginCheck();
+	}, []);
+
+	// TODO: Get rid of active key eventually? Suggested by Sam
 	return (
 		<Template
 			activeKey={HeaderNavbarActiveKey.MINISTRY_TEAMS}
-			body={<TeamsBody MinistryTeams={mockTeams} />}
+			body={<TeamsBody MinistryTeams={mockTeams} isUserLoggedIn={isUserLoggedIn} />}
 		/>
 	);
 };
@@ -48,14 +63,15 @@ function slugify(text: string): string {
 		.toString()
 		.toLowerCase()
 		.replace(/\s+/g, '-') // Replace spaces with -
-		.replace(/[^\w\-]+/g, '') // Remove all non-word characters
-		.replace(/\-\-+/g, '-') // Replace multiple - with single -
+		.replace(/[^\w-]+/g, '') // Remove all non-word characters
+		.replace(/--+/g, '-') // Replace multiple - with single -
 		.replace(/^-+/, '') // Trim - from start of text
 		.replace(/-+$/, ''); // Trim - from end of text
 }
 
-const TeamsBody: React.FC<{ MinistryTeams: MinistryTeam[] }> = ({
+const TeamsBody: React.FC<{ MinistryTeams: MinistryTeam[], isUserLoggedIn: boolean }> = ({
 	MinistryTeams,
+	isUserLoggedIn,
 }) => {
 	return (
 		<div className={'text-center'}>
@@ -80,7 +96,7 @@ const TeamsBody: React.FC<{ MinistryTeams: MinistryTeam[] }> = ({
 					))}
 				</ul>
 				<hr className="mb-4" />
-
+				
 				{MinistryTeams.map((MinistryTeam, index) => (
 					<div key={index} className="mt-5">
 						<h2 className="anchor" id={slugify(MinistryTeam.title)}>
@@ -88,12 +104,18 @@ const TeamsBody: React.FC<{ MinistryTeams: MinistryTeam[] }> = ({
 						</h2>
 						<hr />
 						<p>{MinistryTeam.description}</p>
-						<p>
-							<strong>Leader(s):</strong> {MinistryTeam.leaders}
-						</p>
-						<p>
-							<strong>Contact:</strong> {MinistryTeam.contact}
-						</p>
+						{isUserLoggedIn ? (
+							<>
+								<p>
+									<strong>Leader(s):</strong> {MinistryTeam.leaders}
+								</p>
+								<p>
+									<strong>Contact:</strong> {MinistryTeam.contact}
+								</p>
+							</>
+						) : (
+							<p>You need to be logged in to view the leader and contact information.</p>
+						)}
 					</div>
 				))}
 			</div>
