@@ -19,7 +19,7 @@ interface TemplateProps {
 }
 
 export const Template = observer((templateProps: TemplateProps) => {
-  const [name, setName] = useState("");
+  const userStore = useStore();
 
   useEffect(() => {
     const checkLogin = async () => {
@@ -33,15 +33,15 @@ export const Template = observer((templateProps: TemplateProps) => {
       } finally {
       }
     };
-    checkLogin();
+
+    if (!userStore.isLoggedIn()) {
+      checkLogin();
+    }
   }, []);
 
   return (
     <div className={"page-container"}>
-      <Header
-        activeKey={templateProps.activeKey}
-        name={name}
-      />
+      <Header activeKey={templateProps.activeKey} />
 
       <Container fluid className={"body-container"}>
         {templateProps.body}

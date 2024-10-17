@@ -35,6 +35,10 @@ export class User {
       console.log("error signing out:", error);
     }
   }
+
+  isLoggedIn() {
+    return this.name !== "";
+  }
 }
 
 export const userStore = new User();
