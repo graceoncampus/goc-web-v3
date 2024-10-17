@@ -12,6 +12,22 @@ $header-link-font-size: rem.convert(14px);
 $header-link-font-weight: 500;
 $header-link-underline-thickness: rem.convert(4px);
 
+
+.navbar-nav {
+  align-items: center;
+}
+
+.header-navbar-link {
+  text-decoration: none;
+  :hover {
+    text-decoration: underline;
+  }
+}
+
+
+
+
+.navbar-nav
 .navbar-light .navbar-toggler,
 .navbar-light .navbar-toggler:focus {
   border: none;

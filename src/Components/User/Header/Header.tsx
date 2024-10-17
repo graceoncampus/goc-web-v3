@@ -25,14 +25,12 @@ export enum HeaderNavbarActiveKey {
 
 interface HeaderProps {
   activeKey: HeaderNavbarActiveKey;
-  name: string; // logged in user's name
 }
 
 export const Header = observer((headerProps: HeaderProps) => {
   const [showExpandIcon, setShowExpandIcon] = useState(true);
   const navigate = useNavigate();
   const userStore = useStore();
-  trace(true);
   console.log(userStore.name);
 
   return (
@@ -122,23 +120,23 @@ export const Header = observer((headerProps: HeaderProps) => {
                 </NavDropdown>
               </Nav.Item>
               <Nav.Item className={"px-2"}>
-                <NavLink className={"header-navbar-link"} to={"/smallgroups"}>
+                <NavLink className={"p-2 header-navbar-link"} to={"/smallgroups"}>
                   Small Groups
                 </NavLink>
               </Nav.Item>
               <Nav.Item className={"px-2"}>
-                <NavLink className={"header-navbar-link"} to={"/events"}>
+                <NavLink className={"p-2 header-navbar-link"} to={"/events"}>
                   Events
                 </NavLink>
               </Nav.Item>
               <Nav.Item className={"px-2"}>
-                <NavLink className={"header-navbar-link"} to={"/rides"}>
+                <NavLink className={"p-2 header-navbar-link"} to={"/rides"}>
                   Rides
                 </NavLink>
               </Nav.Item>
               <Nav.Item className={"px-2"}>
                 <NavLink
-                  className={"header-navbar-link"}
+                  className={"p-2 header-navbar-link"}
                   to={"/prayer/request"}
                 >
                   Prayer Requests
@@ -146,7 +144,7 @@ export const Header = observer((headerProps: HeaderProps) => {
               </Nav.Item>
               <Nav.Item className={"px-2"}>
                 {!userStore.name ? (
-                  <NavLink className={"header-navbar-link"} to={"/login"}>
+                  <NavLink className={"p-2 header-navbar-link"} to={"/login"}>
                     Login
                   </NavLink>
                 ) : (
