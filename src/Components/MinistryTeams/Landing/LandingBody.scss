@@ -4,8 +4,6 @@
 
 @use '~sass-rem' as rem;
 
-@import 'src/css/common/containers';
-
 .login-container {
   padding: rem.convert(68px) 0 rem.convert(85px);
 }
