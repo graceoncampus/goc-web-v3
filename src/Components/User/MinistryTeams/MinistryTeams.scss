@@ -1,25 +1,5 @@
 @use '~sass-rem' as rem;
 
-.events {
-	background-color: #c4c4c4;
-	color: white;
-	height: rem.convert(250px);
-	margin: auto;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.event-description {
-	display: flex;
-	justify-content: center;
-}
-
-.event-description-text {
-	margin: 20px;
-	text-align: left;
-}
-
 .left-align {
 	text-align: left;
 }
