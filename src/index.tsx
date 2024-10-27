@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { StoreContext } from "store/StoreContext";
 import { userStore } from "store/User";
 import App from "./App";
-import awsconfig from "./aws-exports";
+import awsconfig from "./amplifyconfiguration.json";
 
 Amplify.configure(awsconfig);
 

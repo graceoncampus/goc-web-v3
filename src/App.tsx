@@ -18,7 +18,7 @@ import { StudyGuide } from "Components/User/Resources/JohnStudyGuide";
 import { Sermons } from "Components/User/Sermons/Sermons";
 import "./App.css";
 import "./css/bootstrap.scss";
-// import { RidesLanding } from "Components/User/Rides/RidesLanding/RidesLanding";
+import { RidesLanding } from "Components/User/Rides/RidesLanding/RidesLanding";
 import { OurBeliefs } from "Components/User/AboutUs/OurBeliefs/OurBeliefs";
 import { Reset } from "Components/User/Auth/Reset";
 import { Events } from "Components/User/Events/Events";
@@ -43,7 +43,7 @@ const App = () => {
           <Route path={"/sermons"} element={<Sermons />} />
           <Route path={"/events"} element={<Events />} />
           <Route path={"/ourbeliefs"} element={<OurBeliefs />}></Route>
-          {/* <Route path={"/rides"} element={<RidesLanding />} /> */}
+          <Route path={"/rides"} element={<RidesLanding />} />
           <Route path={"/rides/rider/signup"} element={<RiderSignup />} />
           <Route path={"/rides/driver/signup"} element={<DriverSignup />} />
           <Route path={"/ministry_teams"} element={<MinistryTeamLanding />} />
