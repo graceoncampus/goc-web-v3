@@ -6,7 +6,6 @@ import { Landing as UserLanding } from "Components/User/Landing/Landing";
 import { NotFound as UserNotFound } from "Components/User/NotFound/NotFound";
 import { PrayerForm } from "./Components/Prayer/PrayerForm";
 import { SmallGroups } from "./Components/User/SmallGroups/SmallGroups";
-import { Provider } from "Components/ui/provider";
 import { MinistryTeams } from "Components/User/MinistryTeams/MinistryTeams";
 import ScrollToTop from "Hooks/ScrollToTop";
 import ReactDOM from "react-dom";
@@ -23,8 +22,6 @@ import { StudyGuide } from "Components/User/Resources/JohnStudyGuide";
 // import { RidesLanding } from "Components/User/Rides/RidesLanding/RidesLanding";
 import { OurBeliefs } from "Components/User/AboutUs/OurBeliefs/OurBeliefs";
 import { Events } from "Components/User/Events/Events";
-import { ChakraProvider } from "@chakra-ui/react";
-import { system } from "styles/theme";
 
 /**
  * Curse Amplify's routing - we need to add trailing slashes to our paths for now!
@@ -36,35 +33,33 @@ import { system } from "styles/theme";
 const App = () => {
   return (
     <React.StrictMode>
-      <ChakraProvider value={system}>
-        <BrowserRouter>
-          <ScrollToTop />
-          <Routes>
-            <Route path={"*"} element={<UserNotFound />} /> {/* 404 */}
-            <Route path={"/"} element={<UserLanding />} />
-            <Route path={"/about"} element={<AboutUs />} />
-            <Route path={"/sermons"} element={<Sermons />} />
-            <Route path={"/events"} element={<Events />} />
-            <Route path={"/ourbeliefs"} element={<OurBeliefs />}></Route>
-            {/* <Route path={"/rides"} element={<RidesLanding />} /> */}
-            <Route path={"/rides/rider/signup"} element={<RiderSignup />} />
-            <Route path={"/rides/driver/signup"} element={<DriverSignup />} />
-            <Route path={"/ministry_teams"} element={<MinistryTeamLanding />} />
-            <Route path={"/ministry-teams"} element={<MinistryTeams />} />
-            <Route
-              path={"/ministry_teams/rides"}
-              element={<StubbedRidesPage />}
-            />
-            <Route
-              path={"/ministry_teams/*"}
-              element={<MinistryTeamNotFound />}
-            />
-            <Route path="/prayer/request" element={<PrayerForm />} />
-            <Route path={"/smallgroups"} element={<SmallGroups />} />
-            <Route path={"/study_guide"} element={<StudyGuide />} />
-          </Routes>
-        </BrowserRouter>
-      </ChakraProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <Routes>
+          <Route path={"*"} element={<UserNotFound />} /> {/* 404 */}
+          <Route path={"/"} element={<UserLanding />} />
+          <Route path={"/about"} element={<AboutUs />} />
+          <Route path={"/sermons"} element={<Sermons />} />
+          <Route path={"/events"} element={<Events />} />
+          <Route path={"/ourbeliefs"} element={<OurBeliefs />}></Route>
+          {/* <Route path={"/rides"} element={<RidesLanding />} /> */}
+          <Route path={"/rides/rider/signup"} element={<RiderSignup />} />
+          <Route path={"/rides/driver/signup"} element={<DriverSignup />} />
+          <Route path={"/ministry_teams"} element={<MinistryTeamLanding />} />
+          <Route path={"/ministry-teams"} element={<MinistryTeams />} />
+          <Route
+            path={"/ministry_teams/rides"}
+            element={<StubbedRidesPage />}
+          />
+          <Route
+            path={"/ministry_teams/*"}
+            element={<MinistryTeamNotFound />}
+          />
+          <Route path="/prayer/request" element={<PrayerForm />} />
+          <Route path={"/smallgroups"} element={<SmallGroups />} />
+          <Route path={"/study_guide"} element={<StudyGuide />} />
+        </Routes>
+      </BrowserRouter>
     </React.StrictMode>
   );
 };
