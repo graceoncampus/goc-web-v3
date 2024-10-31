@@ -22,6 +22,7 @@ import { StudyGuide } from "Components/User/Resources/JohnStudyGuide";
 // import { RidesLanding } from "Components/User/Rides/RidesLanding/RidesLanding";
 import { OurBeliefs } from "Components/User/AboutUs/OurBeliefs/OurBeliefs";
 import { Events } from "Components/User/Events/Events";
+import { Leadership } from "Components/User/Leadership/Leadership";
 
 /**
  * Curse Amplify's routing - we need to add trailing slashes to our paths for now!
@@ -42,6 +43,7 @@ const App = () => {
           <Route path={"/sermons"} element={<Sermons />} />
           <Route path={"/events"} element={<Events />} />
           <Route path={"/ourbeliefs"} element={<OurBeliefs />}></Route>
+          <Route path={"/leadership"} element={<Leadership />}></Route>
           {/* <Route path={"/rides"} element={<RidesLanding />} /> */}
           <Route path={"/rides/rider/signup"} element={<RiderSignup />} />
           <Route path={"/rides/driver/signup"} element={<DriverSignup />} />
