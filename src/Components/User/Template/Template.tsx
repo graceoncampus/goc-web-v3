@@ -2,16 +2,15 @@
  * Template page to body between header and footer.
  */
 
-import React, { useEffect, useState } from "react";
-import { HeaderNavbarActiveKey, Header } from "../Header/Header";
-import { Footer } from "../Footer/Footer";
+import React, { useEffect } from "react";
 import { Container } from "react-bootstrap";
+import { Footer } from "../Footer/Footer";
+import { Header, HeaderNavbarActiveKey } from "../Header/Header";
 
-import "./Template.scss";
-import { User, userStore } from "../../../store/User";
+import { fetchUserAttributes, getCurrentUser } from "aws-amplify/auth";
 import { observer } from "mobx-react-lite";
 import { useStore } from "store/StoreContext";
-import { fetchUserAttributes, getCurrentUser } from "aws-amplify/auth";
+import "./Template.scss";
 
 interface TemplateProps {
   activeKey: HeaderNavbarActiveKey;

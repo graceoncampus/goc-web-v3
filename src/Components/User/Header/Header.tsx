@@ -2,24 +2,26 @@
  * Header.
  */
 
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Image, Nav, NavDropdown, Navbar } from "react-bootstrap";
 
-import { trace } from "mobx";
 import { observer } from "mobx-react-lite";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useStore } from "store/StoreContext";
 import "./Header.scss";
 
 export enum HeaderNavbarActiveKey {
   NONE = "",
   ABOUT = "About",
-  RESOURCES = "Resources",
+  BELIEFS = "Our Beliefs",
+  SERMONS = "Sermons",
+  CLASSES = "Classes",
+  STUDY_GUIDE = "Study Guide",
   SMALL_GROUPS = "Small Groups",
+  MINISTRY_TEAMS = "Ministry Teams",
+  EVENTS = "Events",
   RIDES = "Rides",
   PRAYER = "Prayer",
-  SERMONS = "Sermons",
-  EVENTS = "Events",
   LOGIN = "Login",
 }
 
@@ -29,10 +31,20 @@ interface HeaderProps {
 
 export const Header = observer((headerProps: HeaderProps) => {
   const [showExpandIcon, setShowExpandIcon] = useState(true);
-  const navigate = useNavigate();
   const userStore = useStore();
   console.log(userStore.name);
 
+  useEffect(() => {
+    // Calculate navbar height after component is mounted (used for ministry team links)
+    const navbarElement = document.querySelector(".goc-navbar") as HTMLElement;
+    if (navbarElement) {
+      let navbarHeight = navbarElement.offsetHeight;
+      document.documentElement.style.setProperty(
+        "--navbar-height",
+        `${navbarHeight}px`
+      );
+    }
+  }, []);
   return (
     <Navbar
       className={"goc-navbar"}
@@ -44,14 +56,13 @@ export const Header = observer((headerProps: HeaderProps) => {
       <Container fluid>
         <Navbar.Brand>
           {/* using NavLink instead of Nav.Link to avoid refresh*/}
-          <NavLink to={"/"}> 
+          <NavLink to={"/"}>
             <Image
               src={"/assets/goc-header.svg"}
               alt={"Grace On Campus Logo"}
             />
           </NavLink>
         </Navbar.Brand>
-
         {showExpandIcon ? (
           <Navbar.Toggle
             className={"navbar-expand-icon"}
@@ -112,6 +123,14 @@ export const Header = observer((headerProps: HeaderProps) => {
                   <NavDropdown.Item>
                     <NavLink
                       className={"header-navbar-link"}
+                      to={"/classes"}
+                    >
+                      Classes
+                    </NavLink>
+                  </NavDropdown.Item>
+                  <NavDropdown.Item>
+                    <NavLink
+                      className={"header-navbar-link"}
                       to={"/study_guide"}
                     >
                       John Study Guide
@@ -120,9 +139,27 @@ export const Header = observer((headerProps: HeaderProps) => {
                 </NavDropdown>
               </Nav.Item>
               <Nav.Item className={"px-2"}>
-                <NavLink className={"p-2 header-navbar-link"} to={"/smallgroups"}>
-                  Small Groups
-                </NavLink>
+                <NavDropdown
+                  className={"px-2 header-navbar-link"}
+                  title="Get Involved"
+                >
+                  <NavDropdown.Item>
+                    <NavLink
+                      className={"header-navbar-link"}
+                      to={"/smallgroups"}
+                    >
+                      Small Groups
+                    </NavLink>
+                  </NavDropdown.Item>
+                  <NavDropdown.Item>
+                    <NavLink
+                      className={"header-navbar-link"}
+                      to={"/ministry-teams"}
+                    >
+                      Ministry Teams
+                    </NavLink>
+                  </NavDropdown.Item>
+                </NavDropdown>
               </Nav.Item>
               <Nav.Item className={"px-2"}>
                 <NavLink className={"p-2 header-navbar-link"} to={"/events"}>
