@@ -1,9 +1,0 @@
-/**
-  Template styling.
- */
-
-@use '~sass-rem' as rem;
-
-.page-container > .body-container {
-  padding: rem.convert(60px) 0 rem.convert(90px);
-}

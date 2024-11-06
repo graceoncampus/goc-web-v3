@@ -1,6 +1,5 @@
 import { Template } from "pages/User/Template/Template";
 import { HeaderNavbarActiveKey } from "../Header/Header";
-import "./JohnStudyGuide.scss";
 
 export const StudyGuide = () => {
   return (

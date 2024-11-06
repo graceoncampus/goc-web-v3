@@ -11,7 +11,6 @@ import {
   EventCardListProps,
 } from "pages/EventCardList/EventCardList";
 
-import "./Landing.scss";
 import { Button, Row } from "react-bootstrap";
 
 const LandingBody = () => {

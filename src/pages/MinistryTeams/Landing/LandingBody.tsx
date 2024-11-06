@@ -10,8 +10,6 @@ import {
   HeaderNavbarActiveKey,
 } from "pages/MinistryTeams/Header/Header";
 
-import "./LandingBody.scss";
-
 export const LandingBody = () => {
   return (
     <div className={"page-container"}>

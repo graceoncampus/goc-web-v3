@@ -3,8 +3,6 @@ import { Template } from "pages/User/Template/Template";
 import React from "react";
 import { Button } from "react-bootstrap";
 
-import "css/common/forms.scss";
-import "./SmallGroups.scss";
 interface TemplateProps {
   activeKey: HeaderNavbarActiveKey;
   body: React.ReactNode;

@@ -6,8 +6,6 @@ import React from "react";
 
 import { EventCard, EventCardProps } from "pages/EventCard/EventCard";
 
-import "./EventCardList.scss";
-
 export interface EventCardListProps {
   events: EventCardProps[];
 }

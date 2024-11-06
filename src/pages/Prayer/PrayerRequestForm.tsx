@@ -13,8 +13,6 @@ import { useSearchParams } from "react-router-dom";
 
  */
 
-import "css/common/forms.scss";
-
 interface PrayerRequestFormProps {
   setPrayerRequestCompleted: (prayerRequestValue: boolean) => void;
 }

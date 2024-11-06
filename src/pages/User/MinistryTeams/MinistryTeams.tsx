@@ -2,8 +2,6 @@ import { HeaderNavbarActiveKey } from "pages/User/Header/Header";
 import { Template } from "pages/User/Template/Template";
 import React, { useEffect, useState } from "react";
 
-import "./MinistryTeams.scss";
-
 const mockTeams: MinistryTeam[] = [
   {
     title: "Welcome and Follow Up Team",

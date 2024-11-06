@@ -3,8 +3,6 @@ import { Image, ListGroup, Pagination } from "react-bootstrap";
 import { listSermons } from "graphql/queries";
 import { generateClient } from "aws-amplify/api";
 
-import "./Sermons.scss";
-
 import { Template } from "pages/User/Template/Template";
 import { HeaderNavbarActiveKey } from "../Header/Header";
 const client = generateClient();

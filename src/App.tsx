@@ -15,7 +15,7 @@ import { Landing as MinistryTeamLanding } from "pages/MinistryTeams/Landing/Land
 import { StubbedRidesPage } from "pages/MinistryTeams/Rides/StubbedRidesPage";
 import { NotFound as MinistryTeamNotFound } from "pages/MinistryTeams/NotFound/NotFound";
 import "./App.css";
-import "./css/bootstrap.scss";
+
 import { AboutUs } from "pages/User/AboutUs/AboutUs";
 import { Sermons } from "pages/User/Sermons/Sermons";
 import { StudyGuide } from "pages/User/Resources/JohnStudyGuide";
@@ -24,6 +24,8 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { system } from "theme";
 import { Events } from "pages/User/Events/Events";
 import { OurBeliefs } from "pages/User/AboutUs/OurBeliefs/OurBeliefs";
+import Navbar from "components/Navbar";
+import { Provider } from "provider";
 
 /**
  * Curse Amplify's routing - we need to add trailing slashes to our paths for now!
@@ -35,11 +37,12 @@ import { OurBeliefs } from "pages/User/AboutUs/OurBeliefs/OurBeliefs";
 const App = () => {
   return (
     <React.StrictMode>
-      <ChakraProvider value={system}>
+      <Provider>
         <BrowserRouter>
           <ScrollToTop />
           <Routes>
             <Route path={"*"} element={<UserNotFound />} /> {/* 404 */}
+            <Route path={"/test"} element={<Navbar />} />
             <Route path={"/"} element={<UserLanding />} />
             <Route path={"/about"} element={<AboutUs />} />
             <Route path={"/sermons"} element={<Sermons />} />
@@ -63,7 +66,7 @@ const App = () => {
             <Route path={"/study_guide"} element={<StudyGuide />} />
           </Routes>
         </BrowserRouter>
-      </ChakraProvider>
+      </Provider>
     </React.StrictMode>
   );
 };

@@ -1,9 +1,0 @@
-/**
-  This file stores commonly used dimensions (height/width) across components.
- */
-
-@use '~sass-rem' as rem;
-
-$button-normal-width: rem.convert(220px);
-
-$radio-normal-height-width: rem.convert(14px);

@@ -9,8 +9,6 @@ import { listRides } from "graphql/queries";
 import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 
-import "./RidesLanding.scss";
-
 const client = generateClient();
 
 const updateRides = async (url: string, date: string, emailMsg: string) => {

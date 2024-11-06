@@ -3,7 +3,6 @@ import { Template } from "pages/User/Template/Template";
 import { listGOCEvents } from "graphql/queries";
 import { generateClient } from "aws-amplify/api";
 
-import "./Events.scss";
 import { Accordion, Image } from "react-bootstrap";
 import { useEffect, useState } from "react";
 

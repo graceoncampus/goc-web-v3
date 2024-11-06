@@ -6,8 +6,6 @@
 // import { HeaderNavbarActiveKey, Header } from '../Header/Header';
 // import { Container } from 'react-bootstrap';
 
-// import './MinistryTeamTemplate.scss';
-
 // import { MinistryTeamAccessDenied } from 'Components/MinistryTeams/Auth/MinistryTeamAccessDenied';
 // import { TeamMembershipCheckResult, checkIsTeamMember } from 'Auth/Utilities/CheckMinistryTeamMembership';
 

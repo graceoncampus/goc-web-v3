@@ -1,8 +1,6 @@
 import { Template } from "pages/User/Template/Template";
 import { HeaderNavbarActiveKey } from "../../Header/Header";
 
-import "./OurBeliefs.scss";
-
 export const OurBeliefs = () => {
   return (
     <Template

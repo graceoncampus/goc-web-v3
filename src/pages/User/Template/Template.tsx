@@ -7,8 +7,6 @@ import { HeaderNavbarActiveKey, Header } from "../Header/Header";
 import { Footer } from "../Footer/Footer";
 import { Container } from "react-bootstrap";
 
-import "./Template.scss";
-
 interface TemplateProps {
   activeKey: HeaderNavbarActiveKey;
   body: React.ReactNode;

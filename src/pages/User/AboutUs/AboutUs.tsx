@@ -5,8 +5,6 @@
 import React, { useState } from "react";
 import { Image } from "react-bootstrap";
 
-import "./AboutUs.scss";
-
 import { Button } from "react-bootstrap";
 
 import { Template } from "pages/User/Template/Template";

@@ -1,9 +1,0 @@
-/**
-* Login form styling.
-*/
-
-@use 'node_modules/sass-rem/index' as rem;
-
-.login-container {
-  padding: rem.convert(68px) 0 rem.convert(85px);
-}
