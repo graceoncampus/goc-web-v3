@@ -1,21 +1,22 @@
 /* Landing Page
  */
 
-import React from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { EventCardList } from "Components/EventCardList/EventCardList";
 import { HeaderNavbarActiveKey } from "Components/User/Header/Header";
 import { Template } from "Components/User/Template/Template";
-import {
-  EventCardList,
-  EventCardListProps,
-} from "Components/EventCardList/EventCardList";
 
-import "./Landing.scss";
+import { observer } from "mobx-react-lite";
 import { Button, Row } from "react-bootstrap";
+import { useStore } from "store/StoreContext";
+import "./Landing.scss";
 
-const LandingBody = () => {
+const LandingBody = observer(() => {
   const navigate = useNavigate();
+  const [loggedIn, setLoggedIn] = useState(false);
+  const userStore = useStore();
 
   {
     /* JUST TESTING RIGHT NOW */
@@ -100,7 +101,7 @@ const LandingBody = () => {
       <EventCardList events={events} />
     </div>
   );
-};
+});
 
 export const Landing = () => {
   return (

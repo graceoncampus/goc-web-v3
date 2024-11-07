@@ -2,13 +2,14 @@
  * Handle logout auth flow.
  */
 
-// import { Auth } from 'aws-amplify';
+import { signOut } from "aws-amplify/auth";
 
-// export const handleLogout = async () => {
-//     Auth.signOut().then((value: any) => {
-//         // Signed out user successfully so we reload.
-//         window.location.reload();
-//     }).catch((reason: any) => {
-//         console.error(`Failed to sign out user: ${reason}`);
-//     });
-// };
+export const handleLogout = async () => {
+  try {
+    await signOut();
+      // Signed out user successfully so we reload.
+      window.location.reload();
+  } catch (error) {
+      console.error(`Failed to sign out user: ${error}`);
+  }
+};
