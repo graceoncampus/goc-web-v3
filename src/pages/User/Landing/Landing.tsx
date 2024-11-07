@@ -1,20 +1,21 @@
 /* Landing Page
  */
 
-import React from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { HeaderNavbarActiveKey } from "pages/User/Header/Header";
+import { HeaderNavbarActiveKey } from "../Header/Header";
 import { Template } from "pages/User/Template/Template";
-import {
-  EventCardList,
-  EventCardListProps,
-} from "pages/EventCardList/EventCardList";
+import { EventCardList, EventCardListProps } from "pages/EventCardList/EventCardList";
 
+import { observer } from "mobx-react-lite";
 import { Button, Row } from "react-bootstrap";
+import { useStore } from "store/StoreContext";
 
-const LandingBody = () => {
+const LandingBody = observer(() => {
   const navigate = useNavigate();
+  const [loggedIn, setLoggedIn] = useState(false);
+  const userStore = useStore();
 
   {
     /* JUST TESTING RIGHT NOW */
@@ -55,26 +56,14 @@ const LandingBody = () => {
   return (
     <div className={"landing-container"}>
       <div className={"landing-rounded-blue-box"}>
-        <div className={"landing-welcome-title"}>
-          Welcome to Grace on Campus!
-        </div>
-        <div className={"landing-welcome-subtitle"}>
-          Fridays at 7pm, Rolfe 1200
-        </div>
-        <a
-          className={"landing-facebook-btn"}
-          href={"https://www.facebook.com/groups/gocatucla"}
-          target={"_blank"}
-        >
+        <div className={"landing-welcome-title"}>Welcome to Grace on Campus!</div>
+        <div className={"landing-welcome-subtitle"}>Fridays at 7pm, Rolfe 1200</div>
+        <a className={"landing-facebook-btn"} href={"https://www.facebook.com/groups/gocatucla"} target={"_blank"}>
           Join our Facebook group
         </a>
       </div>
       <div className={"landing-welcome-image-container"}>
-        <img
-          className={"landing-welcome-image"}
-          src="/images/LandingPhoto.png"
-          alt="Grace on Campus"
-        />
+        <img className={"landing-welcome-image"} src="/images/LandingPhoto.png" alt="Grace on Campus" />
       </div>
       <div className={"landing-welcome-paragraph-container"}>
         <div className={"landing-welcome-paragraph-title"}>Welcome!</div>
@@ -83,26 +72,20 @@ const LandingBody = () => {
           <a target={"_blank"} href={"https://www.gracechurch.org/"}>
             Grace Community Church
           </a>
-          , we focus on Bible teaching, leadership training, evangelism, and
-          discipleship. We also provide{" "}
-          <a href={"/rides/rider/signup"}>rides</a> to church every Sunday! Sign
-          up for a ride to church and join our Facebook group to attend our
-          weekly Bible study, every Friday at 7pm.
+          , we focus on Bible teaching, leadership training, evangelism, and discipleship. We also provide{" "}
+          <a href={"/rides/rider/signup"}>rides</a> to church every Sunday! Sign up for a ride to church and join our
+          Facebook group to attend our weekly Bible study, every Friday at 7pm.
         </div>
         <Row className={"btn-container"}>
           <Button onClick={() => navigate("/about")}>About Us</Button>
-          <Button onClick={() => navigate("/ourbeliefs")}>
-            What we believe
-          </Button>
+          <Button onClick={() => navigate("/ourbeliefs")}>What we believe</Button>
         </Row>
       </div>
       <EventCardList events={events} />
     </div>
   );
-};
+});
 
 export const Landing = () => {
-  return (
-    <Template activeKey={HeaderNavbarActiveKey.NONE} body={<LandingBody />} />
-  );
+  return <Template activeKey={HeaderNavbarActiveKey.NONE} body={<LandingBody />} />;
 };

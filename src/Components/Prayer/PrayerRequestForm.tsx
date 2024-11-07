@@ -13,8 +13,6 @@ import { useSearchParams } from "react-router-dom";
 
  */
 
-import "css/common/forms.scss";
-
 interface PrayerRequestFormProps {
   setPrayerRequestCompleted: (prayerRequestValue: boolean) => void;
 }
@@ -38,9 +36,7 @@ interface PrayerRequestFormProps {
  
    };
  */
-export const PrayerRequestForm = (
-  prayerRequestFormProps: PrayerRequestFormProps
-) => {
+export const PrayerRequestForm = (prayerRequestFormProps: PrayerRequestFormProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [prayerName, setPrayerName] = useState<string>("");
@@ -68,18 +64,13 @@ export const PrayerRequestForm = (
   return (
     <Container>
       <Col className={"mx-auto text-center"} lg={"8"}>
-        <span className={"signup-form-title"}>
-          How can we be praying for you?
-        </span>
+        <span className={"signup-form-title"}>How can we be praying for you?</span>
 
         <Form className={"text-center"} onSubmit={handleFormSubmit}>
           <Row className={"text-start gx-5"}>
             <Col className={"mx-auto text-center"} lg={"6"}>
               <Form.Group className={"mb-3"} controlId={"prayerName"}>
-                <Form.Label
-                  as={Row}
-                  className={"signup-form-label position-relative m-0"}
-                >
+                <Form.Label as={Row} className={"signup-form-label position-relative m-0"}>
                   {" "}
                   Name{" "}
                 </Form.Label>
@@ -91,10 +82,7 @@ export const PrayerRequestForm = (
                 />
               </Form.Group>
               <Form.Group className={"mb-3"} controlId={"prayerEmail"}>
-                <Form.Label
-                  as={Row}
-                  className={"signup-form-label position-relative m-0"}
-                >
+                <Form.Label as={Row} className={"signup-form-label position-relative m-0"}>
                   {" "}
                   Email{" "}
                 </Form.Label>
@@ -106,10 +94,7 @@ export const PrayerRequestForm = (
                 />
               </Form.Group>
               <Form.Group className={"mb-3"} controlId={"prayerComments"}>
-                <Form.Label
-                  as={Row}
-                  className={"signup-form-label position-relative m-0"}
-                >
+                <Form.Label as={Row} className={"signup-form-label position-relative m-0"}>
                   {" "}
                   Prayer Request *{" "}
                 </Form.Label>
