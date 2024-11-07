@@ -27,6 +27,21 @@ import { OurBeliefs } from "pages/User/AboutUs/OurBeliefs/OurBeliefs";
 import Navbar from "components/Navbar";
 import { Provider } from "provider";
 
+const routes = [
+  {
+    name: "",
+    link: "/",
+    inNavbar: false,
+    component: UserLanding,
+  },
+  {
+    name: "About",
+    link: "/about",
+    inNavbar: true,
+    component: AboutUs,
+  },
+];
+
 /**
  * Curse Amplify's routing - we need to add trailing slashes to our paths for now!
  * src: https://github.com/aws-amplify/amplify-hosting/issues/97
@@ -42,7 +57,6 @@ const App = () => {
           <ScrollToTop />
           <Routes>
             <Route path={"*"} element={<UserNotFound />} /> {/* 404 */}
-            <Route path={"/test"} element={<Navbar />} />
             <Route path={"/"} element={<UserLanding />} />
             <Route path={"/about"} element={<AboutUs />} />
             <Route path={"/sermons"} element={<Sermons />} />

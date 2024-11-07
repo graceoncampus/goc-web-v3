@@ -1,34 +1,73 @@
 import {
   Box,
   Flex,
-  Avatar,
   Button,
-  MenuItem,
-  Stack,
+  Image,
   Center,
-  Menu,
-  Heading,
-  Container,
+  Link,
+  MenuRoot,
+  MenuRootProvider,
+  MenuTrigger,
 } from "@chakra-ui/react";
 
-interface Props {
-  children: React.ReactNode;
+import { ColorModeButton } from "./ui/color-mode";
+import navlinks from "./navlinks";
+
+interface SubLink {
+  name: string;
+  link: string;
 }
 
-export default function Navbar() {
+interface NavItem {
+  name: string;
+  selected: boolean;
+  link?: string;
+  sublinks?: SubLink[];
+}
+
+interface NavbarProps {
+  selectedNavItemName: string;
+}
+
+function NavItem(props: NavItem) {
+  if (props.link) {
+    return (
+      <Button variant={"plain"} m={2}>
+        <Link href={props.link} fontWeight={props.selected ? "bold" : ""}>
+          {props.name}
+        </Link>
+      </Button>
+    );
+  } else if (props.sublinks && props.sublinks.length > 0) {
+    return <></>;
+  }
+}
+
+export default function Navbar(props: NavbarProps) {
   return (
-    <Container>
-      <Stack gap="2" align="flex-start">
-        <Heading size="sm">Heading (sm)</Heading>
-        <Heading size="md">Heading (md)</Heading>
-        <Heading size="lg">Heading (lg)</Heading>
-        <Heading size="xl">Heading (xl)</Heading>
-        <Heading size="2xl">Heading (2xl)</Heading>
-        <Heading size="3xl">Heading (3xl)</Heading>
-        <Heading size="4xl">Heading (4xl)</Heading>
-        <Heading size="5xl">Heading (5xl)</Heading>
-        <Heading size="6xl">Heading (6xl)</Heading>
-      </Stack>
-    </Container>
+    <Flex m={0} px={2} justify="space-between">
+      <Center>
+        <Image src="/assets/goc-header.svg" />
+      </Center>
+      <Box>
+        {navlinks.map((navItem) => (
+          <NavItem
+            name={navItem.name}
+            link={navItem.link}
+            sublinks={navItem.subLinks}
+            selected={props.selectedNavItemName === navItem.name}
+          />
+        ))}
+        <Button
+          m={2}
+          variant={"solid"}
+          colorPalette={"blue"}
+          fontWeight={"bold"}
+        >
+          Log in
+        </Button>
+        <ColorModeButton />
+      </Box>
+    </Flex>
   );
 }
