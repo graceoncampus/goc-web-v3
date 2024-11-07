@@ -1,7 +1,7 @@
 import { Box, Flex, Button, Image, Center, Link, MenuRoot, MenuRootProvider, MenuTrigger } from "@chakra-ui/react";
 
 import { ColorModeButton } from "./ui/color-mode";
-import navlinks from "./Navlinks";
+import navlinks from "./navlinks";
 
 interface SubLink {
   name: string;

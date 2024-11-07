@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { HeaderNavbarActiveKey } from "../Header";
-import { Template } from "../Template";
+import { Template } from "pages/User/Template/Template";
 // import { PhoneInput } from "react-international-phone";
 import "react-phone-number-input/style.css";
 import PhoneInput, { type Value } from "react-phone-number-input";

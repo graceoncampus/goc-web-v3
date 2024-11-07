@@ -9,7 +9,7 @@ import { Container } from "react-bootstrap";
 import Navbar from "components/Navbar";
 
 interface TemplateProps {
-  activeKey: HeaderNavbarActiveKey;
+  activeKey: string;
   body: React.ReactNode;
 }
 
