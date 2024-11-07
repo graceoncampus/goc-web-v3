@@ -1,28 +1,30 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { RiderSignup } from "Components/User/Rides/RiderSignup/RiderSignup";
-import { DriverSignup } from "Components/User/Rides/DriverSignup/DriverSignup";
+import { Login } from "Components/User/Auth/Login";
 import { Landing as UserLanding } from "Components/User/Landing/Landing";
 import { NotFound as UserNotFound } from "Components/User/NotFound/NotFound";
+import { DriverSignup } from "Components/User/Rides/DriverSignup/DriverSignup";
+import { RiderSignup } from "Components/User/Rides/RiderSignup/RiderSignup";
+import ScrollToTop from "Hooks/ScrollToTop";
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { PrayerForm } from "./Components/Prayer/PrayerForm";
 import { SmallGroups } from "./Components/User/SmallGroups/SmallGroups";
-import { MinistryTeams } from "Components/User/MinistryTeams/MinistryTeams";
-import ScrollToTop from "Hooks/ScrollToTop";
-import ReactDOM from "react-dom";
 // import Viewer from './Components/Viewer/Viewer';
 
 import { Landing as MinistryTeamLanding } from "Components/MinistryTeams/Landing/Landing";
-import { StubbedRidesPage } from "Components/MinistryTeams/Rides/StubbedRidesPage";
 import { NotFound as MinistryTeamNotFound } from "Components/MinistryTeams/NotFound/NotFound";
+import { StubbedRidesPage } from "Components/MinistryTeams/Rides/StubbedRidesPage";
+import { AboutUs } from "Components/User/AboutUs/AboutUs";
+import { StudyGuide } from "Components/User/Resources/JohnStudyGuide";
+import { Sermons } from "Components/User/Sermons/Sermons";
 import "./App.css";
 import "./css/bootstrap.scss";
-import { AboutUs } from "Components/User/AboutUs/AboutUs";
-import { Sermons } from "Components/User/Sermons/Sermons";
-import { StudyGuide } from "Components/User/Resources/JohnStudyGuide";
-// import { RidesLanding } from "Components/User/Rides/RidesLanding/RidesLanding";
+import { RidesLanding } from "Components/User/Rides/RidesLanding/RidesLanding";
 import { OurBeliefs } from "Components/User/AboutUs/OurBeliefs/OurBeliefs";
+import { Reset } from "Components/User/Auth/Reset";
 import { Events } from "Components/User/Events/Events";
 import { Leadership } from "Components/User/Leadership/Leadership";
+import { Signup } from "Components/User/Auth/Signup";
+import { MinistryTeams } from "Components/User/MinistryTeams/MinistryTeams";
 
 /**
  * Curse Amplify's routing - we need to add trailing slashes to our paths for now!
@@ -44,22 +46,19 @@ const App = () => {
           <Route path={"/events"} element={<Events />} />
           <Route path={"/ourbeliefs"} element={<OurBeliefs />}></Route>
           <Route path={"/leadership"} element={<Leadership />}></Route>
-          {/* <Route path={"/rides"} element={<RidesLanding />} /> */}
+          <Route path={"/rides"} element={<RidesLanding />} />
           <Route path={"/rides/rider/signup"} element={<RiderSignup />} />
           <Route path={"/rides/driver/signup"} element={<DriverSignup />} />
           <Route path={"/ministry_teams"} element={<MinistryTeamLanding />} />
           <Route path={"/ministry-teams"} element={<MinistryTeams />} />
-          <Route
-            path={"/ministry_teams/rides"}
-            element={<StubbedRidesPage />}
-          />
-          <Route
-            path={"/ministry_teams/*"}
-            element={<MinistryTeamNotFound />}
-          />
+          <Route path={"/ministry_teams/rides"} element={<StubbedRidesPage />} />
+          <Route path={"/ministry_teams/*"} element={<MinistryTeamNotFound />} />
           <Route path="/prayer/request" element={<PrayerForm />} />
           <Route path={"/smallgroups"} element={<SmallGroups />} />
           <Route path={"/study_guide"} element={<StudyGuide />} />
+          <Route path={"/login"} element={<Login />} />
+          <Route path={"/reset"} element={<Reset />} />
+          <Route path={"/signup"} element={<Signup />} />
         </Routes>
       </BrowserRouter>
     </React.StrictMode>
