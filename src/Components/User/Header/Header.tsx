@@ -39,28 +39,16 @@ export const Header = observer((headerProps: HeaderProps) => {
     const navbarElement = document.querySelector(".goc-navbar") as HTMLElement;
     if (navbarElement) {
       let navbarHeight = navbarElement.offsetHeight;
-      document.documentElement.style.setProperty(
-        "--navbar-height",
-        `${navbarHeight}px`
-      );
+      document.documentElement.style.setProperty("--navbar-height", `${navbarHeight}px`);
     }
   }, []);
   return (
-    <Navbar
-      className={"goc-navbar"}
-      bg={"white"}
-      fixed={"top"}
-      expand={"lg"}
-      collapseOnSelect
-    >
+    <Navbar className={"goc-navbar"} bg={"white"} fixed={"top"} expand={"lg"} collapseOnSelect>
       <Container fluid>
-        <Navbar.Brand>
+        <Navbar.Brand> 
           {/* using NavLink instead of Nav.Link to avoid refresh*/}
           <NavLink to={"/"}>
-            <Image
-              src={"/assets/goc-header.svg"}
-              alt={"Grace On Campus Logo"}
-            />
+            <Image src={"/assets/goc-header.svg"} alt={"Grace On Campus Logo"} />
           </NavLink>
         </Navbar.Brand>
         {showExpandIcon ? (
@@ -69,10 +57,7 @@ export const Header = observer((headerProps: HeaderProps) => {
             aria-controls={"basic-navbar-nav"}
             onClick={() => setShowExpandIcon(false)}
           >
-            <Image
-              src={"/assets/hamburger-menu-icon-expand.svg"}
-              alt={"Hamburger Menu Expand Icon"}
-            />
+            <Image src={"/assets/hamburger-menu-icon-expand.svg"} alt={"Hamburger Menu Expand Icon"} />
           </Navbar.Toggle>
         ) : (
           <Navbar.Toggle
@@ -80,10 +65,7 @@ export const Header = observer((headerProps: HeaderProps) => {
             aria-controls={"basic-navbar-nav"}
             onClick={() => setShowExpandIcon(true)}
           >
-            <Image
-              src={"/assets/hamburger-menu-icon-collapse.svg"}
-              alt={"Hamburger Menu Collapse Icon"}
-            />
+            <Image src={"/assets/hamburger-menu-icon-collapse.svg"} alt={"Hamburger Menu Collapse Icon"} />
           </Navbar.Toggle>
         )}
 
@@ -91,71 +73,47 @@ export const Header = observer((headerProps: HeaderProps) => {
           <Navbar.Collapse className={"justify-content-end"}>
             <Nav activeKey={headerProps.activeKey}>
               <Nav.Item>
-                <NavDropdown
-                  className={"px-2 header-navbar-link"}
-                  title={"About"}
-                >
+                <NavDropdown className={"px-2 header-navbar-link"} title={"About"}>
                   <NavDropdown.Item>
                     <NavLink className={"header-navbar-link"} to={"/about"}>
                       About Us
                     </NavLink>
                   </NavDropdown.Item>
                   <NavDropdown.Item>
-                    <NavLink
-                      className={"header-navbar-link"}
-                      to={"/ourbeliefs"}
-                    >
+                    <NavLink className={"header-navbar-link"} to={"/ourbeliefs"}>
                       Our Beliefs
                     </NavLink>
                   </NavDropdown.Item>
                 </NavDropdown>
               </Nav.Item>
               <Nav.Item>
-                <NavDropdown
-                  className={"px-2 header-navbar-link"}
-                  title="Resources"
-                >
+                <NavDropdown className={"px-2 header-navbar-link"} title="Resources">
                   <NavDropdown.Item>
                     <NavLink className={"header-navbar-link"} to={"/sermons"}>
                       Sermons
                     </NavLink>
                   </NavDropdown.Item>
                   <NavDropdown.Item>
-                    <NavLink
-                      className={"header-navbar-link"}
-                      to={"/classes"}
-                    >
+                    <NavLink className={"header-navbar-link"} to={"/classes"}>
                       Classes
                     </NavLink>
                   </NavDropdown.Item>
                   <NavDropdown.Item>
-                    <NavLink
-                      className={"header-navbar-link"}
-                      to={"/study_guide"}
-                    >
+                    <NavLink className={"header-navbar-link"} to={"/study_guide"}>
                       John Study Guide
                     </NavLink>
                   </NavDropdown.Item>
                 </NavDropdown>
               </Nav.Item>
               <Nav.Item className={"px-2"}>
-                <NavDropdown
-                  className={"px-2 header-navbar-link"}
-                  title="Get Involved"
-                >
+                <NavDropdown className={"px-2 header-navbar-link"} title="Get Involved">
                   <NavDropdown.Item>
-                    <NavLink
-                      className={"header-navbar-link"}
-                      to={"/smallgroups"}
-                    >
+                    <NavLink className={"header-navbar-link"} to={"/smallgroups"}>
                       Small Groups
                     </NavLink>
                   </NavDropdown.Item>
                   <NavDropdown.Item>
-                    <NavLink
-                      className={"header-navbar-link"}
-                      to={"/ministry-teams"}
-                    >
+                    <NavLink className={"header-navbar-link"} to={"/ministry-teams"}>
                       Ministry Teams
                     </NavLink>
                   </NavDropdown.Item>
@@ -172,10 +130,7 @@ export const Header = observer((headerProps: HeaderProps) => {
                 </NavLink>
               </Nav.Item>
               <Nav.Item className={"px-2"}>
-                <NavLink
-                  className={"p-2 header-navbar-link"}
-                  to={"/prayer/request"}
-                >
+                <NavLink className={"p-2 header-navbar-link"} to={"/prayer/request"}>
                   Prayer Requests
                 </NavLink>
               </Nav.Item>
@@ -186,10 +141,7 @@ export const Header = observer((headerProps: HeaderProps) => {
                   </NavLink>
                 ) : (
                   <Nav.Item>
-                    <NavDropdown
-                      className={"px-2 header-navbar-link"}
-                      title={userStore.name}
-                    >
+                    <NavDropdown className={"px-2 header-navbar-link"} title={userStore.name}>
                       <NavDropdown.Item
                         className={"header-navbar-link"}
                         eventKey={"Login"}
