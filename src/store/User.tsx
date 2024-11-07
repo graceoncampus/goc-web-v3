@@ -8,6 +8,7 @@ export class User {
   gradYear = "";
   email = "";
   phone_number = "";
+  groups: string[] = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -17,6 +18,10 @@ export class User {
     this.name = name;
   }
 
+  setGroups(groups: string[]) {
+    this.groups = groups;
+  }
+
   clear() {
     this.name = "";
     this.family_name = "";
@@ -24,6 +29,7 @@ export class User {
     this.gradYear = "";
     this.email = "";
     this.phone_number = "";
+    this.groups = [];
   }
 
   @action
