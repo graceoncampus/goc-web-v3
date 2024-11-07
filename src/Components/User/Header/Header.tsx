@@ -22,6 +22,7 @@ export enum HeaderNavbarActiveKey {
   EVENTS = "Events",
   RIDES = "Rides",
   PRAYER = "Prayer",
+  LEADERSHIP = "Leadership",
   LOGIN = "Login",
 }
 
@@ -45,7 +46,7 @@ export const Header = observer((headerProps: HeaderProps) => {
   return (
     <Navbar className={"goc-navbar"} bg={"white"} fixed={"top"} expand={"lg"} collapseOnSelect>
       <Container fluid>
-        <Navbar.Brand> 
+        <Navbar.Brand>
           {/* using NavLink instead of Nav.Link to avoid refresh*/}
           <NavLink to={"/"}>
             <Image src={"/assets/goc-header.svg"} alt={"Grace On Campus Logo"} />
@@ -85,6 +86,11 @@ export const Header = observer((headerProps: HeaderProps) => {
                     </NavLink>
                   </NavDropdown.Item>
                 </NavDropdown>
+              </Nav.Item>
+              <Nav.Item className={"px-2"}>
+                <Nav.Link className={"header-navbar-link"} eventKey={"Leadership"} href={"/leadership"}>
+                  Leadership
+                </Nav.Link>
               </Nav.Item>
               <Nav.Item>
                 <NavDropdown className={"px-2 header-navbar-link"} title="Resources">

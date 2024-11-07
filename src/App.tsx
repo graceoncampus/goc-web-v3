@@ -22,6 +22,7 @@ import { RidesLanding } from "Components/User/Rides/RidesLanding/RidesLanding";
 import { OurBeliefs } from "Components/User/AboutUs/OurBeliefs/OurBeliefs";
 import { Reset } from "Components/User/Auth/Reset";
 import { Events } from "Components/User/Events/Events";
+import { Leadership } from "Components/User/Leadership/Leadership";
 import { Signup } from "Components/User/Auth/Signup";
 import { MinistryTeams } from "Components/User/MinistryTeams/MinistryTeams";
 
@@ -44,19 +45,14 @@ const App = () => {
           <Route path={"/sermons"} element={<Sermons />} />
           <Route path={"/events"} element={<Events />} />
           <Route path={"/ourbeliefs"} element={<OurBeliefs />}></Route>
+          <Route path={"/leadership"} element={<Leadership />}></Route>
           <Route path={"/rides"} element={<RidesLanding />} />
           <Route path={"/rides/rider/signup"} element={<RiderSignup />} />
           <Route path={"/rides/driver/signup"} element={<DriverSignup />} />
           <Route path={"/ministry_teams"} element={<MinistryTeamLanding />} />
           <Route path={"/ministry-teams"} element={<MinistryTeams />} />
-          <Route
-            path={"/ministry_teams/rides"}
-            element={<StubbedRidesPage />}
-          />
-          <Route
-            path={"/ministry_teams/*"}
-            element={<MinistryTeamNotFound />}
-          />
+          <Route path={"/ministry_teams/rides"} element={<StubbedRidesPage />} />
+          <Route path={"/ministry_teams/*"} element={<MinistryTeamNotFound />} />
           <Route path="/prayer/request" element={<PrayerForm />} />
           <Route path={"/smallgroups"} element={<SmallGroups />} />
           <Route path={"/study_guide"} element={<StudyGuide />} />
