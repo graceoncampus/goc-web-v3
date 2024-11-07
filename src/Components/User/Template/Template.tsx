@@ -2,14 +2,13 @@
  * Template page to body between header and footer.
  */
 
+import { fetchAuthSession, fetchUserAttributes, getCurrentUser } from "aws-amplify/auth";
+import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
 import { Container } from "react-bootstrap";
+import { useStore } from "store/StoreContext";
 import { Footer } from "../Footer/Footer";
 import { Header, HeaderNavbarActiveKey } from "../Header/Header";
-
-import { fetchUserAttributes, getCurrentUser } from "aws-amplify/auth";
-import { observer } from "mobx-react-lite";
-import { useStore } from "store/StoreContext";
 import "./Template.scss";
 
 interface TemplateProps {
@@ -25,7 +24,12 @@ export const Template = observer((templateProps: TemplateProps) => {
       try {
         const { username, userId, signInDetails } = await getCurrentUser();
         const userAttributes = await fetchUserAttributes();
+        const { tokens } = await fetchAuthSession();
+        const groups = tokens?.accessToken.payload["cognito:groups"];
         userStore.setName(userAttributes?.name || "");
+        if (groups) {
+          userStore.setGroups(groups as string[]);
+        }
         console.log(userAttributes);
       } catch (err) {
         console.log(err);

@@ -6,9 +6,10 @@ import { JWT } from "google-auth-library";
 import { GoogleSpreadsheet } from "google-spreadsheet"; // modify gaxios.js in node_modules line 270: new url_1.URL(url) --> new URL(url)
 import { createRide, deleteRide } from "graphql/mutations";
 import { listRides } from "graphql/queries";
+import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-
+import { useStore } from "store/StoreContext";
 import "./RidesLanding.scss";
 
 const client = generateClient();
@@ -23,18 +24,13 @@ const updateRides = async (url: string, date: string, emailMsg: string) => {
   const re2 = /\/.*/g;
   // sample spreadsheet: https://docs.google.com/spreadsheets/d/1kqrgaXIAReEDvZo9d1SM5xBcS23wea2xuM91LZmZdu0/edit#gid=656402499
   const sheetID = url.replace(re1, "").replace(re2, "");
-  const ridesSheetDoc = await new GoogleSpreadsheet(
-    sheetID,
-    serviceAccountAuth
-  );
+  const ridesSheetDoc = await new GoogleSpreadsheet(sheetID, serviceAccountAuth);
 
   const carInputs: CreateCarInput[] = [];
 
   try {
     // delete Old Rides
-    const oldRides = await (
-      client.graphql({ query: listRides }) as Promise<any>
-    )
+    const oldRides = await (client.graphql({ query: listRides }) as Promise<any>)
       .then((result) => {
         return result.data.listRides.items;
       })
@@ -64,9 +60,7 @@ const updateRides = async (url: string, date: string, emailMsg: string) => {
     const rows = await ridesSheet.getRows();
     for (const row of rows) {
       if (row.get("driver_name") && row.get("rider_name")) {
-        const car = carInputs.find(
-          (c) => c.driver_name === row.get("driver_name")
-        );
+        const car = carInputs.find((c) => c.driver_name === row.get("driver_name"));
         if (car) {
           car.riders?.push({
             uid: row.get("rider_uid"),
@@ -159,12 +153,7 @@ export const RidesLanding = () => {
   }, []);
 
   console.log("ride:", ride);
-  return (
-    <Template
-      activeKey={HeaderNavbarActiveKey.RIDES}
-      body={<RidesLandingBody rides={ride} />}
-    />
-  );
+  return <Template activeKey={HeaderNavbarActiveKey.RIDES} body={<RidesLandingBody rides={ride} />} />;
 };
 
 const RidesList = ({ rides }: RideProps) => {
@@ -176,20 +165,10 @@ const RidesList = ({ rides }: RideProps) => {
           <br />
           We've got you covered.
         </h1>
-        <Button
-          className="request-ride-button"
-          variant="dark"
-          href="/rides/rider/signup"
-          target="_blank"
-        >
+        <Button className="request-ride-button" variant="dark" href="/rides/rider/signup" target="_blank">
           I need a ride
         </Button>
-        <Button
-          className="request-ride-button"
-          variant="dark"
-          href="/rides/driver/signup"
-          target="_blank"
-        >
+        <Button className="request-ride-button" variant="dark" href="/rides/driver/signup" target="_blank">
           I can drive
         </Button>
       </div>
@@ -201,10 +180,7 @@ const RidesList = ({ rides }: RideProps) => {
 
         {rides?.cars?.map((car, i) => {
           return (
-            <div
-              key={i}
-              className={i % 2 == 0 ? "table-row" : "even table-row"}
-            >
+            <div key={i} className={i % 2 == 0 ? "table-row" : "even table-row"}>
               <div className="column-item">{car?.driver_name} </div>
               <div className="column-item">
                 {car?.riders.map((rider, i) => {
@@ -219,58 +195,58 @@ const RidesList = ({ rides }: RideProps) => {
   );
 };
 
-const RidesSettings = () => {
+const RIDES_GROUP: string = "RidesTeam";
+
+const RidesSettings = observer(() => {
   const [url, setUrl] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [emailMsg, setEmailMsg] = useState<string>("");
 
+  const userStore = useStore();
+
   return (
-    <div className="admin">
-      <h1>Admin Settings</h1>
-      <form
-        className={"admin-form"}
-        onSubmit={async (e) => {
-          e.preventDefault();
-          await updateRides(url, date, emailMsg);
-        }}
-      >
-        <label>Spreadsheet URL</label>
-        <br />
-        <input
-          type="url"
-          required
-          className={"rides-input"}
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-        />
-        <br />
-        <label>Rides Date</label>
-        <br />
-        <input
-          type="date"
-          required
-          className={"rides-input"}
-          value={date || ""}
-          onChange={(e) => setDate(e.target.value)}
-        />
-        <br />
-        <label>Custom Email Message</label>
-        <br />
-        <input
-          type="text"
-          required
-          className={"rides-input"}
-          value={emailMsg}
-          onChange={(e) => setEmailMsg(e.target.value)}
-        />
-        <br />
-        <Button className={"upload-rides-button"} type="submit">
-          Upload Rides
-        </Button>
-      </form>
-    </div>
+    userStore.groups.includes(RIDES_GROUP) && (
+      <div className="admin">
+        <h1>Admin Settings</h1>
+        <form
+          className={"admin-form"}
+          onSubmit={async (e) => {
+            e.preventDefault();
+            await updateRides(url, date, emailMsg);
+          }}
+        >
+          <label>Spreadsheet URL</label>
+          <br />
+          <input type="url" required className={"rides-input"} value={url} onChange={(e) => setUrl(e.target.value)} />
+          <br />
+          <label>Rides Date</label>
+          <br />
+          <input
+            type="date"
+            required
+            className={"rides-input"}
+            value={date || ""}
+            onChange={(e) => setDate(e.target.value)}
+          />
+          <br />
+          <label>Custom Email Message</label>
+          <br />
+          <input
+            type="text"
+            required
+            className={"rides-input"}
+            value={emailMsg}
+            onChange={(e) => setEmailMsg(e.target.value)}
+          />
+          <br />
+          <Button className={"upload-rides-button"} type="submit">
+            Upload Rides
+          </Button>
+        </form>
+      </div>
+    )
   );
-};
+});
 interface RideProps {
   rides?: Ride;
 }
