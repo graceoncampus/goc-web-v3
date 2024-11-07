@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { Button, Col, Container, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { HeaderNavbarActiveKey } from "../Header/Header";
-import { Template } from "../Template/Template";
+import { HeaderNavbarActiveKey } from "../Header";
+import { Template } from "../Template";
 
 export const Reset = () => {
-  return (
-    <Template activeKey={HeaderNavbarActiveKey.LOGIN} body={<ResetBody />} />
-  );
+  return <Template activeKey={HeaderNavbarActiveKey.LOGIN} body={<ResetBody />} />;
 };
 
 const ResetBody = () => {

@@ -1,17 +1,7 @@
-import {
-  Box,
-  Flex,
-  Button,
-  Image,
-  Center,
-  Link,
-  MenuRoot,
-  MenuRootProvider,
-  MenuTrigger,
-} from "@chakra-ui/react";
+import { Box, Flex, Button, Image, Center, Link, MenuRoot, MenuRootProvider, MenuTrigger } from "@chakra-ui/react";
 
 import { ColorModeButton } from "./ui/color-mode";
-import navlinks from "./navlinks";
+import navlinks from "./Navlinks";
 
 interface SubLink {
   name: string;
@@ -58,12 +48,7 @@ export default function Navbar(props: NavbarProps) {
             selected={props.selectedNavItemName === navItem.name}
           />
         ))}
-        <Button
-          m={2}
-          variant={"solid"}
-          colorPalette={"blue"}
-          fontWeight={"bold"}
-        >
+        <Button m={2} variant={"solid"} colorPalette={"blue"} fontWeight={"bold"}>
           Log in
         </Button>
         <ColorModeButton />

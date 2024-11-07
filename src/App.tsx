@@ -27,12 +27,12 @@ import { NotFound } from "pages/MinistryTeams/NotFound/NotFound";
 import { StudyGuideBody } from "pages/User/Resources/JohnStudyGuide";
 import { Sermons } from "pages/User/Sermons/Sermons";
 import "./App.css";
-import { Login } from "components/User/Auth/Login";
+import { Login } from "components/user/Login";
 import { RidesLanding } from "pages/User/Rides/RidesLanding/RidesLanding";
 import { OurBeliefs } from "pages/User/AboutUs/OurBeliefs/OurBeliefs";
-import { Reset } from "components/User/Auth/Reset";
+import { Reset } from "components/user/Reset";
 import { Events } from "pages/User/Events/Events";
-import { Signup } from "components/User/Auth/Signup";
+import { Signup } from "components/user/Signup";
 import { MinistryTeams } from "pages/User/MinistryTeams/MinistryTeams";
 
 /**

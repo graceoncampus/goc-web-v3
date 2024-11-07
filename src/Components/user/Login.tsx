@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { Button, Col, Container, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { HeaderNavbarActiveKey } from "../Header/Header";
-import { Template } from "../Template/Template";
+import { HeaderNavbarActiveKey } from "../Header";
+import { Template } from "../Template";
 import { signIn } from "aws-amplify/auth";
 
 export const Login = () => {
-  return (
-    <Template activeKey={HeaderNavbarActiveKey.LOGIN} body={<LoginBody />} />
-  );
+  return <Template activeKey={HeaderNavbarActiveKey.LOGIN} body={<LoginBody />} />;
 };
 
 const LoginBody = () => {

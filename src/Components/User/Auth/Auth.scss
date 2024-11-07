@@ -1,9 +1,0 @@
-@use 'node_modules/sass-rem/index' as rem;
-
-.login-container, .reset-container {
-  padding: rem.convert(68px) 0 rem.convert(85px);
-}
-
-input.PhoneInputInput {
-  border-width: 0px;
-}
