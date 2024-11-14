@@ -2,7 +2,7 @@ import { confirmSignUp, resendSignUpCode, signUp, type ConfirmSignUpInput } from
 import { useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { HeaderNavbarActiveKey } from "../Header";
+import { HeaderNavbarActiveKey } from "../OldNavbar";
 import { Template } from "pages/User/Template/Template";
 // import { PhoneInput } from "react-international-phone";
 import "react-phone-number-input/style.css";
