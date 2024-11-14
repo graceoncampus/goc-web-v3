@@ -4,7 +4,7 @@
 
 import React from "react";
 import { HeaderNavbarActiveKey, Header } from "../Header/Header";
-import { Footer } from "../Footer/Footer";
+import Footer from "components/Footer";
 import { Container } from "react-bootstrap";
 import Navbar from "components/Navbar";
 

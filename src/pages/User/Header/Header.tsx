@@ -30,20 +30,11 @@ export const Header = (headerProps: HeaderProps) => {
     const navbarElement = document.querySelector(".goc-navbar") as HTMLElement;
     if (navbarElement) {
       let navbarHeight = navbarElement.offsetHeight;
-      document.documentElement.style.setProperty(
-        "--navbar-height",
-        `${navbarHeight}px`
-      );
+      document.documentElement.style.setProperty("--navbar-height", `${navbarHeight}px`);
     }
   }, []);
   return (
-    <Navbar
-      className={"goc-navbar"}
-      bg={"white"}
-      fixed={"top"}
-      expand={"lg"}
-      collapseOnSelect
-    >
+    <Navbar className={"goc-navbar"} bg={"white"} fixed={"top"} expand={"lg"} collapseOnSelect>
       <Container fluid>
         <Navbar.Brand href={"/"}>
           <Image src={"/assets/goc-header.svg"} alt={"Grace On Campus Logo"} />
@@ -55,10 +46,7 @@ export const Header = (headerProps: HeaderProps) => {
             aria-controls={"basic-navbar-nav"}
             onClick={() => setShowExpandIcon(false)}
           >
-            <Image
-              src={"/assets/hamburger-menu-icon-expand.svg"}
-              alt={"Hamburger Menu Expand Icon"}
-            />
+            <Image src={"/assets/hamburger-menu-icon-expand.svg"} alt={"Hamburger Menu Expand Icon"} />
           </Navbar.Toggle>
         ) : (
           <Navbar.Toggle
@@ -66,10 +54,7 @@ export const Header = (headerProps: HeaderProps) => {
             aria-controls={"basic-navbar-nav"}
             onClick={() => setShowExpandIcon(true)}
           >
-            <Image
-              src={"/assets/hamburger-menu-icon-collapse.svg"}
-              alt={"Hamburger Menu Collapse Icon"}
-            />
+            <Image src={"/assets/hamburger-menu-icon-collapse.svg"} alt={"Hamburger Menu Collapse Icon"} />
           </Navbar.Toggle>
         )}
 
@@ -78,40 +63,21 @@ export const Header = (headerProps: HeaderProps) => {
             <Nav activeKey={headerProps.activeKey}>
               <Nav.Item className={"px-2"}>
                 <NavDropdown className={"header-navbar-link"} title={"About"}>
-                  <NavDropdown.Item
-                    className={"px-2 header-navbar-link"}
-                    eventKey={"About"}
-                    href={"/about"}
-                  >
+                  <NavDropdown.Item className={"px-2 header-navbar-link"} eventKey={"About"} href={"/about"}>
                     About Us
                   </NavDropdown.Item>
-                  <NavDropdown.Item
-                    className={"px-2 header-navbar-link"}
-                    eventKey={"Our Beliefs"}
-                    href={"/ourbeliefs"}
-                  >
+                  <NavDropdown.Item className={"px-2 header-navbar-link"} eventKey={"Our Beliefs"} href={"/ourbeliefs"}>
                     Our Beliefs
                   </NavDropdown.Item>
                 </NavDropdown>
               </Nav.Item>
 
               <Nav.Item className={"px-2"}>
-                <NavDropdown
-                  className={"header-navbar-link"}
-                  title={"Resources"}
-                >
-                  <NavDropdown.Item
-                    className={"px-2 header-navbar-link"}
-                    eventKey={"Sermons"}
-                    href={"/sermons"}
-                  >
+                <NavDropdown className={"header-navbar-link"} title={"Resources"}>
+                  <NavDropdown.Item className={"px-2 header-navbar-link"} eventKey={"Sermons"} href={"/sermons"}>
                     Sermons
                   </NavDropdown.Item>
-                  <NavDropdown.Item
-                    className={"px-2 header-navbar-link"}
-                    eventKey={"Classes"}
-                    href={"/classes"}
-                  >
+                  <NavDropdown.Item className={"px-2 header-navbar-link"} eventKey={"Classes"} href={"/classes"}>
                     Classes
                   </NavDropdown.Item>
                   <NavDropdown.Item
@@ -125,10 +91,7 @@ export const Header = (headerProps: HeaderProps) => {
               </Nav.Item>
 
               <Nav.Item className={"px-2"}>
-                <NavDropdown
-                  className={"header-navbar-link"}
-                  title={"Get Involved"}
-                >
+                <NavDropdown className={"header-navbar-link"} title={"Get Involved"}>
                   <NavDropdown.Item
                     className={"px-2 header-navbar-link"}
                     eventKey={"Small Groups"}
@@ -147,30 +110,18 @@ export const Header = (headerProps: HeaderProps) => {
               </Nav.Item>
 
               <Nav.Item className={"px-2"}>
-                <Nav.Link
-                  className={"header-navbar-link"}
-                  eventKey={"Events"}
-                  href={"/events"}
-                >
+                <Nav.Link className={"header-navbar-link"} eventKey={"Events"} href={"/events"}>
                   Events
                 </Nav.Link>
               </Nav.Item>
 
               <Nav.Item className={"px-2"}>
-                <Nav.Link
-                  className={"header-navbar-link"}
-                  eventKey={"Rides"}
-                  href={"/rides"}
-                >
+                <Nav.Link className={"header-navbar-link"} eventKey={"Rides"} href={"/rides"}>
                   Rides
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item className={"px-2"}>
-                <Nav.Link
-                  className={"header-navbar-link"}
-                  eventKey={"Prayer"}
-                  href={"/prayer/request"}
-                >
+                <Nav.Link className={"header-navbar-link"} eventKey={"Prayer"} href={"/prayer/request"}>
                   Prayer Requests
                 </Nav.Link>
               </Nav.Item>

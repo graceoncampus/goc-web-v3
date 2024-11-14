@@ -5,7 +5,7 @@
 import React from "react";
 import { Button, Row, Col, Container, Form, Image } from "react-bootstrap";
 
-export const Footer = () => {
+export const FooterOld = () => {
   const handleFormSubmit = async (event: any) => {
     event.preventDefault();
   };
@@ -16,11 +16,7 @@ export const Footer = () => {
         <Col sm={"4"} className={"pb-3"}>
           <Row className={"gcc-logo pb-3"}>
             <a href={"https://www.gracechurch.org/"}>
-              <Image
-                fluid
-                src={"/assets/logo-gcc.png"}
-                alt={"Grace Community Church"}
-              />
+              <Image fluid src={"/assets/logo-gcc.png"} alt={"Grace Community Church"} />
             </a>
           </Row>
 
@@ -30,26 +26,10 @@ export const Footer = () => {
             </Row>
 
             <Row sm={"auto"} className={"gx-0"}>
-              <Image
-                className={"logo-icon me-2"}
-                src={"/assets/logo-facebook.png"}
-                alt={"Facebook"}
-              />
-              <Image
-                className={"logo-icon me-2"}
-                src={"/assets/logo-instagram.png"}
-                alt={"Instagram"}
-              />
-              <Image
-                className={"logo-icon me-2"}
-                src={"/assets/logo-vimeo.png"}
-                alt={"Vimeo"}
-              />
-              <Image
-                className={"logo-icon"}
-                src={"/assets/logo-wordpress.png"}
-                alt={"Wordpress"}
-              />
+              <Image className={"logo-icon me-2"} src={"/assets/logo-facebook.png"} alt={"Facebook"} />
+              <Image className={"logo-icon me-2"} src={"/assets/logo-instagram.png"} alt={"Instagram"} />
+              <Image className={"logo-icon me-2"} src={"/assets/logo-vimeo.png"} alt={"Vimeo"} />
+              <Image className={"logo-icon"} src={"/assets/logo-wordpress.png"} alt={"Wordpress"} />
             </Row>
           </div>
         </Col>
@@ -89,33 +69,21 @@ export const Footer = () => {
             <span className={"footer-label"}>NEW TO GOC?</span>
           </Row>
           <Row className={"pb-3"}>
-            <span className={"footer-text"}>
-              We'd love to get in touch with you!
-            </span>
+            <span className={"footer-text"}>We'd love to get in touch with you!</span>
           </Row>
           <Row>
             <Form onSubmit={handleFormSubmit}>
               <Form.Group className={"footer-form-group"} controlId={"name"}>
-                <Form.Label className={"newcomer-form-label"}>
-                  {" "}
-                  Name{" "}
-                </Form.Label>
+                <Form.Label className={"newcomer-form-label"}> Name </Form.Label>
                 <Form.Control placeholder={"Enter your name"} />
               </Form.Group>
 
               <Form.Group className={"footer-form-group"} controlId={"email"}>
-                <Form.Label className={"newcomer-form-label"}>
-                  {" "}
-                  Email{" "}
-                </Form.Label>
+                <Form.Label className={"newcomer-form-label"}> Email </Form.Label>
                 <Form.Control type={"email"} placeholder={"Enter your email"} />
               </Form.Group>
 
-              <Button
-                className={"newcomer-form-submit"}
-                variant={"submit"}
-                type={"submit"}
-              >
+              <Button className={"newcomer-form-submit"} variant={"submit"} type={"submit"}>
                 SUBMIT
               </Button>
             </Form>
@@ -127,26 +95,10 @@ export const Footer = () => {
             </Row>
 
             <Row sm={"auto"} className={"gx-0"}>
-              <Image
-                className={"logo-icon me-2"}
-                src={"/assets/logo-facebook.png"}
-                alt={"Facebook"}
-              />
-              <Image
-                className={"logo-icon me-2"}
-                src={"/assets/logo-instagram.png"}
-                alt={"Instagram"}
-              />
-              <Image
-                className={"logo-icon me-2"}
-                src={"/assets/logo-vimeo.png"}
-                alt={"Vimeo"}
-              />
-              <Image
-                className={"logo-icon"}
-                src={"/assets/logo-wordpress.png"}
-                alt={"Wordpress"}
-              />
+              <Image className={"logo-icon me-2"} src={"/assets/logo-facebook.png"} alt={"Facebook"} />
+              <Image className={"logo-icon me-2"} src={"/assets/logo-instagram.png"} alt={"Instagram"} />
+              <Image className={"logo-icon me-2"} src={"/assets/logo-vimeo.png"} alt={"Vimeo"} />
+              <Image className={"logo-icon"} src={"/assets/logo-wordpress.png"} alt={"Wordpress"} />
             </Row>
           </div>
         </Col>
