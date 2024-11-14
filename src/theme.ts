@@ -1,9 +1,4 @@
-import {
-  createSystem,
-  defaultConfig,
-  defineConfig,
-  defineRecipe,
-} from "@chakra-ui/react";
+import { createSystem, defaultConfig, defineConfig, defineRecipe } from "@chakra-ui/react";
 
 const headingRecipe = defineRecipe({
   variants: {
@@ -33,6 +28,23 @@ const headingRecipe = defineRecipe({
 });
 
 const config = defineConfig({
+  globalCss: {
+    body: {
+      margin: 0,
+      padding: 0,
+      outline: 0,
+      textRendering: "optimizeSpeed",
+      lineHeight: "1.5",
+      fontFamily:
+        "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+    },
+    a: {
+      textDecoration: "none",
+    },
+    code: {
+      fontFamily: "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace",
+    },
+  },
   theme: {
     breakpoints: {
       sm: "320px",
