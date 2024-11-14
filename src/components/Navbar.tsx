@@ -48,7 +48,7 @@ export default function Navbar(props: NavbarProps) {
             selected={props.selectedNavItemName === navItem.name}
           />
         ))}
-        <Button m={2} variant={"solid"} colorPalette={"blue"} fontWeight={"bold"}>
+        <Button m={2} variant={"solid"} bg={"goc.blue"} fontWeight={"bold"}>
           Log in
         </Button>
         <ColorModeButton />
