@@ -1,5 +1,5 @@
 import { Template } from "pages/User/Template/Template";
-import { HeaderNavbarActiveKey } from "components/Header";
+import { HeaderNavbarActiveKey } from "components/OldNavbar";
 
 import "./OurBeliefs.scss";
 

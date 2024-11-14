@@ -2,7 +2,7 @@
  * Header.
  */
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Image, Nav, NavDropdown, Navbar } from "react-bootstrap";
 
 import { observer } from "mobx-react-lite";
