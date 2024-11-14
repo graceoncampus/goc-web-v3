@@ -5,7 +5,7 @@
 import React, { useState } from "react";
 import { Button, Container, Image, Nav, Navbar } from "react-bootstrap";
 
-import { MINISTRY_TEAMS_LIST } from "Constants/MinistryTeams";
+import { MINISTRY_TEAMS_LIST } from "constants/MinistryTeams";
 // import { handleLogout } from 'Auth/Utilities/HandleLogout';
 
 export enum HeaderNavbarActiveKey {
@@ -22,33 +22,20 @@ interface HeaderProps {
 export const Header = (headerProps: HeaderProps) => {
   const [showExpandIcon, setShowExpandIcon] = useState(true);
 
-  const navbarLinks = MINISTRY_TEAMS_LIST.map(
-    (ministryTeamName: string, index: number) => {
-      const ministryTeamHref = `/ministry_teams/${ministryTeamName.toLowerCase()}`;
+  const navbarLinks = MINISTRY_TEAMS_LIST.map((ministryTeamName: string, index: number) => {
+    const ministryTeamHref = `/ministry_teams/${ministryTeamName.toLowerCase()}`;
 
-      return (
-        <Nav.Item className={"px-2"}>
-          <Nav.Link
-            key={index}
-            className={"header-navbar-link"}
-            eventKey={ministryTeamName}
-            href={ministryTeamHref}
-          >
-            {ministryTeamName}
-          </Nav.Link>
-        </Nav.Item>
-      );
-    }
-  );
+    return (
+      <Nav.Item className={"px-2"}>
+        <Nav.Link key={index} className={"header-navbar-link"} eventKey={ministryTeamName} href={ministryTeamHref}>
+          {ministryTeamName}
+        </Nav.Link>
+      </Nav.Item>
+    );
+  });
 
   return (
-    <Navbar
-      className={"goc-navbar"}
-      bg={"white"}
-      fixed={"top"}
-      expand={"lg"}
-      collapseOnSelect
-    >
+    <Navbar className={"goc-navbar"} bg={"white"} fixed={"top"} expand={"lg"} collapseOnSelect>
       <Container fluid>
         <Navbar.Brand href={"/ministry_teams"}>
           <Image src={"/assets/goc-header.svg"} alt={"Grace On Campus Logo"} />
@@ -60,10 +47,7 @@ export const Header = (headerProps: HeaderProps) => {
             aria-controls={"basic-navbar-nav"}
             onClick={() => setShowExpandIcon(false)}
           >
-            <Image
-              src={"/assets/hamburger-menu-icon-expand.svg"}
-              alt={"Hamburger Menu Expand Icon"}
-            />
+            <Image src={"/assets/hamburger-menu-icon-expand.svg"} alt={"Hamburger Menu Expand Icon"} />
           </Navbar.Toggle>
         ) : (
           <Navbar.Toggle
@@ -71,10 +55,7 @@ export const Header = (headerProps: HeaderProps) => {
             aria-controls={"basic-navbar-nav"}
             onClick={() => setShowExpandIcon(true)}
           >
-            <Image
-              src={"/assets/hamburger-menu-icon-collapse.svg"}
-              alt={"Hamburger Menu Collapse Icon"}
-            />
+            <Image src={"/assets/hamburger-menu-icon-collapse.svg"} alt={"Hamburger Menu Collapse Icon"} />
           </Navbar.Toggle>
         )}
 

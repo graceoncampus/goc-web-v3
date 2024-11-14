@@ -12,7 +12,7 @@ import { Landing as MinistryTeamLanding } from "pages/MinistryTeams/Landing/Land
 import { NotFound as UserNotFound } from "pages/MinistryTeams/NotFound/NotFound";
 import { DriverSignup } from "pages/User/Rides/DriverSignup/DriverSignup";
 import { RiderSignup } from "pages/User/Rides/RiderSignup/RiderSignup";
-import ScrollToTop from "Hooks/ScrollToTop";
+import ScrollToTop from "hooks/ScrollToTop";
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { PrayerForm } from "pages/Prayer/PrayerForm";
