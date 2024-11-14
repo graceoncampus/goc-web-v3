@@ -54,8 +54,10 @@ const config = defineConfig({
     },
     tokens: {
       colors: {
-        green: { value: "#3366cc" },
-        gray: { value: "#f7f7f7" },
+        goc: {
+          blue: { value: "#3366cc" },
+          gray: { value: "#f7f7f7" },
+        },
       },
     },
     semanticTokens: {
