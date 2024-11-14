@@ -1,8 +1,6 @@
 import ReactDOM from "react-dom";
 // import Viewer from './Components/Viewer/Viewer';
 
-import "./App.css";
-
 // import { RidesLanding } from "Components/User/Rides/RidesLanding/RidesLanding";
 import { ChakraProvider } from "@chakra-ui/react";
 import { system } from "theme";
@@ -26,7 +24,6 @@ import { AboutUs } from "pages/User/AboutUs/AboutUs";
 import { NotFound } from "pages/MinistryTeams/NotFound/NotFound";
 import { StudyGuideBody } from "pages/User/Resources/JohnStudyGuide";
 import { Sermons } from "pages/User/Sermons/Sermons";
-import "./App.css";
 import { Login } from "components/user/Login";
 import { RidesLanding } from "pages/User/Rides/RidesLanding/RidesLanding";
 import { OurBeliefs } from "pages/User/AboutUs/OurBeliefs/OurBeliefs";
