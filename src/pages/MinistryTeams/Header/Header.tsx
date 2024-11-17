@@ -5,7 +5,7 @@
 import React, { useState } from "react";
 import { Button, Container, Image, Nav, Navbar } from "react-bootstrap";
 
-import { MINISTRY_TEAMS_LIST } from "constants/MinistryTeams";
+import { MINISTRY_TEAMS_LIST } from "Constants/MinistryTeams";
 // import { handleLogout } from 'Auth/Utilities/HandleLogout';
 
 export enum HeaderNavbarActiveKey {

@@ -1,4 +1,17 @@
-import { Box, Flex, Button, Image, Center, Link, MenuRoot, MenuRootProvider, MenuTrigger } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Button,
+  Image,
+  Center,
+  Link,
+  MenuContent,
+  MenuItem,
+  MenuRoot,
+  MenuTrigger,
+  Text,
+} from "@chakra-ui/react";
+import { FaCaretDown } from "react-icons/fa";
 
 import { ColorModeButton } from "./color-mode";
 import navlinks from "./navlinks";
@@ -22,14 +35,30 @@ interface NavbarProps {
 function NavItem(props: NavItem) {
   if (props.link) {
     return (
-      <Button variant={"plain"} m={2}>
+      <Button variant={"plain"} m={2} size="lg">
         <Link href={props.link} fontWeight={props.selected ? "bold" : ""}>
           {props.name}
         </Link>
       </Button>
     );
   } else if (props.sublinks && props.sublinks.length > 0) {
-    return <></>;
+    return (
+      <MenuRoot>
+        <MenuTrigger>
+          <Button variant="plain" m={2} size="lg">
+            {props.name}
+            <FaCaretDown />
+          </Button>
+        </MenuTrigger>
+        <MenuContent>
+          {props.sublinks.map((sublink) => (
+            <MenuItem>
+              <Text fontWeight="semibold">{sublink.name}</Text>
+            </MenuItem>
+          ))}
+        </MenuContent>
+      </MenuRoot>
+    );
   }
 }
 
@@ -37,7 +66,9 @@ export default function Navbar(props: NavbarProps) {
   return (
     <Flex m={0} px={2} justify="space-between">
       <Center>
-        <Image src="/assets/goc-header.svg" />
+        <Link href="/">
+          <Image src="/assets/goc-header.svg" />
+        </Link>
       </Center>
       <Box>
         {navlinks.map((navItem) => (
@@ -49,7 +80,7 @@ export default function Navbar(props: NavbarProps) {
           />
         ))}
         <Button m={2} variant={"solid"} bg={"goc.blue"} fontWeight={"bold"}>
-          Log in
+          Login
         </Button>
         <ColorModeButton />
       </Box>
