@@ -1,9 +1,10 @@
+import { Button, Center, Container, Fieldset, Flex, Input, Link } from "@chakra-ui/react";
+import { signIn } from "aws-amplify/auth";
+import { Template } from "pages/User/Template/Template";
 import { useState } from "react";
-import { Button, Col, Container, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { HeaderNavbarActiveKey } from "../OldNavbar";
-import { Template } from "pages/User/Template/Template";
-import { signIn } from "aws-amplify/auth";
+import { Field } from "../ui/field";
 
 export const Login = () => {
   return <Template activeKey={HeaderNavbarActiveKey.LOGIN} body={<LoginBody />} />;
@@ -14,65 +15,47 @@ const LoginBody = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  function handleSubmit(event: any) {
+    event.preventDefault();
+
+    signIn({ username, password })
+      .then((value: any) => {
+        // Signed in successfully so we reload.
+        navigate("/");
+      })
+      .catch((reason: any) => {
+        console.error(`Failed to sign user in: ${reason}`);
+      });
+  }
   return (
-    <Container className={"text-center login-container"} fluid>
-      <span className={"signup-form-title"}>Welcome!</span>
+    <Container fluid py={"5"}>
+      <Center>
+        <form onSubmit={handleSubmit}>
+          <Fieldset.Root size="lg" maxW="xl">
+            <Fieldset.Content>
+              <Field label="Username" required>
+                <Input name="username" onChange={(e) => setUsername(e.target.value)} />
+              </Field>
 
-      {/* TODO: Form Validation. use Yup? */}
-      <Form
-        className={"justify-content-center"}
-        onSubmit={(event: any) => {
-          event.preventDefault();
-
-          signIn({ username, password })
-            .then((value: any) => {
-              // Signed in successfully so we reload.
-              navigate("/");
-            })
-            .catch((reason: any) => {
-              console.error(`Failed to sign user in: ${reason}`);
-            });
-        }}
-      >
-        <Col className={"mx-auto"} xs={"6"} sm={"5"} md={"4"} lg={"3"} xl={"2"}>
-          <Form.Group className={"text-start mb-3"} controlId={"username"}>
-            <Form.Label className={"signup-form-label"}>Username</Form.Label>
-            <Form.Control
-              placeholder={"Enter your username"}
-              onChange={({ target: { value } }) => {
-                setUsername(value);
-              }}
-              required
-            />
-          </Form.Group>
-
-          <Form.Group className={"text-start mb-3"} controlId={"password"}>
-            <Form.Label className={"signup-form-label"}>Password</Form.Label>
-            <Form.Control
-              type={"password"}
-              placeholder={"Enter your password"}
-              onChange={({ target: { value } }) => {
-                setPassword(value);
-              }}
-              required
-            />
-          </Form.Group>
-
-          <div>
-            <Button variant={"submit"} type={"submit"}>
-              LOG IN
-            </Button>
-
-            <Button variant={"link"} onClick={() => navigate("/reset")}>
+              <Field label="Password" required>
+                <Input name="password" type="password" onChange={(e) => setPassword(e.target.value)} />
+              </Field>
+            </Fieldset.Content>
+            <Link alignSelf={"center"} fontSize={"sm"} href={"/reset"}>
               Forgot Password?
+            </Link>
+            <Button bg={"goc.blue"} type={"submit"}>
+              Log In
             </Button>
-          </div>
-          <span>Don't have an account? </span>
-          <Button variant={"link"} onClick={() => navigate("/signup")}>
-            Sign up
-          </Button>
-        </Col>
-      </Form>
+            <Flex justifyContent={"center"}>
+              <span>Don't have an account?</span>
+              <Link color={"goc.blue"} fontSize={"md"} href={"/signup"} pl={"2"}>
+                Sign up
+              </Link>
+            </Flex>
+          </Fieldset.Root>
+        </form>
+      </Center>
     </Container>
   );
 };
