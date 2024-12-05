@@ -2,7 +2,7 @@
  * Footer.
  */
 
-import { Box, Button, Center, Flex, Image, Input, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Image, Input, Text } from "@chakra-ui/react";
 import React from "react";
 
 export interface FooterColumnProps {
