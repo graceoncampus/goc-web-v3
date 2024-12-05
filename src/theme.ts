@@ -59,6 +59,15 @@ const config = defineConfig({
           gray: { value: "#f7f7f7" },
         },
       },
+      sizes: {
+        xs: { value: "2rem" },     // 32px
+        sm: { value: "4rem" },     // 64px
+        md: { value: "8rem" },     // 128px
+        lg: { value: "12rem" },    // 192px
+        xl: { value: "16rem" },    // 256px
+        "2xl": { value: "24rem" }, // 384px
+        full: { value: "100%" },   // Full width
+      },
       fontSizes: {
         "2xs": { value: "0.625rem" }, // 10px
         xs: { value: "0.75rem" },     // 12px
