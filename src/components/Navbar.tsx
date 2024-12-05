@@ -50,9 +50,11 @@ export default function Navbar(props: NavbarProps) {
             selected={props.selectedNavItemName === navItem.name}
           />
         ))}
-        <Button m={2} variant={"solid"} bg={"goc.blue"} fontWeight={"bold"}>
-          Log in
-        </Button>
+        <Link href={"/login"}>
+          <Button m={2} variant={"solid"} bg={"goc.blue"} fontWeight={"bold"}>
+            Log in
+          </Button>
+        </Link>
         <ColorModeButton />
       </Box>
     </Flex>
