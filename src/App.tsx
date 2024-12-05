@@ -15,7 +15,7 @@ import { RiderSignup } from "pages/User/Rides/RiderSignup/RiderSignup";
 import ScrollToTop from "hooks/ScrollToTop";
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { PrayerForm } from "pages/Prayer/PrayerForm";
+import { PrayerFormPage } from "pages/Prayer/PrayerFormPage";
 import { SmallGroups } from "pages/User/SmallGroups/SmallGroups";
 // import Viewer from './Components/Viewer/Viewer';
 
@@ -61,7 +61,7 @@ const App = () => {
             <Route path={"/ministry-teams"} element={<MinistryTeams />} />
             <Route path={"/ministry_teams/rides"} element={<StubbedRidesPage />} />
             <Route path={"/ministry_teams/*"} element={<NotFound />} />
-            <Route path="/prayer/request" element={<PrayerForm />} />
+            <Route path="/prayer/request" element={<PrayerFormPage />} />
             <Route path={"/smallgroups"} element={<SmallGroups />} />
             <Route path={"/study_guide"} element={<StudyGuideBody />} />
             <Route path={"/login"} element={<Login />} />

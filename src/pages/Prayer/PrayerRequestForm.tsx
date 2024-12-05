@@ -2,8 +2,10 @@
  * Prayer request form.
  */
 
+import { Box, Button, Center, Fieldset, Heading, Input, Stack, Textarea } from "@chakra-ui/react";
+import { Field } from "components/ui/field";
+import { NativeSelectField, NativeSelectRoot } from "components/ui/native-select";
 import React, { useEffect, useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 //  import { CreatePrayerInput } from 'Api';
 
@@ -36,9 +38,7 @@ interface PrayerRequestFormProps {
  
    };
  */
-export const PrayerRequestForm = (
-  prayerRequestFormProps: PrayerRequestFormProps
-) => {
+export const PrayerRequestForm = (prayerRequestFormProps: PrayerRequestFormProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [prayerName, setPrayerName] = useState<string>("");
@@ -64,68 +64,43 @@ export const PrayerRequestForm = (
 
   prayerRequestFormProps.setPrayerRequestCompleted(true);
   return (
-    <Container>
-      <Col className={"mx-auto text-center"} lg={"8"}>
-        <span className={"signup-form-title"}>
-          How can we be praying for you?
-        </span>
+    <Center width={"100%"} margin={"20px"}>
+      <Fieldset.Root maxWidth={"500px"}>
+        <Heading>How can we be praying for you?</Heading>
+        <form className="text-center" onSubmit={handleFormSubmit}>
+          <Stack textAlign="start">
+            <Field label="Name">
+              <Input
+                id="prayerName"
+                placeholder="Enter your name"
+                onChange={({ target: { value } }) => setPrayerName(value)}
+                required
+              />
+            </Field>
+            <Field label="Email">
+              <Input
+                id="prayerEmail"
+                type="email"
+                placeholder="Enter your email"
+                onChange={({ target: { value } }) => setPrayerEmail(value)}
+                required
+              />
+            </Field>
+            <Field label="Prayer Request *">
+              <Textarea
+                id="prayerComments"
+                placeholder="Philippians 4:6-7"
+                as="textarea"
+                onChange={({ target: { value } }) => setPrayerComments(value)}
+              />
+            </Field>
+          </Stack>
 
-        <Form className={"text-center"} onSubmit={handleFormSubmit}>
-          <Row className={"text-start gx-5"}>
-            <Col className={"mx-auto text-center"} lg={"6"}>
-              <Form.Group className={"mb-3"} controlId={"prayerName"}>
-                <Form.Label
-                  as={Row}
-                  className={"signup-form-label position-relative m-0"}
-                >
-                  {" "}
-                  Name{" "}
-                </Form.Label>
-
-                <Form.Control
-                  placeholder={"Enter your name"}
-                  onChange={({ target: { value } }) => setPrayerName(value)}
-                  required
-                />
-              </Form.Group>
-              <Form.Group className={"mb-3"} controlId={"prayerEmail"}>
-                <Form.Label
-                  as={Row}
-                  className={"signup-form-label position-relative m-0"}
-                >
-                  {" "}
-                  Email{" "}
-                </Form.Label>
-                <Form.Control
-                  type={"email"}
-                  placeholder={"Enter your email"}
-                  onChange={({ target: { value } }) => setPrayerEmail(value)}
-                  required
-                />
-              </Form.Group>
-              <Form.Group className={"mb-3"} controlId={"prayerComments"}>
-                <Form.Label
-                  as={Row}
-                  className={"signup-form-label position-relative m-0"}
-                >
-                  {" "}
-                  Prayer Request *{" "}
-                </Form.Label>
-                <Form.Control
-                  placeholder={"Philippians 4:6-7"}
-                  as={"textarea"}
-                  rows={4}
-                  onChange={({ target: { value } }) => setPrayerComments(value)}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-
-          <Button variant={"submit"} type={"submit"}>
+          <Button backgroundColor={"goc.blue"} marginTop={"20px"} variant="solid" type="submit" colorScheme="teal">
             <strong>SUBMIT</strong>
           </Button>
-        </Form>
-      </Col>
-    </Container>
+        </form>
+      </Fieldset.Root>
+    </Center>
   );
 };
