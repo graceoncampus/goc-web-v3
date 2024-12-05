@@ -36,9 +36,11 @@ function NavItem(props: NavItem) {
 export default function Navbar(props: NavbarProps) {
   return (
     <Flex m={0} px={2} justify="space-between">
-      <Center>
-        <Image src="/assets/goc-header.svg" />
-      </Center>
+      <Link href="/" style={{ outline: "none" }}>
+        <Center>
+          <Image src="/assets/goc-header.svg" alt="Logo" />
+        </Center>
+      </Link>
       <Box>
         {navlinks.map((navItem) => (
           <NavItem
