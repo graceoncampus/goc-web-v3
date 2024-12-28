@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import { NavbarActiveKey } from "pages/User/Header/Header";
 
 import { PrayerRequestForm } from "./PrayerRequestForm";
-import { BannerTemplate } from "layouts/BannerTemplate";
+import { Template } from "layouts/Template";
 
 export const PrayerFormPage = () => {
   return (
-    <BannerTemplate activeKey={NavbarActiveKey.PRAYER}>
+    <Template activeKey={NavbarActiveKey.PRAYER}>
       <PrayerFormBody />
-    </BannerTemplate>
+    </Template>
   );
 };
 
