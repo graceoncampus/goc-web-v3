@@ -16,5 +16,9 @@ const NotFoundBody = () => (
 );
 
 export const NotFound = () => {
-  return <Template activeKey={NavbarActiveKey.NONE} body={<NotFoundBody />} />;
+  return (
+    <Template activeKey={NavbarActiveKey.NONE}>
+      <NotFoundBody />
+    </Template>
+  );
 };

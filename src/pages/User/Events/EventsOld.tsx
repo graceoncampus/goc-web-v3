@@ -9,7 +9,11 @@ import { useEffect, useState } from "react";
 const client = generateClient();
 
 export const Events: React.FC = () => {
-  return <Template activeKey={NavbarActiveKey.EVENTS} body={<EventsBody />} />;
+  return (
+    <Template activeKey={NavbarActiveKey.EVENTS}>
+      <EventsBody />
+    </Template>
+  );
 };
 
 interface Event {

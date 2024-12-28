@@ -11,7 +11,11 @@ import { Template } from "layouts/Template";
 import { NavbarActiveKey } from "../Header/Header";
 
 export const AboutUs = () => {
-  return <Template activeKey={NavbarActiveKey.ABOUT} body={<AboutUsBody />} />;
+  return (
+    <Template activeKey={NavbarActiveKey.ABOUT}>
+      <AboutUsBody />
+    </Template>
+  );
 };
 
 const AboutUsBody = () => {

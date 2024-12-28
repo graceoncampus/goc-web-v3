@@ -7,7 +7,11 @@ import { NavbarActiveKey } from "components/Navbar";
 import { Field } from "../ui/field";
 
 export const Login = () => {
-  return <Template activeKey={NavbarActiveKey.LOGIN} body={<LoginBody />} />;
+  return (
+    <Template activeKey={NavbarActiveKey.LOGIN}>
+      <LoginBody />
+    </Template>
+  );
 };
 
 const LoginBody = () => {

@@ -42,10 +42,9 @@ export const MinistryTeams: React.FC = () => {
 
   // TODO: Get rid of active key eventually? Suggested by Sam
   return (
-    <Template
-      activeKey={NavbarActiveKey.MINISTRY_TEAMS}
-      body={<TeamsBody MinistryTeams={mockTeams} isUserLoggedIn={isUserLoggedIn} />}
-    />
+    <Template activeKey={NavbarActiveKey.MINISTRY_TEAMS}>
+      <TeamsBody MinistryTeams={mockTeams} isUserLoggedIn={isUserLoggedIn} />
+    </Template>
   );
 };
 

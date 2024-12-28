@@ -6,7 +6,11 @@ import { Template } from "layouts/Template";
 import { signIn } from "aws-amplify/auth";
 
 export const Login = () => {
-  return <Template activeKey={NavbarActiveKey.LOGIN} body={<LoginBody />} />;
+  return (
+    <Template activeKey={NavbarActiveKey.LOGIN}>
+      <LoginBody />
+    </Template>
+  );
 };
 
 const LoginBody = () => {

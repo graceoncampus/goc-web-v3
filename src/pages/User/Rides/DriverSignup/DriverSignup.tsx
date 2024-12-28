@@ -11,7 +11,11 @@ import { NavbarActiveKey } from "../../Header/Header";
 import { Template } from "layouts/Template";
 
 export const DriverSignup = () => {
-  return <Template activeKey={NavbarActiveKey.RIDES} body={<DriverSignupBody />} />;
+  return (
+    <Template activeKey={NavbarActiveKey.RIDES}>
+      <DriverSignupBody />
+    </Template>
+  );
 };
 
 const DriverSignupBody = () => {

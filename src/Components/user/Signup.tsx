@@ -20,7 +20,11 @@ async function handleSignUpConfirmation({ username, confirmationCode }: ConfirmS
 }
 
 export const Signup = () => {
-  return <Template activeKey={NavbarActiveKey.LOGIN} body={<SignupBody />} />;
+  return (
+    <Template activeKey={NavbarActiveKey.LOGIN}>
+      <SignupBody />
+    </Template>
+  );
 };
 
 export interface Signup {

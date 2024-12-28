@@ -9,7 +9,11 @@ interface TemplateProps {
 }
 
 export const SmallGroups = () => {
-  return <Template activeKey={NavbarActiveKey.SMALL_GROUPS} body={<SmallGroupsBody />} />;
+  return (
+    <Template activeKey={NavbarActiveKey.SMALL_GROUPS}>
+      <SmallGroupsBody />
+    </Template>
+  );
 };
 
 const SmallGroupsBody = () => {

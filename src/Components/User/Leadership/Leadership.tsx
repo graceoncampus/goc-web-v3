@@ -2,7 +2,11 @@ import { Template } from "layouts/Template";
 import { NavbarActiveKey } from "components/Navbar";
 
 export const Leadership = () => {
-  return <Template activeKey={NavbarActiveKey.LEADERSHIP} body={<LeadershipBody />} />;
+  return (
+    <Template activeKey={NavbarActiveKey.LEADERSHIP}>
+      <LeadershipBody />
+    </Template>
+  );
 };
 
 const LeadershipBody = () => {

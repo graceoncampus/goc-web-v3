@@ -4,7 +4,11 @@ import { NavbarActiveKey } from "components/Navbar";
 import "./OurBeliefs.scss";
 
 export const OurBeliefs = () => {
-  return <Template activeKey={NavbarActiveKey.BELIEFS} body={<OurBeliefsBody />} />;
+  return (
+    <Template activeKey={NavbarActiveKey.BELIEFS}>
+      <OurBeliefsBody />
+    </Template>
+  );
 };
 
 const OurBeliefsBody = () => {

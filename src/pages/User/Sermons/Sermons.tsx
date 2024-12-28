@@ -59,10 +59,9 @@ export const Sermons = () => {
   );
 
   return (
-    <Template
-      activeKey={NavbarActiveKey.SERMONS}
-      body={<SermonsBody sermons={filteredSermons} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />}
-    />
+    <Template activeKey={NavbarActiveKey.SERMONS}>
+      <SermonsBody sermons={filteredSermons} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+    </Template>
   );
 };
 

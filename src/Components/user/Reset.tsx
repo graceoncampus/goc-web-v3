@@ -5,7 +5,11 @@ import { NavbarActiveKey } from "components/Navbar";
 import { Template } from "layouts/Template";
 
 export const Reset = () => {
-  return <Template activeKey={NavbarActiveKey.LOGIN} body={<ResetBody />} />;
+  return (
+    <Template activeKey={NavbarActiveKey.LOGIN}>
+      <ResetBody />
+    </Template>
+  );
 };
 
 const ResetBody = () => {

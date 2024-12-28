@@ -2,7 +2,11 @@ import { Template } from "layouts/Template";
 import { NavbarActiveKey } from "../../Header/Header";
 
 export const OurBeliefs = () => {
-  return <Template activeKey={NavbarActiveKey.BELIEFS} body={<OurBeliefsBody />} />;
+  return (
+    <Template activeKey={NavbarActiveKey.BELIEFS}>
+      <OurBeliefsBody />
+    </Template>
+  );
 };
 
 const OurBeliefsBody = () => {

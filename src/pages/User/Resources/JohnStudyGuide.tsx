@@ -2,7 +2,11 @@ import { Template } from "layouts/Template";
 import { NavbarActiveKey } from "../Header/Header";
 
 export const StudyGuide = () => {
-  return <Template activeKey={NavbarActiveKey.ABOUT} body={<StudyGuideBody />} />;
+  return (
+    <Template activeKey={NavbarActiveKey.ABOUT}>
+      <StudyGuideBody />
+    </Template>
+  );
 };
 
 export const StudyGuideBody = () => {

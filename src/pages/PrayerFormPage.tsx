@@ -2,11 +2,15 @@ import React, { useState } from "react";
 // make page for prayer request confirmation.
 import { NavbarActiveKey } from "pages/User/Header/Header";
 
-import { Template } from "layouts/Template";
 import { PrayerRequestForm } from "./PrayerRequestForm";
+import { BannerTemplate } from "layouts/BannerTemplate";
 
 export const PrayerFormPage = () => {
-  return <Template activeKey={NavbarActiveKey.PRAYER} body={<PrayerFormBody />} />;
+  return (
+    <BannerTemplate activeKey={NavbarActiveKey.PRAYER}>
+      <PrayerFormBody />
+    </BannerTemplate>
+  );
 };
 
 const PrayerFormBody = () => {

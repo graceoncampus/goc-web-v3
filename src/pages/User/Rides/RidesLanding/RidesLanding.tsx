@@ -150,7 +150,11 @@ export const RidesLanding = () => {
   }, []);
 
   console.log("ride:", ride);
-  return <Template activeKey={NavbarActiveKey.RIDES} body={<RidesLandingBody rides={ride} />} />;
+  return (
+    <Template activeKey={NavbarActiveKey.RIDES}>
+      <RidesLandingBody rides={ride} />
+    </Template>
+  );
 };
 
 const RidesList = ({ rides }: RideProps) => {

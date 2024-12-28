@@ -10,7 +10,11 @@ import { RiderSignupForm } from "./RiderSignupForm";
 import { Template } from "layouts/Template";
 
 export const RiderSignup = () => {
-  return <Template activeKey={NavbarActiveKey.RIDES} body={<RiderSignupBody />} />;
+  return (
+    <Template activeKey={NavbarActiveKey.RIDES}>
+      <RiderSignupBody />
+    </Template>
+  );
 };
 
 const RiderSignupBody = () => {

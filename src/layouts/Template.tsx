@@ -7,17 +7,17 @@ import Footer from "components/Footer";
 import Navbar, { NavbarActiveKey } from "components/Navbar";
 import { Box } from "@chakra-ui/react";
 
-interface TemplateProps {
+export interface TemplateProps {
   activeKey: NavbarActiveKey;
-  body: React.ReactNode;
+  children: React.ReactNode;
 }
 
-export const Template = (templateProps: TemplateProps) => {
+export const Template: React.FC<TemplateProps> = ({ activeKey, children }) => {
   return (
     <Box>
-      <Navbar selectedNavItemName={templateProps.activeKey} />
+      <Navbar selectedNavItemName={activeKey} />
 
-      <Box>{templateProps.body}</Box>
+      <Box>{children}</Box>
 
       <Footer />
     </Box>

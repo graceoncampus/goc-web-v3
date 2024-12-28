@@ -119,5 +119,9 @@ const LandingBody = observer(() => {
 });
 
 export const Landing = () => {
-  return <Template activeKey={NavbarActiveKey.NONE} body={<LandingBody />} />;
+  return (
+    <Template activeKey={NavbarActiveKey.NONE}>
+      <LandingBody />
+    </Template>
+  );
 };
