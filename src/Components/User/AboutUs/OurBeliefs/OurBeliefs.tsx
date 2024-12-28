@@ -1,10 +1,10 @@
-import { Template } from "pages/User/Template/Template";
-import { HeaderNavbarActiveKey } from "components/OldNavbar";
+import { Template } from "layouts/Template";
+import { NavbarActiveKey } from "components/Navbar";
 
 import "./OurBeliefs.scss";
 
 export const OurBeliefs = () => {
-  return <Template activeKey={HeaderNavbarActiveKey.BELIEFS} body={<OurBeliefsBody />} />;
+  return <Template activeKey={NavbarActiveKey.BELIEFS} body={<OurBeliefsBody />} />;
 };
 
 const OurBeliefsBody = () => {

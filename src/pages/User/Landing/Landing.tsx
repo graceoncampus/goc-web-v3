@@ -4,8 +4,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { HeaderNavbarActiveKey } from "../Header/Header";
-import { Template } from "pages/User/Template/Template";
+import { NavbarActiveKey } from "../Header/Header";
+import { Template } from "layouts/Template";
 import { EventCardList, EventCardListProps } from "pages/EventCardList/EventCardList";
 
 import { observer } from "mobx-react-lite";
@@ -119,5 +119,5 @@ const LandingBody = observer(() => {
 });
 
 export const Landing = () => {
-  return <Template activeKey={HeaderNavbarActiveKey.NONE} body={<LandingBody />} />;
+  return <Template activeKey={NavbarActiveKey.NONE} body={<LandingBody />} />;
 };

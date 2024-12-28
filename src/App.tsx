@@ -15,7 +15,7 @@ import { RiderSignup } from "pages/User/Rides/RiderSignup/RiderSignup";
 import ScrollToTop from "hooks/ScrollToTop";
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { PrayerFormPage } from "pages/Prayer/PrayerFormPage";
+import { PrayerFormPage } from "pages/PrayerFormPage";
 import { SmallGroups } from "pages/User/SmallGroups/SmallGroups";
 // import Viewer from './Components/Viewer/Viewer';
 

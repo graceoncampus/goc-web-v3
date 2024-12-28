@@ -7,7 +7,7 @@ import { Container, Image, Nav, NavDropdown } from "react-bootstrap";
 
 import Navbar from "components/Navbar";
 
-export enum HeaderNavbarActiveKey {
+export enum NavbarActiveKey {
   NONE = "",
   ABOUT = "About",
   BELIEFS = "Our Beliefs",
@@ -22,7 +22,7 @@ export enum HeaderNavbarActiveKey {
 }
 
 interface HeaderProps {
-  activeKey: HeaderNavbarActiveKey;
+  activeKey: NavbarActiveKey;
 }
 
 export const Header = (headerProps: HeaderProps) => {
@@ -32,10 +32,7 @@ export const Header = (headerProps: HeaderProps) => {
     const navbarElement = document.querySelector(".goc-navbar") as HTMLElement;
     if (navbarElement) {
       let navbarHeight = navbarElement.offsetHeight;
-      document.documentElement.style.setProperty(
-        "--navbar-height",
-        `${navbarHeight}px`
-      );
+      document.documentElement.style.setProperty("--navbar-height", `${navbarHeight}px`);
     }
   }, []);
   // return <Navbar></Navbar>;

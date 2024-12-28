@@ -1,7 +1,7 @@
-import { HeaderNavbarActiveKey } from "pages/User/Header/Header";
+import { NavbarActiveKey } from "pages/User/Header/Header";
 import { MdAttachMoney, MdLocationPin } from "react-icons/md";
 
-import { Template } from "pages/User/Template/Template";
+import { Template } from "layouts/Template";
 import { listGOCEvents } from "graphql/queries";
 import { generateClient } from "aws-amplify/api";
 
@@ -12,7 +12,7 @@ import { AccordionItem, AccordionItemContent, AccordionItemTrigger, AccordionRoo
 const client = generateClient();
 
 export const Events: React.FC = () => {
-  return <Template activeKey={HeaderNavbarActiveKey.EVENTS} body={<EventsBody />} />;
+  return <Template activeKey={NavbarActiveKey.EVENTS} body={<EventsBody />} />;
 };
 
 interface Event {

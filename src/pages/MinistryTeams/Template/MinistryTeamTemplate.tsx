@@ -3,14 +3,14 @@
  */
 
 // import React, { useEffect, useState } from 'react';
-// import { HeaderNavbarActiveKey, Header } from '../Header/Header';
+// import { NavbarActiveKey, Header } from '../Header/Header';
 // import { Container } from 'react-bootstrap';
 
 // import { MinistryTeamAccessDenied } from 'Components/MinistryTeams/Auth/MinistryTeamAccessDenied';
 // import { TeamMembershipCheckResult, checkIsTeamMember } from 'Auth/Utilities/CheckMinistryTeamMembership';
 
 // interface TemplateProps {
-//     activeKey: HeaderNavbarActiveKey,
+//     activeKey: NavbarActiveKey,
 //     body: React.ReactNode
 // };
 

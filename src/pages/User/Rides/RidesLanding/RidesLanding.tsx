@@ -1,6 +1,6 @@
 import { CreateCarInput, CreateRideInput, Ride } from "Api";
-import { HeaderNavbarActiveKey } from "pages/User/Header/Header";
-import { Template } from "pages/User/Template/Template";
+import { NavbarActiveKey } from "pages/User/Header/Header";
+import { Template } from "layouts/Template";
 import { generateClient } from "aws-amplify/api";
 import { JWT } from "google-auth-library";
 import { GoogleSpreadsheet } from "google-spreadsheet"; // modify gaxios.js in node_modules line 270: new url_1.URL(url) --> new URL(url)
@@ -21,18 +21,13 @@ const updateRides = async (url: string, date: string, emailMsg: string) => {
   const re2 = /\/.*/g;
   // sample spreadsheet: https://docs.google.com/spreadsheets/d/1kqrgaXIAReEDvZo9d1SM5xBcS23wea2xuM91LZmZdu0/edit#gid=656402499
   const sheetID = url.replace(re1, "").replace(re2, "");
-  const ridesSheetDoc = await new GoogleSpreadsheet(
-    sheetID,
-    serviceAccountAuth
-  );
+  const ridesSheetDoc = await new GoogleSpreadsheet(sheetID, serviceAccountAuth);
 
   const carInputs: CreateCarInput[] = [];
 
   try {
     // delete Old Rides
-    const oldRides = await (
-      client.graphql({ query: listRides }) as Promise<any>
-    )
+    const oldRides = await (client.graphql({ query: listRides }) as Promise<any>)
       .then((result) => {
         return result.data.listRides.items;
       })
@@ -62,9 +57,7 @@ const updateRides = async (url: string, date: string, emailMsg: string) => {
     const rows = await ridesSheet.getRows();
     for (const row of rows) {
       if (row.get("driver_name") && row.get("rider_name")) {
-        const car = carInputs.find(
-          (c) => c.driver_name === row.get("driver_name")
-        );
+        const car = carInputs.find((c) => c.driver_name === row.get("driver_name"));
         if (car) {
           car.riders?.push({
             uid: row.get("rider_uid"),
@@ -157,12 +150,7 @@ export const RidesLanding = () => {
   }, []);
 
   console.log("ride:", ride);
-  return (
-    <Template
-      activeKey={HeaderNavbarActiveKey.RIDES}
-      body={<RidesLandingBody rides={ride} />}
-    />
-  );
+  return <Template activeKey={NavbarActiveKey.RIDES} body={<RidesLandingBody rides={ride} />} />;
 };
 
 const RidesList = ({ rides }: RideProps) => {
@@ -174,20 +162,10 @@ const RidesList = ({ rides }: RideProps) => {
           <br />
           We've got you covered.
         </h1>
-        <Button
-          className="request-ride-button"
-          variant="dark"
-          href="/rides/rider/signup"
-          target="_blank"
-        >
+        <Button className="request-ride-button" variant="dark" href="/rides/rider/signup" target="_blank">
           I need a ride
         </Button>
-        <Button
-          className="request-ride-button"
-          variant="dark"
-          href="/rides/driver/signup"
-          target="_blank"
-        >
+        <Button className="request-ride-button" variant="dark" href="/rides/driver/signup" target="_blank">
           I can drive
         </Button>
       </div>
@@ -199,10 +177,7 @@ const RidesList = ({ rides }: RideProps) => {
 
         {rides?.cars?.map((car, i) => {
           return (
-            <div
-              key={i}
-              className={i % 2 == 0 ? "table-row" : "even table-row"}
-            >
+            <div key={i} className={i % 2 == 0 ? "table-row" : "even table-row"}>
               <div className="column-item">{car?.driver_name} </div>
               <div className="column-item">
                 {car?.riders.map((rider, i) => {
@@ -234,13 +209,7 @@ const RidesSettings = () => {
       >
         <label>Spreadsheet URL</label>
         <br />
-        <input
-          type="url"
-          required
-          className={"rides-input"}
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-        />
+        <input type="url" required className={"rides-input"} value={url} onChange={(e) => setUrl(e.target.value)} />
         <br />
         <label>Rides Date</label>
         <br />

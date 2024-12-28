@@ -1,8 +1,8 @@
-import { Template } from "pages/User/Template/Template";
-import { HeaderNavbarActiveKey } from "components/OldNavbar";
+import { Template } from "layouts/Template";
+import { NavbarActiveKey } from "components/Navbar";
 
 export const Leadership = () => {
-  return <Template activeKey={HeaderNavbarActiveKey.LEADERSHIP} body={<LeadershipBody />} />;
+  return <Template activeKey={NavbarActiveKey.LEADERSHIP} body={<LeadershipBody />} />;
 };
 
 const LeadershipBody = () => {
