@@ -1,21 +1,21 @@
 import { NavbarActiveKey } from "pages/User/Header/Header";
 import { MdAttachMoney, MdLocationPin } from "react-icons/md";
 
-import { Template } from "layouts/Template";
 import { listGOCEvents } from "graphql/queries";
 import { generateClient } from "aws-amplify/api";
 
 import { useEffect, useState } from "react";
 import { Box, Center, Flex, Heading, Icon, Image, Separator, Stack, Text } from "@chakra-ui/react";
 import { AccordionItem, AccordionItemContent, AccordionItemTrigger, AccordionRoot } from "components/ui/accordion";
+import { BannerTemplate } from "layouts/BannerTemplate";
 
 const client = generateClient();
 
 export const Events: React.FC = () => {
   return (
-    <Template activeKey={NavbarActiveKey.EVENTS}>
+    <BannerTemplate title="Events" activeKey={NavbarActiveKey.EVENTS}>
       <EventsBody />
-    </Template>
+    </BannerTemplate>
   );
 };
 

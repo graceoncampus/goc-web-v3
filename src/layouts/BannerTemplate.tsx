@@ -12,12 +12,12 @@ export interface BannerTemplateProps extends TemplateProps {
 export const BannerTemplate = (templateProps: BannerTemplateProps) => {
   return (
     <Template activeKey={templateProps.activeKey}>
-      <Box width={"100%"} background={"goc.gray"} padding={"60px"}>
+      <Box width={"100%"} background={"goc.gray"} padding={"90px"}>
         <Center>
           <Heading size={"5xl"}>{templateProps.title}</Heading>
         </Center>
       </Box>
-      {templateProps.children}
+      <Box marginY={"30px"}>{templateProps.children}</Box>
     </Template>
   );
 };
