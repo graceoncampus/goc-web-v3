@@ -2,8 +2,8 @@ import { confirmSignUp, resendSignUpCode, signUp, type ConfirmSignUpInput } from
 import { useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { HeaderNavbarActiveKey } from "../OldNavbar";
-import { Template } from "pages/User/Template/Template";
+import { NavbarActiveKey } from "components/Navbar";
+import { Template } from "layouts/Template";
 // import { PhoneInput } from "react-international-phone";
 import "react-phone-number-input/style.css";
 import PhoneInput, { type Value } from "react-phone-number-input";
@@ -20,7 +20,11 @@ async function handleSignUpConfirmation({ username, confirmationCode }: ConfirmS
 }
 
 export const Signup = () => {
-  return <Template activeKey={HeaderNavbarActiveKey.LOGIN} body={<SignupBody />} />;
+  return (
+    <Template activeKey={NavbarActiveKey.LOGIN}>
+      <SignupBody />
+    </Template>
+  );
 };
 
 export interface Signup {

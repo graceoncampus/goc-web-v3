@@ -4,7 +4,7 @@
 
 import React from "react";
 import { Container } from "react-bootstrap";
-import { HeaderNavbarActiveKey } from "pages/MinistryTeams/Header/Header";
+import { NavbarActiveKey } from "pages/MinistryTeams/Header/Header";
 // import { MinistryTeamTemplate } from 'Components/MinistryTeams/Template/MinistryTeamTemplate';
 
 const StubbedRidesBody = () => {
@@ -18,6 +18,6 @@ const StubbedRidesBody = () => {
 export const StubbedRidesPage = () => {
   return (
     <div>TODO</div>
-    // <MinistryTeamTemplate activeKey={HeaderNavbarActiveKey.RIDES} body={<StubbedRidesBody />}/>
+    // <MinistryTeamTemplate activeKey={NavbarActiveKey.RIDES} body={<StubbedRidesBody />}/>
   );
 };

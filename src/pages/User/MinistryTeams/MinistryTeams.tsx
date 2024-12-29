@@ -1,5 +1,5 @@
-import { HeaderNavbarActiveKey } from "pages/User/Header/Header";
-import { Template } from "pages/User/Template/Template";
+import { NavbarActiveKey } from "pages/User/Header/Header";
+import { Template } from "layouts/Template";
 import React, { useEffect, useState } from "react";
 
 const mockTeams: MinistryTeam[] = [
@@ -42,12 +42,9 @@ export const MinistryTeams: React.FC = () => {
 
   // TODO: Get rid of active key eventually? Suggested by Sam
   return (
-    <Template
-      activeKey={HeaderNavbarActiveKey.MINISTRY_TEAMS}
-      body={
-        <TeamsBody MinistryTeams={mockTeams} isUserLoggedIn={isUserLoggedIn} />
-      }
-    />
+    <Template activeKey={NavbarActiveKey.MINISTRY_TEAMS}>
+      <TeamsBody MinistryTeams={mockTeams} isUserLoggedIn={isUserLoggedIn} />
+    </Template>
   );
 };
 
@@ -86,10 +83,7 @@ const TeamsBody: React.FC<{
         <ul>
           {MinistryTeams.map((MinistryTeam, index) => (
             <li key={index}>
-              <a
-                href={`#${slugify(MinistryTeam.title)}`}
-                style={{ textDecoration: "none" }}
-              >
+              <a href={`#${slugify(MinistryTeam.title)}`} style={{ textDecoration: "none" }}>
                 {MinistryTeam.title}
               </a>
             </li>
@@ -114,10 +108,7 @@ const TeamsBody: React.FC<{
                 </p>
               </>
             ) : (
-              <p>
-                You need to be logged in to view the leader and contact
-                information.
-              </p>
+              <p>You need to be logged in to view the leader and contact information.</p>
             )}
           </div>
         ))}

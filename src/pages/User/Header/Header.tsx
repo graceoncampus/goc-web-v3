@@ -5,7 +5,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Image, Nav, NavDropdown, Navbar } from "react-bootstrap";
 
-export enum HeaderNavbarActiveKey {
+export enum NavbarActiveKey {
   NONE = "",
   ABOUT = "About",
   BELIEFS = "Our Beliefs",
@@ -20,7 +20,7 @@ export enum HeaderNavbarActiveKey {
 }
 
 interface HeaderProps {
-  activeKey: HeaderNavbarActiveKey;
+  activeKey: NavbarActiveKey;
 }
 
 export const Header = (headerProps: HeaderProps) => {

@@ -1,5 +1,5 @@
-import { HeaderNavbarActiveKey } from "pages/User/Header/Header";
-import { Template } from "pages/User/Template/Template";
+import { NavbarActiveKey } from "pages/User/Header/Header";
+import { Template } from "layouts/Template";
 import { listGOCEvents } from "graphql/queries";
 import { generateClient } from "aws-amplify/api";
 
@@ -10,7 +10,9 @@ const client = generateClient();
 
 export const Events: React.FC = () => {
   return (
-    <Template activeKey={HeaderNavbarActiveKey.EVENTS} body={<EventsBody />} />
+    <Template activeKey={NavbarActiveKey.EVENTS}>
+      <EventsBody />
+    </Template>
   );
 };
 
@@ -31,9 +33,7 @@ const EventsBody: React.FC = () => {
       await (client.graphql({ query: listGOCEvents }) as Promise<any>)
         .then((result) => {
           const eventsData = result.data.listGOCEvents.items.sort(
-            (a: any, b: any) =>
-              new Date(b["startDate"]).getTime() -
-              new Date(a["startDate"]).getTime()
+            (a: any, b: any) => new Date(b["startDate"]).getTime() - new Date(a["startDate"]).getTime(),
           );
           setEvents(
             eventsData.map((event: any) => {
@@ -47,7 +47,7 @@ const EventsBody: React.FC = () => {
                 imageLink: event["imageLink"],
               };
               return item;
-            })
+            }),
           );
         })
         .catch((reason) => {
@@ -79,20 +79,7 @@ const EventsBody: React.FC = () => {
 
   function formatEventDateShort(dateString: string) {
     const date = new Date(dateString);
-    const monthsShort = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
+    const monthsShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const daysOfWeekShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
     const hour = date.getHours();
@@ -128,36 +115,19 @@ const EventsBody: React.FC = () => {
               <Accordion.Body>
                 <div className="event-description">
                   <div className="d-flex">
-                    <Image
-                      width={"300px"}
-                      height={"300px"}
-                      style={{ borderRadius: "20px" }}
-                      src={event.imageLink}
-                    />
+                    <Image width={"300px"} height={"300px"} style={{ borderRadius: "20px" }} src={event.imageLink} />
                     <div className="event-description-text">
                       <div>
                         <h1 className="event-title">{event.title}</h1>
                         <p>
                           <p>{event.description}</p>
                           <div className="event-info">
-                            <p>
-                              {formatEventDate(event.startDate, event.endDate)}
-                            </p>
+                            <p>{formatEventDate(event.startDate, event.endDate)}</p>
                             <div className="location-info">
-                              <Image
-                                className="logo-icon"
-                                src={"/assets/location.png"}
-                              />
+                              <Image className="logo-icon" src={"/assets/location.png"} />
                               <p>{event.location}</p>
-                              <Image
-                                className="logo-icon"
-                                src={"/assets/dollar.png"}
-                              />
-                              <p>
-                                {event.price === 0
-                                  ? "free"
-                                  : event.price.toString()}
-                              </p>
+                              <Image className="logo-icon" src={"/assets/dollar.png"} />
+                              <p>{event.price === 0 ? "free" : event.price.toString()}</p>
                             </div>
                           </div>
                         </p>

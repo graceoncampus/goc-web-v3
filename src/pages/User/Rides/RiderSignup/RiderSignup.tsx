@@ -4,17 +4,16 @@
 
 import React, { useState } from "react";
 
-import { HeaderNavbarActiveKey } from "pages/User/Header/Header";
+import { NavbarActiveKey } from "pages/User/Header/Header";
 import { RiderSignupThankYou } from "./RiderSignupThankYou";
 import { RiderSignupForm } from "./RiderSignupForm";
-import { Template } from "pages/User/Template/Template";
+import { Template } from "layouts/Template";
 
 export const RiderSignup = () => {
   return (
-    <Template
-      activeKey={HeaderNavbarActiveKey.RIDES}
-      body={<RiderSignupBody />}
-    />
+    <Template activeKey={NavbarActiveKey.RIDES}>
+      <RiderSignupBody />
+    </Template>
   );
 };
 

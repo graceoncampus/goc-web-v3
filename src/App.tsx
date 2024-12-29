@@ -15,7 +15,7 @@ import { RiderSignup } from "pages/User/Rides/RiderSignup/RiderSignup";
 import ScrollToTop from "hooks/ScrollToTop";
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { PrayerFormPage } from "pages/Prayer/PrayerFormPage";
+import { PrayerFormPage } from "pages/PrayerFormPage";
 import { SmallGroups } from "pages/User/SmallGroups/SmallGroups";
 // import Viewer from './Components/Viewer/Viewer';
 
@@ -28,7 +28,7 @@ import { Login } from "components/user/Login";
 import { RidesLanding } from "pages/User/Rides/RidesLanding/RidesLanding";
 import { OurBeliefs } from "pages/User/AboutUs/OurBeliefs/OurBeliefs";
 import { Reset } from "components/user/Reset";
-import { Events } from "pages/User/Events/Events";
+import { Events } from "pages/User/EventsPage";
 import { Signup } from "components/user/Signup";
 import { MinistryTeams } from "pages/User/MinistryTeams/MinistryTeams";
 import { Leadership } from "components/user/Leadership/Leadership";

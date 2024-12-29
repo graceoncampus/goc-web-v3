@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 // make page for prayer request confirmation.
-import { HeaderNavbarActiveKey } from "pages/User/Header/Header";
+import { NavbarActiveKey } from "pages/User/Header/Header";
 
-import { Template } from "pages/User/Template/Template";
 import { PrayerRequestForm } from "./PrayerRequestForm";
-interface TemplateProps {
-  activeKey: HeaderNavbarActiveKey;
-  body: React.ReactNode;
-}
+import { Template } from "layouts/Template";
 
 export const PrayerFormPage = () => {
-  return <Template activeKey={HeaderNavbarActiveKey.PRAYER} body={<PrayerFormBody />} />;
+  return (
+    <Template activeKey={NavbarActiveKey.PRAYER}>
+      <PrayerFormBody />
+    </Template>
+  );
 };
 
 const PrayerFormBody = () => {

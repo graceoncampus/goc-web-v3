@@ -3,6 +3,22 @@ import { Box, Flex, Button, Image, Center, Link, MenuRoot, MenuRootProvider, Men
 import { ColorModeButton } from "./color-mode";
 import navlinks from "./navlinks";
 
+export enum NavbarActiveKey {
+  NONE = "",
+  ABOUT = "About",
+  BELIEFS = "Our Beliefs",
+  SERMONS = "Sermons",
+  CLASSES = "Classes",
+  STUDY_GUIDE = "Study Guide",
+  SMALL_GROUPS = "Small Groups",
+  MINISTRY_TEAMS = "Ministry Teams",
+  EVENTS = "Events",
+  RIDES = "Rides",
+  PRAYER = "Prayer",
+  LEADERSHIP = "Leadership",
+  LOGIN = "Login",
+}
+
 interface SubLink {
   name: string;
   link: string;

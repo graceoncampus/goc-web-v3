@@ -1,13 +1,17 @@
 import { Button, Center, Container, Fieldset, Flex, Input, Link } from "@chakra-ui/react";
 import { signIn } from "aws-amplify/auth";
-import { Template } from "pages/User/Template/Template";
+import { Template } from "layouts/Template";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { HeaderNavbarActiveKey } from "../OldNavbar";
+import { NavbarActiveKey } from "components/Navbar";
 import { Field } from "../ui/field";
 
 export const Login = () => {
-  return <Template activeKey={HeaderNavbarActiveKey.LOGIN} body={<LoginBody />} />;
+  return (
+    <Template activeKey={NavbarActiveKey.LOGIN}>
+      <LoginBody />
+    </Template>
+  );
 };
 
 const LoginBody = () => {

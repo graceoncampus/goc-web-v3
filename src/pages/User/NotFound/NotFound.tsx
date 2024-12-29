@@ -5,8 +5,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { Template } from "pages/User/Template/Template";
-import { HeaderNavbarActiveKey } from "pages/User/Header/Header";
+import { Template } from "layouts/Template";
+import { NavbarActiveKey } from "pages/User/Header/Header";
 
 const NotFoundBody = () => (
   <div>
@@ -17,6 +17,8 @@ const NotFoundBody = () => (
 
 export const NotFound = () => {
   return (
-    <Template activeKey={HeaderNavbarActiveKey.NONE} body={<NotFoundBody />} />
+    <Template activeKey={NavbarActiveKey.NONE}>
+      <NotFoundBody />
+    </Template>
   );
 };

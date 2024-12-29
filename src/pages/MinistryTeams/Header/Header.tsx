@@ -8,7 +8,7 @@ import { Button, Container, Image, Nav, Navbar } from "react-bootstrap";
 import { MINISTRY_TEAMS_LIST } from "constants/MinistryTeams";
 // import { handleLogout } from 'Auth/Utilities/HandleLogout';
 
-export enum HeaderNavbarActiveKey {
+export enum NavbarActiveKey {
   NONE = "",
   RIDES = "Rides",
   PRAYER = "Prayer",
@@ -16,7 +16,7 @@ export enum HeaderNavbarActiveKey {
 }
 
 interface HeaderProps {
-  activeKey: HeaderNavbarActiveKey;
+  activeKey: NavbarActiveKey;
 }
 
 export const Header = (headerProps: HeaderProps) => {
