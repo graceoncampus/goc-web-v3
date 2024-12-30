@@ -25,7 +25,7 @@ export const EventCardList = (eventCardListProps: EventCardListProps) => {
               justifyContent={index % 2 === 0 ? "left" : "right"}
             />
           );
-        }
+        },
       )}
     </div>
   );

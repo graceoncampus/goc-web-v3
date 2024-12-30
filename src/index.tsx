@@ -12,5 +12,5 @@ const root = createRoot(container!);
 root.render(
   <StoreContext.Provider value={userStore}>
     <App />
-  </StoreContext.Provider>
+  </StoreContext.Provider>,
 );

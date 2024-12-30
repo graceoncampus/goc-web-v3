@@ -5,8 +5,23 @@ import { listGOCEvents } from "graphql/queries";
 import { generateClient } from "aws-amplify/api";
 
 import { useEffect, useState } from "react";
-import { Box, Center, Flex, Heading, Icon, Image, Separator, Stack, Text } from "@chakra-ui/react";
-import { AccordionItem, AccordionItemContent, AccordionItemTrigger, AccordionRoot } from "components/ui/accordion";
+import {
+  Box,
+  Center,
+  Flex,
+  Heading,
+  Icon,
+  Image,
+  Separator,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
+import {
+  AccordionItem,
+  AccordionItemContent,
+  AccordionItemTrigger,
+  AccordionRoot,
+} from "components/ui/accordion";
 import { BannerTemplate } from "layouts/BannerTemplate";
 
 const client = generateClient();
@@ -37,7 +52,9 @@ const EventsBody: React.FC = () => {
       await (client.graphql({ query: listGOCEvents }) as Promise<any>)
         .then((result) => {
           const eventsData = result.data.listGOCEvents.items.sort(
-            (a: any, b: any) => new Date(b["startDate"]).getTime() - new Date(a["startDate"]).getTime(),
+            (a: any, b: any) =>
+              new Date(b["startDate"]).getTime() -
+              new Date(a["startDate"]).getTime(),
           );
           setEvents(
             eventsData.map((event: any) => {
@@ -84,7 +101,20 @@ const EventsBody: React.FC = () => {
 
   function formatEventDateShort(dateString: string) {
     const date = new Date(dateString);
-    const monthsShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const monthsShort = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
     const daysOfWeekShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
     const hour = date.getHours();
@@ -111,9 +141,15 @@ const EventsBody: React.FC = () => {
                 <AccordionItem key={index} value={event.id}>
                   <AccordionItemTrigger indicatorPlacement="start">
                     <Stack width={"100%"}>
-                      <Flex justify={"space-between"} width={"100%"} marginLeft={"10px"}>
+                      <Flex
+                        justify={"space-between"}
+                        width={"100%"}
+                        marginLeft={"10px"}
+                      >
                         <Heading size={"2xl"}>{event.title}</Heading>
-                        <Text paddingRight={"10px"}>{formatEventDateShort(event.startDate)}</Text>
+                        <Text paddingRight={"10px"}>
+                          {formatEventDateShort(event.startDate)}
+                        </Text>
                       </Flex>
                       <Separator size={"md"} width={"100%"} />
                     </Stack>
@@ -122,8 +158,16 @@ const EventsBody: React.FC = () => {
                   <AccordionItemContent>
                     <Box marginX={"30px"}>
                       <Flex>
-                        <Image width={"300px"} height={"300px"} borderRadius={"20px"} src={event.imageLink} />
-                        <Box className="event-description-text" marginLeft={"20px"}>
+                        <Image
+                          width={"300px"}
+                          height={"300px"}
+                          borderRadius={"20px"}
+                          src={event.imageLink}
+                        />
+                        <Box
+                          className="event-description-text"
+                          marginLeft={"20px"}
+                        >
                           <Box>
                             <Heading size={"5xl"} className="event-title">
                               {event.title}
@@ -131,16 +175,31 @@ const EventsBody: React.FC = () => {
                             <Box>
                               <Text>{event.description}</Text>
                               <Box className="event-info" marginTop={"10px"}>
-                                <Text>{formatEventDate(event.startDate, event.endDate)}</Text>
-                                <Flex className="location-info" alignItems={"center"} marginTop={"10px"}>
+                                <Text>
+                                  {formatEventDate(
+                                    event.startDate,
+                                    event.endDate,
+                                  )}
+                                </Text>
+                                <Flex
+                                  className="location-info"
+                                  alignItems={"center"}
+                                  marginTop={"10px"}
+                                >
                                   <Icon fontSize={"30px"}>
                                     <MdLocationPin />
                                   </Icon>
-                                  <Text marginRight={"10px"}>{event.location}</Text>
+                                  <Text marginRight={"10px"}>
+                                    {event.location}
+                                  </Text>
                                   <Icon fontSize={"30px"}>
                                     <MdAttachMoney />
                                   </Icon>
-                                  <Text>{event.price === 0 ? "free" : event.price.toString()}</Text>
+                                  <Text>
+                                    {event.price === 0
+                                      ? "free"
+                                      : event.price.toString()}
+                                  </Text>
                                 </Flex>
                               </Box>
                             </Box>

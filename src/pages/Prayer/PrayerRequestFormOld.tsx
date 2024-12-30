@@ -37,7 +37,7 @@ interface PrayerRequestFormProps {
    };
  */
 export const PrayerRequestForm = (
-  prayerRequestFormProps: PrayerRequestFormProps
+  prayerRequestFormProps: PrayerRequestFormProps,
 ) => {
   const [searchParams, setSearchParams] = useSearchParams();
 

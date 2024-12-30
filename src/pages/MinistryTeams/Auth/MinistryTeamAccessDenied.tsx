@@ -11,7 +11,7 @@ interface MinistryTeamAccessDeniedProps {
 }
 
 export const MinistryTeamAccessDenied = (
-  ministryTeamAccessDeniedProps: MinistryTeamAccessDeniedProps
+  ministryTeamAccessDeniedProps: MinistryTeamAccessDeniedProps,
 ) => {
   return (
     <Container

@@ -25,12 +25,16 @@ const LeadershipBody = () => {
             <div className="description col-lg-6">
               <h4 className="mb-3">Matt Ng</h4>
               <p>
-                Matt was born in San Francisco and raised in a Christian home, coming to saving faith at a young age. He
-                moved to Los Angeles to attend UCLA, and became actively involved at Grace on Campus and Grace Community
-                Church during his college years. A graduate of The Master’s Seminary, he has served as the shepherd of
-                Grace on Campus since 2021. Matt and his wife Kimmie (also from San Francisco and a UCLA alum) are
-                blessed with three boys and a girl. In their spare time, the Ngs enjoy watching the Warriors when they
-                win, visiting coffee shops around town, and smoking meat in their backyard smoker.
+                Matt was born in San Francisco and raised in a Christian home,
+                coming to saving faith at a young age. He moved to Los Angeles
+                to attend UCLA, and became actively involved at Grace on Campus
+                and Grace Community Church during his college years. A graduate
+                of The Master’s Seminary, he has served as the shepherd of Grace
+                on Campus since 2021. Matt and his wife Kimmie (also from San
+                Francisco and a UCLA alum) are blessed with three boys and a
+                girl. In their spare time, the Ngs enjoy watching the Warriors
+                when they win, visiting coffee shops around town, and smoking
+                meat in their backyard smoker.
               </p>
             </div>
           </div>

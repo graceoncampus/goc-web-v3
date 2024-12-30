@@ -16,7 +16,7 @@ type EventTimeOption = {
 };
 
 export const DriverSignupForm = (
-  driverSignupFormProps: DriverSignupFormProps
+  driverSignupFormProps: DriverSignupFormProps,
 ) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -71,7 +71,7 @@ export const DriverSignupForm = (
           required
         />
       );
-    }
+    },
   );
 
   return (

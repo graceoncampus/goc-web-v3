@@ -31,7 +31,10 @@ export const handleSignup = async (signup: Signup) => {
 
 import { confirmSignUp, type ConfirmSignUpInput } from "aws-amplify/auth";
 
-async function handleSignUpConfirmation({ username, confirmationCode }: ConfirmSignUpInput) {
+async function handleSignUpConfirmation({
+  username,
+  confirmationCode,
+}: ConfirmSignUpInput) {
   try {
     const { isSignUpComplete, nextStep } = await confirmSignUp({
       username,

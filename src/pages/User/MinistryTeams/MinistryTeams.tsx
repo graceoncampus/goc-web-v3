@@ -83,7 +83,10 @@ const TeamsBody: React.FC<{
         <ul>
           {MinistryTeams.map((MinistryTeam, index) => (
             <li key={index}>
-              <a href={`#${slugify(MinistryTeam.title)}`} style={{ textDecoration: "none" }}>
+              <a
+                href={`#${slugify(MinistryTeam.title)}`}
+                style={{ textDecoration: "none" }}
+              >
                 {MinistryTeam.title}
               </a>
             </li>
@@ -108,7 +111,10 @@ const TeamsBody: React.FC<{
                 </p>
               </>
             ) : (
-              <p>You need to be logged in to view the leader and contact information.</p>
+              <p>
+                You need to be logged in to view the leader and contact
+                information.
+              </p>
             )}
           </div>
         ))}

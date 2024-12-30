@@ -16,5 +16,7 @@ export const PrayerFormPage = () => {
 const PrayerFormBody = () => {
   const [, setPrayerRequestCompleted] = useState(false);
 
-  return <PrayerRequestForm setPrayerRequestCompleted={setPrayerRequestCompleted} />;
+  return (
+    <PrayerRequestForm setPrayerRequestCompleted={setPrayerRequestCompleted} />
+  );
 };

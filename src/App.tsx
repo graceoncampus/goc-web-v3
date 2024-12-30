@@ -1,12 +1,6 @@
-import ReactDOM from "react-dom";
-// import Viewer from './Components/Viewer/Viewer';
-
 // import { RidesLanding } from "Components/User/Rides/RidesLanding/RidesLanding";
-import { ChakraProvider } from "@chakra-ui/react";
-import { system } from "theme";
-import Navbar from "components/Navbar";
+// import { LoginForm } from "pages/Login/LoginForm";
 import { Provider } from "provider";
-import { LoginForm } from "pages/Login/LoginForm";
 import { Landing } from "pages/User/Landing/Landing";
 import { Landing as MinistryTeamLanding } from "pages/MinistryTeams/Landing/Landing";
 import { NotFound as UserNotFound } from "pages/MinistryTeams/NotFound/NotFound";
@@ -17,8 +11,6 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { PrayerFormPage } from "pages/PrayerFormPage";
 import { SmallGroups } from "pages/User/SmallGroups/SmallGroups";
-// import Viewer from './Components/Viewer/Viewer';
-
 import { StubbedRidesPage } from "pages/MinistryTeams/Rides/StubbedRidesPage";
 import { AboutUs } from "pages/User/AboutUs/AboutUs";
 import { NotFound } from "pages/MinistryTeams/NotFound/NotFound";
@@ -33,13 +25,6 @@ import { Signup } from "components/user/Signup";
 import { MinistryTeams } from "pages/User/MinistryTeams/MinistryTeams";
 import { Leadership } from "components/user/Leadership/Leadership";
 
-/**
- * Curse Amplify's routing - we need to add trailing slashes to our paths for now!
- * src: https://github.com/aws-amplify/amplify-hosting/issues/97
- * Example query param string:
- * [❌] /rides/rider/signup?eventId=EVENT_ID
- * [✔] /rides/rider/signup/?eventId=EVENT_ID
- */
 const App = () => {
   return (
     <React.StrictMode>
@@ -59,7 +44,10 @@ const App = () => {
             <Route path={"/rides/driver/signup"} element={<DriverSignup />} />
             <Route path={"/ministry_teams"} element={<MinistryTeamLanding />} />
             <Route path={"/ministry-teams"} element={<MinistryTeams />} />
-            <Route path={"/ministry_teams/rides"} element={<StubbedRidesPage />} />
+            <Route
+              path={"/ministry_teams/rides"}
+              element={<StubbedRidesPage />}
+            />
             <Route path={"/ministry_teams/*"} element={<NotFound />} />
             <Route path="/prayer/request" element={<PrayerFormPage />} />
             <Route path={"/smallgroups"} element={<SmallGroups />} />

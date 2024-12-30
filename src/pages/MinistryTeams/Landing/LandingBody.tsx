@@ -15,12 +15,15 @@ export const LandingBody = () => {
       <Container className={"text-center body-container"} fluid>
         <Col>
           <Row>
-            <span className={"ministry-teams-landing-header"}>Thank you for serving!</span>
+            <span className={"ministry-teams-landing-header"}>
+              Thank you for serving!
+            </span>
           </Row>
 
           <Row>
             <span className={"ministry-teams-landing-text"}>
-              Please use the links in the navigation bar to access the ministry team pages.
+              Please use the links in the navigation bar to access the ministry
+              team pages.
             </span>
           </Row>
         </Col>

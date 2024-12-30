@@ -1,4 +1,9 @@
-import { confirmSignUp, resendSignUpCode, signUp, type ConfirmSignUpInput } from "aws-amplify/auth";
+import {
+  confirmSignUp,
+  resendSignUpCode,
+  signUp,
+  type ConfirmSignUpInput,
+} from "aws-amplify/auth";
 import { useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +13,10 @@ import { Template } from "layouts/Template";
 import "react-phone-number-input/style.css";
 import PhoneInput, { type Value } from "react-phone-number-input";
 
-async function handleSignUpConfirmation({ username, confirmationCode }: ConfirmSignUpInput) {
+async function handleSignUpConfirmation({
+  username,
+  confirmationCode,
+}: ConfirmSignUpInput) {
   try {
     const { isSignUpComplete, nextStep } = await confirmSignUp({
       username,
@@ -112,7 +120,9 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
             <Row className={"text-start gx-5"}>
               <Col>
                 <Form.Group className={"text-start mb-3"} controlId={"first"}>
-                  <Form.Label className={"signup-form-label mb-1"}>First Name *</Form.Label>
+                  <Form.Label className={"signup-form-label mb-1"}>
+                    First Name *
+                  </Form.Label>
                   <Form.Control
                     placeholder={"Shawn"}
                     onChange={({ target: { value } }) => {
@@ -122,7 +132,9 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                   />
                 </Form.Group>
                 <Form.Group className={"text-start mb-3"} controlId={"last"}>
-                  <Form.Label className={"signup-form-label mb-1"}>Last Name *</Form.Label>
+                  <Form.Label className={"signup-form-label mb-1"}>
+                    Last Name *
+                  </Form.Label>
                   <Form.Control
                     placeholder={"Zhuang"}
                     onChange={({ target: { value } }) => {
@@ -133,7 +145,9 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                 </Form.Group>
 
                 <Form.Group className={"text-start mb-3"} controlId={"email"}>
-                  <Form.Label className={"signup-form-label mb-1"}>Email *</Form.Label>
+                  <Form.Label className={"signup-form-label mb-1"}>
+                    Email *
+                  </Form.Label>
                   <Form.Control
                     type={"email"}
                     placeholder={"shawnzhuang@gmail.com"}
@@ -146,7 +160,9 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                 </Form.Group>
 
                 <Form.Group className={"text-start mb-3"} controlId={"number"}>
-                  <Form.Label className={"signup-form-label mb-1"}>Phone Number *</Form.Label>
+                  <Form.Label className={"signup-form-label mb-1"}>
+                    Phone Number *
+                  </Form.Label>
                   <PhoneInput
                     className={"form-control"}
                     // defaultCountry="us"
@@ -164,8 +180,13 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
               </Col>
 
               <Col>
-                <Form.Group className={"text-start mb-3"} controlId={"password"}>
-                  <Form.Label className={"signup-form-label mb-1"}>Password *</Form.Label>
+                <Form.Group
+                  className={"text-start mb-3"}
+                  controlId={"password"}
+                >
+                  <Form.Label className={"signup-form-label mb-1"}>
+                    Password *
+                  </Form.Label>
                   <Form.Control
                     type={"password"}
                     placeholder={"Password"}
@@ -175,8 +196,13 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                     required
                   />
                 </Form.Group>
-                <Form.Group className={"text-start mb-3"} controlId={"password"}>
-                  <Form.Label className={"signup-form-label mb-1"}>Confirm Password *</Form.Label>
+                <Form.Group
+                  className={"text-start mb-3"}
+                  controlId={"password"}
+                >
+                  <Form.Label className={"signup-form-label mb-1"}>
+                    Confirm Password *
+                  </Form.Label>
                   <Form.Control
                     type={"password"}
                     placeholder={"Password Again"}
@@ -187,7 +213,9 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                   />
                 </Form.Group>
                 <Form.Group className={"text-start mb-3"} controlId={"address"}>
-                  <Form.Label className={"signup-form-label mb-1"}>Dorm/Address *</Form.Label>
+                  <Form.Label className={"signup-form-label mb-1"}>
+                    Dorm/Address *
+                  </Form.Label>
                   <Form.Control
                     placeholder={"424 Veteran Ave"}
                     onChange={({ target: { value } }) => {
@@ -197,7 +225,9 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                   />
                 </Form.Group>
                 <Form.Group className={"text-start mb-3"} controlId={"year"}>
-                  <Form.Label className={"signup-form-label mb-1"}>Graduation Year</Form.Label>
+                  <Form.Label className={"signup-form-label mb-1"}>
+                    Graduation Year
+                  </Form.Label>
                   <select
                     id="year"
                     value={gradYear}
@@ -242,7 +272,9 @@ const ConfirmationForm = ({ username }: ConfirmationFormProps) => {
 
   return (
     <Container className={"text-center login-container"} fluid>
-      <span className={"signup-form-title"}>Check your email for a confirmation code to finish signing up!</span>
+      <span className={"signup-form-title"}>
+        Check your email for a confirmation code to finish signing up!
+      </span>
 
       <Form
         className={"justify-content-center"}
@@ -264,7 +296,9 @@ const ConfirmationForm = ({ username }: ConfirmationFormProps) => {
       >
         <Col className={"mx-auto"} xs={"6"} sm={"5"} md={"4"} lg={"3"} xl={"2"}>
           <Form.Group className={"text-start mb-3"} controlId={"username"}>
-            <Form.Label className={"signup-form-label"}>Confirmation Code</Form.Label>
+            <Form.Label className={"signup-form-label"}>
+              Confirmation Code
+            </Form.Label>
             <Form.Control
               placeholder={"Enter your confirmation code"}
               onChange={({ target: { value } }) => {

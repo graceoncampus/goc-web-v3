@@ -70,7 +70,7 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
           required
         />
       );
-    }
+    },
   );
 
   const eventTimesRadioButtons = eventTimes.map(
@@ -101,7 +101,7 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
           required
         />
       );
-    }
+    },
   );
 
   return (

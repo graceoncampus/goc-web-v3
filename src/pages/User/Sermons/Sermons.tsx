@@ -24,15 +24,19 @@ export const Sermons = () => {
       await (client.graphql({ query: listSermons }) as Promise<any>)
         .then((result) => {
           const sermonData = result.data.listSermons.items.sort(
-            (a: any, b: any) => new Date(b["date"]).getTime() - new Date(a["date"]).getTime(),
+            (a: any, b: any) =>
+              new Date(b["date"]).getTime() - new Date(a["date"]).getTime(),
           );
           setSermons(
             sermonData.map((sermon: any) => {
-              const convertedDate = new Date(sermon["date"]).toLocaleString("en-US", {
-                month: "short",
-                day: "2-digit",
-                year: "numeric",
-              });
+              const convertedDate = new Date(sermon["date"]).toLocaleString(
+                "en-US",
+                {
+                  month: "short",
+                  day: "2-digit",
+                  year: "numeric",
+                },
+              );
               const item = {
                 title: sermon["title"],
                 speaker: sermon["speaker"],
@@ -60,7 +64,11 @@ export const Sermons = () => {
 
   return (
     <Template activeKey={NavbarActiveKey.SERMONS}>
-      <SermonsBody sermons={filteredSermons} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <SermonsBody
+        sermons={filteredSermons}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+      />
     </Template>
   );
 };
@@ -75,9 +83,15 @@ const SermonsBody = (props: SermonBodyProps) => {
   const { sermons, searchQuery, setSearchQuery } = props;
   const PAGE_SIZE = 5;
   const [currentPage, setCurrentPage] = useState(1);
-  const sermonsToDisplay = sermons.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const sermonsToDisplay = sermons.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE,
+  );
   const totalPages = Math.ceil(sermons.length / PAGE_SIZE);
-  const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
+  const pageNumbers = Array.from(
+    { length: totalPages },
+    (_, index) => index + 1,
+  );
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -86,9 +100,15 @@ const SermonsBody = (props: SermonBodyProps) => {
 
   const pagination = (
     <Pagination className="sermons-pagination justify-content-end">
-      <Pagination.Prev onClick={() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))} />
+      <Pagination.Prev
+        onClick={() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))}
+      />
       {pageNumbers.map((number) => {
-        if (number === 1 || number === totalPages || (number >= currentPage - 1 && number <= currentPage + 1)) {
+        if (
+          number === 1 ||
+          number === totalPages ||
+          (number >= currentPage - 1 && number <= currentPage + 1)
+        ) {
           return (
             <Pagination.Item
               key={number}
@@ -104,7 +124,11 @@ const SermonsBody = (props: SermonBodyProps) => {
         }
         return null;
       })}
-      <Pagination.Next onClick={() => setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages))} />
+      <Pagination.Next
+        onClick={() =>
+          setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages))
+        }
+      />
     </Pagination>
   );
 

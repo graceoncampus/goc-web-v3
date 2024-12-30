@@ -32,7 +32,10 @@ export const Header = (headerProps: HeaderProps) => {
     const navbarElement = document.querySelector(".goc-navbar") as HTMLElement;
     if (navbarElement) {
       let navbarHeight = navbarElement.offsetHeight;
-      document.documentElement.style.setProperty("--navbar-height", `${navbarHeight}px`);
+      document.documentElement.style.setProperty(
+        "--navbar-height",
+        `${navbarHeight}px`,
+      );
     }
   }, []);
   // return <Navbar></Navbar>;

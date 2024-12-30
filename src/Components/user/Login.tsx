@@ -1,4 +1,12 @@
-import { Button, Center, Container, Fieldset, Flex, Input, Link } from "@chakra-ui/react";
+import {
+  Button,
+  Center,
+  Container,
+  Fieldset,
+  Flex,
+  Input,
+  Link,
+} from "@chakra-ui/react";
 import { signIn } from "aws-amplify/auth";
 import { Template } from "layouts/Template";
 import { useState } from "react";
@@ -38,11 +46,18 @@ const LoginBody = () => {
           <Fieldset.Root size="lg" maxW="xl">
             <Fieldset.Content>
               <Field label="Username" required>
-                <Input name="username" onChange={(e) => setUsername(e.target.value)} />
+                <Input
+                  name="username"
+                  onChange={(e) => setUsername(e.target.value)}
+                />
               </Field>
 
               <Field label="Password" required>
-                <Input name="password" type="password" onChange={(e) => setPassword(e.target.value)} />
+                <Input
+                  name="password"
+                  type="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </Field>
             </Fieldset.Content>
             <Link alignSelf={"center"} fontSize={"sm"} href={"/reset"}>
@@ -53,7 +68,12 @@ const LoginBody = () => {
             </Button>
             <Flex justifyContent={"center"}>
               <span>Don't have an account?</span>
-              <Link color={"goc.blue"} fontSize={"md"} href={"/signup"} pl={"2"}>
+              <Link
+                color={"goc.blue"}
+                fontSize={"md"}
+                href={"/signup"}
+                pl={"2"}
+              >
                 Sign up
               </Link>
             </Flex>

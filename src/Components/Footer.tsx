@@ -13,7 +13,12 @@ export interface FooterColumnProps {
 function FooterColumn(props: FooterColumnProps) {
   return (
     <Box>
-      <Text fontWeight={"500"} fontSize={"1rem"} lineHeight={"1.5625rem"} color={"#AFAFAF"}>
+      <Text
+        fontWeight={"500"}
+        fontSize={"1rem"}
+        lineHeight={"1.5625rem"}
+        color={"#AFAFAF"}
+      >
         {props.title.toUpperCase()}
       </Text>
       {props.children}
@@ -28,7 +33,11 @@ export default function Footer() {
 
   return (
     <Flex justify={"space-between"} padding={"2rem"} bgColor={"goc.gray"}>
-      <Image height={"94px"} src={"/assets/logo-gcc.png"} alt={"Grace Community Church"} />
+      <Image
+        height={"94px"}
+        src={"/assets/logo-gcc.png"}
+        alt={"Grace Community Church"}
+      />
       <FooterColumn title="GRACE ON CAMPUS">
         <Text>Fridays at 7pm</Text>
         <Text>Broad Art Center 2160E</Text>
@@ -50,10 +59,30 @@ export default function Footer() {
       </FooterColumn>
       <FooterColumn title="FOLLOW US">
         <Flex justify={"space-between"}>
-          <Image height={"35px"} src={"/assets/logo-facebook.png"} alt={"Facebook"} margin={"0 0.5rem"} />
-          <Image height={"35px"} src={"/assets/logo-instagram.png"} alt={"Instagram"} margin={"0 0.5rem"} />
-          <Image height={"35px"} src={"/assets/logo-vimeo.png"} alt={"Vimeo"} margin={"0 0.5rem"} />
-          <Image height={"35px"} src={"/assets/logo-wordpress.png"} alt={"Wordpress"} margin={"0 0.5rem"} />
+          <Image
+            height={"35px"}
+            src={"/assets/logo-facebook.png"}
+            alt={"Facebook"}
+            margin={"0 0.5rem"}
+          />
+          <Image
+            height={"35px"}
+            src={"/assets/logo-instagram.png"}
+            alt={"Instagram"}
+            margin={"0 0.5rem"}
+          />
+          <Image
+            height={"35px"}
+            src={"/assets/logo-vimeo.png"}
+            alt={"Vimeo"}
+            margin={"0 0.5rem"}
+          />
+          <Image
+            height={"35px"}
+            src={"/assets/logo-wordpress.png"}
+            alt={"Wordpress"}
+            margin={"0 0.5rem"}
+          />
         </Flex>
       </FooterColumn>
     </Flex>
