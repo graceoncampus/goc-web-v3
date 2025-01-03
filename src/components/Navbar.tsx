@@ -63,7 +63,7 @@ export default function Navbar(props: NavbarProps) {
   return (
     <Flex m={0} px={2} justify="space-between">
       <Link href="/" style={{ outline: "none" }}>
-        <Center>
+        <Center margin="0.5rem">
           <Image src="/assets/goc-header.svg" alt="Logo" />
         </Center>
       </Link>
