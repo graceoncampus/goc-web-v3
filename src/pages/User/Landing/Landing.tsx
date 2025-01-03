@@ -144,8 +144,18 @@ const LandingBody = observer(() => {
       <Stack
         direction={{ base: "column", lg: "row" }}
         width="100%"
-        gap="4"
-        separator={<StackSeparator />}
+        height="100%"
+        gap="2"
+        alignItems="center"
+        separator={
+          <Box
+            height={{ base: "3px", lg: "180px" }}
+            width={{ base: "80%", lg: "3px" }}
+            bg="gray.300"
+            marginX="auto"
+            marginY="auto"
+          />
+        }
       >
         <InfoBox
           title="New Here?"
