@@ -32,7 +32,12 @@ export default function Footer() {
   };
 
   return (
-    <Flex justify={"space-between"} padding={"2rem"} bgColor={"goc.gray"}>
+    <Flex
+      justify={"space-between"}
+      padding={"2rem"}
+      bgColor={"goc.gray"}
+      as="footer"
+    >
       <Image
         height={"94px"}
         src={"/assets/logo-gcc.png"}

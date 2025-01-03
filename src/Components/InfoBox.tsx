@@ -20,7 +20,7 @@ const InfoBox = ({
     <Box
       flex={1}
       textAlign="center"
-      padding={{ base: "20", lg: "16", xl: "20" }}
+      padding={{ base: "2rem", sm: "3rem", md: "5rem" }}
       bg="transparent"
       borderRadius="md"
       border={showBorder ? { base: "none", md: "2px solid #ddd" } : "none"}

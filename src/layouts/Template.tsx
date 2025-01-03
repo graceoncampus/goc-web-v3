@@ -14,11 +14,9 @@ export interface TemplateProps {
 
 export const Template: React.FC<TemplateProps> = ({ activeKey, children }) => {
   return (
-    <Box>
+    <Box width="100%">
       <Navbar selectedNavItemName={activeKey} />
-
-      <Box>{children}</Box>
-
+      <Box as="main">{children}</Box>
       <Footer />
     </Box>
   );

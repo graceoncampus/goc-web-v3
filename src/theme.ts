@@ -42,7 +42,11 @@ const headingRecipe = defineRecipe({
 
 const config = defineConfig({
   globalCss: {
+    "*, *::before, *::after, *:before, *:after": {
+      boxSizing: "border-box",
+    },
     body: {
+      minHeight: "100vh",
       margin: 0,
       padding: 0,
       outline: 0,
@@ -55,10 +59,6 @@ const config = defineConfig({
       _hover: {
         textDecoration: "none",
       },
-    },
-    code: {
-      fontFamily:
-        "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace",
     },
   },
   theme: {

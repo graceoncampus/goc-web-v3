@@ -5,6 +5,7 @@ interface OutlineButtonProps {
   href?: string;
   children: React.ReactNode;
   icon?: ReactNode;
+  backgroundColor?: string;
   animateIcon?: boolean;
   onWhite?: boolean;
 }
@@ -22,11 +23,15 @@ const OutlineButton = ({
       marginTop="1.5rem"
       asChild
       color={onWhite ? "inherit" : "white"}
-      bg="transparent"
-      borderRadius={onWhite ? "0.5rem" : "1.2rem"}
+      backgroundColor="transparent"
+      borderRadius={onWhite ? ".4rem" : "1.2rem"}
       borderWidth="2px"
       borderColor={onWhite ? "gray.700" : "white"}
-      paddingX={{ sm: "1rem", md: "1rem", lg: "1.2rem", xl: "1.5rem" }}
+      paddingX={
+        onWhite
+          ? { sm: "0.6rem", md: "0.8rem", lg: "1rem", xl: "1.2rem" }
+          : { sm: "1.5rem", md: "1.8rem", lg: "2rem", xl: "2.2rem" }
+      }
       paddingY={{ sm: "0", md: "0", lg: "0.5rem", xl: "1.2rem" }}
       transition={
         animateIcon
@@ -36,7 +41,7 @@ const OutlineButton = ({
       _hover={{
         backgroundColor: onWhite ? "goc.blue" : "white",
         color: onWhite ? "white" : "black",
-        boxShadow: "0 0 8px rgba(0, 0, 0, 0.2)",
+        boxShadow: "0 0 8px rgba(0, 0, 0, .2)",
         borderColor: onWhite ? "goc.blue" : "white",
         ...(icon &&
           animateIcon && {
@@ -53,7 +58,7 @@ const OutlineButton = ({
     >
       <Link
         href={href}
-        fontSize={{ base: "2xs", sm: "xs", md: "sm", lg: "sm", xl: "md" }}
+        fontSize={{ base: "xs", sm: "xs", md: "sm", lg: "sm", xl: "md" }}
         fontWeight="semibold"
         textTransform="uppercase"
         textDecoration="none"
@@ -73,13 +78,13 @@ const OutlineButton = ({
               animateIcon ? "translateY(-50%) translateX(-10px)" : "none"
             }
             opacity={animateIcon ? 0 : 1}
-            transition="opacity 0.5s ease, transform 0.5s ease"
+            transition="opacity .5s ease, transform .5s ease"
             _groupHover={
               animateIcon
                 ? {
                     opacity: 1,
                     transform: "translateY(-50%) translateX(0)",
-                    transition: "opacity 0.5s ease, transform 0.5s ease",
+                    transition: "opacity .5s ease, transform .5s ease",
                   }
                 : undefined
             }

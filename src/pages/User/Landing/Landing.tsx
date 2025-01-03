@@ -22,9 +22,9 @@ import {
   Center,
   Heading,
   Image,
-  StackSeparator,
   Stack,
   Text,
+  Container,
 } from "@chakra-ui/react";
 
 export const Landing = () => {
@@ -75,29 +75,30 @@ const LandingBody = observer(() => {
   ];
 
   return (
-    <Box width="100%">
+    <Container fluid margin="0" padding="0">
       {/* Banner */}
-      <Box position="relative" width="100%" overflow="hidden">
+      <Box position="relative" width="100%" height="100vh" overflow="hidden">
         <Image
           width="100%"
           height="100%"
-          src="/images/landing.jpg"
+          src="/images/landing3.jpg" // Make sure to center the image before changing
           alt="GOC Landing Photo"
-          backgroundSize="cover"
+          objectFit="cover"
+          objectPosition="center"
         />
         {/* Overlay */}
         <Box
           position="absolute"
-          top={0}
-          left={0}
+          top="0"
+          left="0"
           width="100%"
           height="100%"
           bg="black"
-          opacity={0.4}
+          opacity="0.4"
         />
 
         {/* Centered text & button */}
-        <Center
+        <Container
           position="absolute"
           top="50%"
           left="50%"
@@ -105,20 +106,34 @@ const LandingBody = observer(() => {
           width="100%"
           textAlign="center"
           color="white"
-          paddingLeft={4}
-          paddingRight={4}
+          padding="1.5rem"
         >
           <Stack gap="0" align="center">
             <Heading
               as="h1"
               size="h1"
-              fontSize={{ sm: "2xl", md: "4xl", lg: "5xl", xl: "6xl" }}
+              fontSize={{
+                base: "2xl",
+                sm: "2xl",
+                md: "4xl",
+                lg: "5xl",
+                xl: "6xl",
+              }}
               fontWeight="bold"
+              textWrap="pretty"
+              marginBottom="0.5rem"
             >
               Welcome to Grace on Campus!
             </Heading>
             <Text
-              fontSize={{ sm: "sm", md: "md", lg: "lg", xl: "xl" }}
+              fontSize={{
+                base: "xs",
+                sm: "sm",
+                md: "md",
+                lg: "lg",
+                xl: "xl",
+              }}
+              textWrap="pretty"
               marginBottom={{
                 sm: "0",
                 md: "0",
@@ -126,7 +141,7 @@ const LandingBody = observer(() => {
                 xl: "2rem",
               }}
             >
-              Fridays at 7pm, Broad 2160E
+              Fridays at 7pm, Rolfe 1200
             </Text>
             <OutlineButton
               href="https://www.facebook.com/groups/gocatucla"
@@ -137,20 +152,19 @@ const LandingBody = observer(() => {
               JOIN US!
             </OutlineButton>
           </Stack>
-        </Center>
+        </Container>
       </Box>
 
       {/* Info cards */}
       <Stack
         direction={{ base: "column", lg: "row" }}
-        width="100%"
-        height="100%"
+        maxWidth="100%"
         gap="2"
         alignItems="center"
         separator={
           <Box
-            height={{ base: "3px", lg: "180px" }}
-            width={{ base: "80%", lg: "3px" }}
+            height={{ base: "2px", lg: "180px" }}
+            width={{ base: "80%", lg: "2.5px" }}
             bg="gray.300"
             marginX="auto"
             marginY="auto"
@@ -161,39 +175,55 @@ const LandingBody = observer(() => {
           title="New Here?"
           description="Learn more about GOC"
           buttonText="ABOUT US"
-          link="#about-us"
+          link="/aboutus"
         />
         <InfoBox
           title="Small Groups"
           description="Get plugged in!"
           buttonText="LEARN MORE"
-          link="#small-groups"
+          link="/smallgroups"
         />
         <InfoBox
           title="Events"
           description="Join us for upcoming happenings"
           buttonText="LEARN MORE"
-          link="#events"
+          link="/events"
         />
       </Stack>
 
       {/* Ride Signup */}
       <Box
+        maxWidth="100%"
         bg="goc.blue"
-        paddingY={{ sm: "7rem", md: "8rem", lg: "9rem", xl: "10rem" }}
+        paddingX={{
+          base: "2rem",
+          sm: "2rem",
+          md: "3rem",
+          lg: "5rem",
+          xl: "8rem",
+        }}
+        paddingY={{
+          base: "2rem",
+          sm: "7rem",
+          md: "8rem",
+          lg: "9rem",
+          xl: "10rem",
+        }}
         textAlign="center"
         color="white"
       >
         <Heading
-          size={{ sm: "2xl", md: "4xl", lg: "4xl", xl: "5xl" }}
-          marginTop={2}
+          size={{ base: "2xl", sm: "2xl", md: "4xl", lg: "4xl", xl: "6xl" }}
+          marginTop="0.5rem"
+          textWrap="pretty"
         >
           Sign up for a ride to church!
         </Heading>
         <Text
-          fontSize={{ sm: "sm", md: "md", lg: "lg", xl: "lg" }}
-          marginTop={2}
-          marginBottom={4}
+          fontSize={{ base: "sm", sm: "sm", md: "md", lg: "lg", xl: "lg" }}
+          marginTop="0.5rem"
+          marginBottom="1rem"
+          textWrap="pretty"
         >
           Grace Community Church - 9am every Sunday
         </Text>
@@ -202,6 +232,6 @@ const LandingBody = observer(() => {
 
       {/* Events */}
       {/* <EventCardList events={events} /> */}
-    </Box>
+    </Container>
   );
 });
