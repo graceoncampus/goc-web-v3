@@ -20,12 +20,17 @@ const InfoBox = ({
     <Box
       flex={1}
       textAlign="center"
-      padding={{ base: "2rem", sm: "3rem", md: "5rem" }}
+      padding={{ base: "2rem", sm: "3rem", md: "4rem", lg: "5rem", xl: "6rem" }}
       bg="transparent"
       borderRadius="md"
       border={showBorder ? { base: "none", md: "2px solid #ddd" } : "none"}
     >
-      <Heading size={{ base: "h4", lg: "2xl", xl: "h3" }} marginBottom={2}>
+      <Heading
+        size={{ base: "2xl", md: "4xl", lg: "2xl", xl: "4xl" }}
+        lineHeight="1.2"
+        fontWeight="semibold"
+        marginBottom={2}
+      >
         {title}
       </Heading>
       <Text fontSize={{ base: "sm", xl: "md" }}>{description}</Text>

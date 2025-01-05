@@ -9,35 +9,6 @@ const headingRecipe = defineRecipe({
   base: {
     fontFamily: "'Poppins', sans-serif",
   },
-  variants: {
-    size: {
-      h1: {
-        fontSize: "6xl",
-        fontWeight: "bold",
-        lineHeight: "1.2",
-      },
-      h2: {
-        fontSize: "5xl",
-        fontWeight: "semibold",
-        lineHeight: "1.3",
-      },
-      h3: {
-        fontSize: "4xl",
-        fontWeight: "semibold",
-        lineHeight: "1.3",
-      },
-      h4: {
-        fontSize: "3xl",
-        fontWeight: "semibold",
-        lineHeight: "1.3",
-      },
-      h5: {
-        fontSize: "xl",
-        fontWeight: "medium",
-        lineHeight: "1.4",
-      },
-    },
-  },
 });
 
 const config = defineConfig({

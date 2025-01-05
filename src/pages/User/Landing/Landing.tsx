@@ -112,14 +112,14 @@ const LandingBody = observer(() => {
           <Stack gap="0" align="center">
             <Heading
               as="h1"
-              size="h1"
               fontSize={{
                 base: "2xl",
-                sm: "2xl",
+                sm: "3xl",
                 md: "4xl",
                 lg: "5xl",
                 xl: "6xl",
               }}
+              lineHeight="1.2"
               fontWeight="bold"
               textWrap="pretty"
               marginBottom="0.5rem"
@@ -160,7 +160,7 @@ const LandingBody = observer(() => {
       <Stack
         direction={{ base: "column", lg: "row" }}
         maxWidth="100%"
-        gap="2"
+        gap={1}
         alignItems="center"
         separator={
           <Box
@@ -208,7 +208,7 @@ const LandingBody = observer(() => {
           sm: "7rem",
           md: "8rem",
           lg: "9rem",
-          xl: "10rem",
+          xl: "12rem",
         }}
         textAlign="center"
         color="white"

@@ -29,7 +29,7 @@ import {
   DrawerTrigger,
 } from "components/ui/drawer";
 
-import { ColorModeButton } from "./color-mode";
+import { ColorModeButton } from "components/ui/color-mode";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { IoMdMenu } from "react-icons/io";
 import navlinks from "./navlinks";
