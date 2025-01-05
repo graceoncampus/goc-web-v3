@@ -46,18 +46,28 @@ const config = defineConfig({
       boxSizing: "border-box",
     },
     body: {
-      minHeight: "100vh",
       margin: 0,
       padding: 0,
-      outline: 0,
       textRendering: "optimizeSpeed",
       lineHeight: "1.5",
       fontFamily: "'Poppins', sans-serif",
     },
     a: {
-      textDecoration: "none",
+      textDecoration: "none !important",
+      outline: "none !important",
+      _focusVisible: {
+        outline: "2px solid black !important",
+        outlineOffset: "2px !important",
+      },
       _hover: {
-        textDecoration: "none",
+        textDecoration: "none !important",
+      },
+    },
+    button: {
+      outline: "none",
+      _focusVisible: {
+        outline: "2px solid black",
+        outlineOffset: "2px",
       },
     },
   },

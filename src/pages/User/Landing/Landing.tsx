@@ -85,6 +85,7 @@ const LandingBody = observer(() => {
           alt="GOC Landing Photo"
           objectFit="cover"
           objectPosition="center"
+          userSelect={"none"}
         />
         {/* Overlay */}
         <Box
@@ -175,7 +176,7 @@ const LandingBody = observer(() => {
           title="New Here?"
           description="Learn more about GOC"
           buttonText="ABOUT US"
-          link="/aboutus"
+          link="/about"
         />
         <InfoBox
           title="Small Groups"

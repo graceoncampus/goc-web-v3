@@ -1,3 +1,7 @@
+/**
+ * GOC Navigation Bar
+ */
+
 import { useState, useEffect } from "react";
 import {
   Box,
@@ -7,11 +11,11 @@ import {
   Link,
   Button,
   IconButton,
-  Icon,
   MenuRoot,
   MenuTrigger,
   MenuContent,
   MenuItem,
+  Icon,
 } from "@chakra-ui/react";
 import {
   DrawerBackdrop,
@@ -29,6 +33,7 @@ import { ColorModeButton } from "./color-mode";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { IoMdMenu } from "react-icons/io";
 import navlinks from "./navlinks";
+import LoginButton from "./LoginButton";
 
 export enum NavbarActiveKey {
   NONE = "",
@@ -46,7 +51,7 @@ export enum NavbarActiveKey {
   LOGIN = "Login",
 }
 
-interface SubLink {
+interface SublinkProps {
   name: string;
   link: string;
 }
@@ -54,9 +59,10 @@ interface SubLink {
 interface NavItemProps {
   name: string;
   link?: string;
-  sublinks?: SubLink[];
-  color?: string;
+  sublinks?: SublinkProps[];
   selected: boolean;
+  isScrolled: boolean;
+  drawerOpen: boolean;
 }
 
 interface NavbarProps {
@@ -67,21 +73,31 @@ const NavItem = ({
   name,
   link,
   sublinks = [],
-  color,
+  isScrolled,
   selected,
+  drawerOpen,
 }: NavItemProps) => {
+  const fontSize = "1rem";
+  const fontWeight = selected ? "bold" : "normal";
+  const color = isScrolled || drawerOpen ? "black" : "white";
+  const bgHoverColor = isScrolled || drawerOpen ? "goc.gray" : "goc.gray/30";
+
   if (sublinks.length > 0) {
     return (
       <Box position="relative">
         <MenuRoot>
-          <MenuTrigger>
+          <MenuTrigger asChild>
             <Button
               variant="ghost"
               margin={2}
-              fontSize={15}
-              fontWeight={selected ? "bold" : "normal"}
+              fontSize={fontSize}
+              fontWeight={fontWeight}
               color={color}
+              backgroundColor="transparent"
               transition="color 0.3s ease"
+              _hover={{
+                backgroundColor: bgHoverColor,
+              }}
             >
               {name} <RiArrowDropDownLine />
             </Button>
@@ -111,12 +127,20 @@ const NavItem = ({
   }
 
   return (
-    <Button variant="ghost" margin={2} transition="color 0.3s ease">
+    <Button
+      variant="ghost"
+      asChild
+      margin={2}
+      _hover={{
+        backgroundColor: bgHoverColor,
+      }}
+    >
       <Link
         href={link}
-        fontSize={15}
+        fontSize={fontSize}
         color={color}
-        fontWeight={selected ? "bold" : "normal"}
+        transition="color 0.3s ease"
+        fontWeight={fontWeight}
       >
         {name}
       </Link>
@@ -138,11 +162,12 @@ const Navbar = (props: NavbarProps) => {
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   const bgColor = isScrolled ? "white" : "transparent";
-  const textColor = isScrolled ? "black" : "white";
   const shadow = isScrolled ? "md" : "none";
 
   return (
@@ -150,7 +175,7 @@ const Navbar = (props: NavbarProps) => {
       margin="0"
       paddingRight="1.5rem"
       align="center"
-      justify="space-between"
+      justifyContent="space-between"
       position="fixed"
       width="100%"
       zIndex="1000"
@@ -162,7 +187,6 @@ const Navbar = (props: NavbarProps) => {
       {/* Logo */}
       <Link
         href="/"
-        outline="none"
         display={drawerOpen ? "none" : "block"}
         transition="opacity 0.3s ease"
         opacity={drawerOpen ? 0 : 1}
@@ -179,24 +203,14 @@ const Navbar = (props: NavbarProps) => {
             key={navItem.name}
             name={navItem.name}
             link={navItem.link}
-            sublinks={navItem.subLinks}
-            color={textColor}
+            sublinks={navItem.sublinks}
             selected={props.selectedNavItemName === navItem.name}
+            isScrolled={isScrolled}
+            drawerOpen={drawerOpen}
           />
         ))}
-        <Link href={"/login"}>
-          <Button
-            margin="0.5rem"
-            variant="solid"
-            bg="goc.blue"
-            fontWeight="bold"
-            borderRadius="1.2rem"
-          >
-            Log in
-          </Button>
-        </Link>
-        {/* WE CAN ADD THIS LATER */}
-        {/* <ColorModeButton />  */}
+        <LoginButton />
+        {/* <ColorModeButton /> TODO */}
       </Box>
 
       {/* Hamburger Menu */}
@@ -209,11 +223,11 @@ const Navbar = (props: NavbarProps) => {
         <DrawerBackdrop />
         <DrawerTrigger asChild>
           <IconButton
-            variant="ghost"
+            variant={"ghost"}
             display={{ base: drawerOpen ? "none" : "flex", xl: "none" }}
             aria-label="Open Menu"
           >
-            <Icon fontSize="35px">
+            <Icon fontSize={"2.5rem"}>
               <IoMdMenu />
             </Icon>
           </IconButton>
@@ -228,26 +242,16 @@ const Navbar = (props: NavbarProps) => {
                 <NavItem
                   name={navItem.name}
                   link={navItem.link}
-                  sublinks={navItem.subLinks}
-                  color="black"
+                  sublinks={navItem.sublinks}
                   selected={props.selectedNavItemName === navItem.name}
+                  isScrolled={isScrolled}
+                  drawerOpen={drawerOpen}
                 />
               </Box>
             ))}
           </DrawerBody>
           <DrawerFooter>
-            {/* Login Button (make component later) */}
-            <Link href={"/login"}>
-              <Button
-                marginTop="1rem"
-                variant="solid"
-                bg="goc.blue"
-                fontWeight="bold"
-                borderRadius="1.2rem"
-              >
-                Log in
-              </Button>
-            </Link>
+            <LoginButton />
           </DrawerFooter>
           <DrawerCloseTrigger />
         </DrawerContent>

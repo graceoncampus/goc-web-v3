@@ -1,13 +1,13 @@
 const navlinks = [
   {
-    name: "About Us",
+    name: "About", // Dropdown
     sublinks: [
       {
-        name: "About Us",
+        name: "About",
         link: "/about",
       },
       {
-        name: "Our Beliefs",
+        name: "OurBeliefs",
         link: "/ourbeliefs",
       },
     ],
@@ -18,7 +18,7 @@ const navlinks = [
   },
   {
     name: "Resources", // Dropdown
-    subLinks: [
+    sublinks: [
       {
         name: "Sermons",
         link: "/sermons",
@@ -39,7 +39,7 @@ const navlinks = [
   },
   {
     name: "Get involved", // Dropdown
-    subLinks: [
+    sublinks: [
       {
         name: "Small Groups",
         link: "/smallgroups",

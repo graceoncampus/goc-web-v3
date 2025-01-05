@@ -1,23 +1,39 @@
-/**
- * Footer.
- */
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  Grid,
+  GridItem,
+  Image,
+  Input,
+  Link,
+  Text,
+} from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
+import { Field } from "components/ui/field";
+import { Toaster, toaster } from "components/ui/toaster";
+import { FaFacebook, FaWordpress, FaInstagram, FaVimeoV } from "react-icons/fa";
 
-import { Box, Button, Flex, Image, Input, Text } from "@chakra-ui/react";
-import React from "react";
-
-export interface FooterColumnProps {
+interface FooterColumnProps {
   title: string;
   children?: React.ReactNode | null;
+}
+
+interface FormValues {
+  name: string;
+  email: string;
 }
 
 function FooterColumn(props: FooterColumnProps) {
   return (
     <Box>
       <Text
-        fontWeight={"500"}
+        fontWeight={"medium"}
         fontSize={"1rem"}
         lineHeight={"1.5625rem"}
         color={"#AFAFAF"}
+        marginBottom={2}
       >
         {props.title.toUpperCase()}
       </Text>
@@ -27,69 +43,187 @@ function FooterColumn(props: FooterColumnProps) {
 }
 
 export default function Footer() {
-  const handleFormSubmit = async (event: any) => {
-    event.preventDefault();
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>();
+
+  const onSubmit = handleSubmit((data) => {
+    console.log(data);
+
+    toaster.create({
+      description: "Submitted!",
+      type: "success",
+    });
+  });
 
   return (
-    <Flex
-      justify={"space-between"}
-      padding={"2rem"}
-      bgColor={"goc.gray"}
-      as="footer"
-    >
-      <Image
-        height={"94px"}
-        src={"/assets/logo-gcc.png"}
-        alt={"Grace Community Church"}
-      />
-      <FooterColumn title="GRACE ON CAMPUS">
-        <Text>Fridays at 7pm</Text>
-        <Text>Broad Art Center 2160E</Text>
-      </FooterColumn>
-      <FooterColumn title="Contact Us">
-        <Text>Phillip Ko</Text>
-        <Text>(510) 612-7862</Text>
-        <Text>gocateam@gmail.com</Text>
-      </FooterColumn>
-      <FooterColumn title="NEW TO GOC?">
-        <Text>We'd love to get in touch with you!</Text>
-        <Text fontWeight={"bold"}>Name: </Text>
-        <Input />
-        <Text fontWeight={"bold"}>Email: </Text>
-        <Input />
-        <Button marginTop={"4px"} background={"goc.blue"}>
-          Submit
-        </Button>
-      </FooterColumn>
-      <FooterColumn title="FOLLOW US">
-        <Flex justify={"space-between"}>
-          <Image
-            height={"35px"}
-            src={"/assets/logo-facebook.png"}
-            alt={"Facebook"}
-            margin={"0 0.5rem"}
-          />
-          <Image
-            height={"35px"}
-            src={"/assets/logo-instagram.png"}
-            alt={"Instagram"}
-            margin={"0 0.5rem"}
-          />
-          <Image
-            height={"35px"}
-            src={"/assets/logo-vimeo.png"}
-            alt={"Vimeo"}
-            margin={"0 0.5rem"}
-          />
-          <Image
-            height={"35px"}
-            src={"/assets/logo-wordpress.png"}
-            alt={"Wordpress"}
-            margin={"0 0.5rem"}
-          />
-        </Flex>
-      </FooterColumn>
-    </Flex>
+    <Box as="footer" bgColor={"goc.gray"} padding={"3.5rem"} maxWidth={"100%"}>
+      <Toaster />
+      <Grid
+        templateColumns={{
+          base: "1fr",
+          md: "repeat(2, 1fr)",
+          xl: "repeat(3, 1fr) 1.7fr 1fr",
+        }}
+        templateRows="auto"
+        gap={12}
+        alignItems={"start"}
+      >
+        {/* Logo */}
+        <GridItem
+          gridColumn={{ base: "1 / -1", md: "1 / 2", xl: "1 / 2" }}
+          gridRow="1"
+        >
+          <Container
+            width={"min(100%, 20rem)"}
+            maxHeight={"5.875"}
+            paddingLeft={"0"}
+            paddingRight={"1rem"}
+            margin={"0"}
+          >
+            <Image
+              width={"100%"}
+              height={"auto"}
+              src={"/assets/logo-gcc.png"}
+              alt={"Grace Community Church"}
+              objectFit="cover"
+              objectPosition="center"
+            />
+          </Container>
+        </GridItem>
+
+        {/* Grace on Campus */}
+        <GridItem
+          gridColumn={{ base: "1 / -1", md: "2 / 3", xl: "2 / 3" }}
+          gridRow={{ base: "2", md: "1", xl: "1" }}
+        >
+          <FooterColumn title="GRACE ON CAMPUS">
+            <Text>Fridays at 7pm</Text>
+            <Text>Broad Art Center 2160E</Text>
+          </FooterColumn>
+        </GridItem>
+
+        {/* Contact Us */}
+        <GridItem
+          gridColumn={{ base: "1 / -1", md: "1 / 2", xl: "3 / 4" }}
+          gridRow={{ base: "3", md: "2", xl: "1" }}
+        >
+          <FooterColumn title="CONTACT US">
+            <Text>Phillip Ko</Text>
+            <Text>(510) 612-7862</Text>
+            <Text>gocateam@gmail.com</Text>
+          </FooterColumn>
+        </GridItem>
+
+        {/* Forms */}
+        <GridItem
+          gridColumn={{ base: "1 / -1", md: "2 / 3", xl: "4 / 5" }}
+          gridRow={{ base: "4", md: "2 / 4", xl: "1" }}
+        >
+          <FooterColumn title="NEW TO GOC?">
+            <Text marginBottom={2}>We'd love to get in touch with you!</Text>
+            <form onSubmit={onSubmit}>
+              <Box marginBottom={2}>
+                <Field
+                  label={
+                    <Text fontSize={"1rem"} fontWeight={"semibold"}>
+                      Name:
+                    </Text>
+                  }
+                  errorText={errors.name?.message}
+                  invalid={!!errors.name}
+                >
+                  <Input
+                    size="sm"
+                    autoComplete="name"
+                    {...register("name", { required: "Name is required" })}
+                  />
+                </Field>
+              </Box>
+              <Box marginBottom={2}>
+                <Field
+                  label={
+                    <Text fontSize={"1rem"} fontWeight={"semibold"}>
+                      Email:
+                    </Text>
+                  }
+                  errorText={errors.email?.message}
+                  invalid={!!errors.email}
+                >
+                  <Input
+                    size="sm"
+                    autoComplete="email"
+                    {...register("email", { required: "Email is required" })}
+                  />
+                </Field>
+              </Box>
+              <Button
+                variant={"plain"}
+                type={"submit"}
+                background={"goc.blue"}
+                color={"white"}
+                size={"sm"}
+                width={"100%"}
+              >
+                Submit
+              </Button>
+            </form>
+          </FooterColumn>
+        </GridItem>
+
+        {/* Follow Us */}
+        <GridItem
+          gridColumn={{ base: "1 / -1", md: "1 / 2", xl: "5 / 6" }}
+          gridRow={{ base: "5", md: "3", xl: "1" }}
+        >
+          <FooterColumn title="FOLLOW US">
+            <Flex justify={"start"} align="center" flexDirection="row" gap={4}>
+              <Link
+                href="https://www.facebook.com/GOCatUCLA"
+                target="_blank"
+                rel="noopener noreferrer"
+                fontSize="4xl"
+                _hover={{ color: "#316FF6", transform: "scale(1.05)" }}
+                transition="all .2s ease-in-out"
+              >
+                <FaFacebook />
+              </Link>
+              <Link
+                href="https://www.instagram.com/goc_ucla/"
+                target="_blank"
+                rel="noopener noreferrer"
+                fontSize="4xl"
+                _hover={{ color: "#d62976", transform: "scale(1.05)" }}
+                transition="all .2s ease-in-out"
+              >
+                <FaInstagram />
+              </Link>
+              <Link
+                href="https://vimeo.com/user32835937"
+                target="_blank"
+                rel="noopener noreferrer"
+                fontSize="4xl"
+                _hover={{ color: "#86c9ef", transform: "scale(1.05)" }}
+                transition="all .2s ease-in-out"
+              >
+                <FaVimeoV />
+              </Link>
+              <Link
+                href="https://graceoncampusucla.wordpress.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                fontSize="4xl"
+                _hover={{ color: "#00749c", transform: "scale(1.05)" }}
+                transition="all .2s ease-in-out"
+              >
+                <FaWordpress />
+              </Link>
+            </Flex>
+          </FooterColumn>
+        </GridItem>
+      </Grid>
+    </Box>
   );
 }
