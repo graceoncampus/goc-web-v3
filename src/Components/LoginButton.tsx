@@ -13,12 +13,12 @@ const LoginButton = () => {
       boxShadow="none"
       backgroundColor="goc.blue"
       borderRadius="1.2rem"
-      transition="background .4s ease, box-shadow .4s ease"
+      transition="background .2s ease, box-shadow .2s ease"
       _hover={{
         textDecoration: "none",
         boxShadow: "md",
         backgroundColor: "rgb(48, 90, 175)", // slightly darker blue than goc.blue
-        transition: "background .3s ease, box-shadow .3s ease",
+        transition: "background 50ms ease, box-shadow 50ms ease",
       }}
       _focusVisible={{
         outline: "2px solid black",

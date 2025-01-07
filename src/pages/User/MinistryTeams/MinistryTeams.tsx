@@ -78,11 +78,6 @@ const TeamsBody: React.FC<{
 }> = ({ MinistryTeams, isUserLoggedIn }) => {
   return (
     <div className={"text-center"}>
-      <h1 className="Teams">
-        {/* TODO: Replace with page header component (future work)*/}
-        <strong>Ministry Teams</strong>
-      </h1>
-
       <div className="col-md-6 mx-auto px-3 py-4 my-2 order-md-1 left-align">
         <h2>List of Ministry Teams</h2>
         <hr />

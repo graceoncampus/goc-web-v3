@@ -19,7 +19,6 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "store/StoreContext";
 import {
   Box,
-  Center,
   Heading,
   Image,
   Stack,

@@ -1,6 +1,14 @@
-import { Button } from "react-bootstrap";
-import { NavbarActiveKey } from "components/Navbar";
+import {
+  Box,
+  Button,
+  Heading,
+  Link,
+  Stack,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { BannerTemplate } from "layouts/BannerTemplate";
+import { NavbarActiveKey } from "components/Navbar";
 
 export const SmallGroups = () => {
   return (
@@ -18,10 +26,29 @@ export const SmallGroups = () => {
 
 const SmallGroupsBody = () => {
   return (
-    <div className={"text-center"}>
-      <div className="sg-container">
-        <div className="upper-body">
-          <h2>What are Small Groups?</h2>
+    <VStack
+      gap={8}
+      textAlign="center"
+      maxWidth="800px"
+      marginLeft="auto"
+      marginRight="auto"
+      paddingTop="40px"
+      paddingBottom="40px"
+      paddingLeft="16px"
+      paddingRight="16px"
+    >
+      {/* What are Small Groups? */}
+      <Box>
+        <Heading
+          as="h2"
+          fontSize="2xl"
+          fontWeight="bold"
+          marginBottom="16px"
+          textAlign="center"
+        >
+          What are Small Groups?
+        </Heading>
+        <Text fontSize="lg" lineHeight="1.8" textAlign="left" textWrap="pretty">
           Small groups are the backbone of our discipleship ministry. Each small
           group focuses on Bible study, prayer, fellowship, and accountability.
           In these smaller, more intimate groups, we have the opportunity to
@@ -29,30 +56,70 @@ const SmallGroupsBody = () => {
           for each other. Each small group has a leader who will minister to
           your spiritual needs, counsel you through life’s tough issues, and
           spur you on in your walk with the Lord.
-        </div>
-        <div className="lower-body">
-          <h2>I want to join a small group!</h2>
+        </Text>
+      </Box>
+
+      {/* Join a Small Group! */}
+      <Box>
+        <Heading
+          as="h2"
+          fontSize="2xl"
+          fontWeight="bold"
+          marginBottom="16px"
+          textAlign="center"
+        >
+          I want to join a small group!
+        </Heading>
+        <Text
+          fontSize="lg"
+          lineHeight="1.8"
+          marginBottom="24px"
+          textAlign="center"
+          textWrap="pretty"
+        >
           Awesome! Men's and women's small group leaders are listed in the
           following links, along with a quick intro so you can get to know them
           better.
-        </div>
-        <Button
-          variant="dark"
-          className="button"
-          href="/docs/sgl-men.pdf"
-          target="_blank"
+        </Text>
+        <Stack
+          direction={["column", "row"]}
+          gap={4}
+          marginTop={"3rem"}
+          justifyContent="center"
+          alignItems="center"
         >
-          Men's Small Group Leaders
-        </Button>
-        <Button
-          className="button"
-          variant="dark"
-          href="/docs/sgl-women.pdf"
-          target="_blank"
-        >
-          Women's Small Group Leaders
-        </Button>
-      </div>
-    </div>
+          <Button
+            size="lg"
+            backgroundColor="blue.500"
+            paddingTop="12px"
+            paddingBottom="12px"
+            paddingLeft="24px"
+            paddingRight="24px"
+            borderRadius="8px"
+            _hover={{ backgroundColor: "blue.600" }}
+            _focus={{ boxShadow: "outline" }}
+          >
+            <Link href="/" color="white" fontWeight="bold">
+              Men's Small Group Leaders
+            </Link>
+          </Button>
+          <Button
+            size="lg"
+            backgroundColor="blue.500"
+            paddingTop="12px"
+            paddingBottom="12px"
+            paddingLeft="24px"
+            paddingRight="24px"
+            borderRadius="8px"
+            _hover={{ backgroundColor: "blue.600" }}
+            _focus={{ boxShadow: "outline" }}
+          >
+            <Link href="/" color="white" fontWeight="bold">
+              Women's Small Group Leaders
+            </Link>
+          </Button>
+        </Stack>
+      </Box>
+    </VStack>
   );
 };

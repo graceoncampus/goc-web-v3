@@ -3,7 +3,6 @@
  */
 
 import {
-  Box,
   Button,
   Center,
   Fieldset,
@@ -12,12 +11,13 @@ import {
   Stack,
   Textarea,
 } from "@chakra-ui/react";
+import GOCButton from "components/GOCButton";
 import { Field } from "components/ui/field";
 import {
   NativeSelectField,
   NativeSelectRoot,
 } from "components/ui/native-select";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 //  import { CreatePrayerInput } from 'Api';
 
@@ -80,10 +80,12 @@ export const PrayerRequestForm = (
   return (
     <Center width={"100%"} margin={"20px"}>
       <Fieldset.Root maxWidth={"500px"}>
-        <Heading>How can we be praying for you?</Heading>
-        <form className="text-center" onSubmit={handleFormSubmit}>
+        <Heading fontSize={"xl"} marginBottom={"1rem"}>
+          How can we be praying for you?
+        </Heading>
+        <form onSubmit={handleFormSubmit}>
           <Stack textAlign="start">
-            <Field label="Name">
+            <Field label="Name" fontSize="1rem">
               <Input
                 id="prayerName"
                 placeholder="Enter your name"
@@ -106,19 +108,14 @@ export const PrayerRequestForm = (
                 placeholder="Philippians 4:6-7"
                 as="textarea"
                 onChange={({ target: { value } }) => setPrayerComments(value)}
+                height="10rem"
               />
             </Field>
           </Stack>
 
-          <Button
-            backgroundColor={"goc.blue"}
-            marginTop={"20px"}
-            variant="solid"
-            type="submit"
-            colorScheme="teal"
-          >
-            <strong>SUBMIT</strong>
-          </Button>
+          <GOCButton type="submit" buttonProps={{ marginTop: "20px" }}>
+            SUBMIT
+          </GOCButton>
         </form>
       </Fieldset.Root>
     </Center>
