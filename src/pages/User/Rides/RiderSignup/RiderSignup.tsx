@@ -2,9 +2,9 @@
  * Rider signup higher order conditional rendering component.
  */
 
-import React, { useState } from "react";
+import { useState } from "react";
 
-import { NavbarActiveKey } from "pages/User/Header/Header";
+import { NavbarActiveKey } from "components/Navbar";
 import { RiderSignupThankYou } from "./RiderSignupThankYou";
 import { RiderSignupForm } from "./RiderSignupForm";
 import { Template } from "layouts/Template";

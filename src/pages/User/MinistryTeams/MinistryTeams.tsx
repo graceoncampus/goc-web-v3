@@ -1,6 +1,6 @@
-import { NavbarActiveKey } from "pages/User/Header/Header";
-import { Template } from "layouts/Template";
-import React, { useEffect, useState } from "react";
+import { NavbarActiveKey } from "components/Navbar";
+import { useEffect, useState } from "react";
+import { BannerTemplate } from "layouts/BannerTemplate";
 
 const mockTeams: MinistryTeam[] = [
   {
@@ -42,9 +42,15 @@ export const MinistryTeams: React.FC = () => {
 
   // TODO: Get rid of active key eventually? Suggested by Sam
   return (
-    <Template activeKey={NavbarActiveKey.MINISTRY_TEAMS}>
+    <BannerTemplate
+      title="Ministry Teams"
+      activeKey={NavbarActiveKey.MINISTRY_TEAMS}
+      imageSrc="/images/landing3.jpg"
+      alt="Ministry Teams page banner"
+      overlay
+    >
       <TeamsBody MinistryTeams={mockTeams} isUserLoggedIn={isUserLoggedIn} />
-    </Template>
+    </BannerTemplate>
   );
 };
 

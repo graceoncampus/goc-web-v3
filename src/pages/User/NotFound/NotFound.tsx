@@ -6,7 +6,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import { Template } from "layouts/Template";
-import { NavbarActiveKey } from "pages/User/Header/Header";
+import { NavbarActiveKey } from "components/Navbar";
 
 const NotFoundBody = () => (
   <div>

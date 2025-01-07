@@ -6,11 +6,11 @@ const LoginButton = () => {
       asChild
       position="relative"
       outline="none"
+      border="none"
       margin=".5rem"
       color="white"
       fontWeight="bold"
       boxShadow="none"
-      border="none"
       backgroundColor="goc.blue"
       borderRadius="1.2rem"
       transition="background .4s ease, box-shadow .4s ease"

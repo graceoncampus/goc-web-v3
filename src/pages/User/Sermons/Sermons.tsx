@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Image, ListGroup, Pagination } from "react-bootstrap";
+import { ListGroup, Pagination } from "react-bootstrap";
 import { listSermons } from "graphql/queries";
 import { generateClient } from "aws-amplify/api";
-
-import { Template } from "layouts/Template";
-import { NavbarActiveKey } from "../Header/Header";
+import { NavbarActiveKey } from "components/Navbar";
+import { BannerTemplate } from "layouts/BannerTemplate";
 const client = generateClient();
 
 export interface SermonItem {
@@ -63,13 +62,19 @@ export const Sermons = () => {
   );
 
   return (
-    <Template activeKey={NavbarActiveKey.SERMONS}>
+    <BannerTemplate
+      title="Sermons"
+      activeKey={NavbarActiveKey.SERMONS}
+      imageSrc="/images/landing3.jpg"
+      alt="Sermons page banner"
+      overlay
+    >
       <SermonsBody
         sermons={filteredSermons}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
-    </Template>
+    </BannerTemplate>
   );
 };
 
@@ -134,10 +139,6 @@ const SermonsBody = (props: SermonBodyProps) => {
 
   return (
     <div className="text-center">
-      <h1 className="sermons">
-        {" "}
-        <strong> Sermons </strong>{" "}
-      </h1>
       <div className="sermons-body-container">
         <div className="d-flex justify-content-between align-items-centerd">
           <div className="sermons-search-container">

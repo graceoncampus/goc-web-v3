@@ -14,7 +14,7 @@ import { SmallGroups } from "pages/User/SmallGroups/SmallGroups";
 import { StubbedRidesPage } from "pages/MinistryTeams/Rides/StubbedRidesPage";
 import { AboutUs } from "pages/User/AboutUs/AboutUs";
 import { NotFound } from "pages/MinistryTeams/NotFound/NotFound";
-import { StudyGuideBody } from "pages/User/Resources/JohnStudyGuide";
+import { StudyGuide } from "pages/User/Resources/JohnStudyGuide";
 import { Sermons } from "pages/User/Sermons/Sermons";
 import { Login } from "components/user/Login";
 import { RidesLanding } from "pages/User/Rides/RidesLanding/RidesLanding";
@@ -51,7 +51,7 @@ const App = () => {
             <Route path={"/ministry_teams/*"} element={<NotFound />} />
             <Route path="/prayer/request" element={<PrayerFormPage />} />
             <Route path={"/smallgroups"} element={<SmallGroups />} />
-            <Route path={"/study_guide"} element={<StudyGuideBody />} />
+            <Route path={"/study_guide"} element={<StudyGuide />} />
             <Route path={"/login"} element={<Login />} />
             <Route path={"/reset"} element={<Reset />} />
             <Route path={"/signup"} element={<Signup />} />

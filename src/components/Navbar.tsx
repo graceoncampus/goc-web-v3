@@ -29,7 +29,7 @@ import {
   DrawerTrigger,
 } from "components/ui/drawer";
 
-import { ColorModeButton } from "components/ui/color-mode";
+// import { ColorModeButton } from "components/ui/color-mode";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { IoMdMenu } from "react-icons/io";
 import navlinks from "./navlinks";
@@ -46,7 +46,7 @@ export enum NavbarActiveKey {
   MINISTRY_TEAMS = "Ministry Teams",
   EVENTS = "Events",
   RIDES = "Rides",
-  PRAYER = "Prayer",
+  PRAYER = "Prayer Request",
   LEADERSHIP = "Leadership",
   LOGIN = "Login",
 }
@@ -169,6 +169,7 @@ const Navbar = (props: NavbarProps) => {
 
   const bgColor = isScrolled ? "white" : "transparent";
   const shadow = isScrolled ? "md" : "none";
+  const iconColor = isScrolled ? "black" : "goc.gray";
 
   return (
     <Flex
@@ -181,16 +182,11 @@ const Navbar = (props: NavbarProps) => {
       zIndex="1000"
       backgroundColor={bgColor}
       boxShadow={shadow}
-      transition="background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease"
+      transition="background-color .3s ease, box-shadow .3s ease, color .3s ease"
       as="nav"
     >
       {/* Logo */}
-      <Link
-        href="/"
-        display={drawerOpen ? "none" : "block"}
-        transition="opacity 0.3s ease"
-        opacity={drawerOpen ? 0 : 1}
-      >
+      <Link href="/">
         <Center margin="1rem">
           <Image src="/assets/goc-header.svg" alt="Logo" />
         </Center>
@@ -222,12 +218,21 @@ const Navbar = (props: NavbarProps) => {
       >
         <DrawerBackdrop />
         <DrawerTrigger asChild>
+          {/* TODO: There's an issue here for mobile, but updating react would resolve it */}
           <IconButton
             variant={"ghost"}
             display={{ base: drawerOpen ? "none" : "flex", xl: "none" }}
             aria-label="Open Menu"
+            backgroundColor={"transparent"}
+            _hover={{
+              backgroundColor: "goc.gray/30",
+            }}
           >
-            <Icon fontSize={"2.5rem"}>
+            <Icon
+              color={iconColor}
+              fontSize={"2.5rem"}
+              transition={"color .3s ease"}
+            >
               <IoMdMenu />
             </Icon>
           </IconButton>

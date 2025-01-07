@@ -5,7 +5,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { NavbarActiveKey } from "../Header/Header";
+import { NavbarActiveKey } from "components/Navbar";
 import { Template } from "layouts/Template";
 import {
   EventCardList,

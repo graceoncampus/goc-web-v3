@@ -5,9 +5,7 @@
 import React, { useState } from "react";
 import { DriverSignupThankYou } from "./DriverSignupThankYou";
 import { DriverSignupForm } from "./DriverSignupForm";
-
-import { NavbarActiveKey } from "../../Header/Header";
-
+import { NavbarActiveKey } from "components/Navbar";
 import { Template } from "layouts/Template";
 
 export const DriverSignup = () => {

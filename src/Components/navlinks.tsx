@@ -7,7 +7,7 @@ const navlinks = [
         link: "/about",
       },
       {
-        name: "OurBeliefs",
+        name: "Our Beliefs",
         link: "/ourbeliefs",
       },
     ],

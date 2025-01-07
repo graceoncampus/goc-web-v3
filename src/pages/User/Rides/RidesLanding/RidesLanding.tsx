@@ -1,6 +1,5 @@
 import { CreateCarInput, CreateRideInput, Ride } from "Api";
-import { NavbarActiveKey } from "pages/User/Header/Header";
-import { Template } from "layouts/Template";
+import { NavbarActiveKey } from "components/Navbar";
 import { generateClient } from "aws-amplify/api";
 import { JWT } from "google-auth-library";
 import { GoogleSpreadsheet } from "google-spreadsheet"; // modify gaxios.js in node_modules line 270: new url_1.URL(url) --> new URL(url)
@@ -8,6 +7,7 @@ import { createRide, deleteRide } from "graphql/mutations";
 import { listRides } from "graphql/queries";
 import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
+import { BannerTemplate } from "layouts/BannerTemplate";
 
 const client = generateClient();
 
@@ -158,9 +158,15 @@ export const RidesLanding = () => {
 
   console.log("ride:", ride);
   return (
-    <Template activeKey={NavbarActiveKey.RIDES}>
+    <BannerTemplate
+      title="Rides"
+      activeKey={NavbarActiveKey.RIDES}
+      imageSrc="/images/landing3.jpg"
+      alt="Rides page banner"
+      overlay
+    >
       <RidesLandingBody rides={ride} />
-    </Template>
+    </BannerTemplate>
   );
 };
 

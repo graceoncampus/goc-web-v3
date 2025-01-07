@@ -1,27 +1,24 @@
-import { Template } from "layouts/Template";
-import React from "react";
 import { Button } from "react-bootstrap";
 import { NavbarActiveKey } from "components/Navbar";
-
-interface TemplateProps {
-  activeKey: NavbarActiveKey;
-  body: React.ReactNode;
-}
+import { BannerTemplate } from "layouts/BannerTemplate";
 
 export const SmallGroups = () => {
   return (
-    <Template activeKey={NavbarActiveKey.SMALL_GROUPS}>
+    <BannerTemplate
+      title="Small Groups"
+      activeKey={NavbarActiveKey.SMALL_GROUPS}
+      imageSrc="/images/landing3.jpg"
+      alt="Small Groups page banner"
+      overlay
+    >
       <SmallGroupsBody />
-    </Template>
+    </BannerTemplate>
   );
 };
 
 const SmallGroupsBody = () => {
   return (
     <div className={"text-center"}>
-      <div className="overlay" id="small-groups">
-        <h1>Small Groups</h1>
-      </div>
       <div className="sg-container">
         <div className="upper-body">
           <h2>What are Small Groups?</h2>

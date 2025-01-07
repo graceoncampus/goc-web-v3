@@ -1,15 +1,21 @@
-import { Template } from "layouts/Template";
-import { NavbarActiveKey } from "../Header/Header";
+import { NavbarActiveKey } from "components/Navbar";
+import { BannerTemplate } from "layouts/BannerTemplate";
 
 export const StudyGuide = () => {
   return (
-    <Template activeKey={NavbarActiveKey.ABOUT}>
+    <BannerTemplate
+      title="Study Guide"
+      activeKey={NavbarActiveKey.STUDY_GUIDE}
+      imageSrc="/images/landing3.jpg"
+      alt="Study Guide page banner"
+      overlay
+    >
       <StudyGuideBody />
-    </Template>
+    </BannerTemplate>
   );
 };
 
-export const StudyGuideBody = () => {
+const StudyGuideBody = () => {
   return (
     <div className="study-guide-body">
       <div className="study-guide-header">
@@ -148,5 +154,3 @@ export const StudyGuideBody = () => {
     </div>
   );
 };
-
-export default StudyGuide;

@@ -3,7 +3,6 @@
  */
 
 import React from "react";
-import { NavbarActiveKey, Header } from "../Header/Header";
 import Footer from "components/Footer";
 import { Container } from "react-bootstrap";
 import Navbar from "components/Navbar";
