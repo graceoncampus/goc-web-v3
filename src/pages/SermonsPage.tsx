@@ -143,10 +143,10 @@ const SermonsBody = (props: SermonBodyProps) => {
               <Input
                 value={searchQuery}
                 onChange={handleSearch}
-                width={"500px"}
+                width={"400px"}
                 placeholder="search by title, speaker, or passage"
-                rounded={"lg"}
-                borderColor={"lightgray"}
+                rounded={"2xl"}
+                borderColor={"black"}
               />
             </InputGroup>
           </Box>
