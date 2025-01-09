@@ -4,6 +4,23 @@ import { listSermons } from "graphql/queries";
 import { generateClient } from "aws-amplify/api";
 import { NavbarActiveKey } from "components/Navbar";
 import { BannerTemplate } from "layouts/BannerTemplate";
+import {
+  Box,
+  Center,
+  Flex,
+  Heading,
+  HStack,
+  Input,
+  Text,
+} from "@chakra-ui/react";
+import {
+  PaginationRoot,
+  PaginationNextTrigger,
+  PaginationItems,
+  PaginationPrevTrigger,
+} from "components/ui/pagination";
+import { InputGroup } from "components/ui/input-group";
+import { LuSearch } from "react-icons/lu";
 const client = generateClient();
 
 export interface SermonItem {
@@ -14,7 +31,7 @@ export interface SermonItem {
   URI: string;
 }
 
-export const Sermons = () => {
+export const SermonsPage = () => {
   const [sermons, setSermons] = useState<SermonItem[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -104,54 +121,38 @@ const SermonsBody = (props: SermonBodyProps) => {
   };
 
   const pagination = (
-    <Pagination className="sermons-pagination justify-content-end">
-      <Pagination.Prev
-        onClick={() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))}
-      />
-      {pageNumbers.map((number) => {
-        if (
-          number === 1 ||
-          number === totalPages ||
-          (number >= currentPage - 1 && number <= currentPage + 1)
-        ) {
-          return (
-            <Pagination.Item
-              key={number}
-              active={number === currentPage}
-              onClick={() => setCurrentPage(number)}
-              className="sermons-pagination-item"
-            >
-              {number}
-            </Pagination.Item>
-          );
-        } else if (number === currentPage - 2 || number === currentPage + 2) {
-          return <Pagination.Ellipsis key={number} />;
-        }
-        return null;
-      })}
-      <Pagination.Next
-        onClick={() =>
-          setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages))
-        }
-      />
-    </Pagination>
+    <PaginationRoot
+      count={totalPages}
+      page={currentPage}
+      onPageChange={(e) => setCurrentPage(e.page)}
+    >
+      <HStack>
+        <PaginationPrevTrigger />
+        <PaginationItems />
+        <PaginationNextTrigger />
+      </HStack>
+    </PaginationRoot>
   );
 
   return (
-    <div className="text-center">
-      <div className="sermons-body-container">
-        <div className="d-flex justify-content-between align-items-centerd">
-          <div className="sermons-search-container">
-            <input
-              className="sermons-search"
-              placeholder="search by title, speaker, or passage"
-              value={searchQuery}
-              onChange={handleSearch}
-            />
-          </div>
+    <Center>
+      <Box width={"100%"}>
+        <Flex justifyContent={"space-between"}>
+          <Box>
+            <InputGroup flex="1" startElement={<LuSearch />}>
+              <Input
+                value={searchQuery}
+                onChange={handleSearch}
+                width={"500px"}
+                placeholder="search by title, speaker, or passage"
+                rounded={"lg"}
+                borderColor={"lightgray"}
+              />
+            </InputGroup>
+          </Box>
           {pagination}
-        </div>
-        <ListGroup className="sermons-container">
+        </Flex>
+        <ListGroup>
           {sermonsToDisplay.map((sermon) => (
             <SermonItem
               key={sermon.title}
@@ -163,24 +164,27 @@ const SermonsBody = (props: SermonBodyProps) => {
             />
           ))}
         </ListGroup>
-        <div className="sermons-pagination-container">{pagination}</div>
-      </div>
-    </div>
+        <Flex justifyContent="flex-end">{pagination}</Flex>
+      </Box>
+    </Center>
   );
 };
 
 const SermonItem = (props: SermonItem) => {
   return (
-    <ListGroup.Item className="sermon-item mt-2 border rounded">
-      <div className="sermon-item-container">
-        <div className="sermon-info">
-          <h2 className="sermon-title">{props.title}</h2>
-          <div>
-            {props.speaker} | {props.passage} | {props.date}
-          </div>
-        </div>
-        <audio className="sermon-audio" src={props.URI} controls />
-      </div>
-    </ListGroup.Item>
+    <Box
+      rounded={"lg"}
+      borderWidth={"2px"}
+      borderColor={"goc.darkgray"}
+      marginY={"10px"}
+      padding={"30px"}
+      width={"100%"}
+    >
+      <Heading>{props.title}</Heading>
+      <Text marginTop={"10px"} marginBottom={"20px"}>
+        {props.speaker} | {props.passage} | {props.date}
+      </Text>
+      <audio style={{ width: "100%" }} src={props.URI} controls />
+    </Box>
   );
 };
