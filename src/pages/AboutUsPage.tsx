@@ -10,7 +10,7 @@ import {
   AspectRatio,
 } from "@chakra-ui/react";
 
-export const AboutUs = () => {
+export const AboutUsPage = () => {
   return (
     <BannerTemplate
       title="About Us"

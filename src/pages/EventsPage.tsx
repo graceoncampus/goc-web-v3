@@ -24,7 +24,7 @@ import { BannerTemplate } from "layouts/BannerTemplate";
 
 const client = generateClient();
 
-export const Events: React.FC = () => {
+export const EventsPage: React.FC = () => {
   return (
     <BannerTemplate title="Events" activeKey={NavbarActiveKey.EVENTS}>
       <EventsBody />

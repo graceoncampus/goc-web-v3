@@ -12,15 +12,15 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { PrayerFormPage } from "pages/PrayerFormPage";
 import { SmallGroups } from "pages/User/SmallGroups/SmallGroups";
 import { StubbedRidesPage } from "pages/MinistryTeams/Rides/StubbedRidesPage";
-import { AboutUs } from "pages/User/AboutUs/AboutUs";
+import { AboutUsPage } from "pages/AboutUsPage";
 import { NotFound } from "pages/MinistryTeams/NotFound/NotFound";
 import { StudyGuide } from "pages/User/Resources/JohnStudyGuide";
-import { Sermons } from "pages/User/Sermons/Sermons";
+import { Sermons } from "pages/SermonsPage";
 import { Login } from "components/user/Login";
 import { RidesLanding } from "pages/User/Rides/RidesLanding/RidesLanding";
-import { OurBeliefs } from "pages/User/AboutUs/OurBeliefs/OurBeliefs";
+import { OurBeliefsPage } from "pages/OurBeliefsPage";
 import { Reset } from "components/user/Reset";
-import { Events } from "pages/User/EventsPage";
+import { EventsPage } from "pages/EventsPage";
 import { Signup } from "components/user/Signup";
 import { MinistryTeams } from "pages/User/MinistryTeams/MinistryTeams";
 import { Leadership } from "components/user/Leadership/Leadership";
@@ -34,10 +34,10 @@ const App = () => {
           <Routes>
             <Route path={"*"} element={<UserNotFound />} /> {/* 404 */}
             <Route path={"/"} element={<Landing />} />
-            <Route path={"/about"} element={<AboutUs />} />
+            <Route path={"/about"} element={<AboutUsPage />} />
             <Route path={"/sermons"} element={<Sermons />} />
-            <Route path={"/events"} element={<Events />} />
-            <Route path={"/ourbeliefs"} element={<OurBeliefs />}></Route>
+            <Route path={"/events"} element={<EventsPage />} />
+            <Route path={"/ourbeliefs"} element={<OurBeliefsPage />}></Route>
             <Route path={"/leadership"} element={<Leadership />}></Route>
             <Route path={"/rides"} element={<RidesLanding />} />
             <Route path={"/rides/rider/signup"} element={<RiderSignup />} />

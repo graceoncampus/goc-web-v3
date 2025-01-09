@@ -2,7 +2,7 @@ import { BannerTemplate } from "layouts/BannerTemplate";
 import { NavbarActiveKey } from "components/Navbar";
 import { Box, Heading, Text, VStack, Container } from "@chakra-ui/react";
 
-export const OurBeliefs = () => {
+export const OurBeliefsPage = () => {
   return (
     <BannerTemplate
       title="Our Beliefs"
