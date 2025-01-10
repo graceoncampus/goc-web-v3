@@ -32,7 +32,7 @@ import {
 // import { ColorModeButton } from "components/ui/color-mode";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { IoMdMenu } from "react-icons/io";
-import navlinks from "./navlinks";
+import NavLinks from "./NavLinks";
 import LoginButton from "./LoginButton";
 
 export enum NavbarActiveKey {
@@ -91,7 +91,7 @@ const NavItem = ({
           <MenuTrigger asChild>
             <Button
               variant="ghost"
-              margin={2}
+              margin={".5rem"}
               fontSize={fontSize}
               fontWeight={fontWeight}
               color={color}
@@ -207,7 +207,7 @@ const Navbar = ({
 
       {/* Full Navbar */}
       <Box display={{ base: "none", xl: "flex" }}>
-        {navlinks.map((navItem) => (
+        {NavLinks.map((navItem) => (
           <NavItem
             key={navItem.name}
             name={navItem.name}
@@ -261,7 +261,7 @@ const Navbar = ({
             <DrawerTitle>Menu</DrawerTitle>
           </DrawerHeader>
           <DrawerBody paddingBottom="5rem">
-            {navlinks.map((navItem) => (
+            {NavLinks.map((navItem) => (
               <Box key={navItem.name} marginBottom="1rem">
                 <NavItem
                   key={navItem.name}

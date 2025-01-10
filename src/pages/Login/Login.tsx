@@ -15,12 +15,12 @@ import { signIn } from "aws-amplify/auth";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NavbarActiveKey } from "components/Navbar";
-import { Field } from "../ui/field";
+import { Field } from "../../components/ui/field";
 import { Template } from "layouts/Template";
 import { InputGroup } from "components/ui/input-group";
 import { LuLock, LuUser } from "react-icons/lu";
 
-export const Login = () => {
+export const LoginPage = () => {
   return (
     <Template activeKey={NavbarActiveKey.LOGIN}>
       <LoginBody />

@@ -10,7 +10,7 @@ import { Template } from "layouts/Template";
 import {
   EventCardList,
   EventCardListProps,
-} from "pages/EventCardList/EventCardList";
+} from "components/EventCardList";
 
 import { RiArrowRightLine } from "react-icons/ri";
 import OutlineButton from "components/OutlineButton";

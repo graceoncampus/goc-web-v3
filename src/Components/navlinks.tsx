@@ -1,4 +1,4 @@
-const navlinks = [
+const NavLinks = [
   {
     name: "About", // Dropdown
     sublinks: [
@@ -9,6 +9,10 @@ const navlinks = [
       {
         name: "Our Beliefs",
         link: "/ourbeliefs",
+      },
+      {
+        name: "Leadership",
+        link: "/leadership",
       },
     ],
   },
@@ -52,4 +56,4 @@ const navlinks = [
   },
 ];
 
-export default navlinks;
+export default NavLinks;

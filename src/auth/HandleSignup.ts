@@ -1,4 +1,4 @@
-import { Signup } from "components/user/Signup";
+import { Signup } from "pages/Login/Signup";
 
 import { signUp } from "aws-amplify/auth";
 

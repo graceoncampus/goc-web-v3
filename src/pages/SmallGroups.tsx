@@ -10,7 +10,7 @@ import {
 import { BannerTemplate } from "layouts/BannerTemplate";
 import { NavbarActiveKey } from "components/Navbar";
 
-export const SmallGroups = () => {
+export const SmallGroupsPage = () => {
   return (
     <BannerTemplate
       title="Small Groups"

@@ -26,7 +26,7 @@ const mockTeams: MinistryTeam[] = [
   },
 ];
 
-export const MinistryTeams: React.FC = () => {
+export const MinistryTeamsPage: React.FC = () => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
 
   // Fire only on refresh/load

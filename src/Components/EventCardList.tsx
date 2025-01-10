@@ -2,9 +2,7 @@
  * EventList
  */
 
-import React from "react";
-
-import { EventCard, EventCardProps } from "pages/EventCard/EventCard";
+import { EventCard, EventCardProps } from "components/EventCard";
 
 export interface EventCardListProps {
   events: EventCardProps[];

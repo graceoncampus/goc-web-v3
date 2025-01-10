@@ -1,11 +1,17 @@
-import { Template } from "layouts/Template";
 import { NavbarActiveKey } from "components/Navbar";
+import { BannerTemplate } from "layouts/BannerTemplate";
 
-export const Leadership = () => {
+export const LeadershipPage = () => {
   return (
-    <Template activeKey={NavbarActiveKey.LEADERSHIP}>
+    <BannerTemplate
+      title="Leadership"
+      activeKey={NavbarActiveKey.LEADERSHIP}
+      imageSrc="/images/landing3.jpg"
+      alt="Leadership page banner"
+      overlay
+    >
       <LeadershipBody />
-    </Template>
+    </BannerTemplate>
   );
 };
 
@@ -20,7 +26,7 @@ const LeadershipBody = () => {
           <h2>Shepherd</h2>
           <div className="row">
             <div className="col-lg-6 mb-4">
-              <img className="img-fluid" src="images/matt.jpg" />
+              <img className="img-fluid" src="images/matt.jpg" alt="Matt Ng" />
             </div>
             <div className="description col-lg-6">
               <h4 className="mb-3">Matt Ng</h4>
