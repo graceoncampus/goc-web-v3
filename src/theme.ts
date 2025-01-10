@@ -55,6 +55,7 @@ const config = defineConfig({
         goc: {
           blue: { value: "#3366cc" }, // rgb(51, 102, 204)
           gray: { value: "#f7f7f7" },
+          darkgray: { value: "lightgray" },
         },
       },
       sizes: {

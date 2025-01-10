@@ -13,7 +13,7 @@ import { StubbedRidesPage } from "pages/MinistryTeams/Rides/StubbedRidesPage";
 import { AboutUsPage } from "pages/AboutUsPage";
 import { NotFound } from "pages/MinistryTeams/NotFound/NotFound";
 import { StudyGuide } from "pages/User/Resources/JohnStudyGuide";
-import { Sermons } from "pages/SermonsPage";
+import { SermonsPage } from "pages/SermonsPage";
 import { Login } from "components/user/Login";
 import { RidesLanding } from "pages/User/Rides/RidesLanding/RidesLanding";
 import { OurBeliefsPage } from "pages/OurBeliefsPage";
@@ -34,7 +34,7 @@ const App = () => {
             <Route path={"*"} element={<UserNotFound />} /> {/* 404 */}
             <Route path={"/"} element={<Landing />} />
             <Route path={"/about"} element={<AboutUsPage />} />
-            <Route path={"/sermons"} element={<Sermons />} />
+            <Route path={"/sermons"} element={<SermonsPage />} />
             <Route path={"/events"} element={<EventsPage />} />
             <Route path={"/ourbeliefs"} element={<OurBeliefsPage />}></Route>
             <Route path={"/leadership"} element={<Leadership />}></Route>
