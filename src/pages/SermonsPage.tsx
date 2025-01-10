@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { ListGroup, Pagination } from "react-bootstrap";
 import { listSermons } from "graphql/queries";
 import { generateClient } from "aws-amplify/api";
 import { NavbarActiveKey } from "components/Navbar";
@@ -12,6 +11,7 @@ import {
   HStack,
   Input,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import {
   PaginationRoot,
@@ -23,16 +23,8 @@ import { InputGroup } from "components/ui/input-group";
 import { LuSearch } from "react-icons/lu";
 const client = generateClient();
 
-export interface SermonItem {
-  title: string;
-  speaker: string;
-  passage: string;
-  date: string;
-  URI: string;
-}
-
 export const SermonsPage = () => {
-  const [sermons, setSermons] = useState<SermonItem[]>([]);
+  const [sermons, setSermons] = useState<SermonItemProps[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -95,8 +87,35 @@ export const SermonsPage = () => {
   );
 };
 
+export interface SermonItemProps {
+  title: string;
+  speaker: string;
+  passage: string;
+  date: string;
+  URI: string;
+}
+
+const SermonItem = (props: SermonItemProps) => {
+  return (
+    <Box
+      rounded={"lg"}
+      borderWidth={"2px"}
+      borderColor={"goc.darkgray"}
+      marginY={"1rem"}
+      padding={"2rem"}
+      width={"100%"}
+    >
+      <Heading>{props.title}</Heading>
+      <Text marginTop={".625rem"} marginBottom={"1.2rem"}>
+        {props.speaker} | {props.passage} | {props.date}
+      </Text>
+      <audio style={{ width: "100%" }} src={props.URI} controls />
+    </Box>
+  );
+};
+
 interface SermonBodyProps {
-  sermons: SermonItem[];
+  sermons: SermonItemProps[];
   searchQuery: string;
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -110,10 +129,6 @@ const SermonsBody = (props: SermonBodyProps) => {
     currentPage * PAGE_SIZE,
   );
   const totalPages = Math.ceil(sermons.length / PAGE_SIZE);
-  const pageNumbers = Array.from(
-    { length: totalPages },
-    (_, index) => index + 1,
-  );
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -137,13 +152,13 @@ const SermonsBody = (props: SermonBodyProps) => {
   return (
     <Center>
       <Box width={"100%"}>
-        <Flex justifyContent={"space-between"}>
+        <Flex justifyContent={"space-between"} marginBottom={".5rem"}>
           <Box>
             <InputGroup flex="1" startElement={<LuSearch />}>
               <Input
                 value={searchQuery}
                 onChange={handleSearch}
-                width={"400px"}
+                width={"25rem"}
                 placeholder="search by title, speaker, or passage"
                 rounded={"2xl"}
                 borderColor={"black"}
@@ -152,7 +167,7 @@ const SermonsBody = (props: SermonBodyProps) => {
           </Box>
           {pagination}
         </Flex>
-        <ListGroup>
+        <VStack gap={"0"}>
           {sermonsToDisplay.map((sermon) => (
             <SermonItem
               key={sermon.title}
@@ -163,28 +178,9 @@ const SermonsBody = (props: SermonBodyProps) => {
               date={sermon.date}
             />
           ))}
-        </ListGroup>
+        </VStack>
         <Flex justifyContent="flex-end">{pagination}</Flex>
       </Box>
     </Center>
-  );
-};
-
-const SermonItem = (props: SermonItem) => {
-  return (
-    <Box
-      rounded={"lg"}
-      borderWidth={"2px"}
-      borderColor={"goc.darkgray"}
-      marginY={"10px"}
-      padding={"30px"}
-      width={"100%"}
-    >
-      <Heading>{props.title}</Heading>
-      <Text marginTop={"10px"} marginBottom={"20px"}>
-        {props.speaker} | {props.passage} | {props.date}
-      </Text>
-      <audio style={{ width: "100%" }} src={props.URI} controls />
-    </Box>
   );
 };
