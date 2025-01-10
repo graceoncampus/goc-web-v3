@@ -84,7 +84,7 @@ export const BannerTemplate: React.FC<BannerTemplateProps> = ({
         </Center>
       </Box>
       <Box marginX={"1.5rem"} marginY={"3rem"}>
-        {children || <></>}
+        {children}
       </Box>
     </Template>
   );

@@ -46,7 +46,7 @@ export enum NavbarActiveKey {
   MINISTRY_TEAMS = "Ministry Teams",
   EVENTS = "Events",
   RIDES = "Rides",
-  PRAYER = "Prayer Request",
+  PRAYER = "Prayer Requests",
   LEADERSHIP = "Leadership",
   LOGIN = "Login",
 }
@@ -67,6 +67,7 @@ interface NavItemProps {
 
 interface NavbarProps {
   selectedNavItemName: string;
+  disableTransparent?: boolean;
 }
 
 const NavItem = ({
@@ -84,6 +85,7 @@ const NavItem = ({
 
   if (sublinks.length > 0) {
     return (
+      // Dropdown menu
       <Box position="relative">
         <MenuRoot>
           <MenuTrigger asChild>
@@ -93,8 +95,8 @@ const NavItem = ({
               fontSize={fontSize}
               fontWeight={fontWeight}
               color={color}
-              backgroundColor="transparent"
-              transition="color 0.3s ease"
+              transition={"color 0.3s ease"}
+              backgroundColor={"transparent"}
               _hover={{
                 backgroundColor: bgHoverColor,
               }}
@@ -110,12 +112,16 @@ const NavItem = ({
             zIndex="1000"
             boxShadow="md"
             rounded="md"
-            padding={1}
-            marginTop={2}
+            padding={".25rem"}
+            marginTop={".5rem"}
           >
             {sublinks.map((sublink) => (
               <MenuItem key={sublink.name} value={sublink.name} asChild>
-                <Link href={sublink.link} padding="0.5rem 1rem" display="block">
+                <Link
+                  href={sublink.link}
+                  padding={".5rem 1rem"}
+                  cursor={"pointer"}
+                >
                   {sublink.name}
                 </Link>
               </MenuItem>
@@ -127,10 +133,11 @@ const NavItem = ({
   }
 
   return (
+    // No dropdown menu
     <Button
       variant="ghost"
       asChild
-      margin={2}
+      margin=".5rem"
       _hover={{
         backgroundColor: bgHoverColor,
       }}
@@ -148,24 +155,28 @@ const NavItem = ({
   );
 };
 
-const Navbar = (props: NavbarProps) => {
+const Navbar = ({
+  selectedNavItemName,
+  disableTransparent = false,
+}: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
+      if (disableTransparent || window.scrollY > 50) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
       }
     };
 
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [disableTransparent]);
 
   const bgColor = isScrolled ? "white" : "transparent";
   const shadow = isScrolled ? "md" : "none";
@@ -178,6 +189,8 @@ const Navbar = (props: NavbarProps) => {
       align="center"
       justifyContent="space-between"
       position="fixed"
+      top="0"
+      left="0"
       width="100%"
       zIndex="1000"
       backgroundColor={bgColor}
@@ -200,7 +213,14 @@ const Navbar = (props: NavbarProps) => {
             name={navItem.name}
             link={navItem.link}
             sublinks={navItem.sublinks}
-            selected={props.selectedNavItemName === navItem.name}
+            selected={
+              !!(
+                selectedNavItemName === navItem.name ||
+                navItem.sublinks?.some(
+                  (sublink) => sublink.name === selectedNavItemName,
+                )
+              )
+            }
             isScrolled={isScrolled}
             drawerOpen={drawerOpen}
           />
@@ -218,7 +238,6 @@ const Navbar = (props: NavbarProps) => {
       >
         <DrawerBackdrop />
         <DrawerTrigger asChild>
-          {/* TODO: There's an issue here for mobile, but updating react would resolve it */}
           <IconButton
             variant={"ghost"}
             display={{ base: drawerOpen ? "none" : "flex", xl: "none" }}
@@ -241,14 +260,22 @@ const Navbar = (props: NavbarProps) => {
           <DrawerHeader>
             <DrawerTitle>Menu</DrawerTitle>
           </DrawerHeader>
-          <DrawerBody>
+          <DrawerBody paddingBottom="5rem">
             {navlinks.map((navItem) => (
               <Box key={navItem.name} marginBottom="1rem">
                 <NavItem
+                  key={navItem.name}
                   name={navItem.name}
                   link={navItem.link}
                   sublinks={navItem.sublinks}
-                  selected={props.selectedNavItemName === navItem.name}
+                  selected={
+                    !!(
+                      selectedNavItemName === navItem.name ||
+                      navItem.sublinks?.some(
+                        (sublink) => sublink.name === selectedNavItemName,
+                      )
+                    )
+                  }
                   isScrolled={isScrolled}
                   drawerOpen={drawerOpen}
                 />

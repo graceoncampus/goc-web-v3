@@ -7,7 +7,7 @@ import { BannerTemplate } from "layouts/BannerTemplate";
 export const PrayerFormPage = () => {
   return (
     <BannerTemplate
-      title="Prayer Request"
+      title="Prayer Requests"
       activeKey={NavbarActiveKey.PRAYER}
       imageSrc="/images/landing3.jpg"
       alt="Prayer Request page banner"

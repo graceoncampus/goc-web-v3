@@ -25,7 +25,7 @@ const navlinks = [
       },
       {
         name: "Study Guide",
-        link: "/study_guide",
+        link: "/study-guide",
       },
     ],
   },
@@ -34,8 +34,8 @@ const navlinks = [
     link: "/events",
   },
   {
-    name: "Prayer Request",
-    link: "/prayer/request",
+    name: "Prayer Requests",
+    link: "/prayer-request",
   },
   {
     name: "Get involved", // Dropdown
@@ -46,7 +46,7 @@ const navlinks = [
       },
       {
         name: "Ministry Teams",
-        link: "/ministry-teams",
+        link: "/ministryteams",
       },
     ],
   },

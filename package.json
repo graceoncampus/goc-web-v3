@@ -12,6 +12,7 @@
     "@aws-sdk/client-dynamodb": "^3.662.0",
     "@chakra-ui/react": "^3.1.0",
     "@emotion/react": "^11.13.3",
+    "@fontsource/poppins": "^5.1.1",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^14.5.2",

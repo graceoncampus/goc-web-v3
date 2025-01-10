@@ -1,18 +1,24 @@
 import {
+  Box,
   Button,
-  Center,
   Container,
   Fieldset,
   Flex,
+  Heading,
+  Image,
   Input,
   Link,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
 import { signIn } from "aws-amplify/auth";
-import { Template } from "layouts/Template";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NavbarActiveKey } from "components/Navbar";
 import { Field } from "../ui/field";
+import { Template } from "layouts/Template";
+import { InputGroup } from "components/ui/input-group";
+import { LuLock, LuUser } from "react-icons/lu";
 
 export const Login = () => {
   return (
@@ -39,47 +45,130 @@ const LoginBody = () => {
         console.error(`Failed to sign user in: ${reason}`);
       });
   }
-  return (
-    <Container fluid py={"5"}>
-      <Center>
-        <form onSubmit={handleSubmit}>
-          <Fieldset.Root size="lg" maxW="xl">
-            <Fieldset.Content>
-              <Field label="Username" required>
-                <Input
-                  name="username"
-                  onChange={(e) => setUsername(e.target.value)}
-                />
-              </Field>
 
-              <Field label="Password" required>
-                <Input
-                  name="password"
-                  type="password"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </Field>
-            </Fieldset.Content>
-            <Link alignSelf={"center"} fontSize={"sm"} href={"/reset"}>
-              Forgot Password?
-            </Link>
-            <Button bg={"goc.blue"} type={"submit"}>
-              Log In
-            </Button>
-            <Flex justifyContent={"center"}>
-              <span>Don't have an account?</span>
+  return (
+    <Box
+      position="relative"
+      width="100%"
+      height="max(100vh, 35rem)"
+      overflow="hidden"
+    >
+      {/* Banner image*/}
+      <Image
+        width="100%"
+        height="100%"
+        src="/images/landing3.jpg" // Make sure to center the image before changing
+        alt="GOC Landing Photo"
+        objectFit="cover"
+        objectPosition="center"
+        userSelect="none"
+      />
+      {/* Overlay */}
+      <Box
+        position="absolute"
+        top="0"
+        left="0"
+        width="100%"
+        height="100%"
+        bg="black"
+        opacity="0.4"
+      />
+      {/* Login */}
+      <Container
+        maxWidth="fit-content"
+        position="absolute"
+        top="50%"
+        left="50%"
+        transform="translate(-50%, -50%)"
+        textAlign="center"
+        color="black"
+        backgroundColor="goc.gray/90"
+        borderRadius="lg"
+        boxShadow="lg"
+        padding="2rem 6rem"
+      >
+        <VStack width="100%" gap="0" align="center">
+          <Heading
+            as="h2"
+            fontSize={{
+              base: "2xl",
+              sm: "2xl",
+              md: "2xl",
+              lg: "2xl",
+              xl: "3xl",
+            }}
+            lineHeight="1.2"
+            fontWeight="semibold"
+            textAlign="center"
+            width="100%"
+            marginBottom="2rem"
+          >
+            Welcome back!
+          </Heading>
+          <form onSubmit={handleSubmit}>
+            <Fieldset.Root size="lg" maxW="xl">
+              <Fieldset.Content>
+                <Field required>
+                  <InputGroup flex="1" startElement={<LuUser />}>
+                    <Input
+                      variant="subtle"
+                      backgroundColor="#D9D9D9B2"
+                      name="username"
+                      type="username"
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder="Username"
+                      paddingX="2rem"
+                    />
+                  </InputGroup>
+                </Field>
+
+                <Field required>
+                  <InputGroup flex="1" startElement={<LuLock />}>
+                    <Input
+                      variant="subtle"
+                      backgroundColor="#D9D9D9B2"
+                      name="password"
+                      type="password"
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Password"
+                      paddingX="2rem"
+                    />
+                  </InputGroup>
+                </Field>
+              </Fieldset.Content>
               <Link
-                color={"goc.blue"}
-                fontSize={"md"}
-                href={"/signup"}
-                pl={"2"}
+                alignSelf="center"
+                fontSize="xs"
+                href="/reset"
+                textWrap="nowrap"
               >
-                Sign up
+                Forgot your password?
               </Link>
-            </Flex>
-          </Fieldset.Root>
-        </form>
-      </Center>
-    </Container>
+              <Button bg="goc.blue" type="submit" marginTop="1rem">
+                Log In
+              </Button>
+              <Flex
+                flexDirection="row"
+                justifyContent="center"
+                marginTop="1rem"
+                fontSize={{
+                  base: "xs",
+                  sm: "xs",
+                  md: "sm",
+                  lg: "sm",
+                  xl: "sm",
+                }}
+                textWrap="nowrap"
+              >
+                <Text>Don't have an account?</Text>
+                <Link color="goc.blue" href="/signup" paddingLeft=".5rem">
+                  Sign up
+                </Link>
+              </Flex>
+            </Fieldset.Root>
+          </form>
+        </VStack>
+      </Container>
+    </Box>
   );
 };

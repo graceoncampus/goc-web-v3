@@ -17,14 +17,7 @@ import OutlineButton from "components/OutlineButton";
 import InfoBox from "components/InfoBox";
 import { observer } from "mobx-react-lite";
 import { useStore } from "store/StoreContext";
-import {
-  Box,
-  Heading,
-  Image,
-  Stack,
-  Text,
-  Container,
-} from "@chakra-ui/react";
+import { Box, Heading, Image, Stack, Text, Container } from "@chakra-ui/react";
 
 export const Landing = () => {
   return (
@@ -77,6 +70,7 @@ const LandingBody = observer(() => {
     <Container fluid margin="0" padding="0">
       {/* Banner */}
       <Box position="relative" width="100%" height="100vh" overflow="hidden">
+        {/* Banner image */}
         <Image
           width="100%"
           height="100%"
@@ -84,7 +78,7 @@ const LandingBody = observer(() => {
           alt="GOC Landing Photo"
           objectFit="cover"
           objectPosition="center"
-          userSelect={"none"}
+          userSelect="none"
         />
         {/* Overlay */}
         <Box
