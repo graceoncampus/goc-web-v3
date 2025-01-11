@@ -2,23 +2,23 @@
  * 404 not found page for users.
  */
 
-import React from "react";
-import { Link } from "react-router-dom";
-
-import { Template } from "layouts/Template";
 import { NavbarActiveKey } from "components/Navbar";
+import { LoginTemplate } from "layouts/LoginTemplate";
+import { Heading, Text } from "@chakra-ui/react";
+import GOCButton from "components/GOCButton";
 
 const NotFoundBody = () => (
   <div>
-    <h1>404 - Not Found!</h1>
-    <Link to="/">Go Home</Link>
+    <Heading as={"h2"}>404</Heading>
+    <Text textWrap={"nowrap"}>Page not found!</Text>
+    <GOCButton href="/">Go Home</GOCButton>
   </div>
 );
 
 export const NotFound = () => {
   return (
-    <Template activeKey={NavbarActiveKey.NONE}>
+    <LoginTemplate activeKey={NavbarActiveKey.NONE}>
       <NotFoundBody />
-    </Template>
+    </LoginTemplate>
   );
 };

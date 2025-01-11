@@ -47,7 +47,6 @@ export const MinistryTeamsPage: React.FC = () => {
       activeKey={NavbarActiveKey.MINISTRY_TEAMS}
       imageSrc="/images/landing3.jpg"
       alt="Ministry Teams page banner"
-      overlay
     >
       <TeamsBody MinistryTeams={mockTeams} isUserLoggedIn={isUserLoggedIn} />
     </BannerTemplate>

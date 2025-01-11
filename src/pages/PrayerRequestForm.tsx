@@ -73,9 +73,9 @@ export const PrayerRequestForm = (
 
   prayerRequestFormProps.setPrayerRequestCompleted(true);
   return (
-    <Center width={"100%"} margin={"20px"}>
+    <Center width={"100%"} margin={"auto"}>
       <Fieldset.Root maxWidth={"500px"}>
-        <Heading fontSize={"xl"} marginBottom={"1rem"}>
+        <Heading textAlign={"center"} fontSize={"xl"} marginBottom={"1rem"}>
           How can we be praying for you?
         </Heading>
         <form onSubmit={handleFormSubmit}>
@@ -108,9 +108,7 @@ export const PrayerRequestForm = (
             </Field>
           </Stack>
 
-          <GOCButton type="submit" buttonProps={{ marginTop: "20px" }}>
-            SUBMIT
-          </GOCButton>
+          <GOCButton type="submit">SUBMIT</GOCButton>
         </form>
       </Fieldset.Root>
     </Center>

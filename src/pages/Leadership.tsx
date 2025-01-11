@@ -8,7 +8,6 @@ export const LeadershipPage = () => {
       activeKey={NavbarActiveKey.LEADERSHIP}
       imageSrc="/images/landing3.jpg"
       alt="Leadership page banner"
-      overlay
     >
       <LeadershipBody />
     </BannerTemplate>

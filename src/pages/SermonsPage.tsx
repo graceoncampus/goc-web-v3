@@ -76,7 +76,6 @@ export const SermonsPage = () => {
       activeKey={NavbarActiveKey.SERMONS}
       imageSrc="/images/landing3.jpg"
       alt="Sermons page banner"
-      overlay
     >
       <SermonsBody
         sermons={filteredSermons}

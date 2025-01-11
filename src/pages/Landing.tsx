@@ -7,10 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 import { NavbarActiveKey } from "components/Navbar";
 import { Template } from "layouts/Template";
-import {
-  EventCardList,
-  EventCardListProps,
-} from "components/EventCardList";
+import { EventCardList, EventCardListProps } from "components/EventCardList";
 
 import { RiArrowRightLine } from "react-icons/ri";
 import OutlineButton from "components/OutlineButton";
@@ -72,6 +69,9 @@ const LandingBody = observer(() => {
       <Box position="relative" width="100%" height="100vh" overflow="hidden">
         {/* Banner image */}
         <Image
+          position="absolute"
+          top="0"
+          left="0"
           width="100%"
           height="100%"
           src="/images/landing3.jpg" // Make sure to center the image before changing

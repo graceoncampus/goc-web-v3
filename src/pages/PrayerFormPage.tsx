@@ -11,7 +11,6 @@ export const PrayerFormPage = () => {
       activeKey={NavbarActiveKey.PRAYER}
       imageSrc="/images/landing3.jpg"
       alt="Prayer Request page banner"
-      overlay
     >
       <PrayerFormBody />
     </BannerTemplate>

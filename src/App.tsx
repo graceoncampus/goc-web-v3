@@ -20,8 +20,8 @@ import { MinistryTeamsPage } from "pages/MinistryTeams";
 import { LoginPage } from "pages/Login/Login";
 import { Reset } from "pages/Login/Reset";
 import { Signup } from "pages/Login/Signup";
+import { NotFound as UserNotFound } from "pages/NotFound";
 import { NotFound } from "pages/MinistryTeams/NotFound/NotFound";
-import { NotFound as UserNotFound } from "pages/MinistryTeams/NotFound/NotFound";
 import "@fontsource/poppins";
 
 const App = () => {

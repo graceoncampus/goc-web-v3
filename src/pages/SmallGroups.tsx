@@ -17,7 +17,6 @@ export const SmallGroupsPage = () => {
       activeKey={NavbarActiveKey.SMALL_GROUPS}
       imageSrc="/images/landing3.jpg"
       alt="Small Groups page banner"
-      overlay
     >
       <SmallGroupsBody />
     </BannerTemplate>
@@ -99,7 +98,7 @@ const SmallGroupsBody = () => {
             _hover={{ backgroundColor: "blue.600" }}
             _focus={{ boxShadow: "outline" }}
           >
-            <Link href="/" color="white" fontWeight="bold">
+            <Link href="/docs/sgl-men.pdf" color="white" fontWeight="bold">
               Men's Small Group Leaders
             </Link>
           </Button>
@@ -114,7 +113,7 @@ const SmallGroupsBody = () => {
             _hover={{ backgroundColor: "blue.600" }}
             _focus={{ boxShadow: "outline" }}
           >
-            <Link href="/" color="white" fontWeight="bold">
+            <Link href="/docs/sgl-women.pdf" color="white" fontWeight="bold">
               Women's Small Group Leaders
             </Link>
           </Button>

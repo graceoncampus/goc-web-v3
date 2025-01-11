@@ -1,8 +1,8 @@
-import { Signup } from "pages/Login/Signup";
-
+import { SignupProps } from "pages/Login/Signup";
 import { signUp } from "aws-amplify/auth";
+import { confirmSignUp, type ConfirmSignUpInput } from "aws-amplify/auth";
 
-export const handleSignup = async (signup: Signup) => {
+export const handleSignup = async (signup: SignupProps) => {
   try {
     const { isSignUpComplete, userId, nextStep } = await signUp({
       username: signup.email,
@@ -28,8 +28,6 @@ export const handleSignup = async (signup: Signup) => {
     console.log("error signing up:", error);
   }
 };
-
-import { confirmSignUp, type ConfirmSignUpInput } from "aws-amplify/auth";
 
 async function handleSignUpConfirmation({
   username,

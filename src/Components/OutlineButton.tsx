@@ -2,10 +2,9 @@ import { Box, Button, Link } from "@chakra-ui/react";
 import { ReactNode } from "react";
 
 interface OutlineButtonProps {
-  href?: string;
   children: React.ReactNode;
+  href: string;
   icon?: ReactNode;
-  backgroundColor?: string;
   animateIcon?: boolean;
   onWhite?: boolean;
 }

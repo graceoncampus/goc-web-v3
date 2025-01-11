@@ -17,7 +17,6 @@ export const AboutUsPage = () => {
       activeKey={NavbarActiveKey.ABOUT}
       imageSrc="/images/landing3.jpg"
       alt="About Us page banner"
-      overlay
     >
       <AboutUsBody />
     </BannerTemplate>

@@ -8,7 +8,6 @@ export const StudyGuide = () => {
       activeKey={NavbarActiveKey.STUDY_GUIDE}
       imageSrc="/images/resources.jpeg"
       alt="Study Guide page banner"
-      overlay
     >
       <StudyGuideBody />
     </BannerTemplate>

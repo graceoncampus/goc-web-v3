@@ -19491,6 +19491,11 @@ use-isomorphic-layout-effect@^1.1.1, use-isomorphic-layout-effect@^1.1.2:
   resolved "https://registry.yarnpkg.com/use-isomorphic-layout-effect/-/use-isomorphic-layout-effect-1.1.2.tgz#497cefb13d863d687b08477d9e5a164ad8c1a6fb"
   integrity sha512-49L8yCO3iGT/ZF9QttjwLF/ZD9Iwto5LnH5LmEdk/6cFmXddqi2ulF0edxTwjj+7mqvpVVGQWvbXZdn32wRSHA==
 
+use-mask-input@^3.4.2:
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/use-mask-input/-/use-mask-input-3.4.2.tgz#7aa7a369ad98dcdae62f93ccb41aa7d64f78a5eb"
+  integrity sha512-d+lYFl/6rsmdya3bZfMoMqZYC5uSKDPtWp/BD+FQ6KRsAKaPfRO1Z/jvagrytKCpvIrpER3i/WKC/4baIzlr+A==
+
 use-sidecar@^1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/use-sidecar/-/use-sidecar-1.1.2.tgz"

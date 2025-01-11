@@ -14,7 +14,7 @@ export const BannerTemplate: React.FC<BannerTemplateProps> = ({
   alt,
   activeKey,
   children,
-  overlay = false,
+  overlay = true,
 }) => {
   const bgColor = imageSrc ? "transparent" : "gray";
   const titleColor = imageSrc ? "white" : "black";

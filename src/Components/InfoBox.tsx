@@ -5,7 +5,7 @@ interface InfoBoxProps {
   title: string;
   description: string;
   buttonText: string;
-  link?: string;
+  link: string;
   showBorder?: boolean;
 }
 

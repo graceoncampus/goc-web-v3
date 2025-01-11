@@ -9,7 +9,6 @@ export const OurBeliefsPage = () => {
       activeKey={NavbarActiveKey.BELIEFS}
       imageSrc="/images/landing3.jpg"
       alt="Our Beliefs page banner"
-      overlay
     >
       <OurBeliefsBody />
     </BannerTemplate>
