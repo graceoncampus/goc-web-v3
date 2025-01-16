@@ -37,7 +37,7 @@ import LoginButton from "./LoginButton";
 
 export enum NavbarActiveKey {
   NONE = "",
-  ABOUT = "About",
+  ABOUT = "About Us",
   BELIEFS = "Our Beliefs",
   SERMONS = "Sermons",
   CLASSES = "Classes",

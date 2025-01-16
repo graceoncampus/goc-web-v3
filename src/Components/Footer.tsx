@@ -8,12 +8,15 @@ import {
   Image,
   Input,
   Link,
+  Stack,
   Text,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { Field } from "components/ui/field";
 import { Toaster, toaster } from "components/ui/toaster";
 import { FaFacebook, FaWordpress, FaInstagram, FaVimeoV } from "react-icons/fa";
+import { MdOutlineAccessTime, MdOutlineLocationOn } from "react-icons/md";
+import { contactInfo } from "../constants/ContactInfo";
 
 interface FooterColumnProps {
   title: string;
@@ -33,7 +36,7 @@ function FooterColumn(props: FooterColumnProps) {
         fontSize={"1rem"}
         lineHeight={"1.5625rem"}
         color={"#AFAFAF"}
-        marginBottom={2}
+        marginBottom={".3rem"}
       >
         {props.title.toUpperCase()}
       </Text>
@@ -59,7 +62,7 @@ export default function Footer() {
   });
 
   return (
-    <Box as="footer" bgColor={"goc.gray"} padding={"3.5rem"} maxWidth={"100%"}>
+    <Box as="footer" bgColor={"goc.gray"} padding={"3.25rem"} maxWidth={"100%"}>
       <Toaster />
       <Grid
         templateColumns={{
@@ -100,8 +103,19 @@ export default function Footer() {
           gridRow={{ base: "2", md: "1", xl: "1" }}
         >
           <FooterColumn title="GRACE ON CAMPUS">
-            <Text>Fridays at 7pm</Text>
-            <Text>Broad Art Center 2160E</Text>
+            <Stack gap={".5rem"}>
+              <Flex alignItems={"center"}>
+                <MdOutlineAccessTime />
+                <Text marginLeft={".2rem"}>
+                  {contactInfo.day} at {contactInfo.time}
+                </Text>
+              </Flex>
+
+              <Flex alignItems={"center"}>
+                <MdOutlineLocationOn />
+                <Text marginLeft={".2rem"}>{contactInfo.location}</Text>
+              </Flex>
+            </Stack>
           </FooterColumn>
         </GridItem>
 
@@ -111,9 +125,11 @@ export default function Footer() {
           gridRow={{ base: "3", md: "2", xl: "1" }}
         >
           <FooterColumn title="CONTACT US">
-            <Text>Phillip Ko</Text>
-            <Text>(510) 612-7862</Text>
-            <Text>gocateam@gmail.com</Text>
+            <Stack gap={".1rem"}>
+              <Text>{contactInfo.name}</Text>
+              <Text>{contactInfo.phone}</Text>
+              <Text>{contactInfo.email}</Text>
+            </Stack>
           </FooterColumn>
         </GridItem>
 

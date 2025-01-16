@@ -3,7 +3,7 @@ const NavLinks = [
     name: "About", // Dropdown
     sublinks: [
       {
-        name: "About",
+        name: "About Us",
         link: "/about",
       },
       {

@@ -4,17 +4,15 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { NavbarActiveKey } from "components/Navbar";
 import { Template } from "layouts/Template";
-import { EventCardList, EventCardListProps } from "components/EventCardList";
-
-import { RiArrowRightLine } from "react-icons/ri";
+import { RiArrowRightLine  } from "react-icons/ri";
 import OutlineButton from "components/OutlineButton";
 import InfoBox from "components/InfoBox";
 import { observer } from "mobx-react-lite";
 import { useStore } from "store/StoreContext";
 import { Box, Heading, Image, Stack, Text, Container } from "@chakra-ui/react";
+import { contactInfo } from "../constants/ContactInfo";
 
 export const Landing = () => {
   return (
@@ -135,7 +133,7 @@ const LandingBody = observer(() => {
                 xl: "2rem",
               }}
             >
-              Fridays at 7pm, Rolfe 1200
+              {contactInfo.day} at {contactInfo.time}, {contactInfo.location}
             </Text>
             <OutlineButton
               href="https://www.facebook.com/groups/gocatucla"
@@ -221,11 +219,8 @@ const LandingBody = observer(() => {
         >
           Grace Community Church - 9am every Sunday
         </Text>
-        <OutlineButton href="#rides">SIGN UP</OutlineButton>
+        <OutlineButton href="/rides">SIGN UP</OutlineButton>
       </Box>
-
-      {/* Events */}
-      {/* <EventCardList events={events} /> */}
     </Container>
   );
 });
