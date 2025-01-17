@@ -17,8 +17,17 @@ const NavLinks = [
     ],
   },
   {
-    name: "Rides",
-    link: "/rides",
+    name: "Get involved", // Dropdown
+    sublinks: [
+      {
+        name: "Small Groups",
+        link: "/smallgroups",
+      },
+      {
+        name: "Ministry Teams",
+        link: "/ministryteams",
+      },
+    ],
   },
   {
     name: "Resources", // Dropdown
@@ -34,25 +43,16 @@ const NavLinks = [
     ],
   },
   {
-    name: "Events",
-    link: "/events",
-  },
-  {
     name: "Prayer Requests",
     link: "/prayer-request",
   },
   {
-    name: "Get involved", // Dropdown
-    sublinks: [
-      {
-        name: "Small Groups",
-        link: "/smallgroups",
-      },
-      {
-        name: "Ministry Teams",
-        link: "/ministryteams",
-      },
-    ],
+    name: "Events",
+    link: "/events",
+  },
+  {
+    name: "Rides",
+    link: "/rides",
   },
 ];
 

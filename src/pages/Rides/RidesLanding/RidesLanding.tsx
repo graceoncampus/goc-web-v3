@@ -8,6 +8,9 @@ import { listRides } from "graphql/queries";
 import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { BannerTemplate } from "layouts/BannerTemplate";
+import { Box, Container, Heading, Image, Text, VStack } from "@chakra-ui/react";
+import GOCButton from "components/GOCButton";
+import { MdHeight } from "react-icons/md";
 
 const client = generateClient();
 
@@ -138,7 +141,7 @@ const updateRides = async (url: string, date: string, emailMsg: string) => {
   }
 };
 
-export const RidesLanding = () => {
+export const RidesLandingPage = () => {
   const [ride, setRide] = useState<Ride>();
   const [loading, setLoading] = useState<Boolean>(true);
 
@@ -161,7 +164,7 @@ export const RidesLanding = () => {
     <BannerTemplate
       title="Rides"
       activeKey={NavbarActiveKey.RIDES}
-      imageSrc="/images/rides.png"
+      imageSrc="/images/rides2.png"
       alt="Rides page banner"
     >
       <RidesLandingBody rides={ride} />
@@ -171,30 +174,66 @@ export const RidesLanding = () => {
 
 const RidesList = ({ rides }: RideProps) => {
   return (
-    <div>
-      <div className="overlay" id="rides-landing">
-        <h1>
-          Need a ride?
-          <br />
-          We've got you covered.
-        </h1>
-        <Button
-          className="request-ride-button"
-          variant="dark"
-          href="/rides/rider/signup"
-          target="_blank"
-        >
-          I need a ride
-        </Button>
-        <Button
-          className="request-ride-button"
-          variant="dark"
-          href="/rides/driver/signup"
-          target="_blank"
-        >
-          I can drive
-        </Button>
-      </div>
+    <Container fluid>
+      <Box
+        position={"relative"}
+        width={"100%"}
+        paddingX={"1rem"}
+        paddingY={"6rem"}
+        borderRadius={"2rem"}
+        marginBottom={"3rem"}
+      >
+        <Image
+          position="absolute"
+          top="0"
+          left="0"
+          width="100%"
+          height="100%"
+          src="/images/rides.jpg"
+          alt="Rides card background"
+          objectFit="cover"
+          objectPosition="center"
+          userSelect="none"
+          borderRadius={"2rem"}
+          zIndex={"-2"}
+        />
+        {/* Overlay */}
+        <Box
+          position="absolute"
+          top="0"
+          left="0"
+          width="100%"
+          height="100%"
+          bg="black"
+          opacity="0.4"
+          borderRadius={"2rem"}
+          zIndex={"-1"}
+        />
+        <VStack gap={0} color={"white"} textAlign={"center"}>
+          <Heading as={"h2"} fontSize={{ sm: "2xl", md: "3xl" }}>
+            Need a ride?
+          </Heading>
+          <Text
+            fontSize={{ sm: "lg", md: "xl" }}
+            textAlign={"center"}
+            marginBottom={"1.5rem"}
+          >
+            We've got you covered!
+          </Text>
+          <GOCButton
+            href="/rides/rider/signup"
+            buttonProps={{ width: "10rem", height: "3rem" }}
+          >
+            I need a ride
+          </GOCButton>
+          <GOCButton
+            href="/rides/driver/signup"
+            buttonProps={{ width: "10rem", height: "3rem" }}
+          >
+            I can drive
+          </GOCButton>
+        </VStack>
+      </Box>
       <div className="rides-container">
         <div className="table-header">
           <div className="column-item">Driver</div>
@@ -217,7 +256,7 @@ const RidesList = ({ rides }: RideProps) => {
           );
         })}
       </div>
-    </div>
+    </Container>
   );
 };
 

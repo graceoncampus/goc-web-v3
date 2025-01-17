@@ -34,7 +34,6 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import { IoMdMenu } from "react-icons/io";
 import NavLinks from "./NavLinks";
 import LoginButton from "./LoginButton";
-import GOCButton from "./GOCButton";
 
 export enum NavbarActiveKey {
   NONE = "",
@@ -79,7 +78,7 @@ const NavItem = ({
   selected,
   drawerOpen,
 }: NavItemProps) => {
-  const fontSize = "1rem";
+  const fontSize = "md";
   const fontWeight = selected ? "bold" : "normal";
   const color =
     isScrolled || drawerOpen
@@ -97,14 +96,15 @@ const NavItem = ({
         <MenuRoot>
           <MenuTrigger asChild>
             <Button
-              variant="ghost"
-              margin={".5rem"}
+              variant={"ghost"}
+              marginY={".5rem"}
+              marginX={drawerOpen ? ".5rem" : "0"}
               fontSize={fontSize}
               fontWeight={fontWeight}
               color={color}
               transition={"color 0.3s ease"}
               backgroundColor={"transparent"}
-              outline="none !important"
+              outline={"none"}
               _hover={{
                 backgroundColor: bgHoverColor,
               }}
@@ -143,9 +143,9 @@ const NavItem = ({
   return (
     // No dropdown menu
     <Button
-      variant="ghost"
+      variant={"ghost"}
       asChild
-      margin=".5rem"
+      margin={".5rem"}
       _hover={{
         backgroundColor: bgHoverColor,
       }}
@@ -259,6 +259,7 @@ const Navbar = ({
               color={iconColor}
               fontSize={"2.5rem"}
               transition={"color .3s ease"}
+              
             >
               <IoMdMenu />
             </Icon>

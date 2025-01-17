@@ -8,6 +8,18 @@ import {
 const headingRecipe = defineRecipe({
   base: {
     fontFamily: "'Poppins', sans-serif",
+    fontSize: { sm: "2xl", xl: "3xl" },
+    fontWeight: "bold",
+    lineHeight: "1.2",
+    marginBottom: "1rem",
+  },
+});
+
+const textRecipe = defineRecipe({
+  base: {
+    fontFamily: "'Poppins', sans-serif",
+    fontSize: { sm: "md", xl: "lg" },
+    textWrap: "pretty",
   },
 });
 
@@ -15,6 +27,10 @@ const config = defineConfig({
   globalCss: {
     "*, *::before, *::after, *:before, *:after": {
       boxSizing: "border-box",
+    },
+    _selection: {
+      background: "{colors.goc.blue}",
+      color: "white",
     },
     body: {
       margin: 0,
@@ -41,10 +57,11 @@ const config = defineConfig({
   },
   theme: {
     breakpoints: {
-      sm: "320px",
-      md: "768px",
-      lg: "960px",
-      xl: "1200px",
+      // base: 0-319px (optional)
+      sm: "320px", // 320-767px (Mobile / Tablet)
+      md: "768px", // 768-959px (Small screens)
+      lg: "960px", // 960-1199px (Large screens)
+      xl: "1200px", // 1200+px (XL screens)
     },
     tokens: {
       colors: {
@@ -97,7 +114,7 @@ const config = defineConfig({
         },
       },
     },
-    recipes: { heading: headingRecipe },
+    recipes: { heading: headingRecipe, text: textRecipe },
   },
 });
 

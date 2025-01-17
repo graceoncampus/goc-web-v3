@@ -27,13 +27,12 @@ const InfoBox = ({
     >
       <Heading
         size={{ base: "2xl", md: "4xl", lg: "2xl", xl: "4xl" }}
-        lineHeight="1.2"
         fontWeight="semibold"
-        marginBottom={2}
+        marginBottom={".5rem"}
       >
         {title}
       </Heading>
-      <Text fontSize={{ base: "sm", xl: "md" }}>{description}</Text>
+      <Text fontSize={"md"}>{description}</Text>
       <OutlineButton href={link} onWhite>
         {buttonText}
       </OutlineButton>

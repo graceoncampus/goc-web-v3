@@ -107,14 +107,16 @@ export default function Footer() {
             <Stack gap={".5rem"}>
               <Flex alignItems={"center"}>
                 <LuClock7 />
-                <Text marginLeft={".2rem"}>
+                <Text fontSize={"md"} marginLeft={".2rem"}>
                   {contactInfo.day} at {contactInfo.time}
                 </Text>
               </Flex>
 
               <Flex alignItems={"center"}>
                 <TfiLocationPin />
-                <Text marginLeft={".2rem"}>{contactInfo.location}</Text>
+                <Text fontSize={"md"} marginLeft={".2rem"}>
+                  {contactInfo.location}
+                </Text>
               </Flex>
             </Stack>
           </FooterColumn>
@@ -127,9 +129,9 @@ export default function Footer() {
         >
           <FooterColumn title="CONTACT US">
             <Stack gap={".1rem"}>
-              <Text>{contactInfo.name}</Text>
-              <Text>{contactInfo.phone}</Text>
-              <Text>{contactInfo.email}</Text>
+              <Text fontSize={"md"}>{contactInfo.name}</Text>
+              <Text fontSize={"md"}>{contactInfo.phone}</Text>
+              <Text fontSize={"md"}>{contactInfo.email}</Text>
             </Stack>
           </FooterColumn>
         </GridItem>
@@ -140,12 +142,14 @@ export default function Footer() {
           gridRow={{ base: "4", md: "2 / 4", xl: "1" }}
         >
           <FooterColumn title="NEW TO GOC?">
-            <Text marginBottom={2}>We'd love to get in touch with you!</Text>
+            <Text fontSize={"md"} marginBottom={"1rem"}>
+              We'd love to get in touch with you!
+            </Text>
             <form onSubmit={onSubmit}>
               <Box marginBottom={2}>
                 <Field
                   label={
-                    <Text fontSize={"1rem"} fontWeight={"semibold"}>
+                    <Text fontSize={"sm"} fontWeight={"semibold"}>
                       Name:
                     </Text>
                   }
@@ -162,7 +166,7 @@ export default function Footer() {
               <Box marginBottom={2}>
                 <Field
                   label={
-                    <Text fontSize={"1rem"} fontWeight={"semibold"}>
+                    <Text fontSize={"sm"} fontWeight={"semibold"}>
                       Email:
                     </Text>
                   }

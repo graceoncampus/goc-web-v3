@@ -10,7 +10,7 @@ import { Box } from "@chakra-ui/react";
 export interface TemplateProps {
   activeKey: NavbarActiveKey;
   children: React.ReactNode;
-  disableTransparentNavbar?: Boolean;
+  disableTransparentNavbar?: boolean;
 }
 
 export const Template: React.FC<TemplateProps> = ({
@@ -20,11 +20,10 @@ export const Template: React.FC<TemplateProps> = ({
 }) => {
   return (
     <Box>
-      {disableTransparentNavbar ? (
-        <Navbar selectedNavItemName={activeKey} disableTransparent />
-      ) : (
-        <Navbar selectedNavItemName={activeKey} />
-      )}
+      <Navbar
+        selectedNavItemName={activeKey}
+        disableTransparent={disableTransparentNavbar}
+      />
       <Box as={"main"}>{children}</Box>
       <Footer />
     </Box>

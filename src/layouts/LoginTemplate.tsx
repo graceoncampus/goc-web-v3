@@ -5,6 +5,7 @@ export interface LoginTemplateProps extends TemplateProps {
   imageSrc?: string;
   alt?: string;
   overlay?: boolean;
+  animate?: boolean;
 }
 
 export const LoginTemplate: React.FC<LoginTemplateProps> = ({
@@ -13,6 +14,7 @@ export const LoginTemplate: React.FC<LoginTemplateProps> = ({
   activeKey,
   children,
   overlay = true,
+  animate = true,
 }) => {
   const bgColor = imageSrc ? "transparent" : "gray";
 
@@ -63,6 +65,9 @@ export const LoginTemplate: React.FC<LoginTemplateProps> = ({
           boxShadow="lg"
           padding="2rem 6rem"
           marginY={"6rem"}
+          opacity={animate ? "0" : "1"}
+          animation={animate ? "fadeIn .5s ease-in-out" : undefined}
+          animationFillMode={animate ? "forwards" : undefined}
         >
           {children}
         </Container>

@@ -21,7 +21,7 @@ interface SectionHeadingProps {
 
 const SectionHeading: React.FC<SectionHeadingProps> = ({ children }) => {
   return (
-    <Heading as="h2" size={"xl"} textAlign={"left"} marginBottom={4}>
+    <Heading as="h2" fontSize={"xl"} marginBottom={"1rem"}>
       {children}
     </Heading>
   );
@@ -29,10 +29,10 @@ const SectionHeading: React.FC<SectionHeadingProps> = ({ children }) => {
 
 const OurBeliefsBody = () => {
   return (
-    <Container maxWidth="800px" textAlign="center">
-      <VStack gap={"3rem"} fontSize="md" lineHeight="tall" textWrap="pretty">
+    <Container maxWidth="800px">
+      <VStack gap={"3rem"} fontSize="md" lineHeight="tall" textAlign="left">
         {/* Section 1 */}
-        <Box textAlign="left">
+        <Box>
           <SectionHeading>The Sinfulness of Man</SectionHeading>
           <Text>
             When man was first created, man was in a perfect relationship with
@@ -48,7 +48,7 @@ const OurBeliefsBody = () => {
         </Box>
 
         {/* Section 2 */}
-        <Box textAlign="left">
+        <Box>
           <SectionHeading>God&apos;s Plan of Redemption</SectionHeading>
           <Text>
             God’s plan to save man from His wrath was carried out through Jesus
@@ -67,7 +67,7 @@ const OurBeliefsBody = () => {
         </Box>
 
         {/* Section 3 */}
-        <Box textAlign="left">
+        <Box>
           <SectionHeading>God&apos;s Call for Man to Be Saved</SectionHeading>
           <Text>
             Saving faith in Christ is a gracious gift of God where the Holy

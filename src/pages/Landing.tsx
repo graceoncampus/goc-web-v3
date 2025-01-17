@@ -222,6 +222,7 @@ const LandingBody = observer(() => {
         color="white"
       >
         <Heading
+          as={"h2"}
           size={{ base: "2xl", sm: "2xl", md: "4xl", lg: "4xl", xl: "6xl" }}
           marginTop="0.5rem"
           textWrap="pretty"

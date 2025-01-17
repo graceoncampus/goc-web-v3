@@ -21,6 +21,7 @@ import {
   AccordionRoot,
 } from "components/ui/accordion";
 import { BannerTemplate } from "layouts/BannerTemplate";
+import { Container } from "react-bootstrap";
 
 const client = generateClient();
 
@@ -130,122 +131,112 @@ const EventsBody: React.FC = () => {
   }
 
   return (
-    <>
-      <Box width={"100%"}>
-        <Center marginBottom={"1rem"}>
-          <Heading
-            as="h2"
-            fontSize={{
-              base: "2xl",
-              md: "3xl",
-              lg: "4xl",
-              xl: "4xl",
-            }}
-          >
-            Upcoming Events
-          </Heading>
-        </Center>
-        <Stack
-          width={{ sm: "100%", md: "4/5" }}
-          marginX={"auto"}
-          marginY={"1.8rem"}
+    <Container fluid>
+      <Center>
+        <Heading
+          as="h2"
+          fontSize={{
+            base: "2xl",
+            md: "3xl",
+            lg: "4xl",
+            xl: "4xl",
+          }}
         >
-          <AccordionRoot spaceY={"1rem"} variant={"plain"} collapsible>
-            {events.map((event, index) => (
-              <AccordionItem key={index} value={event.id}>
-                <AccordionItemTrigger indicatorPlacement="start">
-                  <Stack width={"100%"}>
-                    <Flex
-                      flexDirection={{ base: "column", md: "row" }}
-                      justifyContent={"space-between"}
-                      alignItems={"center"}
-                      width={"100%"}
-                      marginLeft={"10px"}
+          Upcoming Events
+        </Heading>
+      </Center>
+      <Stack
+        width={{ sm: "100%", md: "4/5" }}
+        marginX={"auto"}
+        marginY={"1.8rem"}
+      >
+        <AccordionRoot spaceY={"1rem"} variant={"plain"} collapsible>
+          {events.map((event, index) => (
+            <AccordionItem key={index} value={event.id}>
+              <AccordionItemTrigger indicatorPlacement="start">
+                <Stack width={"100%"}>
+                  <Flex
+                    flexDirection={{ base: "column", md: "row" }}
+                    justifyContent={"space-between"}
+                    alignItems={"center"}
+                    width={"100%"}
+                    marginLeft={"10px"}
+                  >
+                    <Heading
+                      as={"p"}
+                      fontSize={{
+                        base: "md",
+                        md: "xl",
+                        lg: "2xl",
+                      }}
+                      margin={0}
                     >
-                      <Heading
-                        fontSize={{
-                          base: "md",
-                          md: "xl",
-                          lg: "2xl",
-                        }}
-                        lineHeight={"1.5"}
-                        marginRight={"1rem"}
-                      >
-                        {event.title}
-                      </Heading>
-                      <Text
-                        fontSize={{
-                          base: "sm",
-                          md: "xl",
-                        }}
-                        marginRight={"10px"}
-                        textAlign={"right"}
-                      >
-                        {formatEventDateShort(event.startDate)}
-                      </Text>
-                    </Flex>
-                    <Separator size={"md"} width={"100%"} />
-                  </Stack>
-                </AccordionItemTrigger>
+                      {event.title}
+                    </Heading>
+                    <Text
+                      fontSize={{
+                        base: "sm",
+                        md: "xl",
+                      }}
+                      marginRight={"10px"}
+                      textAlign={"right"}
+                    >
+                      {formatEventDateShort(event.startDate)}
+                    </Text>
+                  </Flex>
+                  <Separator size={"md"} width={"100%"} />
+                </Stack>
+              </AccordionItemTrigger>
 
-                <AccordionItemContent>
-                  <Box marginX={"30px"}>
-                    <Flex>
-                      <Image
-                        width={"300px"}
-                        height={"300px"}
-                        borderRadius={"20px"}
-                        src={event.imageLink}
-                      />
-                      <Box
-                        className="event-description-text"
-                        marginLeft={"20px"}
-                      >
+              <AccordionItemContent>
+                <Box marginX={"30px"}>
+                  <Flex>
+                    <Image
+                      width={"300px"}
+                      height={"300px"}
+                      borderRadius={"20px"}
+                      src={event.imageLink}
+                    />
+                    <Box className="event-description-text" marginLeft={"20px"}>
+                      <Box>
+                        <Heading size={"5xl"} className="event-title">
+                          {event.title}
+                        </Heading>
                         <Box>
-                          <Heading size={"5xl"} className="event-title">
-                            {event.title}
-                          </Heading>
-                          <Box>
-                            <Text>{event.description}</Text>
-                            <Box className="event-info" marginTop={"10px"}>
+                          <Text>{event.description}</Text>
+                          <Box className="event-info" marginTop={"10px"}>
+                            <Text>
+                              {formatEventDate(event.startDate, event.endDate)}
+                            </Text>
+                            <Flex
+                              className="location-info"
+                              alignItems={"center"}
+                              marginTop={"10px"}
+                            >
+                              <Icon fontSize={"30px"}>
+                                <MdLocationPin />
+                              </Icon>
+                              <Text marginRight={"10px"}>{event.location}</Text>
+                              <Icon fontSize={"30px"}>
+                                <MdAttachMoney />
+                              </Icon>
                               <Text>
-                                {formatEventDate(
-                                  event.startDate,
-                                  event.endDate,
-                                )}
+                                {event.price === 0
+                                  ? "free"
+                                  : event.price.toString()}
                               </Text>
-                              <Flex
-                                className="location-info"
-                                alignItems={"center"}
-                                marginTop={"10px"}
-                              >
-                                <Icon fontSize={"30px"}>
-                                  <MdLocationPin />
-                                </Icon>
-                                <Text marginRight={"10px"}>
-                                  {event.location}
-                                </Text>
-                                <Icon fontSize={"30px"}>
-                                  <MdAttachMoney />
-                                </Icon>
-                                <Text>
-                                  {event.price === 0
-                                    ? "free"
-                                    : event.price.toString()}
-                                </Text>
-                              </Flex>
-                            </Box>
+                            </Flex>
                           </Box>
                         </Box>
                       </Box>
-                    </Flex>
-                  </Box>
-                </AccordionItemContent>
-              </AccordionItem>
-            ))}
-          </AccordionRoot>
-        </Stack>
-      </Box>
-    </>
+                    </Box>
+                  </Flex>
+                </Box>
+              </AccordionItemContent>
+            </AccordionItem>
+          ))}
+        </AccordionRoot>
+      </Stack>
+    </Container>
   );
 };

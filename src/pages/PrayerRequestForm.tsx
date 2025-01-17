@@ -41,9 +41,9 @@ interface PrayerRequestFormProps {
  
    };
  */
-export const PrayerRequestForm = (
-  prayerRequestFormProps: PrayerRequestFormProps,
-) => {
+export const PrayerRequestForm = ({
+  setPrayerRequestCompleted,
+}: PrayerRequestFormProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [prayerName, setPrayerName] = useState<string>("");
@@ -52,6 +52,7 @@ export const PrayerRequestForm = (
 
   const handleFormSubmit = async (event: any) => {
     event.preventDefault();
+
     const prayerSignup = {
       prayerName,
       prayerEmail,
@@ -63,11 +64,10 @@ export const PrayerRequestForm = (
     //   prayerName: prayerName,
     //   prayerEmail: prayerEmail,
     //   prayerComments: prayerComments,
-
     // };
-  };
 
-  prayerRequestFormProps.setPrayerRequestCompleted(true);
+    setPrayerRequestCompleted(true);
+  };
   return (
     <Center width={"100%"} margin={"auto"}>
       <Fieldset.Root maxWidth={"500px"}>
@@ -98,7 +98,7 @@ export const PrayerRequestForm = (
                 required
               />
             </Field>
-            <Field label="Prayer Request *">
+            <Field label="Prayer Request">
               <Textarea
                 id="prayerComments"
                 placeholder="Philippians 4:6-7"

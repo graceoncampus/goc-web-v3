@@ -5,6 +5,7 @@ interface GOCButtonProps {
   children: React.ReactNode;
   buttonProps?: Record<string, any>;
   type?: "button" | "submit" | "reset";
+  target?: "_self" | "_blank";
 }
 
 const GOCButton: React.FC<GOCButtonProps> = ({
@@ -12,6 +13,7 @@ const GOCButton: React.FC<GOCButtonProps> = ({
   children,
   buttonProps,
   type = "button",
+  target = "_self",
 }) => {
   return href ? (
     <Button
@@ -20,7 +22,7 @@ const GOCButton: React.FC<GOCButtonProps> = ({
       outline="none"
       padding=".5rem 1rem"
       color="white"
-      fontSize="1rem"
+      fontSize="md"
       fontWeight="semibold"
       boxShadow="none"
       border="none"
@@ -39,7 +41,9 @@ const GOCButton: React.FC<GOCButtonProps> = ({
       }}
       {...buttonProps}
     >
-      <Link href={href}>{children}</Link>
+      <Link href={href} target={target}>
+        {children}
+      </Link>
     </Button>
   ) : (
     <Button
