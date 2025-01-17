@@ -7,7 +7,7 @@ export const OurBeliefsPage = () => {
     <BannerTemplate
       title="Our Beliefs"
       activeKey={NavbarActiveKey.BELIEFS}
-      imageSrc="/images/landing3.jpg"
+      imageSrc="/images/beliefs.jpg"
       alt="Our Beliefs page banner"
     >
       <OurBeliefsBody />

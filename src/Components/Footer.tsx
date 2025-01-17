@@ -15,7 +15,8 @@ import { useForm } from "react-hook-form";
 import { Field } from "components/ui/field";
 import { Toaster, toaster } from "components/ui/toaster";
 import { FaFacebook, FaWordpress, FaInstagram, FaVimeoV } from "react-icons/fa";
-import { MdOutlineAccessTime, MdOutlineLocationOn } from "react-icons/md";
+import { TfiLocationPin } from "react-icons/tfi";
+import { LuClock7 } from "react-icons/lu";
 import { contactInfo } from "../constants/ContactInfo";
 
 interface FooterColumnProps {
@@ -105,14 +106,14 @@ export default function Footer() {
           <FooterColumn title="GRACE ON CAMPUS">
             <Stack gap={".5rem"}>
               <Flex alignItems={"center"}>
-                <MdOutlineAccessTime />
+                <LuClock7 />
                 <Text marginLeft={".2rem"}>
                   {contactInfo.day} at {contactInfo.time}
                 </Text>
               </Flex>
 
               <Flex alignItems={"center"}>
-                <MdOutlineLocationOn />
+                <TfiLocationPin />
                 <Text marginLeft={".2rem"}>{contactInfo.location}</Text>
               </Flex>
             </Stack>

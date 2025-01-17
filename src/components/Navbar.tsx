@@ -34,6 +34,7 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import { IoMdMenu } from "react-icons/io";
 import NavLinks from "./NavLinks";
 import LoginButton from "./LoginButton";
+import GOCButton from "./GOCButton";
 
 export enum NavbarActiveKey {
   NONE = "",
@@ -80,8 +81,14 @@ const NavItem = ({
 }: NavItemProps) => {
   const fontSize = "1rem";
   const fontWeight = selected ? "bold" : "normal";
-  const color = isScrolled || drawerOpen ? "black" : "white";
-  const bgHoverColor = isScrolled || drawerOpen ? "goc.gray" : "goc.gray/30";
+  const color =
+    isScrolled || drawerOpen
+      ? selected
+        ? "{colors.goc.blue}"
+        : "black"
+      : "white";
+  const bgHoverColor =
+    isScrolled || drawerOpen ? "{colors.goc.gray}" : "{colors.goc.gray/30}";
 
   if (sublinks.length > 0) {
     return (

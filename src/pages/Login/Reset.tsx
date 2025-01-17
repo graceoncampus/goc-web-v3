@@ -16,7 +16,7 @@ import { InputGroup } from "components/ui/input-group";
 import { MdOutlineEmail } from "react-icons/md";
 import GOCButton from "components/GOCButton";
 
-export const Reset = () => {
+export const ResetPage = () => {
   return (
     <LoginTemplate activeKey={NavbarActiveKey.LOGIN}>
       <ResetBody />

@@ -29,7 +29,7 @@ export interface SignupProps {
   gradYear: string;
 }
 
-export const Signup = () => {
+export const SignupPage = () => {
   return (
     <LoginTemplate activeKey={NavbarActiveKey.LOGIN}>
       <SignupBody />
@@ -68,7 +68,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
 
   const onSignup = async (data: SignupProps) => {
     try {
-      const { isSignUpComplete, userId, nextStep } = await signUp({
+      await signUp({
         username: data.email,
         password: data.password,
         options: {

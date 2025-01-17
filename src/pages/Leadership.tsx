@@ -6,7 +6,7 @@ export const LeadershipPage = () => {
     <BannerTemplate
       title="Leadership"
       activeKey={NavbarActiveKey.LEADERSHIP}
-      imageSrc="/images/landing3.jpg"
+      imageSrc="/images/leadership.jpg"
       alt="Leadership page banner"
     >
       <LeadershipBody />

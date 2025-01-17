@@ -22,10 +22,10 @@ export const BannerTemplate: React.FC<BannerTemplateProps> = ({
   return (
     <Template activeKey={activeKey}>
       <Box
-        width={"100%"}
-        bg={bgColor}
-        padding={"12rem"}
         position={"relative"}
+        width={"100%"}
+        height={{ base: "20rem", md: "24rem" }}
+        bg={bgColor}
         overflow={"hidden"}
       >
         {imageSrc && (
@@ -34,6 +34,7 @@ export const BannerTemplate: React.FC<BannerTemplateProps> = ({
               src={imageSrc}
               alt={alt || "Banner image"}
               objectFit={"cover"}
+              objectPosition="center"
               width={"100%"}
               height={"100%"}
               position={"absolute"}
@@ -49,16 +50,17 @@ export const BannerTemplate: React.FC<BannerTemplateProps> = ({
                 left={0}
                 width={"100%"}
                 height={"100%"}
-                bg={"rgba(0, 0, 0, 0.5)"}
+                bg="black"
+                opacity="0.5"
                 zIndex={-1}
               />
             )}
           </>
         )}
         <Center
+          position={"absolute"}
           width={"100%"}
           height={"100%"}
-          position={"absolute"}
           textAlign={"center"}
           top={"50%"}
           left={"50%"}
@@ -73,10 +75,8 @@ export const BannerTemplate: React.FC<BannerTemplateProps> = ({
               xl: "6xl",
             }}
             color={titleColor}
-            lineHeight="1.2"
-            fontWeight="bold"
-            width="100%"
-            paddingX={"1rem"}
+            lineHeight={"1.2"}
+            fontWeight={"bold"}
             marginX={"auto"}
           >
             {title}

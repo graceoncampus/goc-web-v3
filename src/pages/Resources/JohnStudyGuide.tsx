@@ -1,7 +1,7 @@
 import { NavbarActiveKey } from "components/Navbar";
 import { BannerTemplate } from "layouts/BannerTemplate";
 
-export const StudyGuide = () => {
+export const StudyGuidePage = () => {
   return (
     <BannerTemplate
       title="Study Guide"

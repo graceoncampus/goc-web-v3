@@ -45,7 +45,7 @@ export const MinistryTeamsPage: React.FC = () => {
     <BannerTemplate
       title="Ministry Teams"
       activeKey={NavbarActiveKey.MINISTRY_TEAMS}
-      imageSrc="/images/landing3.jpg"
+      imageSrc="/images/ministry_teams.jpg"
       alt="Ministry Teams page banner"
     >
       <TeamsBody MinistryTeams={mockTeams} isUserLoggedIn={isUserLoggedIn} />

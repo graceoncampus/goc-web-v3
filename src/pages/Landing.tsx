@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NavbarActiveKey } from "components/Navbar";
 import { Template } from "layouts/Template";
-import { RiArrowRightLine  } from "react-icons/ri";
+import { RiArrowRightLine } from "react-icons/ri";
 import OutlineButton from "components/OutlineButton";
 import InfoBox from "components/InfoBox";
 import { observer } from "mobx-react-lite";
@@ -14,7 +14,7 @@ import { useStore } from "store/StoreContext";
 import { Box, Heading, Image, Stack, Text, Container } from "@chakra-ui/react";
 import { contactInfo } from "../constants/ContactInfo";
 
-export const Landing = () => {
+export const LandingPage = () => {
   return (
     <Template activeKey={NavbarActiveKey.NONE}>
       <LandingBody />
@@ -114,6 +114,11 @@ const LandingBody = observer(() => {
               fontWeight="bold"
               textWrap="pretty"
               marginBottom="0.5rem"
+              animation="fadeIn .5s ease-in-out"
+              animationDelay="0s"
+              opacity="0"
+              animationFillMode="forwards"
+              textShadow={"2px 2px rgba(0,0,0,0.3)"}
             >
               Welcome to Grace on Campus!
             </Heading>
@@ -132,17 +137,29 @@ const LandingBody = observer(() => {
                 lg: "1rem",
                 xl: "2rem",
               }}
+              animation="fadeIn .5s ease-in-out"
+              animationDelay="0.25s"
+              opacity="0"
+              animationFillMode="forwards"
+              textShadow={"1px 1px rgba(0,0,0,0.3)"}
             >
               {contactInfo.day} at {contactInfo.time}, {contactInfo.location}
             </Text>
-            <OutlineButton
-              href="https://www.facebook.com/groups/gocatucla"
-              onWhite={false}
-              icon={<RiArrowRightLine />}
-              animateIcon
+            <Box
+              animation="fadeIn .5s ease-in-out"
+              animationDelay="0.6s"
+              opacity="0"
+              animationFillMode="forwards"
             >
-              JOIN US!
-            </OutlineButton>
+              <OutlineButton
+                href="https://www.facebook.com/groups/gocatucla"
+                onWhite={false}
+                icon={<RiArrowRightLine />}
+                animateIcon
+              >
+                JOIN US!
+              </OutlineButton>
+            </Box>
           </Stack>
         </Container>
       </Box>

@@ -1,25 +1,25 @@
 import React from "react";
 import ScrollToTop from "hooks/ScrollToTop";
 import { Provider } from "provider";
-import { Landing } from "pages/Landing";
+import { LandingPage } from "pages/Landing";
 import { Landing as MinistryTeamLanding } from "pages/MinistryTeams/Landing/Landing";
 import { DriverSignup } from "pages/Rides/DriverSignup/DriverSignup";
 import { RiderSignup } from "pages/Rides/RiderSignup/RiderSignup";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { PrayerFormPage } from "pages/PrayerFormPage";
+import { PrayerFormPage } from "pages/PrayerForm";
 import { SmallGroupsPage } from "pages/SmallGroups";
 import { StubbedRidesPage } from "pages/MinistryTeams/Rides/StubbedRidesPage";
-import { AboutUsPage } from "pages/AboutUsPage";
-import { StudyGuide } from "pages/Resources/JohnStudyGuide";
-import { SermonsPage } from "pages/SermonsPage";
+import { AboutUsPage } from "pages/AboutUs";
+import { StudyGuidePage } from "pages/Resources/JohnStudyGuide";
+import { SermonsPage } from "pages/Sermons";
 import { RidesLanding } from "pages/Rides/RidesLanding/RidesLanding";
 import { OurBeliefsPage } from "pages/OurBeliefs";
 import { LeadershipPage } from "pages/Leadership";
-import { EventsPage } from "pages/EventsPage";
+import { EventsPage } from "pages/Events";
 import { MinistryTeamsPage } from "pages/MinistryTeams";
 import { LoginPage } from "pages/Login/Login";
-import { Reset } from "pages/Login/Reset";
-import { Signup } from "pages/Login/Signup";
+import { ResetPage } from "pages/Login/Reset";
+import { SignupPage } from "pages/Login/Signup";
 import { NotFound as UserNotFound } from "pages/NotFound";
 import { NotFound } from "pages/MinistryTeams/NotFound/NotFound";
 import "@fontsource/poppins";
@@ -32,7 +32,7 @@ const App = () => {
           <ScrollToTop />
           <Routes>
             <Route path={"*"} element={<UserNotFound />} /> {/* 404 */}
-            <Route path={"/"} element={<Landing />} />
+            <Route path={"/"} element={<LandingPage />} />
             <Route path={"/about"} element={<AboutUsPage />} />
             <Route path={"/sermons"} element={<SermonsPage />} />
             <Route path={"/events"} element={<EventsPage />} />
@@ -50,10 +50,10 @@ const App = () => {
             <Route path={"/ministry_teams/*"} element={<NotFound />} />
             <Route path="/prayer-request" element={<PrayerFormPage />} />
             <Route path={"/smallgroups"} element={<SmallGroupsPage />} />
-            <Route path={"/study-guide"} element={<StudyGuide />} />
+            <Route path={"/study-guide"} element={<StudyGuidePage />} />
             <Route path={"/login"} element={<LoginPage />} />
-            <Route path={"/reset"} element={<Reset />} />
-            <Route path={"/signup"} element={<Signup />} />
+            <Route path={"/reset"} element={<ResetPage />} />
+            <Route path={"/signup"} element={<SignupPage />} />
           </Routes>
         </BrowserRouter>
       </Provider>

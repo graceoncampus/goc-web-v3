@@ -29,6 +29,7 @@ const config = defineConfig({
       _focus: {
         outline: "none !important",
       },
+      // THIS ENABLES OUTLINE WHEN USER TABS (optional)
       // _focusVisible: {
       //   outline: "2px solid black !important",
       //   outlineOffset: "2px !important",
@@ -85,9 +86,15 @@ const config = defineConfig({
       },
     },
     keyframes: {
-      spin: {
-        from: { transform: "rotate(0deg)" },
-        to: { transform: "rotate(360deg)" },
+      fadeIn: {
+        from: {
+          opacity: 0,
+          transform: "translateY(10px)",
+        },
+        to: {
+          opacity: 1,
+          transform: "none",
+        },
       },
     },
     recipes: { heading: headingRecipe },

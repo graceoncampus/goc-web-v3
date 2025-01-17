@@ -19,7 +19,7 @@ export const Template: React.FC<TemplateProps> = ({
   disableTransparentNavbar = false,
 }) => {
   return (
-    <Box width={"100%"} position={"relative"}>
+    <Box>
       {disableTransparentNavbar ? (
         <Navbar selectedNavItemName={activeKey} disableTransparent />
       ) : (

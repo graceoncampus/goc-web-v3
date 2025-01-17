@@ -15,12 +15,8 @@ import { Field } from "components/ui/field";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 //  import { CreatePrayerInput } from 'Api';
-
 //import { getEventsByEventId } from 'graphql/queries';
 //import { createDriver } from 'graphql/mutations';
-/*
-
- */
 
 interface PrayerRequestFormProps {
   setPrayerRequestCompleted: (prayerRequestValue: boolean) => void;
@@ -75,7 +71,12 @@ export const PrayerRequestForm = (
   return (
     <Center width={"100%"} margin={"auto"}>
       <Fieldset.Root maxWidth={"500px"}>
-        <Heading textAlign={"center"} fontSize={"xl"} marginBottom={"1rem"}>
+        <Heading
+          textAlign={"center"}
+          fontSize={"xl"}
+          marginBottom={"1rem"}
+          textWrap={"balance"}
+        >
           How can we be praying for you?
         </Heading>
         <form onSubmit={handleFormSubmit}>

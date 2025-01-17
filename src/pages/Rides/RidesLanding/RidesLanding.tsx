@@ -161,7 +161,7 @@ export const RidesLanding = () => {
     <BannerTemplate
       title="Rides"
       activeKey={NavbarActiveKey.RIDES}
-      imageSrc="/images/landing3.jpg"
+      imageSrc="/images/rides.png"
       alt="Rides page banner"
     >
       <RidesLandingBody rides={ride} />
