@@ -3,6 +3,7 @@
  */
 
 import { useState, useEffect } from "react";
+import { getCurrentUser } from "aws-amplify/auth";
 import {
   Box,
   Flex,
@@ -259,7 +260,6 @@ const Navbar = ({
               color={iconColor}
               fontSize={"2.5rem"}
               transition={"color .3s ease"}
-              
             >
               <IoMdMenu />
             </Icon>

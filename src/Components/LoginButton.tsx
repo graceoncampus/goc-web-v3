@@ -1,6 +1,27 @@
 import { Button, Link } from "@chakra-ui/react";
+import {
+  getCurrentUser,
+  GetCurrentUserOutput,
+  signOut,
+} from "aws-amplify/auth";
+import { useEffect, useState } from "react";
 
 const LoginButton = () => {
+  const [user, setUser] = useState<GetCurrentUserOutput | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const u = await getCurrentUser();
+        setUser(u);
+        console.log(u.signInDetails);
+      } catch {
+        console.log("No user signed in.");
+      }
+    };
+    fetchUser();
+  }, []);
+
   return (
     <Button
       asChild
@@ -25,7 +46,21 @@ const LoginButton = () => {
         outlineOffset: "2px",
       }}
     >
-      <Link href="/login">Log in</Link>
+      {user ? (
+        <Link
+          onClick={async (e) => {
+            e.preventDefault();
+            await signOut();
+            localStorage.removeItem("signedIn");
+            window.location.reload();
+          }}
+        >
+          Log out
+        </Link>
+      ) : (
+        // <Link href="/login">{user?.username}</Link>
+        <Link href="/login">Log In</Link>
+      )}
     </Button>
   );
 };
