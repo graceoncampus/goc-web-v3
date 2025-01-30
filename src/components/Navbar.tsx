@@ -3,6 +3,7 @@
  */
 
 import { useState, useEffect, useCallback } from "react";
+import { getCurrentUser } from "aws-amplify/auth";
 import {
   Box,
   Flex,

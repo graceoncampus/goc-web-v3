@@ -69,13 +69,15 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
 
   const onSignup = async (data: SignupProps) => {
     try {
+      const formattedPhoneNumber =
+        "+1" + data.phoneNumber.replace(/[()-\s]/g, "");
       await signUp({
         username: data.email,
         password: data.password,
         options: {
           userAttributes: {
             email: data.email,
-            phone_number: data.phoneNumber,
+            phone_number: formattedPhoneNumber,
             name: data.firstName,
             family_name: data.lastName,
             "custom:address": data.address,
