@@ -29,17 +29,15 @@ const LoginBody = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  function handleSubmit(event: any) {
+  async function handleSubmit(event: any) {
     event.preventDefault();
 
-    signIn({ username, password })
-      .then((value: any) => {
-        // Signed in successfully so we reload.
-        navigate("/");
-      })
-      .catch((reason: any) => {
-        console.error(`Failed to sign user in: ${reason}`);
-      });
+    try {
+      await signIn({ username, password });
+      navigate("/"); // Redirect on successful sign-in
+    } catch (error) {
+      console.error("Failed to sign user in:", error);
+    }
   }
 
   return (

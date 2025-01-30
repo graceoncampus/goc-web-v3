@@ -60,7 +60,8 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    setError,
+    formState: { errors, isSubmitting },
   } = useForm<SignupProps>();
   const registerWithMask = useHookFormMask(register);
 
@@ -86,6 +87,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
       setUsername(data.email);
     } catch (error: any) {
       console.log(error);
+      setError("email", { message: error.message });
       if (error.name === "UsernameExistsException") {
         try {
           await resendSignUpCode({ username: data.email });

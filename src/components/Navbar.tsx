@@ -2,7 +2,7 @@
  * GOC Navigation Bar
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Box,
   Flex,
@@ -16,6 +16,7 @@ import {
   MenuContent,
   MenuItem,
   Icon,
+  Container,
 } from "@chakra-ui/react";
 import {
   DrawerBackdrop,
@@ -170,21 +171,17 @@ const Navbar = ({
   const [isScrolled, setIsScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (disableTransparent || window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
+  const handleScroll = useCallback(() => {
+    setIsScrolled(disableTransparent || window.scrollY > 50);
+  }, [disableTransparent]);
 
+  useEffect(() => {
     handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [disableTransparent]);
+  }, [handleScroll]);
 
   const bgColor = isScrolled ? "white" : "transparent";
   const shadow = isScrolled ? "md" : "none";
@@ -209,7 +206,13 @@ const Navbar = ({
       {/* Logo */}
       <Link href="/">
         <Center margin="1rem">
-          <Image src="/assets/goc-header.svg" alt="Logo" />
+          <Container fluid padding={0}>
+            {isScrolled ? (
+              <Image src="/assets/goc-header.svg" alt="Logo" />
+            ) : (
+              <Image src="/assets/goc-header.svg" fill="white" alt="Logo" />
+            )}
+          </Container>
         </Center>
       </Link>
 
@@ -259,7 +262,6 @@ const Navbar = ({
               color={iconColor}
               fontSize={"2.5rem"}
               transition={"color .3s ease"}
-              
             >
               <IoMdMenu />
             </Icon>
