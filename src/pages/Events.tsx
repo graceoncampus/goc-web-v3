@@ -192,20 +192,23 @@ const EventsBody: React.FC = () => {
                 <Box marginX={"30px"}>
                   <Flex>
                     <Image
-                      width={"300px"}
-                      height={"300px"}
+                      width={"100px"}
+                      height={"175px"}
                       borderRadius={"20px"}
                       src={event.imageLink}
                     />
                     <Box className="event-description-text" marginLeft={"20px"}>
                       <Box>
-                        <Heading size={"5xl"} className="event-title">
+                        {/* <Heading size={"sm"} className="event-title">
                           {event.title}
-                        </Heading>
+                        </Heading> */}
+                        <Text fontSize={"md"} fontWeight={"800"}>
+                          {event.title}
+                        </Text>
                         <Box>
-                          <Text>{event.description}</Text>
+                          <Text fontSize={"xs"}>{event.description}</Text>
                           <Box className="event-info" marginTop={"10px"}>
-                            <Text>
+                            <Text fontSize={"xs"}>
                               {formatEventDate(event.startDate, event.endDate)}
                             </Text>
                             <Flex
@@ -213,14 +216,16 @@ const EventsBody: React.FC = () => {
                               alignItems={"center"}
                               marginTop={"10px"}
                             >
-                              <Icon fontSize={"30px"}>
+                              <Icon fontSize={"20px"}>
                                 <MdLocationPin />
                               </Icon>
-                              <Text marginRight={"10px"}>{event.location}</Text>
-                              <Icon fontSize={"30px"}>
+                              <Text fontSize={"sm"} marginRight={"10px"}>
+                                {event.location}
+                              </Text>
+                              <Icon fontSize={"20px"}>
                                 <MdAttachMoney />
                               </Icon>
-                              <Text>
+                              <Text fontSize={"sm"}>
                                 {event.price === 0
                                   ? "free"
                                   : event.price.toString()}
