@@ -32,6 +32,7 @@ import {
 
 // import { ColorModeButton } from "components/ui/color-mode";
 import { RiArrowDropDownLine } from "react-icons/ri";
+import { FiExternalLink } from "react-icons/fi";
 import { IoMdMenu } from "react-icons/io";
 import NavLinks from "./NavLinks";
 import LoginButton from "./LoginButton";
@@ -55,6 +56,7 @@ export enum NavbarActiveKey {
 interface SublinkProps {
   name: string;
   link: string;
+  external?: boolean;
 }
 
 interface NavItemProps {
@@ -125,14 +127,33 @@ const NavItem = ({
             marginTop={".5rem"}
           >
             {sublinks.map((sublink) => (
-              <MenuItem key={sublink.name} value={sublink.name} asChild>
-                <Link
-                  href={sublink.link}
-                  padding={".5rem 1rem"}
-                  cursor={"pointer"}
-                >
-                  {sublink.name}
-                </Link>
+              <MenuItem
+                key={sublink.name}
+                value={sublink.name}
+                gap={".25rem"}
+                asChild
+              >
+                {sublink.external ? (
+                  <Link
+                    href={sublink.link}
+                    padding={".5rem 1rem"}
+                    cursor={"pointer"}
+                    target={"_blank"}
+                  >
+                    {sublink.name}
+                    <Icon fontSize={".8rem"} marginBottom={".2rem"}>
+                      <FiExternalLink />
+                    </Icon>
+                  </Link>
+                ) : (
+                  <Link
+                    href={sublink.link}
+                    padding={".5rem 1rem"}
+                    cursor={"pointer"}
+                  >
+                    {sublink.name}
+                  </Link>
+                )}
               </MenuItem>
             ))}
           </MenuContent>
