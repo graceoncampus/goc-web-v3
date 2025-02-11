@@ -17,7 +17,6 @@ import {
   MenuContent,
   MenuItem,
   Icon,
-  Container,
 } from "@chakra-ui/react";
 import {
   DrawerBackdrop,
@@ -207,13 +206,7 @@ const Navbar = ({
       {/* Logo */}
       <Link href="/">
         <Center margin="1rem">
-          <Container fluid padding={0}>
-            {isScrolled ? (
-              <Image src="/assets/goc-header.svg" alt="Logo" />
-            ) : (
-              <Image src="/assets/goc-header.svg" fill="white" alt="Logo" />
-            )}
-          </Container>
+          <Image src="/assets/goc-header.svg" alt="Logo" />
         </Center>
       </Link>
 
