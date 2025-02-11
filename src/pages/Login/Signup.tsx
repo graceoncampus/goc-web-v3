@@ -48,8 +48,8 @@ const SignupBody = () => {
 };
 
 interface SignupFormProps {
-  setSignedUp: Function;
-  setUsername: Function;
+  setSignedUp: React.Dispatch<React.SetStateAction<boolean>>;
+  setUsername: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
@@ -61,8 +61,10 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
     handleSubmit,
     watch,
     setError,
-    formState: { errors, isSubmitting },
-  } = useForm<SignupProps>();
+    formState: { errors },
+  } = useForm<SignupProps>({
+    mode: "onChange",
+  });
   const registerWithMask = useHookFormMask(register);
 
   const password = watch("password");
@@ -120,7 +122,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
       >
         <VStack gap="1rem">
           <Stack direction={{ base: "column", lg: "row" }} width="100%" gap={4}>
-            <Field label="First Name" required>
+            <Field label="First Name" required={true}>
               <Input
                 {...register("firstName", {
                   required: "First name is required",
@@ -135,7 +137,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                 </Text>
               )}
             </Field>
-            <Field label="Last Name" required>
+            <Field label="Last Name" required={true}>
               <Input
                 {...register("lastName", { required: "Last name is required" })}
                 placeholder="Zhuang"
@@ -149,7 +151,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
               )}
             </Field>
           </Stack>
-          <Field label="Email" required>
+          <Field label="Email" required={true}>
             <Input
               {...register("email", {
                 required: "Email is required",
@@ -168,7 +170,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
               </Text>
             )}
           </Field>
-          <Field label="Phone Number" required>
+          <Field label="Phone Number" required={true}>
             <Input
               {...registerWithMask("phoneNumber", ["(999) 999-9999"], {
                 required: "Phone number is required",
@@ -188,7 +190,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
               </Text>
             )}
           </Field>
-          <Field label="Password" required>
+          <Field label="Password" required={true}>
             <Input
               type="password"
               {...register("password", {
@@ -208,7 +210,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
               </Text>
             )}
           </Field>
-          <Field label="Confirm Password" required>
+          <Field label="Confirm Password" required={true}>
             <Input
               type="password"
               {...register("confirmPassword", {
@@ -226,7 +228,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
               </Text>
             )}
           </Field>
-          <Field label="Address / Dorm" required>
+          <Field label="Address / Dorm" required={true}>
             <Input
               {...register("address", { required: "Address is required" })}
               placeholder="Sproul Landing"
@@ -239,7 +241,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
               </Text>
             )}
           </Field>
-          <Field label="Graduation Year" required>
+          <Field label="Graduation Year" required={true}>
             <select
               {...register("gradYear", {
                 required: "Graduation year is required",
@@ -326,7 +328,7 @@ const ConfirmationForm = ({ username }: ConfirmationFormProps) => {
         onSubmit={handleSubmit(onConfirm)}
       >
         <VStack gap="1rem">
-          <Field label="Confirmation Code" required>
+          <Field label="Confirmation Code" required={true}>
             <Input
               {...register("code", {
                 required: "Confirmation code is required",

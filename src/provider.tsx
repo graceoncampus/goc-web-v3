@@ -5,7 +5,7 @@ import { system } from "./theme";
 export function Provider(props: { children: React.ReactNode }) {
   return (
     <ChakraProvider value={system}>
-      <ThemeProvider attribute="class" disableTransitionOnChange>
+      <ThemeProvider attribute="class" disableTransitionOnChange={true}>
         {props.children}
       </ThemeProvider>
     </ChakraProvider>

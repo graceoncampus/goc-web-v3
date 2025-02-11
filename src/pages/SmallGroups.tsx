@@ -18,7 +18,7 @@ export const SmallGroupsPage = () => {
 
 const SmallGroupsBody = () => {
   return (
-    <Container padding={0} fluid>
+    <Container padding={0} fluid={true}>
       <VStack
         gap={"2.5rem"}
         maxWidth={"760px"}

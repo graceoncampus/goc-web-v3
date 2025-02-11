@@ -12,7 +12,7 @@ export const LandingBody = () => {
     <div className={"page-container"}>
       <Header activeKey={NavbarActiveKey.NONE} />
 
-      <Container className={"text-center body-container"} fluid>
+      <Container className={"text-center body-container"} fluid={true}>
         <Col>
           <Row>
             <span className={"ministry-teams-landing-header"}>

@@ -17,7 +17,7 @@ const GOCButton: React.FC<GOCButtonProps> = ({
 }) => {
   return href ? (
     <Button
-      asChild
+      asChild={true}
       variant="solid"
       outline="none"
       padding=".5rem 1rem"
