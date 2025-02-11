@@ -58,8 +58,8 @@ const AboutUsBody = () => {
           marginBottom="2rem"
         >
           <iframe
-            src="https://www.youtube.com/embed/5T5BY1j2MkE"
-            title="YouTube video"
+            src="https://www.youtube.com/embed/lxRTy17jhZs?si=3JPbbXOliNUSNP8F"
+            title="GOC Welcome Week Video"
             allowFullScreen
           ></iframe>
         </AspectRatio>
