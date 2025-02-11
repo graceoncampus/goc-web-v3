@@ -33,7 +33,7 @@ const InfoBox = ({
         {title}
       </Heading>
       <Text fontSize={"md"}>{description}</Text>
-      <OutlineButton href={link} onWhite>
+      <OutlineButton href={link} onWhite={true}>
         {buttonText}
       </OutlineButton>
     </Box>

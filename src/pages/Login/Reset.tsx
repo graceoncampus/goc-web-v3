@@ -51,7 +51,7 @@ const ResetBody = () => {
               Enter your email to receive instructions to reset it.
             </Text>
           </Fieldset.Legend>
-          <Field required marginY={".6rem"}>
+          <Field required={true} marginY={".6rem"}>
             <InputGroup flex="1" width="100%" startElement={<MdOutlineEmail />}>
               <Input
                 variant="subtle"

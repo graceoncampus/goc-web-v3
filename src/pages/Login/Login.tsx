@@ -62,7 +62,7 @@ const LoginBody = () => {
       <form onSubmit={handleSubmit}>
         <Fieldset.Root size="lg" maxWidth="xl">
           <Fieldset.Content>
-            <Field required>
+            <Field required={true}>
               <InputGroup flex="1" startElement={<LuUser />}>
                 <Input
                   variant="subtle"
@@ -76,7 +76,7 @@ const LoginBody = () => {
               </InputGroup>
             </Field>
 
-            <Field required>
+            <Field required={true}>
               <InputGroup flex="1" startElement={<LuLock />}>
                 <Input
                   variant="subtle"

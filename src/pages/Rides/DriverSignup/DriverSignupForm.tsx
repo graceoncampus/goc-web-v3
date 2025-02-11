@@ -68,7 +68,7 @@ export const DriverSignupForm = (
           onChange={({ target: { value } }) =>
             setDriverEventTime(eventTimeHeading)
           }
-          required
+          required={true}
         />
       );
     },
@@ -90,7 +90,7 @@ export const DriverSignupForm = (
                 <Form.Control
                   placeholder={"Enter your name"}
                   onChange={({ target: { value } }) => setDriverName(value)}
-                  required
+                  required={true}
                 />
               </Form.Group>
 
@@ -103,7 +103,7 @@ export const DriverSignupForm = (
                   type={"email"}
                   placeholder={"Enter your email"}
                   onChange={({ target: { value } }) => setDriverEmail(value)}
-                  required
+                  required={true}
                 />
               </Form.Group>
 
@@ -117,7 +117,7 @@ export const DriverSignupForm = (
                   onChange={({ target: { value } }) =>
                     setDriverPhoneNumber(value)
                   }
-                  required
+                  required={true}
                 />
               </Form.Group>
               <Form.Group className={"mb-3"} controlId={"driverEventTime"}>
@@ -139,7 +139,7 @@ export const DriverSignupForm = (
                 <Form.Control
                   placeholder={"Enter your address"}
                   onChange={({ target: { value } }) => setDriverAddress(value)}
-                  required
+                  required={true}
                 />
               </Form.Group>
               <Form.Group className={"mb-3"} controlId={"driverNumRiderSpots"}>
@@ -152,7 +152,7 @@ export const DriverSignupForm = (
                   onChange={({ target: { value } }) =>
                     setDriverNumRiderSpots(parseInt(value))
                   }
-                  required
+                  required={true}
                 />
               </Form.Group>
               <Form.Group className={"mb-3"} controlId={"driverComments"}>

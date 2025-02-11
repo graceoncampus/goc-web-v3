@@ -3,7 +3,6 @@
  */
 
 import { useState, useEffect, useCallback } from "react";
-import { getCurrentUser } from "aws-amplify/auth";
 import {
   Box,
   Flex,
@@ -97,7 +96,7 @@ const NavItem = ({
       // Dropdown menu
       <Box position="relative">
         <MenuRoot>
-          <MenuTrigger asChild>
+          <MenuTrigger asChild={true}>
             <Button
               variant={"ghost"}
               marginY={".5rem"}
@@ -131,7 +130,7 @@ const NavItem = ({
                 key={sublink.name}
                 value={sublink.name}
                 gap={".25rem"}
-                asChild
+                asChild={true}
               >
                 {sublink.external ? (
                   <Link
@@ -166,7 +165,7 @@ const NavItem = ({
     // No dropdown menu
     <Button
       variant={"ghost"}
-      asChild
+      asChild={true}
       margin={".5rem"}
       _hover={{
         backgroundColor: bgHoverColor,
@@ -263,7 +262,7 @@ const Navbar = ({
         onOpenChange={(e) => setDrawerOpen(e.open)}
       >
         <DrawerBackdrop />
-        <DrawerTrigger asChild>
+        <DrawerTrigger asChild={true}>
           <IconButton
             variant={"ghost"}
             display={{ base: drawerOpen ? "none" : "flex", xl: "none" }}

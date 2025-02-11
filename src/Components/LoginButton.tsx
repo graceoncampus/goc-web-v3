@@ -24,7 +24,7 @@ const LoginButton = () => {
 
   return (
     <Button
-      asChild
+      asChild={true}
       position="relative"
       outline="none"
       border="none"

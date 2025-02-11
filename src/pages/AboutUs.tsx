@@ -60,8 +60,8 @@ const AboutUsBody = () => {
           <iframe
             src="https://www.youtube.com/embed/lxRTy17jhZs?si=3JPbbXOliNUSNP8F"
             title="GOC Welcome Week Video"
-            allowFullScreen
-          ></iframe>
+            allowFullScreen={true}
+          />
         </AspectRatio>
       </VStack>
     </Container>
