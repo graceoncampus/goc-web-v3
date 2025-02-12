@@ -57,20 +57,20 @@ const EventsBody: React.FC = () => {
         .then((result) => {
           const eventsData = result.data.listGOCEvents.items.sort(
             (a: any, b: any) =>
-              new Date(b["startDate"]).getTime() -
-              new Date(a["startDate"]).getTime(),
+              new Date(b.startDate).getTime() -
+              new Date(a.startDate).getTime(),
           );
           setEvents(
             eventsData.map((event: any) => {
               const item = {
-                id: event["id"],
-                title: event["title"],
-                startDate: event["startDate"],
-                endDate: event["endDate"],
-                price: event["price"],
-                location: event["location"],
-                description: event["description"],
-                imageLink: event["imageLink"],
+                id: event.id,
+                title: event.title,
+                startDate: event.startDate,
+                endDate: event.endDate,
+                price: event.price,
+                location: event.location,
+                description: event.description,
+                imageLink: event.imageLink,
               };
               return item;
             }),
@@ -131,7 +131,7 @@ const EventsBody: React.FC = () => {
   }
 
   return (
-    <Container fluid>
+    <Container fluid={true}>
       <Center>
         <Heading
           as="h2"
@@ -150,7 +150,7 @@ const EventsBody: React.FC = () => {
         marginX={"auto"}
         marginY={"1.8rem"}
       >
-        <AccordionRoot spaceY={"1rem"} variant={"plain"} collapsible>
+        <AccordionRoot spaceY={"1rem"} variant={"plain"} collapsible={true}>
           {events.map((event, index) => (
             <AccordionItem key={index} value={event.id}>
               <AccordionItemTrigger indicatorPlacement="start">

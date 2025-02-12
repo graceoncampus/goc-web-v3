@@ -12,7 +12,7 @@ export const LoginForm = () => {
   const [password, setPassword] = useState("");
 
   return (
-    <Container className={"text-center login-container"} fluid>
+    <Container className={"text-center login-container"} fluid={true}>
       <span className={"signup-form-title"}>
         Please log in to view this page!
       </span>
@@ -33,7 +33,7 @@ export const LoginForm = () => {
               onChange={({ target: { value } }) => {
                 setUsername(value);
               }}
-              required
+              required={true}
             />
           </Form.Group>
 
@@ -45,7 +45,7 @@ export const LoginForm = () => {
               onChange={({ target: { value } }) => {
                 setPassword(value);
               }}
-              required
+              required={true}
             />
           </Form.Group>
         </Col>

@@ -34,11 +34,11 @@ export const SermonsPage = () => {
         .then((result) => {
           const sermonData = result.data.listSermons.items.sort(
             (a: any, b: any) =>
-              new Date(b["date"]).getTime() - new Date(a["date"]).getTime(),
+              new Date(b.date).getTime() - new Date(a.date).getTime(),
           );
           setSermons(
             sermonData.map((sermon: any) => {
-              const convertedDate = new Date(sermon["date"]).toLocaleString(
+              const convertedDate = new Date(sermon.date).toLocaleString(
                 "en-US",
                 {
                   month: "short",
@@ -47,11 +47,11 @@ export const SermonsPage = () => {
                 },
               );
               const item = {
-                title: sermon["title"],
-                speaker: sermon["speaker"],
-                passage: sermon["passage"],
+                title: sermon.title,
+                speaker: sermon.speaker,
+                passage: sermon.passage,
                 date: convertedDate,
-                URI: sermon["URI"],
+                URI: sermon.URI,
               };
               return item;
             }),
@@ -109,7 +109,7 @@ const SermonItem = (props: SermonItemProps) => {
       <Text marginTop={".625rem"} marginBottom={"1.2rem"}>
         {props.speaker} | {props.passage} | {props.date}
       </Text>
-      <audio style={{ width: "100%" }} src={props.URI} controls />
+      <audio style={{ width: "100%" }} src={props.URI} controls={true} />
     </Box>
   );
 };

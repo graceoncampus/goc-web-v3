@@ -117,7 +117,7 @@ const updateRides = async (url: string, date: string, emailMsg: string) => {
     const rides: CreateRideInput = {
       cars: carInputs,
       emailMessage: emailMsg,
-      date: date,
+      date,
     };
 
     await (
@@ -174,7 +174,7 @@ export const RidesLandingPage = () => {
 
 const RidesList = ({ rides }: RideProps) => {
   return (
-    <Container fluid>
+    <Container fluid={true}>
       <Box
         position={"relative"}
         width={"100%"}
@@ -244,7 +244,7 @@ const RidesList = ({ rides }: RideProps) => {
           return (
             <div
               key={i}
-              className={i % 2 == 0 ? "table-row" : "even table-row"}
+              className={i % 2 === 0 ? "table-row" : "even table-row"}
             >
               <div className="column-item">{car?.driver_name} </div>
               <div className="column-item">
@@ -279,7 +279,7 @@ const RidesSettings = () => {
         <br />
         <input
           type="url"
-          required
+          required={true}
           className={"rides-input"}
           value={url}
           onChange={(e) => setUrl(e.target.value)}
@@ -289,7 +289,7 @@ const RidesSettings = () => {
         <br />
         <input
           type="date"
-          required
+          required={true}
           className={"rides-input"}
           value={date || ""}
           onChange={(e) => setDate(e.target.value)}
@@ -299,7 +299,7 @@ const RidesSettings = () => {
         <br />
         <input
           type="text"
-          required
+          required={true}
           className={"rides-input"}
           value={emailMsg}
           onChange={(e) => setEmailMsg(e.target.value)}

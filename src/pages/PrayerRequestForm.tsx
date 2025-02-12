@@ -15,8 +15,8 @@ import { Field } from "components/ui/field";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 //  import { CreatePrayerInput } from 'Api';
-//import { getEventsByEventId } from 'graphql/queries';
-//import { createDriver } from 'graphql/mutations';
+// import { getEventsByEventId } from 'graphql/queries';
+// import { createDriver } from 'graphql/mutations';
 
 interface PrayerRequestFormProps {
   setPrayerRequestCompleted: (prayerRequestValue: boolean) => void;
@@ -86,7 +86,7 @@ export const PrayerRequestForm = ({
                 id="prayerName"
                 placeholder="Enter your name"
                 onChange={({ target: { value } }) => setPrayerName(value)}
-                required
+                required={true}
               />
             </Field>
             <Field label="Email">
@@ -95,7 +95,7 @@ export const PrayerRequestForm = ({
                 type="email"
                 placeholder="Enter your email"
                 onChange={({ target: { value } }) => setPrayerEmail(value)}
-                required
+                required={true}
               />
             </Field>
             <Field label="Prayer Request">

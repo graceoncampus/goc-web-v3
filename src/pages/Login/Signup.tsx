@@ -25,8 +25,8 @@ export interface SignupProps {
   phoneNumber: string;
   password: string;
   confirmPassword: string;
-  address: string;
-  gradYear: string;
+  address?: string;
+  gradYear?: string;
 }
 
 export const SignupPage = () => {
@@ -40,6 +40,7 @@ export const SignupPage = () => {
 const SignupBody = () => {
   const [signedUp, setSignedUp] = useState(false);
   const [username, setUsername] = useState("");
+
   return !signedUp ? (
     <SignupForm setSignedUp={setSignedUp} setUsername={setUsername} />
   ) : (
@@ -48,8 +49,8 @@ const SignupBody = () => {
 };
 
 interface SignupFormProps {
-  setSignedUp: Function;
-  setUsername: Function;
+  setSignedUp: React.Dispatch<React.SetStateAction<boolean>>;
+  setUsername: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
@@ -60,8 +61,11 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
     register,
     handleSubmit,
     watch,
+    setError,
     formState: { errors },
-  } = useForm<SignupProps>();
+  } = useForm<SignupProps>({
+    mode: "onChange",
+  });
   const registerWithMask = useHookFormMask(register);
 
   const password = watch("password");
@@ -70,31 +74,43 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
     try {
       const formattedPhoneNumber =
         "+1" + data.phoneNumber.replace(/[()-\s]/g, "");
+
+      // Required fields
+      const userAttributes: { [key: string]: string } = {
+        email: data.email,
+        phone_number: formattedPhoneNumber,
+        name: data.firstName,
+        family_name: data.lastName,
+      };
+
+      // Optional fields
+      if (data.address) {
+        userAttributes["custom:address"] = data.address;
+      }
+      if (data.gradYear) {
+        userAttributes["custom:grad_year"] = data.gradYear;
+      }
+
       await signUp({
         username: data.email,
         password: data.password,
         options: {
-          userAttributes: {
-            email: data.email,
-            phone_number: formattedPhoneNumber,
-            name: data.firstName,
-            family_name: data.lastName,
-            "custom:address": data.address,
-            "custom:grad_year": data.gradYear,
-          },
+          userAttributes,
         },
       });
-      setSignedUp(true);
       setUsername(data.email);
+      setSignedUp(true);
     } catch (error: any) {
-      console.log(error);
+      console.error("Error signing up: ", error);
       if (error.name === "UsernameExistsException") {
         try {
           await resendSignUpCode({ username: data.email });
           setSignedUp(true);
-        } catch (resendError) {
-          console.log("Error resending code: ", resendError);
+        } catch (resendError: any) {
+          setError("email", { message: "That email already exists :(" });
         }
+      } else {
+        setError("root", { message: error.message });
       }
     }
   };
@@ -118,7 +134,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
       >
         <VStack gap="1rem">
           <Stack direction={{ base: "column", lg: "row" }} width="100%" gap={4}>
-            <Field label="First Name" required>
+            <Field label="First Name" required={true}>
               <Input
                 {...register("firstName", {
                   required: "First name is required",
@@ -133,7 +149,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                 </Text>
               )}
             </Field>
-            <Field label="Last Name" required>
+            <Field label="Last Name" required={true}>
               <Input
                 {...register("lastName", { required: "Last name is required" })}
                 placeholder="Zhuang"
@@ -147,12 +163,12 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
               )}
             </Field>
           </Stack>
-          <Field label="Email" required>
+          <Field label="Email" required={true}>
             <Input
               {...register("email", {
                 required: "Email is required",
                 pattern: {
-                  value: /^\S+@\S+$/i,
+                  value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
                   message: "Invalid email address",
                 },
               })}
@@ -166,14 +182,10 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
               </Text>
             )}
           </Field>
-          <Field label="Phone Number" required>
+          <Field label="Phone Number" required={true}>
             <Input
               {...registerWithMask("phoneNumber", ["(999) 999-9999"], {
                 required: "Phone number is required",
-                minLength: {
-                  value: 10,
-                  message: "Invalid phone number",
-                },
               })}
               type="text"
               placeholder="Enter phone number"
@@ -186,14 +198,14 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
               </Text>
             )}
           </Field>
-          <Field label="Password" required>
+          <Field label="Password" required={true}>
             <Input
               type="password"
               {...register("password", {
                 required: "Password is required",
                 minLength: {
-                  value: 6,
-                  message: "Password must be at least 6 characters",
+                  value: 8,
+                  message: "Password must be at least 8 characters",
                 },
               })}
               placeholder="Password"
@@ -206,7 +218,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
               </Text>
             )}
           </Field>
-          <Field label="Confirm Password" required>
+          <Field label="Confirm Password" required={true}>
             <Input
               type="password"
               {...register("confirmPassword", {
@@ -224,9 +236,9 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
               </Text>
             )}
           </Field>
-          <Field label="Address / Dorm" required>
+          <Field label="Address / Dorm">
             <Input
-              {...register("address", { required: "Address is required" })}
+              {...register("address")}
               placeholder="Sproul Landing"
               variant="subtle"
               backgroundColor="#D9D9D9B2"
@@ -237,11 +249,9 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
               </Text>
             )}
           </Field>
-          <Field label="Graduation Year" required>
+          <Field label="Graduation Year">
             <select
-              {...register("gradYear", {
-                required: "Graduation year is required",
-              })}
+              {...register("gradYear")}
               style={{
                 backgroundColor: "#D9D9D9B2",
                 width: "100%",
@@ -249,6 +259,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                 padding: "0.5rem",
               }}
             >
+              <option value="">Select</option>
               {years.map((year) => (
                 <option key={year} value={year}>
                   {year}
@@ -261,6 +272,11 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
               </Text>
             )}
           </Field>
+          {errors.root && (
+            <Text color="red" fontSize={"sm"}>
+              {errors.root.message}
+            </Text>
+          )}
           <Button type="submit" width="100%">
             Sign Up
           </Button>
@@ -285,18 +301,22 @@ const ConfirmationForm = ({ username }: ConfirmationFormProps) => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<{ code: string }>();
+
+  console.log("Username passed to ConfirmationForm:", username);
 
   const onConfirm = async ({ code }: { code: string }) => {
     try {
       const { isSignUpComplete } = await confirmSignUp({
-        username,
+        username: username,
         confirmationCode: code,
       });
       if (isSignUpComplete) navigate("/");
-    } catch (error) {
-      console.log("error confirming sign up", error);
+    } catch (error: any) {
+      console.error("Error confirming sign up", error);
+      setError("root", { message: error.message });
     }
   };
 
@@ -324,7 +344,7 @@ const ConfirmationForm = ({ username }: ConfirmationFormProps) => {
         onSubmit={handleSubmit(onConfirm)}
       >
         <VStack gap="1rem">
-          <Field label="Confirmation Code" required>
+          <Field label="Confirmation Code" required={true}>
             <Input
               {...register("code", {
                 required: "Confirmation code is required",
@@ -333,8 +353,17 @@ const ConfirmationForm = ({ username }: ConfirmationFormProps) => {
               variant="subtle"
               backgroundColor="#D9D9D9B2"
             />
-            {errors.code && <Text color="red">{errors.code.message}</Text>}
+            {errors.code && (
+              <Text color="red" fontSize="sm">
+                {errors.code.message}
+              </Text>
+            )}
           </Field>
+          {errors.root && (
+            <Text color="red" fontSize={"sm"}>
+              {errors.root.message}
+            </Text>
+          )}
           <Button type="submit" width="100%">
             Verify
           </Button>

@@ -21,5 +21,5 @@ export const PickupLocationPopup = () => {
 };
 
 const TurnaroundImage = () => {
-  return <Image fluid rounded src={"/images/PickupLocations.png"} />;
+  return <Image fluid={true} rounded={true} src={"/images/PickupLocations.png"} />;
 };

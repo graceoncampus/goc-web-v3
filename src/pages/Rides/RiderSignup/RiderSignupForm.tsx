@@ -67,7 +67,7 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
             setRiderEventPickupLocation(pickupLocationName);
             setDisableOffCampusPickupLocationTextInput(true);
           }}
-          required
+          required={true}
         />
       );
     },
@@ -98,7 +98,7 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
           onChange={({ target: { value } }) =>
             setRiderEventTime(eventTimeHeading)
           }
-          required
+          required={true}
         />
       );
     },
@@ -122,7 +122,7 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
                 <Form.Control
                   placeholder={"Enter your name"}
                   onChange={({ target: { value } }) => setRiderName(value)}
-                  required
+                  required={true}
                 />
               </Form.Group>
 
@@ -135,7 +135,7 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
                   type={"email"}
                   placeholder={"Enter your email"}
                   onChange={({ target: { value } }) => setRiderEmail(value)}
-                  required
+                  required={true}
                 />
               </Form.Group>
 
@@ -150,7 +150,7 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
                   onChange={({ target: { value } }) =>
                     setRiderPhoneNumber(value)
                   }
-                  required
+                  required={true}
                 />
               </Form.Group>
 
@@ -181,14 +181,14 @@ export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
                     onClick={(apartmentClickEvent) => {
                       setDisableOffCampusPickupLocationTextInput(false);
                     }}
-                    required
+                    required={true}
                   />
 
                   <Form.Control
                     type={"text"}
                     size={"sm"}
                     disabled={disableOffCampusPickupLocationTextInput}
-                    required
+                    required={true}
                   />
                 </div>
               </Form.Group>
