@@ -20,7 +20,7 @@ const OutlineButton = ({
     <Button
       variant="outline"
       marginTop="1.5rem"
-      asChild
+      asChild={true}
       color={onWhite ? "inherit" : "white"}
       backgroundColor="transparent"
       borderRadius={onWhite ? ".4rem" : "1.2rem"}

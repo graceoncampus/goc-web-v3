@@ -16,7 +16,7 @@ export const MinistryTeamAccessDenied = (
   return (
     <Container
       className={"no-header-no-footer-single-container text-center"}
-      fluid
+      fluid={true}
     >
       <Col>
         <Row>

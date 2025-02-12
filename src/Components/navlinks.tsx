@@ -1,6 +1,17 @@
+/* 
+ *  FORMAT
+ * 
+ *  name: string
+ *  link: string
+ *  sublinks: SublinkProps[] (have dropdown)
+ *      name: string
+ *      link: string
+ *      external: boolean (when true, adds external link icon)
+ */
+
 const NavLinks = [
   {
-    name: "About", // Dropdown
+    name: "About",
     sublinks: [
       {
         name: "About Us",
@@ -17,7 +28,7 @@ const NavLinks = [
     ],
   },
   {
-    name: "Get involved", // Dropdown
+    name: "Get involved",
     sublinks: [
       {
         name: "Small Groups",
@@ -30,7 +41,7 @@ const NavLinks = [
     ],
   },
   {
-    name: "Resources", // Dropdown
+    name: "Resources",
     sublinks: [
       {
         name: "Sermons",
@@ -39,6 +50,11 @@ const NavLinks = [
       {
         name: "Study Guide",
         link: "/study-guide",
+      },
+      {
+        name: "Linktree",
+        link: "https://linktr.ee/goc_ucla",
+        external: true,
       },
     ],
   },

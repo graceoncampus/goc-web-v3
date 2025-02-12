@@ -47,9 +47,9 @@ export const Header = (headerProps: HeaderProps) => {
       bg={"white"}
       fixed={"top"}
       expand={"lg"}
-      collapseOnSelect
+      collapseOnSelect={true}
     >
-      <Container fluid>
+      <Container fluid={true}>
         <Navbar.Brand href={"/ministry_teams"}>
           <Image src={"/assets/goc-header.svg"} alt={"Grace On Campus Logo"} />
         </Navbar.Brand>
@@ -78,7 +78,7 @@ export const Header = (headerProps: HeaderProps) => {
           </Navbar.Toggle>
         )}
 
-        <Container fluid>
+        <Container fluid={true}>
           <Navbar.Collapse className={"justify-content-end"}>
             <Nav activeKey={headerProps.activeKey}>{navbarLinks}</Nav>
 

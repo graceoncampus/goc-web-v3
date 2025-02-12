@@ -2,8 +2,7 @@
  * GOC Navigation Bar
  */
 
-import { useState, useEffect } from "react";
-import { getCurrentUser } from "aws-amplify/auth";
+import { useState, useEffect, useCallback } from "react";
 import {
   Box,
   Flex,
@@ -32,6 +31,7 @@ import {
 
 // import { ColorModeButton } from "components/ui/color-mode";
 import { RiArrowDropDownLine } from "react-icons/ri";
+import { FiExternalLink } from "react-icons/fi";
 import { IoMdMenu } from "react-icons/io";
 import NavLinks from "./NavLinks";
 import LoginButton from "./LoginButton";
@@ -55,6 +55,7 @@ export enum NavbarActiveKey {
 interface SublinkProps {
   name: string;
   link: string;
+  external?: boolean;
 }
 
 interface NavItemProps {
@@ -95,7 +96,7 @@ const NavItem = ({
       // Dropdown menu
       <Box position="relative">
         <MenuRoot>
-          <MenuTrigger asChild>
+          <MenuTrigger asChild={true}>
             <Button
               variant={"ghost"}
               marginY={".5rem"}
@@ -125,14 +126,33 @@ const NavItem = ({
             marginTop={".5rem"}
           >
             {sublinks.map((sublink) => (
-              <MenuItem key={sublink.name} value={sublink.name} asChild>
-                <Link
-                  href={sublink.link}
-                  padding={".5rem 1rem"}
-                  cursor={"pointer"}
-                >
-                  {sublink.name}
-                </Link>
+              <MenuItem
+                key={sublink.name}
+                value={sublink.name}
+                gap={".25rem"}
+                asChild={true}
+              >
+                {sublink.external ? (
+                  <Link
+                    href={sublink.link}
+                    padding={".5rem 1rem"}
+                    cursor={"pointer"}
+                    target={"_blank"}
+                  >
+                    {sublink.name}
+                    <Icon fontSize={".8rem"} marginBottom={".2rem"}>
+                      <FiExternalLink />
+                    </Icon>
+                  </Link>
+                ) : (
+                  <Link
+                    href={sublink.link}
+                    padding={".5rem 1rem"}
+                    cursor={"pointer"}
+                  >
+                    {sublink.name}
+                  </Link>
+                )}
               </MenuItem>
             ))}
           </MenuContent>
@@ -145,7 +165,7 @@ const NavItem = ({
     // No dropdown menu
     <Button
       variant={"ghost"}
-      asChild
+      asChild={true}
       margin={".5rem"}
       _hover={{
         backgroundColor: bgHoverColor,
@@ -171,21 +191,17 @@ const Navbar = ({
   const [isScrolled, setIsScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (disableTransparent || window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
+  const handleScroll = useCallback(() => {
+    setIsScrolled(disableTransparent || window.scrollY > 50);
+  }, [disableTransparent]);
 
+  useEffect(() => {
     handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [disableTransparent]);
+  }, [handleScroll]);
 
   const bgColor = isScrolled ? "white" : "transparent";
   const shadow = isScrolled ? "md" : "none";
@@ -246,7 +262,7 @@ const Navbar = ({
         onOpenChange={(e) => setDrawerOpen(e.open)}
       >
         <DrawerBackdrop />
-        <DrawerTrigger asChild>
+        <DrawerTrigger asChild={true}>
           <IconButton
             variant={"ghost"}
             display={{ base: drawerOpen ? "none" : "flex", xl: "none" }}

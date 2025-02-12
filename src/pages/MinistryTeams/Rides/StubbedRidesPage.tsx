@@ -9,7 +9,7 @@ import { NavbarActiveKey } from "components/Navbar";
 
 const StubbedRidesBody = () => {
   return (
-    <Container fluid>
+    <Container fluid={true}>
       <span> PUT STUFF HERE! </span>
     </Container>
   );

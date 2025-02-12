@@ -62,7 +62,7 @@ const LandingBody = observer(() => {
   ];
 
   return (
-    <Container fluid margin="0" padding="0">
+    <Container fluid={true} margin="0" padding="0">
       {/* Banner */}
       <Box position="relative" width="100%" height="100vh" overflow="hidden">
         {/* Banner image */}
@@ -155,7 +155,7 @@ const LandingBody = observer(() => {
                 href="https://www.facebook.com/groups/gocatucla"
                 onWhite={false}
                 icon={<RiArrowRightLine />}
-                animateIcon
+                animateIcon={true}
               >
                 JOIN US!
               </OutlineButton>
