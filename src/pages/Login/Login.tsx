@@ -1,5 +1,5 @@
 import { signIn } from "aws-amplify/auth";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { NavbarActiveKey } from "components/Navbar";
 import { Field } from "../../components/ui/field";
@@ -16,6 +16,11 @@ import {
 } from "@chakra-ui/react";
 import { LoginTemplate } from "layouts/LoginTemplate";
 
+interface LoginFormProps {
+  username: string;
+  password: string;
+}
+
 export const LoginPage = () => {
   return (
     <LoginTemplate activeKey={NavbarActiveKey.LOGIN}>
@@ -25,20 +30,30 @@ export const LoginPage = () => {
 };
 
 const LoginBody = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<LoginFormProps>();
+
   const navigate = useNavigate();
 
-  async function handleSubmit(event: any) {
-    event.preventDefault();
-
+  const onSubmit = async (data: LoginFormProps) => {
     try {
-      await signIn({ username, password });
+      await signIn({ username: data.username, password: data.password });
       navigate("/"); // Redirect on successful sign-in
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to sign user in:", error);
+      if (error.name === "UserNotFoundException") {
+        setError("username", { message: "Incorect username" });
+      } else if (error.name === "NotAuthorizedException") {
+        setError("password", { message: "Incorrect username or password" });
+      } else {
+        setError("root", { message: error.message });
+      }
     }
-  }
+  };
 
   return (
     <VStack minWidth={"12rem"} width="100%" gap="0" align="center">
@@ -59,7 +74,7 @@ const LoginBody = () => {
       >
         Welcome back!
       </Heading>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Fieldset.Root size="lg" maxWidth="xl">
           <Fieldset.Content>
             <Field required={true}>
@@ -67,13 +82,19 @@ const LoginBody = () => {
                 <Input
                   variant="subtle"
                   backgroundColor="#D9D9D9B2"
-                  name="username"
                   type="username"
-                  onChange={(e) => setUsername(e.target.value)}
                   placeholder="Username"
                   paddingX="2rem"
+                  {...register("username", {
+                    required: "Username is required",
+                  })}
                 />
               </InputGroup>
+              {errors.username && (
+                <Text margin="0" color="red" fontSize="sm">
+                  {errors.username.message}
+                </Text>
+              )}
             </Field>
 
             <Field required={true}>
@@ -81,14 +102,25 @@ const LoginBody = () => {
                 <Input
                   variant="subtle"
                   backgroundColor="#D9D9D9B2"
-                  name="password"
                   type="password"
-                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
                   paddingX="2rem"
+                  {...register("password", {
+                    required: "Password is required",
+                  })}
                 />
               </InputGroup>
+              {errors.password && (
+                <Text margin="0" color="red" fontSize="sm">
+                  {errors.password.message}
+                </Text>
+              )}
             </Field>
+            {errors.root && (
+              <Text margin="0" color="red" fontSize="sm">
+                {errors.root.message}
+              </Text>
+            )}
           </Fieldset.Content>
           <Link
             alignSelf="center"
@@ -98,7 +130,7 @@ const LoginBody = () => {
           >
             Forgot your password?
           </Link>
-          <Button bg="goc.blue" type="submit" marginTop="1rem">
+          <Button type="submit" bg="goc.blue" marginTop="1rem">
             Log In
           </Button>
           <Text fontSize="sm" marginTop="1rem" textWrap="nowrap">
