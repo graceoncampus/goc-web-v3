@@ -57,8 +57,7 @@ const EventsBody: React.FC = () => {
         .then((result) => {
           const eventsData = result.data.listGOCEvents.items.sort(
             (a: any, b: any) =>
-              new Date(b.startDate).getTime() -
-              new Date(a.startDate).getTime(),
+              new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
           );
           setEvents(
             eventsData.map((event: any) => {
@@ -150,7 +149,12 @@ const EventsBody: React.FC = () => {
         marginX={"auto"}
         marginY={"1.8rem"}
       >
-        <AccordionRoot spaceY={"1rem"} variant={"plain"} collapsible={true}>
+        <AccordionRoot
+          spaceY={"1rem"}
+          variant={"plain"}
+          collapsible={true}
+          multiple
+        >
           {events.map((event, index) => (
             <AccordionItem key={index} value={event.id}>
               <AccordionItemTrigger indicatorPlacement="start">
