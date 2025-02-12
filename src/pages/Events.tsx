@@ -57,8 +57,7 @@ const EventsBody: React.FC = () => {
         .then((result) => {
           const eventsData = result.data.listGOCEvents.items.sort(
             (a: any, b: any) =>
-              new Date(b.startDate).getTime() -
-              new Date(a.startDate).getTime(),
+              new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
           );
           setEvents(
             eventsData.map((event: any) => {
@@ -150,7 +149,12 @@ const EventsBody: React.FC = () => {
         marginX={"auto"}
         marginY={"1.8rem"}
       >
-        <AccordionRoot spaceY={"1rem"} variant={"plain"} collapsible={true}>
+        <AccordionRoot
+          spaceY={"1rem"}
+          variant={"plain"}
+          collapsible={true}
+          multiple
+        >
           {events.map((event, index) => (
             <AccordionItem key={index} value={event.id}>
               <AccordionItemTrigger indicatorPlacement="start">
@@ -192,20 +196,28 @@ const EventsBody: React.FC = () => {
                 <Box marginX={"30px"}>
                   <Flex>
                     <Image
-                      width={"300px"}
-                      height={"300px"}
+                      width={{ base: "100px", md: "200px" }}
+                      height={{ base: "175px", md: "200px" }}
                       borderRadius={"20px"}
                       src={event.imageLink}
                     />
                     <Box className="event-description-text" marginLeft={"20px"}>
                       <Box>
-                        <Heading size={"5xl"} className="event-title">
+                        <Text
+                          fontSize={{
+                            base: "md",
+                            md: "4xl",
+                          }}
+                          fontWeight={"800"}
+                        >
                           {event.title}
-                        </Heading>
+                        </Text>
                         <Box>
-                          <Text>{event.description}</Text>
+                          <Text fontSize={{ base: "xs", md: "md" }}>
+                            {event.description}
+                          </Text>
                           <Box className="event-info" marginTop={"10px"}>
-                            <Text>
+                            <Text fontSize={{ base: "xs", md: "md" }}>
                               {formatEventDate(event.startDate, event.endDate)}
                             </Text>
                             <Flex
@@ -213,14 +225,19 @@ const EventsBody: React.FC = () => {
                               alignItems={"center"}
                               marginTop={"10px"}
                             >
-                              <Icon fontSize={"30px"}>
+                              <Icon fontSize={{ base: "20px", md: "24px" }}>
                                 <MdLocationPin />
                               </Icon>
-                              <Text marginRight={"10px"}>{event.location}</Text>
-                              <Icon fontSize={"30px"}>
+                              <Text
+                                fontSize={{ base: "sm", md: "md" }}
+                                marginRight={"10px"}
+                              >
+                                {event.location}
+                              </Text>
+                              <Icon fontSize={{ base: "20px", md: "24px" }}>
                                 <MdAttachMoney />
                               </Icon>
-                              <Text>
+                              <Text fontSize={{ base: "sm", md: "md" }}>
                                 {event.price === 0
                                   ? "free"
                                   : event.price.toString()}
