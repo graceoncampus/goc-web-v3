@@ -1,12 +1,9 @@
-/**
- * Driver signup higher order conditional rendering component.
- */
-
-import React, { useState } from "react";
+import { useState } from "react";
 import { DriverSignupThankYou } from "./DriverSignupThankYou";
 import { DriverSignupForm } from "./DriverSignupForm";
 import { NavbarActiveKey } from "components/Navbar";
 import { Template } from "layouts/Template";
+import { Box } from "@chakra-ui/react";
 
 export const DriverSignup = () => {
   return (
@@ -17,11 +14,15 @@ export const DriverSignup = () => {
 };
 
 const DriverSignupBody = () => {
-  const [riderSignupCompleted, setDriverSignupCompleted] = useState(false);
+  const [driverSignupCompleted, setDriverSignupCompleted] = useState(false);
 
-  return riderSignupCompleted ? (
-    <DriverSignupThankYou />
-  ) : (
-    <DriverSignupForm setDriverSignupCompleted={setDriverSignupCompleted} />
+  return (
+    <Box padding={6}>
+      {driverSignupCompleted ? (
+        <DriverSignupThankYou />
+      ) : (
+        <DriverSignupForm setDriverSignupCompleted={setDriverSignupCompleted} />
+      )}
+    </Box>
   );
 };

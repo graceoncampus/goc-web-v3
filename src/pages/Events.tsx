@@ -13,6 +13,7 @@ import {
   Separator,
   Stack,
   Text,
+  Container,
 } from "@chakra-ui/react";
 import {
   AccordionItem,
@@ -21,7 +22,6 @@ import {
   AccordionRoot,
 } from "components/ui/accordion";
 import { BannerTemplate } from "layouts/BannerTemplate";
-import { Container } from "react-bootstrap";
 
 const client = generateClient();
 

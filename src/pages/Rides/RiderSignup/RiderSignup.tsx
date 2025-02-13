@@ -1,9 +1,5 @@
-/**
- * Rider signup higher order conditional rendering component.
- */
-
 import { useState } from "react";
-
+import { Box } from "@chakra-ui/react";
 import { NavbarActiveKey } from "components/Navbar";
 import { RiderSignupThankYou } from "./RiderSignupThankYou";
 import { RiderSignupForm } from "./RiderSignupForm";
@@ -20,9 +16,13 @@ export const RiderSignup = () => {
 const RiderSignupBody = () => {
   const [riderSignupCompleted, setRiderSignupCompleted] = useState(false);
 
-  return riderSignupCompleted ? (
-    <RiderSignupThankYou />
-  ) : (
-    <RiderSignupForm setRiderSignupCompleted={setRiderSignupCompleted} />
+  return (
+    <Box padding={6}>
+      {riderSignupCompleted ? (
+        <RiderSignupThankYou />
+      ) : (
+        <RiderSignupForm setRiderSignupCompleted={setRiderSignupCompleted} />
+      )}
+    </Box>
   );
 };

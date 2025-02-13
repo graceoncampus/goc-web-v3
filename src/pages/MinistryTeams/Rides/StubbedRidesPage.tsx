@@ -3,16 +3,11 @@
  */
 
 import React from "react";
-import { Container } from "react-bootstrap";
 import { NavbarActiveKey } from "components/Navbar";
 // import { MinistryTeamTemplate } from 'Components/MinistryTeams/Template/MinistryTeamTemplate';
 
 const StubbedRidesBody = () => {
-  return (
-    <Container fluid={true}>
-      <span> PUT STUFF HERE! </span>
-    </Container>
-  );
+  return <span> PUT STUFF HERE! </span>;
 };
 
 export const StubbedRidesPage = () => {

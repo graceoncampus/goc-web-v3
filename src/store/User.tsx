@@ -1,5 +1,5 @@
 import { signOut } from "aws-amplify/auth";
-import { action, makeAutoObservable } from "mobx";
+import { makeAutoObservable } from "mobx";
 
 export class User {
   name = "";
@@ -26,7 +26,6 @@ export class User {
     this.phone_number = "";
   }
 
-  @action
   async logout() {
     try {
       await signOut();

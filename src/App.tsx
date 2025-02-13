@@ -20,8 +20,8 @@ import { MinistryTeamsPage } from "pages/MinistryTeams";
 import { LoginPage } from "pages/Login/Login";
 import { ResetPage } from "pages/Login/Reset";
 import { SignupPage } from "pages/Login/Signup";
-import { NotFound as UserNotFound } from "pages/NotFound";
-import { NotFound } from "pages/MinistryTeams/NotFound/NotFound";
+import { NotFoundPage as UserNotFoundPage } from "pages/NotFound";
+import { NotFoundPage } from "pages/MinistryTeams/NotFound/NotFound";
 import "@fontsource/poppins";
 
 const App = () => {
@@ -31,13 +31,13 @@ const App = () => {
         <BrowserRouter>
           <ScrollToTop />
           <Routes>
-            <Route path={"*"} element={<UserNotFound />} /> {/* 404 */}
+            <Route path={"*"} element={<UserNotFoundPage />} /> {/* 404 */}
             <Route path={"/"} element={<LandingPage />} />
             <Route path={"/about"} element={<AboutUsPage />} />
             <Route path={"/sermons"} element={<SermonsPage />} />
             <Route path={"/events"} element={<EventsPage />} />
-            <Route path={"/ourbeliefs"} element={<OurBeliefsPage />}/>
-            <Route path={"/leadership"} element={<LeadershipPage />}/>
+            <Route path={"/ourbeliefs"} element={<OurBeliefsPage />} />
+            <Route path={"/leadership"} element={<LeadershipPage />} />
             <Route path={"/rides"} element={<RidesLandingPage />} />
             <Route path={"/rides/rider/signup"} element={<RiderSignup />} />
             <Route path={"/rides/driver/signup"} element={<DriverSignup />} />
@@ -47,7 +47,7 @@ const App = () => {
               path={"/ministry_teams/rides"}
               element={<StubbedRidesPage />}
             />
-            <Route path={"/ministry_teams/*"} element={<NotFound />} />
+            <Route path={"/ministry_teams/*"} element={<NotFoundPage />} />
             <Route path="/prayer-request" element={<PrayerFormPage />} />
             <Route path={"/smallgroups"} element={<SmallGroupsPage />} />
             <Route path={"/study-guide"} element={<StudyGuidePage />} />

@@ -1,10 +1,16 @@
-/**
- * Driver signup form.
- */
-
-import React, { useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { useSearchParams } from "react-router-dom";
+import { useState } from "react";
+import {
+  Box,
+  Button,
+  Container,
+  Input,
+  Stack,
+  Text,
+  Textarea,
+  VStack,
+} from "@chakra-ui/react";
+import { Field } from "components/ui/field";
+import { Radio, RadioGroup } from "components/ui/radio";
 
 interface DriverSignupFormProps {
   setDriverSignupCompleted: (driverSignupValue: boolean) => void;
@@ -15,165 +21,117 @@ type EventTimeOption = {
   subtext: string;
 };
 
-export const DriverSignupForm = (
-  driverSignupFormProps: DriverSignupFormProps,
-) => {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const [eventTimes, setEventTimes] = useState<EventTimeOption[]>([
-    {
-      heading: "Morning",
-      subtext: "(9am - 12:30pm)",
-    },
-    {
-      heading: "Evening",
-      subtext: "(6pm - 7:30pm)",
-    },
-    {
-      heading: "Staying",
-      subtext: "(9am - 7:30pm)",
-    },
+export const DriverSignupForm = ({ setDriverSignupCompleted }: DriverSignupFormProps) => {
+  const [eventTimes] = useState<EventTimeOption[]>([
+    { heading: "Morning", subtext: "(9am - 12:30pm)" },
+    { heading: "Evening", subtext: "(6pm - 7:30pm)" },
+    { heading: "Staying", subtext: "(9am - 7:30pm)" },
   ]);
 
-  const [driverName, setDriverName] = useState<string>("");
-  const [driverEmail, setDriverEmail] = useState<string>("");
-  const [driverPhoneNumber, setDriverPhoneNumber] = useState<string>("");
-  const [driverEventTime, setDriverEventTime] = useState<string>("");
-  const [driverAddress, setDriverAddress] = useState<string>("");
-  const [driverNumRiderSpots, setDriverNumRiderSpots] = useState<number>(0);
-  const [driverComments, setDriverComments] = useState<string>("");
+  const [driverName, setDriverName] = useState("");
+  const [driverEmail, setDriverEmail] = useState("");
+  const [driverPhoneNumber, setDriverPhoneNumber] = useState("");
+  const [driverEventTime, setDriverEventTime] = useState("");
+  const [driverAddress, setDriverAddress] = useState("");
+  const [driverNumRiderSpots, setDriverNumRiderSpots] = useState<number | "">("");
+  const [driverComments, setDriverComments] = useState("");
 
-  const eventTimesRadioButtons = eventTimes.map(
-    (eventTime: EventTimeOption) => {
-      const eventTimeHeading = eventTime.heading;
-      const eventTimeSubtext = eventTime.subtext;
-
-      return (
-        <Form.Check
-          key={eventTimeHeading}
-          name={"radio-time"}
-          type={"radio"}
-          id={`${eventTimeHeading}-radio`}
-          className={"signup-form-radio-button"}
-          label={
-            <div className={"time-label"}>
-              <span className={"signup-form-radio-text"}>
-                {eventTimeHeading}
-              </span>
-              <div className={"signup-form-radio-subheading"}>
-                {eventTimeSubtext}
-              </div>
-            </div>
-          }
-          onChange={({ target: { value } }) =>
-            setDriverEventTime(eventTimeHeading)
-          }
-          required={true}
-        />
-      );
-    },
-  );
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setDriverSignupCompleted(true);
+  };
 
   return (
-    <Container>
-      <Col className={"mx-auto text-center"} lg={"8"}>
-        <span className={"signup-form-title"}>Sign up to drive to Church!</span>
+    <Container maxW="container.md" p={6}>
+      <Box textAlign="center" mb={6}>
+        <Text fontSize="2xl" fontWeight="bold" color="teal.500">
+          Sign up to drive to Church!
+        </Text>
+      </Box>
 
-        <Form className={"text-center"} onSubmit={() => {}}>
-          <Row className={"text-start gx-5"}>
-            <Col lg={"6"}>
-              <Form.Group className={"mb-3"} controlId={"driverName"}>
-                <Form.Label className={"signup-form-label"}>
-                  {" "}
-                  Name *{" "}
-                </Form.Label>
-                <Form.Control
-                  placeholder={"Enter your name"}
-                  onChange={({ target: { value } }) => setDriverName(value)}
-                  required={true}
+      <Box as="form" onSubmit={handleSubmit}>
+        <VStack gap={4} align="stretch">
+          <Stack direction={{ base: "column", md: "row" }} gap={6}>
+            {/* Left Column */}
+            <VStack gap={4} flex={1}>
+              <Field label="Name" required>
+                <Input
+                  placeholder="Enter your name"
+                  value={driverName}
+                  onChange={(e) => setDriverName(e.target.value)}
                 />
-              </Form.Group>
+              </Field>
 
-              <Form.Group className={"mb-3"} controlId={"driverEmail"}>
-                <Form.Label className={"signup-form-label"}>
-                  {" "}
-                  Email *{" "}
-                </Form.Label>
-                <Form.Control
-                  type={"email"}
-                  placeholder={"Enter your email"}
-                  onChange={({ target: { value } }) => setDriverEmail(value)}
-                  required={true}
+              <Field label="Email" required>
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={driverEmail}
+                  onChange={(e) => setDriverEmail(e.target.value)}
                 />
-              </Form.Group>
+              </Field>
 
-              <Form.Group className={"mb-3"} controlId={"driverPhoneNumber"}>
-                <Form.Label className={"signup-form-label"}>
-                  {" "}
-                  Phone Number *{" "}
-                </Form.Label>
-                <Form.Control
-                  placeholder={"Enter your phone number"}
-                  onChange={({ target: { value } }) =>
-                    setDriverPhoneNumber(value)
-                  }
-                  required={true}
+              <Field label="Phone Number" required>
+                <Input
+                  placeholder="Enter your phone number"
+                  value={driverPhoneNumber}
+                  onChange={(e) => setDriverPhoneNumber(e.target.value)}
                 />
-              </Form.Group>
-              <Form.Group className={"mb-3"} controlId={"driverEventTime"}>
-                <Form.Label className={"signup-form-label"}>
-                  {" "}
-                  Time *{" "}
-                </Form.Label>
+              </Field>
 
-                {eventTimesRadioButtons}
-              </Form.Group>
-            </Col>
+              <Field label="Event Time" required>
+                <RadioGroup value={driverEventTime} onValueChange={(e) => setDriverEventTime(e.value)}>
+                  <Stack direction="column">
+                    {eventTimes.map((eventTime) => (
+                      <Radio key={eventTime.heading} value={eventTime.heading}>
+                        <Box>
+                          <Text fontWeight="bold">{eventTime.heading}</Text>
+                          <Text fontSize="sm" color="gray.500">
+                            {eventTime.subtext}
+                          </Text>
+                        </Box>
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
+              </Field>
+            </VStack>
 
-            <Col lg={"6"}>
-              <Form.Group className={"mb-3"} controlId={"driverAddress"}>
-                <Form.Label className={"signup-form-label"}>
-                  {" "}
-                  Address *{" "}
-                </Form.Label>
-                <Form.Control
-                  placeholder={"Enter your address"}
-                  onChange={({ target: { value } }) => setDriverAddress(value)}
-                  required={true}
+            {/* Right Column */}
+            <VStack gap={4} flex={1}>
+              <Field label="Address" required>
+                <Input
+                  placeholder="Enter your address"
+                  value={driverAddress}
+                  onChange={(e) => setDriverAddress(e.target.value)}
                 />
-              </Form.Group>
-              <Form.Group className={"mb-3"} controlId={"driverNumRiderSpots"}>
-                <Form.Label className={"signup-form-label"}>
-                  {" "}
-                  Number of spots (excluding you) *{" "}
-                </Form.Label>
-                <Form.Control
-                  placeholder={"Enter number of spots in your car"}
-                  onChange={({ target: { value } }) =>
-                    setDriverNumRiderSpots(parseInt(value))
-                  }
-                  required={true}
+              </Field>
+
+              <Field label="Number of Rider Spots" required>
+                <Input
+                  placeholder="Enter number of spots in your car"
+                  type="number"
+                  value={driverNumRiderSpots}
+                  onChange={(e) => setDriverNumRiderSpots(Number(e.target.value) || "")}
                 />
-              </Form.Group>
-              <Form.Group className={"mb-3"} controlId={"driverComments"}>
-                <Form.Label className={"signup-form-label"}>
-                  {" "}
-                  Comments{" "}
-                </Form.Label>
-                <Form.Control
-                  as={"textarea"}
+              </Field>
+
+              <Field label="Comments">
+                <Textarea
+                  placeholder="Additional comments (optional)"
                   rows={4}
-                  onChange={({ target: { value } }) => setDriverComments(value)}
+                  value={driverComments}
+                  onChange={(e) => setDriverComments(e.target.value)}
                 />
-              </Form.Group>
-            </Col>
-          </Row>
+              </Field>
+            </VStack>
+          </Stack>
 
-          <Button variant={"submit"} type={"submit"}>
+          <Button colorScheme="teal" size="lg" type="submit" width="full">
             <strong>SIGN UP</strong>
           </Button>
-        </Form>
-      </Col>
+        </VStack>
+      </Box>
     </Container>
   );
 };
