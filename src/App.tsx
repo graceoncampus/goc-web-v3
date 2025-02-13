@@ -1,5 +1,5 @@
 import React from "react";
-import ScrollToTop from "hooks/ScrollToTop";
+import ScrollToTop from "@/hooks/ScrollToTop";
 import { Provider } from "provider";
 import { LandingPage } from "pages/Landing";
 import { Landing as MinistryTeamLanding } from "pages/MinistryTeams/Landing/Landing";

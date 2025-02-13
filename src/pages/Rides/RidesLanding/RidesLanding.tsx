@@ -5,11 +5,19 @@
 import { CreateCarInput, CreateRideInput, Ride } from "Api";
 import { NavbarActiveKey } from "components/Navbar";
 import { generateClient } from "aws-amplify/api";
-import { createRide, deleteRide } from "graphql/mutations";
-import { listRides } from "graphql/queries";
+import { createRide, deleteRide } from "@/graphql/mutations";
+import { listRides } from "@/graphql/queries";
 import { useEffect, useState } from "react";
 import { BannerTemplate } from "layouts/BannerTemplate";
-import { Box, Button, Container, Heading, Image, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Container,
+  Heading,
+  Image,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import GOCButton from "components/GOCButton";
 import { MdHeight } from "react-icons/md";
 
@@ -20,7 +28,11 @@ const client = generateClient();
  * This function sends the spreadsheet URL, date, and email message
  * to an endpoint that performs the rides update logic.
  */
-const updateRidesClient = async (url: string, date: string, emailMsg: string) => {
+const updateRidesClient = async (
+  url: string,
+  date: string,
+  emailMsg: string,
+) => {
   try {
     const response = await fetch("/api/updateRides", {
       method: "POST",
