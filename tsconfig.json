@@ -21,7 +21,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/components/*": ["./src/components/*"],
-      "hooks/*": ["hooks/*"],
+      "hooks/*": ["./src/hooks/*"],
       "pages/*": ["pages/*"],
       "layouts/*": ["layouts/*"],
       "constants/*": ["constants/*"],
