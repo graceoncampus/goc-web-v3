@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                         
+    "target": "ESNext",
     "types": ["vite/client", "vite-plugin-svgr/client"],
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -20,7 +20,16 @@
     "baseUrl": "src",
     "paths": {
       "@/*": ["./src/*"],
-      "@/components/*": ["./src/components/*"]
+      "@/components/*": ["./src/components/*"],
+      "hooks/*": ["hooks/*"],
+      "pages/*": ["pages/*"],
+      "layouts/*": ["layouts/*"],
+      "constants/*": ["constants/*"],
+      "components/*": ["components/*"],
+      "auth/*": ["auth/*"],
+      "store/*": ["store/*"],
+      "graphql/*": ["graphql/*"],
+      "ui-components/*": ["ui-components/*"]
     }
   },
   "include": ["src"]
