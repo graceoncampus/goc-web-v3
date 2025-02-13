@@ -12,7 +12,7 @@ import InfoBox from "components/InfoBox";
 import { observer } from "mobx-react-lite";
 import { useStore } from "store/StoreContext";
 import { Box, Heading, Image, Stack, Text, Container } from "@chakra-ui/react";
-import { contactInfo } from "../constants/ContactInfo";
+import { contactInfo } from "constants/ContactInfo";
 
 export const LandingPage = () => {
   return (
@@ -123,20 +123,9 @@ const LandingBody = observer(() => {
               Welcome to Grace on Campus!
             </Heading>
             <Text
-              fontSize={{
-                base: "xs",
-                sm: "sm",
-                md: "md",
-                lg: "lg",
-                xl: "xl",
-              }}
+              fontSize={{ base: "xs", sm: "sm", md: "md", lg: "lg", xl: "xl" }}
               textWrap="pretty"
-              marginBottom={{
-                sm: "0",
-                md: "0",
-                lg: "1rem",
-                xl: "2rem",
-              }}
+              marginBottom={{ sm: "0", md: "0", lg: "1rem", xl: "2rem" }}
               animation="fadeIn .5s ease-in-out"
               animationDelay="0.25s"
               opacity="0"

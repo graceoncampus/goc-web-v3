@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Box } from "@chakra-ui/react";
 import { NavbarActiveKey } from "components/Navbar";
-import { RiderSignupThankYou } from "./RiderSignupThankYou";
-import { RiderSignupForm } from "./RiderSignupForm";
+import { RiderSignupThankYou } from "pages/Rides/RiderSignup/RiderSignupThankYou";
+import { RiderSignupForm } from "pages/Rides/RiderSignup/RiderSignupForm";
 import { Template } from "layouts/Template";
 
 export const RiderSignup = () => {

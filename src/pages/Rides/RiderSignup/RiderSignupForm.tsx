@@ -10,7 +10,7 @@ import {
   VStack,
   HStack,
 } from "@chakra-ui/react";
-import { PickupLocationPopup } from "./PickupLocationPopup/PickupLocationPopup";
+import { PickupLocationPopup } from "pages/Rides/RiderSignup/PickupLocationPopup/PickupLocationPopup";
 import { Field } from "components/ui/field";
 import { Radio, RadioGroup } from "components/ui/radio";
 
@@ -18,10 +18,7 @@ interface RiderSignupFormProps {
   setRiderSignupCompleted: (riderSignupValue: boolean) => void;
 }
 
-type EventTimeOption = {
-  heading: string;
-  subtext: string;
-};
+type EventTimeOption = { heading: string; subtext: string };
 
 export const RiderSignupForm = ({
   setRiderSignupCompleted,

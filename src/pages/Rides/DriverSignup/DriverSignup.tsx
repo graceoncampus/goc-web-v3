@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { DriverSignupThankYou } from "./DriverSignupThankYou";
-import { DriverSignupForm } from "./DriverSignupForm";
+import { DriverSignupThankYou } from "pages/Rides/DriverSignup/DriverSignupThankYou";
+import { DriverSignupForm } from "pages/Rides/DriverSignup/DriverSignupForm";
 import { NavbarActiveKey } from "components/Navbar";
 import { Template } from "layouts/Template";
 import { Box } from "@chakra-ui/react";

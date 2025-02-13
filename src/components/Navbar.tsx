@@ -33,8 +33,8 @@ import {
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { FiExternalLink } from "react-icons/fi";
 import { IoMdMenu } from "react-icons/io";
-import NavLinks from "./NavLinks";
-import LoginButton from "./LoginButton";
+import NavLinks from "components/NavLinks";
+import LoginButton from "components/LoginButton";
 
 export enum NavbarActiveKey {
   NONE = "",
@@ -107,9 +107,7 @@ const NavItem = ({
               transition={"color 0.3s ease"}
               backgroundColor={"transparent"}
               outline={"none"}
-              _hover={{
-                backgroundColor: bgHoverColor,
-              }}
+              _hover={{ backgroundColor: bgHoverColor }}
             >
               {name} <RiArrowDropDownLine />
             </Button>
@@ -167,9 +165,7 @@ const NavItem = ({
       variant={"ghost"}
       asChild={true}
       margin={".5rem"}
-      _hover={{
-        backgroundColor: bgHoverColor,
-      }}
+      _hover={{ backgroundColor: bgHoverColor }}
     >
       <Link
         href={link}
@@ -268,9 +264,7 @@ const Navbar = ({
             display={{ base: drawerOpen ? "none" : "flex", xl: "none" }}
             aria-label="Open Menu"
             backgroundColor={"transparent"}
-            _hover={{
-              backgroundColor: "goc.gray/30",
-            }}
+            _hover={{ backgroundColor: "goc.gray/30" }}
           >
             <Icon
               color={iconColor}
