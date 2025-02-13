@@ -1,3 +1,4 @@
+// TODO: DELETE THIS FILE (NOT NEEDED ANYMORE BUT JUST IN CASE FOR FUTURE REFERENCE)
 // Issues with NodeJs Polyfill with webpack 5.0+
 // https://stackoverflow.com/a/71280203
 // https://stackoverflow.com/a/73661388

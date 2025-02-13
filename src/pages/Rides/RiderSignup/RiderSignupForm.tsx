@@ -1,10 +1,18 @@
-/**
- * Rider signup form.
- */
-
-import React, { useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { useState } from "react";
+import {
+  Box,
+  Button,
+  Container,
+  Input,
+  Stack,
+  Text,
+  Textarea,
+  VStack,
+  HStack,
+} from "@chakra-ui/react";
 import { PickupLocationPopup } from "./PickupLocationPopup/PickupLocationPopup";
+import { Field } from "components/ui/field";
+import { Radio, RadioGroup } from "components/ui/radio";
 
 interface RiderSignupFormProps {
   setRiderSignupCompleted: (riderSignupValue: boolean) => void;
@@ -15,213 +23,156 @@ type EventTimeOption = {
   subtext: string;
 };
 
-export const RiderSignupForm = (riderSignupFormProps: RiderSignupFormProps) => {
-  const [eventPickupLocations, setEventPickupLocations] = useState<string[]>([
+export const RiderSignupForm = ({
+  setRiderSignupCompleted,
+}: RiderSignupFormProps) => {
+  const [eventPickupLocations] = useState<string[]>([
     "Hedrick Turnaround",
     "Holly Turnaround",
     "De Neve Turnaround",
   ]);
-  const [eventTimes, setEventTimes] = useState<EventTimeOption[]>([
-    {
-      heading: "Morning",
-      subtext: "(9am - 12:30pm)",
-    },
-    {
-      heading: "Evening",
-      subtext: "(6pm - 7:30pm)",
-    },
-    {
-      heading: "Staying",
-      subtext: "(9am - 7:30pm)",
-    },
+
+  const [eventTimes] = useState<EventTimeOption[]>([
+    { heading: "Morning", subtext: "(9am - 12:30pm)" },
+    { heading: "Evening", subtext: "(6pm - 7:30pm)" },
+    { heading: "Staying", subtext: "(9am - 7:30pm)" },
   ]);
 
-  const [riderName, setRiderName] = useState<string>("");
-  const [riderEmail, setRiderEmail] = useState<string>("");
-  const [riderPhoneNumber, setRiderPhoneNumber] = useState<string>("");
-  const [riderEventPickupLocation, setRiderEventPickupLocation] =
-    useState<string>("");
-  const [riderEventTime, setRiderEventTime] = useState<string>("");
-  const [riderComments, setRiderComments] = useState<string>("");
-
+  const [riderName, setRiderName] = useState("");
+  const [riderEmail, setRiderEmail] = useState("");
+  const [riderPhoneNumber, setRiderPhoneNumber] = useState("");
+  const [riderEventPickupLocation, setRiderEventPickupLocation] = useState("");
+  const [riderEventTime, setRiderEventTime] = useState("");
+  const [riderComments, setRiderComments] = useState("");
   const [
     disableOffCampusPickupLocationTextInput,
     setDisableOffCampusPickupLocationTextInput,
   ] = useState(true);
 
-  const eventPickupLocationsRadioButtons = eventPickupLocations.map(
-    (pickupLocationName: string) => {
-      return (
-        <Form.Check
-          key={pickupLocationName}
-          name={"radio-pickup-location"}
-          type={"radio"}
-          id={`${pickupLocationName}-pickup-location-radio`}
-          className={"signup-form-radio-button"}
-          label={
-            <span className={"signup-form-radio-text"}>
-              {pickupLocationName}
-            </span>
-          }
-          onClick={(pickupLocationClickEvent) => {
-            setRiderEventPickupLocation(pickupLocationName);
-            setDisableOffCampusPickupLocationTextInput(true);
-          }}
-          required={true}
-        />
-      );
-    },
-  );
-
-  const eventTimesRadioButtons = eventTimes.map(
-    (eventTime: EventTimeOption) => {
-      const eventTimeHeading = eventTime.heading;
-      const eventTimeSubtext = eventTime.subtext;
-
-      return (
-        <Form.Check
-          key={eventTimeHeading}
-          name={"radio-time"}
-          type={"radio"}
-          id={`${eventTimeHeading}-radio`}
-          className={"signup-form-radio-button"}
-          label={
-            <div className={"time-label"}>
-              <span className={"signup-form-radio-text"}>
-                {eventTimeHeading}
-              </span>
-              <div className={"signup-form-radio-subheading"}>
-                {eventTimeSubtext}
-              </div>
-            </div>
-          }
-          onChange={({ target: { value } }) =>
-            setRiderEventTime(eventTimeHeading)
-          }
-          required={true}
-        />
-      );
-    },
-  );
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setRiderSignupCompleted(true);
+  };
 
   return (
-    <Container>
-      <Col className={"mx-auto text-center"} lg={"8"}>
-        <span className={"signup-form-title"}>
+    <Container maxW="container.md" p={6}>
+      <Box textAlign="center" mb={6}>
+        <Text fontSize="2xl" fontWeight="bold" color="teal.500">
           Sign up for a ride to Church!
-        </span>
+        </Text>
+      </Box>
 
-        <Form className={"text-center"} onSubmit={() => {}}>
-          <Row className={"text-start gx-5"}>
-            <Col lg={"6"}>
-              <Form.Group className={"mb-3"} controlId={"riderName"}>
-                <Form.Label className={"signup-form-label"}>
-                  {" "}
-                  Name *{" "}
-                </Form.Label>
-                <Form.Control
-                  placeholder={"Enter your name"}
-                  onChange={({ target: { value } }) => setRiderName(value)}
-                  required={true}
+      <Box as="form" onSubmit={handleSubmit}>
+        <VStack gap={6} align="stretch">
+          <Stack direction={{ base: "column", md: "row" }} gap={6}>
+            {/* Left Column */}
+            <VStack gap={4} flex={1}>
+              <Field label="Name" required>
+                <Input
+                  placeholder="Enter your name"
+                  value={riderName}
+                  onChange={(e) => setRiderName(e.target.value)}
                 />
-              </Form.Group>
+              </Field>
 
-              <Form.Group className={"mb-3"} controlId={"riderEmail"}>
-                <Form.Label className={"signup-form-label"}>
-                  {" "}
-                  Email *{" "}
-                </Form.Label>
-                <Form.Control
-                  type={"email"}
-                  placeholder={"Enter your email"}
-                  onChange={({ target: { value } }) => setRiderEmail(value)}
-                  required={true}
+              <Field label="Email" required>
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={riderEmail}
+                  onChange={(e) => setRiderEmail(e.target.value)}
                 />
-              </Form.Group>
+              </Field>
 
-              <Form.Group className={"mb-3"} controlId={"riderPhoneNumber"}>
-                <Form.Label className={"signup-form-label"}>
-                  {" "}
-                  Phone Number *{" "}
-                </Form.Label>
-                <Form.Control
-                  type={"tel"}
-                  placeholder={"Enter your phone number"}
-                  onChange={({ target: { value } }) =>
-                    setRiderPhoneNumber(value)
-                  }
-                  required={true}
+              <Field label="Phone Number" required>
+                <Input
+                  type="tel"
+                  placeholder="Enter your phone number"
+                  value={riderPhoneNumber}
+                  onChange={(e) => setRiderPhoneNumber(e.target.value)}
                 />
-              </Form.Group>
+              </Field>
 
-              <Form.Group className={"mb-3"} controlId={"riderPickupLocation"}>
-                <div>
-                  <Form.Label className={"signup-form-label"}>
-                    {" "}
-                    Pickup Location *{" "}
-                  </Form.Label>
+              <Field label="Pickup Location" required>
+                <PickupLocationPopup />
+                <RadioGroup
+                  // todo: remove this comment after testing: () => setRiderEventPickupLocation(riderEventPickupLocation)
+                  onValueChange={(e) => setRiderEventPickupLocation(e.value)}
+                >
+                  <Stack direction="column">
+                    {eventPickupLocations.map((location) => (
+                      <Radio
+                        key={location}
+                        value={location}
+                        onClick={() =>
+                          setDisableOffCampusPickupLocationTextInput(true)
+                        }
+                      >
+                        {location}
+                      </Radio>
+                    ))}
+                    <HStack>
+                      <Radio
+                        value="Off Campus"
+                        onClick={() =>
+                          setDisableOffCampusPickupLocationTextInput(false)
+                        }
+                      >
+                        Off Campus
+                      </Radio>
+                      <Input
+                        type="text"
+                        size="sm"
+                        disabled={disableOffCampusPickupLocationTextInput}
+                        placeholder="Enter location"
+                        onChange={(e) =>
+                          setRiderEventPickupLocation(e.target.value)
+                        }
+                      />
+                    </HStack>
+                  </Stack>
+                </RadioGroup>
+              </Field>
+            </VStack>
 
-                  <PickupLocationPopup />
-                </div>
+            {/* Right Column */}
+            <VStack gap={4} flex={1}>
+              <Field label="Event Time" required>
+                <RadioGroup
+                  // todo: remove this comment after testing: () => setRiderEventTime(riderEventTime)}
+                  onValueChange={(e) => setRiderEventTime(e.value)}
+                >
+                  <Stack direction="column">
+                    {eventTimes.map((eventTime) => (
+                      <Radio key={eventTime.heading} value={eventTime.heading}>
+                        <Box>
+                          <Text fontWeight="bold">{eventTime.heading}</Text>
+                          <Text fontSize="sm" color="gray.500">
+                            {eventTime.subtext}
+                          </Text>
+                        </Box>
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
+              </Field>
 
-                {eventPickupLocationsRadioButtons}
-
-                <div className={"off-campus-radio-text-input"}>
-                  <Form.Check
-                    className={"pe-3 signup-form-radio-button"}
-                    name={"radio-pickup-location"}
-                    type={"radio"}
-                    id={"off-campus-pickup-location-radio"}
-                    label={
-                      <span className={"signup-form-radio-text"}>
-                        {" "}
-                        Off&nbsp;Campus{" "}
-                      </span>
-                    }
-                    onClick={(apartmentClickEvent) => {
-                      setDisableOffCampusPickupLocationTextInput(false);
-                    }}
-                    required={true}
-                  />
-
-                  <Form.Control
-                    type={"text"}
-                    size={"sm"}
-                    disabled={disableOffCampusPickupLocationTextInput}
-                    required={true}
-                  />
-                </div>
-              </Form.Group>
-            </Col>
-
-            <Col lg={"6"}>
-              <Form.Group className={"mb-3"} controlId={"riderTime"}>
-                <Form.Label className={"signup-form-label"}>
-                  {" "}
-                  Time *{" "}
-                </Form.Label>
-                {eventTimesRadioButtons}
-              </Form.Group>
-
-              <Form.Group className={"mb-3"} controlId={"riderComments"}>
-                <Form.Label className={"signup-form-label"}>
-                  {" "}
-                  Comments{" "}
-                </Form.Label>
-                <Form.Control
-                  as={"textarea"}
+              <Field label="Comments">
+                <Textarea
+                  placeholder="Additional comments (optional)"
                   rows={4}
-                  onChange={({ target: { value } }) => setRiderComments(value)}
+                  value={riderComments}
+                  onChange={(e) => setRiderComments(e.target.value)}
                 />
-              </Form.Group>
-            </Col>
-          </Row>
+              </Field>
+            </VStack>
+          </Stack>
 
-          <Button variant={"submit"} type={"submit"}>
+          <Button colorScheme="teal" size="lg" type="submit" width="full">
             <strong>SIGN UP</strong>
           </Button>
-        </Form>
-      </Col>
+        </VStack>
+      </Box>
     </Container>
   );
 };

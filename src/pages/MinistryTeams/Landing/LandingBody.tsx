@@ -1,33 +1,23 @@
-/**
- * Landing page body.
- */
-
-import React from "react";
-import { Col, Container, Row } from "react-bootstrap";
-
-import { Header, NavbarActiveKey } from "pages/MinistryTeams/Header/Header";
+import { Box, Container, Text, VStack } from "@chakra-ui/react";
+import Navbar, { NavbarActiveKey } from "components/Navbar";
 
 export const LandingBody = () => {
   return (
-    <div className={"page-container"}>
-      <Header activeKey={NavbarActiveKey.NONE} />
+    <Box className="page-container">
+      <Navbar selectedNavItemName={NavbarActiveKey.NONE} />
 
-      <Container className={"text-center body-container"} fluid={true}>
-        <Col>
-          <Row>
-            <span className={"ministry-teams-landing-header"}>
-              Thank you for serving!
-            </span>
-          </Row>
+      <Container maxWidth="container.md" centerContent>
+        <VStack gap={4} textAlign="center" marginTop={8}>
+          <Text fontSize="2xl" fontWeight="bold" color="teal.600">
+            Thank you for serving!
+          </Text>
 
-          <Row>
-            <span className={"ministry-teams-landing-text"}>
-              Please use the links in the navigation bar to access the ministry
-              team pages.
-            </span>
-          </Row>
-        </Col>
+          <Text fontSize="lg" color="gray.600">
+            Please use the links in the navigation bar to access the ministry
+            team pages.
+          </Text>
+        </VStack>
       </Container>
-    </div>
+    </Box>
   );
 };

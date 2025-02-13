@@ -2,7 +2,7 @@
  * Ministry team landing page.
  */
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { LandingBody } from "./LandingBody";
 import { LoginForm } from "pages/Login/LoginForm";

@@ -1,25 +1,28 @@
-/**
- * Turnaround popup widget.
- */
-
-import React from "react";
-import Tippy from "@tippyjs/react";
-import { Image } from "react-bootstrap";
-import { IconContext } from "react-icons/lib";
+import { IconButton, Image } from "@chakra-ui/react";
 import { BiHelpCircle } from "react-icons/bi";
+import { Tooltip } from "components/ui/tooltip";
 
 export const PickupLocationPopup = () => {
   return (
-    <Tippy content={<TurnaroundImage />} arrow={false}>
-      <button type={"button"} className={"remove-button-styling"}>
-        <IconContext.Provider value={{ className: "helpCircle" }}>
-          <BiHelpCircle />
-        </IconContext.Provider>
-      </button>
-    </Tippy>
+    <Tooltip
+      content={<TurnaroundImage />}
+      positioning={{ placement: "right-end" }}
+      openDelay={0}
+      showArrow
+    >
+      <IconButton aria-label="Pickup location help" variant="ghost" size="lg">
+        <BiHelpCircle />
+      </IconButton>
+    </Tooltip>
   );
 };
 
 const TurnaroundImage = () => {
-  return <Image fluid={true} rounded={true} src={"/images/PickupLocations.png"} />;
+  return (
+    <Image
+      src="/images/PickupLocations.png"
+      alt="Pickup Locations"
+      borderRadius="md"
+    />
+  );
 };
