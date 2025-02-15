@@ -8,7 +8,7 @@ export const RiderSignupThankYou = () => {
           Thank you for signing up for a ride!
         </Text>
         <Text fontSize="lg" color="gray.600">
-          You will receive a confirmation email shortly.
+          You will receive a confirmation email shortly
         </Text>
       </VStack>
     </Container>

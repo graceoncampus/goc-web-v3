@@ -68,6 +68,7 @@ const config = defineConfig({
         black: { value: "#000000" },
         goc: {
           pale_blue: { value: "#E6F0FF" },
+          bright_blue: { value: "#5A86D9" },
           blue: { value: "#3366CC" },
           gray: { value: "#F7F7F7" },
           orange: { value: "#CC9933" },
