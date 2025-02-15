@@ -272,11 +272,7 @@ const Navbar = ({
               backgroundColor: "goc.gray/30",
             }}
           >
-            <Icon
-              color={iconColor}
-              fontSize={"2.5rem"}
-              transition={"color .3s ease"}
-            >
+            <Icon color={iconColor} transition={"color .3s ease"} size={"2xl"}>
               <IoMdMenu />
             </Icon>
           </IconButton>

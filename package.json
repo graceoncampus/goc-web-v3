@@ -53,6 +53,7 @@
   },
   "scripts": {
     "start": "vite",
+    "debug": "vite --debug",
     "build": "vite build",
     "test": "vite preview",
     "eject": "react-scripts eject",

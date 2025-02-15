@@ -67,9 +67,13 @@ const config = defineConfig({
       colors: {
         black: { value: "#000000" },
         goc: {
-          blue: { value: "#3366cc" }, // rgb(51, 102, 204)
-          gray: { value: "#f7f7f7" },
+          pale_blue: { value: "#E6F0FF" },
+          blue: { value: "#3366CC" },
+          gray: { value: "#F7F7F7" },
+          orange: { value: "#CC9933" },
+          pale_orange: { value: "#D1A347" },
           darkgray: { value: "lightgray" },
+          beige: { value: "#FAF2E0" },
         },
       },
       sizes: {
