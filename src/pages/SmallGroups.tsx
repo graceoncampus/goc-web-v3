@@ -58,8 +58,8 @@ const SmallGroupsBody = () => {
           </Text>
         </Box>
         <Stack
-          direction={{ base: "column", lg: "row" }}
-          gap={4}
+          direction={"column"}
+          gap={"1rem"}
           justifyContent="center"
           alignItems="center"
         >

@@ -23,7 +23,7 @@ const GOCButton: React.FC<GOCButtonProps> = ({
       padding=".5rem 1rem"
       color="white"
       fontSize="md"
-      fontWeight="semibold"
+      fontWeight="medium"
       boxShadow="none"
       border="none"
       marginTop="1.25rem"
@@ -32,7 +32,7 @@ const GOCButton: React.FC<GOCButtonProps> = ({
       _hover={{
         textDecoration: "none",
         boxShadow: "md",
-        backgroundColor: "rgb(79, 132, 239)", // slightly brighter blue than goc.blue
+        backgroundColor: "rgb(49, 93, 180)", // slightly darker blue than goc.blue
         transition: "background .1s ease, box-shadow .1s ease",
       }}
       _focusVisible={{
@@ -52,7 +52,7 @@ const GOCButton: React.FC<GOCButtonProps> = ({
       outline="none"
       color="white"
       fontSize=".875rem"
-      fontWeight="semibold"
+      fontWeight="medium"
       boxShadow="none"
       border="none"
       marginTop="1.25rem"
@@ -61,7 +61,7 @@ const GOCButton: React.FC<GOCButtonProps> = ({
       _hover={{
         textDecoration: "none",
         boxShadow: "md",
-        backgroundColor: "rgb(79, 132, 239)", // slightly brighter blue than goc.blue
+        backgroundColor: "rgb(49, 93, 180)", // slightly brighter blue than goc.blue
         transition: "background 50ms ease, box-shadow 50ms ease",
       }}
       _focusVisible={{
