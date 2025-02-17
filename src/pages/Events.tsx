@@ -1,6 +1,6 @@
 import { NavbarActiveKey } from "components/Navbar";
 import { MdAttachMoney, MdLocationPin } from "react-icons/md";
-import { listGOCEvents } from "graphql/queries";
+import { listGOCEvents } from "@/graphql/queries";
 import { generateClient } from "aws-amplify/api";
 import { useEffect, useState } from "react";
 import {

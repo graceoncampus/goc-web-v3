@@ -1,7 +1,7 @@
 // TODO: Make page for prayer request confirmation.
 import { useState } from "react";
 import { NavbarActiveKey } from "components/Navbar";
-import { PrayerRequestForm } from "./PrayerRequestForm";
+import { PrayerRequestForm } from "pages/PrayerRequestForm";
 import { BannerTemplate } from "layouts/BannerTemplate";
 
 export const PrayerFormPage = () => {

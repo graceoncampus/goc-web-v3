@@ -1,5 +1,5 @@
 import React from "react";
-import { userStore } from "./User"; // Adjust path
+import { userStore } from "store/User"; // Adjust path
 
 export const StoreContext = React.createContext(userStore);
 

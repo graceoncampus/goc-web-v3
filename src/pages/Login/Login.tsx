@@ -2,7 +2,7 @@ import { signIn } from "aws-amplify/auth";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { NavbarActiveKey } from "components/Navbar";
-import { Field } from "../../components/ui/field";
+import { Field } from "components/ui/field";
 import { InputGroup } from "components/ui/input-group";
 import { LuLock, LuUser } from "react-icons/lu";
 import {
@@ -59,13 +59,7 @@ const LoginBody = () => {
     <VStack minWidth={"12rem"} width="100%" gap="0" align="center">
       <Heading
         as="h2"
-        fontSize={{
-          base: "2xl",
-          sm: "2xl",
-          md: "2xl",
-          lg: "2xl",
-          xl: "3xl",
-        }}
+        fontSize={{ base: "2xl", sm: "2xl", md: "2xl", lg: "2xl", xl: "3xl" }}
         lineHeight="1.2"
         fontWeight="semibold"
         textAlign="center"

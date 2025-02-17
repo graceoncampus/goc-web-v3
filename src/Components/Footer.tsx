@@ -17,7 +17,7 @@ import { Toaster, toaster } from "components/ui/toaster";
 import { FaFacebook, FaWordpress, FaInstagram, FaVimeoV } from "react-icons/fa";
 import { TfiLocationPin } from "react-icons/tfi";
 import { LuClock7 } from "react-icons/lu";
-import { contactInfo } from "../constants/ContactInfo";
+import { contactInfo } from "constants/ContactInfo";
 
 interface FooterColumnProps {
   title: string;
@@ -56,10 +56,7 @@ export default function Footer() {
   const onSubmit = handleSubmit((data) => {
     console.log(data);
 
-    toaster.create({
-      description: "Submitted!",
-      type: "success",
-    });
+    toaster.create({ description: "Submitted!", type: "success" });
   });
 
   return (

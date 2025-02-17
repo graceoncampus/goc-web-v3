@@ -4,7 +4,7 @@
 
 import { useEffect, useState } from "react";
 
-import { LandingBody } from "./LandingBody";
+import { LandingBody } from "pages/MinistryTeams/Landing/LandingBody";
 import { LoginForm } from "pages/Login/LoginForm";
 // import { checkIsLoggedIn } from 'Auth/Utilities/CheckLogin';
 

@@ -1,54 +1,60 @@
-import { NavbarActiveKey } from "components/Navbar";
-import { useEffect, useState } from "react";
 import { BannerTemplate } from "layouts/BannerTemplate";
+import { NavbarActiveKey } from "components/Navbar";
+import React, { useEffect, useState } from "react";
+import { checkIsLoggedIn } from "auth/CheckLogin";
+import {
+  Box,
+  Container,
+  Text,
+  Heading,
+  VStack,
+  List,
+  Link,
+} from "@chakra-ui/react";
 
 const mockTeams: MinistryTeam[] = [
   {
     title: "Welcome and Follow Up Team",
     description:
       "Welcome and Follow Up is an outreach ministry team that exists to obey the call of Romans 15:7 to “welcome one another as Christ has welcomed you, for the glory of God”. We serve on Fridays during large group and have biweekly meetings every even Monday. Our ministry team seeks to encourage our members to grow a greater love for the church body and for nonbelievers through the means of outreach.",
-    leaders: "Cameron Ong, Britney Burnasky",
-    contact: "cameron262002@gmail.com, (650) 450-7321",
+    leaders: "Shawn Zhuang",
+    contact: "redacted@x.com, (XXX) XXX-XXXX",
   },
   {
     title: "Music Team",
     description:
       "Welcome and Follow Up is an outreach ministry team that exists to obey the call of Romans 15:7 to “welcome one another as Christ has welcomed you, for the glory of God”. We serve on Fridays during large group and have biweekly meetings every even Monday. Our ministry team seeks to encourage our members to grow a greater love for the church body and for nonbelievers through the means of outreach.",
-    leaders: "Cameron Ong, Britney Burnasky",
-    contact: "cameron262002@gmail.com, (650) 450-7321",
+    leaders: "Shawn Zhuang",
+    contact: "redacted@x.com, (XXX) XXX-XXXX",
   },
   {
     title: "Sound Team",
     description:
       "Welcome and Follow Up is an outreach ministry team that exists to obey the call of Romans 15:7 to “welcome one another as Christ has welcomed you, for the glory of God”. We serve on Fridays during large group and have biweekly meetings every even Monday. Our ministry team seeks to encourage our members to grow a greater love for the church body and for nonbelievers through the means of outreach.",
-    leaders: "Cameron Ong, Britney Burnasky",
-    contact: "cameron262002@gmail.com, (650) 450-7321",
+    leaders: "Shawn Zhuang",
+    contact: "redacted@x.com, (XXX) XXX-XXXX",
   },
 ];
 
 export const MinistryTeamsPage: React.FC = () => {
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Fire only on refresh/load
+  // Fire on refresh/load
   useEffect(() => {
-    const userLoginCheck = async () => {
-      // Replace with actual login check logic
-      // const loggedIn = await checkIsLoggedIn(); // Example API call
-      // setIsUserLoggedIn(loggedIn);
+    const checkAuth = async () => {
+      await checkIsLoggedIn(setIsLoggedIn);
     };
-
-    userLoginCheck();
+    checkAuth();
   }, []);
 
-  // TODO: Get rid of active key eventually? Suggested by Sam
   return (
     <BannerTemplate
       title="Ministry Teams"
       activeKey={NavbarActiveKey.MINISTRY_TEAMS}
-      imageSrc="/images/ministry_teams.jpg"
+      imageSrc="/images/landing3.jpg"
       alt="Ministry Teams page banner"
     >
-      <TeamsBody MinistryTeams={mockTeams} isUserLoggedIn={isUserLoggedIn} />
+      <TeamsBody MinistryTeams={mockTeams} isUserLoggedIn={isLoggedIn} />
     </BannerTemplate>
   );
 };
@@ -71,54 +77,72 @@ function slugify(text: string): string {
     .replace(/-+$/, ""); // Trim - from end of text
 }
 
+interface SectionProps {
+  id?: string;
+  heading: React.ReactNode;
+  children: React.ReactNode;
+}
+
+const Section: React.FC<SectionProps> = ({ heading, id, children }) => {
+  return (
+    <Box width="100%" lineHeight="tall">
+      <Heading as="h2" id={id} marginBottom="400">
+        {heading}
+      </Heading>
+      <hr />
+      <Box m="4">{children}</Box>
+    </Box>
+  );
+};
+
 const TeamsBody: React.FC<{
   MinistryTeams: MinistryTeam[];
   isUserLoggedIn: boolean;
 }> = ({ MinistryTeams, isUserLoggedIn }) => {
   return (
-    <div className={"text-center"}>
-      <div className="col-md-6 mx-auto px-3 py-4 my-2 order-md-1 left-align">
-        <h2>List of Ministry Teams</h2>
-        <hr />
-        <ul>
-          {MinistryTeams.map((MinistryTeam, index) => (
-            <li key={index}>
-              <a
-                href={`#${slugify(MinistryTeam.title)}`}
-                style={{ textDecoration: "none" }}
-              >
-                {MinistryTeam.title}
-              </a>
-            </li>
-          ))}
-        </ul>
-        <hr className="mb-4" />
+    <Container maxWidth="800px" textAlign="left">
+      <VStack gap={"2.5rem"} margin={"auto"}>
+        <Section heading="List of Ministry Teams">
+          <Text>
+            <List.Root>
+              {MinistryTeams.map((MinistryTeam) => (
+                <List.Item>
+                  <Link
+                    href={`#${slugify(MinistryTeam.title)}`}
+                    color="goc.blue"
+                  >
+                    {MinistryTeam.title}
+                  </Link>
+                </List.Item>
+              ))}
+            </List.Root>
+          </Text>
+        </Section>
 
-        {MinistryTeams.map((MinistryTeam, index) => (
-          <div key={index} className="mt-5">
-            <h2 className="anchor" id={slugify(MinistryTeam.title)}>
-              {MinistryTeam.title}
-            </h2>
-            <hr />
-            <p>{MinistryTeam.description}</p>
+        {MinistryTeams.map((MinistryTeam) => (
+          <Section
+            id={slugify(MinistryTeam.title)}
+            heading={MinistryTeam.title}
+          >
+            <Text marginBottom="4">{MinistryTeam.description}</Text>
             {isUserLoggedIn ? (
               <>
-                <p>
+                <Text marginBottom="1">
                   <strong>Leader(s):</strong> {MinistryTeam.leaders}
-                </p>
-                <p>
+                </Text>
+                <Text>
                   <strong>Contact:</strong> {MinistryTeam.contact}
-                </p>
+                </Text>
               </>
             ) : (
-              <p>
+              <Text>
                 You need to be logged in to view the leader and contact
                 information.
-              </p>
+              </Text>
             )}
-          </div>
+          </Section>
         ))}
-      </div>
-    </div>
+      </VStack>
+    </Container>
   );
 };

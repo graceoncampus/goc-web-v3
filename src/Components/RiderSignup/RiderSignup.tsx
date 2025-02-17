@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Box } from "@chakra-ui/react";
-import { RiderSignupThankYou } from "./RiderSignupThankYou";
-import { RiderSignupForm } from "./RiderSignupForm";
+import { RiderSignupThankYou } from "components/RiderSignup/RiderSignupThankYou";
+import { RiderSignupForm } from "components/RiderSignup/RiderSignupForm";
 
 const RiderSignup = () => {
   const [riderSignupCompleted, setRiderSignupCompleted] = useState(false);
