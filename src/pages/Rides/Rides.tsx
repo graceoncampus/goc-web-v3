@@ -1,9 +1,8 @@
-// Remove these server-side imports from your client code
 // import { JWT } from "google-auth-library";
 // import { GoogleSpreadsheet } from "google-spreadsheet";
-import { CreateCarInput, CreateRideInput, Ride } from "Api";
-import { createRide, deleteRide } from "@/graphql/mutations";
-import { listRides } from "@/graphql/queries";
+import { CreateCarInput, CreateRideInput, Ride, Car, Rider } from "Api";
+// import { listRides } from "graphql/queries";
+import { createRide, deleteRide } from "graphql/mutations";
 import { useForm } from "react-hook-form";
 import { NavbarActiveKey } from "components/Navbar";
 import { generateClient } from "aws-amplify/api";
@@ -22,6 +21,8 @@ import {
   Text,
   VStack,
   Collapsible,
+  Table,
+  Spinner,
 } from "@chakra-ui/react";
 import { Field } from "components/ui/field";
 import { FaCarSide } from "react-icons/fa";
@@ -55,25 +56,56 @@ const updateRidesClient = async (
   }
 };
 
+// Custom listRides query (since the default one doesn't include the cars field)
+export const listRides = /* GraphQL */ `
+  query ListRides(
+    $filter: TableRideFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listRides(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        date
+        emailMessage
+        cars {
+          driver_id
+          driver_name
+          riders {
+            name
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+
 export const RidesLandingPage = () => {
-  const [ride, setRide] = useState<Ride>();
-  const [loading, setLoading] = useState<Boolean>(true);
+  const [rides, setRides] = useState<Ride[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchRides = async () => {
-      await (client.graphql({ query: listRides }) as Promise<any>)
-        .then((result) => {
-          setRide(result.data.listRides.items[0]); // assuming only one "rides" in db
-        })
-        .catch((reason) => {
-          console.error(reason);
-        });
+      try {
+        const result = (await client.graphql({
+          query: listRides,
+        })) as any;
+        // Extract rides from the connection object
+        setRides(result.data.listRides.items);
+      } catch (error) {
+        console.error("Error fetching rides:", error);
+      }
       setLoading(false);
     };
     fetchRides();
   }, []);
 
-  console.log("ride:", ride);
+  console.log("rides:", rides);
   return (
     <BannerTemplate
       title="Rides"
@@ -81,16 +113,17 @@ export const RidesLandingPage = () => {
       imageSrc="/images/rides2.png"
       alt="Rides page banner"
     >
-      <RidesLandingBody rides={ride} />
+      <RidesLandingBody rides={rides} loading={loading} />
     </BannerTemplate>
   );
 };
 
 interface RidesProps {
-  rides?: Ride;
+  rides: Ride[];
+  loading: boolean;
 }
 
-const RidesLandingBody = ({ rides }: RidesProps) => {
+const RidesLandingBody = ({ rides, loading }: RidesProps) => {
   const [riderOpen, setRiderOpen] = useState(false);
   const [driverOpen, setDriverOpen] = useState(false);
 
@@ -115,10 +148,10 @@ const RidesLandingBody = ({ rides }: RidesProps) => {
         {/* Rider Signup Form */}
         <Collapsible.Root lazyMount unmountOnExit open={riderOpen}>
           <Collapsible.Content
-            borderRadius={"1rem"}
-            paddingX={"1.5rem"}
-            paddingY={"2rem"}
-            backgroundColor={"goc.pale_blue"}
+            borderRadius="1rem"
+            paddingX="1.5rem"
+            paddingY="2rem"
+            backgroundColor="goc.pale_blue"
             marginBottom={{ base: "2.5rem", md: "2.5rem" }}
           >
             <RiderSignup />
@@ -128,10 +161,10 @@ const RidesLandingBody = ({ rides }: RidesProps) => {
         {/* Driver Signup Form */}
         <Collapsible.Root lazyMount unmountOnExit open={driverOpen}>
           <Collapsible.Content
-            borderRadius={"1rem"}
-            paddingX={"1.5rem"}
-            paddingY={"2rem"}
-            backgroundColor={"goc.pale_blue"}
+            borderRadius="1rem"
+            paddingX="1.5rem"
+            paddingY="2rem"
+            backgroundColor="goc.pale_blue"
             marginBottom={{ base: "2.5rem", md: "2.5rem" }}
           >
             <DriverSignup />
@@ -140,8 +173,7 @@ const RidesLandingBody = ({ rides }: RidesProps) => {
 
         {/* Heading */}
         <Heading as="h2" display="inline-flex" gap="1rem">
-          Check your rides for this week!
-          <FaCarSide />
+          Check your rides for this week! <FaCarSide />
         </Heading>
         <Text marginBottom="1.5rem" marginRight={{ base: "0", md: "3rem" }}>
           As a ministry of Grace Community Church, we provide rides to and from
@@ -149,7 +181,7 @@ const RidesLandingBody = ({ rides }: RidesProps) => {
         </Text>
 
         {/* Rides List */}
-        <RidesList rides={rides} />
+        <RidesList rides={rides} loading={loading} />
       </Box>
     </Flex>
   );
@@ -182,31 +214,26 @@ const RidesMenuSidebar = ({
     <Box
       position={{ base: "block", md: "sticky" }}
       top={{ base: "0", md: "6rem" }}
-      width={"100%"}
-      zIndex={"5"}
-      paddingX={"1.5rem"}
-      paddingY={"1.8rem"}
-      backgroundColor={"goc.blue"}
-      borderRadius={"1rem"}
-      boxShadow={"md"}
+      width="100%"
+      zIndex="5"
+      paddingX="1.5rem"
+      paddingY="1.8rem"
+      backgroundColor="goc.blue"
+      borderRadius="1rem"
+      boxShadow="md"
     >
       {user ? (
         <RidesSettings />
       ) : (
-        <VStack
-          gap={0}
-          textAlign={"center"}
-          color={"white"}
-          marginBottom={"1rem"}
-        >
+        <VStack gap={0} textAlign="center" color="white" marginBottom="1rem">
           <Heading
-            as={"h2"}
+            as="h2"
             fontSize={{ base: "xl", xl: "2xl" }}
             marginBottom={{ base: 0, xl: ".5rem" }}
           >
             Need a ride?
           </Heading>
-          <Text fontSize={{ base: "sm", xl: "lg" }} textWrap={"nowrap"}>
+          <Text fontSize={{ base: "sm", xl: "lg" }} textWrap="nowrap">
             We've got you covered!
           </Text>
 
@@ -255,12 +282,12 @@ const RidesMenuSidebar = ({
       {!user && (
         <Text
           fontSize={{ base: "2xs", xl: "sm" }}
-          textAlign={"center"}
-          color={"white"}
-          marginTop={"1.5rem"}
-          textWrap={"nowrap"}
+          textAlign="center"
+          color="white"
+          marginTop="1.5rem"
+          textWrap="nowrap"
         >
-          <Link href="/login" color={"white"} fontWeight={"bold"}>
+          <Link href="/login" color="white" fontWeight="bold">
             Login
           </Link>{" "}
           to access admin settings
@@ -270,27 +297,67 @@ const RidesMenuSidebar = ({
   );
 };
 
-const RidesList = ({ rides }: RidesProps) => {
-  return (
-    <Box backgroundColor={"gray.200"} paddingY={"50rem"}>
-      <Box>
-        <Text>Driver</Text>
-        <Text>Rider(s)</Text>
-      </Box>
+const RidesList = ({ rides, loading }: RidesProps) => {
+  if (loading)
+    return (
+      <VStack marginTop="3rem">
+        <Spinner color="goc.blue" animationDuration="0.8s" borderWidth="3px" />
+        <Text color="goc.blue">Loading...</Text>
+      </VStack>
+    );
 
-      {rides?.cars?.map((car, i) => {
-        return (
-          <div key={i} className={i % 2 === 0 ? "table-row" : "even table-row"}>
-            <div>{car?.driver_name} </div>
-            <div>
-              {car?.riders.map((rider, i) => {
-                return <span key={i}>{rider?.name}</span>;
-              })}
-            </div>
-          </div>
-        );
-      })}
-    </Box>
+  return (
+    <Table.Root size="sm" variant="outline" striped stickyHeader>
+      <Table.Header backgroundColor={"goc.blue"}>
+        <Table.Row>
+          <Table.ColumnHeader color={"white"} padding={".75rem"}>
+            <Text fontSize={"sm"}>Driver</Text>
+          </Table.ColumnHeader>
+          <Table.ColumnHeader color={"white"}>
+            <Text fontSize={"sm"}>Rider(s)</Text>
+          </Table.ColumnHeader>
+          <Table.ColumnHeader color={"white"}>
+            <Text fontSize={"sm"}>Comments</Text>
+          </Table.ColumnHeader>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {/* For each Ride, iterate over its cars */}
+        {rides.map((ride: Ride, rideIndex: number) =>
+          ride.cars?.map((car: Car | null, carIndex: number) => {
+            if (!car) return null;
+            return (
+              <Table.Row key={`${rideIndex}-${carIndex}`}>
+                <Table.Cell verticalAlign={"top"} paddingY={"1rem"}>
+                  <Text fontSize={"sm"}>{car.driver_name}</Text>
+                </Table.Cell>
+                <Table.Cell verticalAlign={"top"} paddingY={"1rem"}>
+                  {car.riders && car.riders.length > 0 ? (
+                    <VStack align="start" gap={0}>
+                      {car.riders.map(
+                        (rider: Rider | null, riderIndex: number) =>
+                          rider ? (
+                            <Text key={riderIndex} fontSize="sm">
+                              {rider.name} {rider.staying ? "(staying)" : ""}
+                            </Text>
+                          ) : null,
+                      )}
+                    </VStack>
+                  ) : (
+                    "No riders"
+                  )}
+                </Table.Cell>
+                <Table.Cell verticalAlign={"top"} paddingY={"1rem"}>
+                  <Text fontSize="sm">
+                    {car.driver?.comment || "No comments"}
+                  </Text>
+                </Table.Cell>
+              </Table.Row>
+            );
+          }),
+        )}
+      </Table.Body>
+    </Table.Root>
   );
 };
 
@@ -319,14 +386,14 @@ const RidesSettings = () => {
       justifyContent="center"
       alignItems="center"
     >
-      <Heading as="h2" textAlign="center" color={"white"}>
+      <Heading as="h2" textAlign="center" color="white">
         Admin Settings
       </Heading>
 
       <Box
         as="form"
         onSubmit={handleSubmit(onSubmit)}
-        padding={"1.5rem"}
+        padding="1.5rem"
         border="1px solid #ccc"
         borderRadius="8px"
         backgroundColor="white"
@@ -355,11 +422,11 @@ const RidesSettings = () => {
             <Input type="text" {...register("emailMsg")} />
           </Field>
           <Button
-            color={"white"}
+            color="white"
             backgroundColor="black"
             type="submit"
             width="full"
-            fontWeight={"bold"}
+            fontWeight="bold"
             marginTop="1rem"
           >
             Upload Rides
