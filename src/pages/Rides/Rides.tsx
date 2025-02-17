@@ -2,11 +2,11 @@
 // import { JWT } from "google-auth-library";
 // import { GoogleSpreadsheet } from "google-spreadsheet";
 import { CreateCarInput, CreateRideInput, Ride } from "Api";
-import { createRide, deleteRide } from "graphql/mutations";
+import { createRide, deleteRide } from "@/graphql/mutations";
+import { listRides } from "@/graphql/queries";
 import { useForm } from "react-hook-form";
 import { NavbarActiveKey } from "components/Navbar";
 import { generateClient } from "aws-amplify/api";
-import { listRides } from "graphql/queries";
 import { getCurrentUser, GetCurrentUserOutput } from "aws-amplify/auth";
 import { useEffect, useState, useCallback } from "react";
 import { BannerTemplate } from "layouts/BannerTemplate";
