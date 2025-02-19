@@ -73,15 +73,19 @@ export const RiderSignupForm = ({
   };
 
   return (
-    <Container fluid>
+    <Container
+      fluid
+      padding={"2rem"}
+      boxShadow={"md"}
+      border={"3px solid {colors.goc.blue}"}
+    >
       <Heading
         id="rider-signup"
-        as={"h2"}
-        fontSize="2xl"
+        as="h2"
         textAlign="center"
         fontWeight="bold"
         color="black"
-        marginBottom="2rem"
+        marginBottom="1rem"
       >
         Sign up for a ride to Church!
       </Heading>
@@ -95,7 +99,7 @@ export const RiderSignupForm = ({
           objectFit="cover"
           objectPosition="center"
           userSelect="none"
-          marginBottom="2.5rem"
+          marginY="2.5rem"
         />
       </Container>
       <Box as="form" onSubmit={handleSubmit(onSubmit)}>

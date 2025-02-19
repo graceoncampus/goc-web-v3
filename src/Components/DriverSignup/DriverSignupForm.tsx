@@ -64,11 +64,15 @@ export const DriverSignupForm = ({
   };
 
   return (
-    <Container fluid>
+    <Container
+      fluid
+      padding={"2rem"}
+      boxShadow={"md"}
+      border={"3px solid {colors.goc.blue}"}
+    >
       <Heading
         id="driver-signup"
         as={"h2"}
-        fontSize="2xl"
         textAlign="center"
         fontWeight="bold"
         color="black"

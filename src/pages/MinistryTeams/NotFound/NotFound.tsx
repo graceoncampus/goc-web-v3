@@ -1,5 +1,5 @@
 /**
- * 404 not found page for ministry teams.
+ * 404 not found page for ministry teams
  */
 
 import { NavbarActiveKey } from "components/Navbar";
@@ -17,9 +17,10 @@ export const NotFoundPage = () => {
 
 const NotFoundBody = () => (
   <div>
-    <Heading as={"h2"}>404</Heading>
+    <Heading as={"h2"} margin={".3rem"}>
+      404
+    </Heading>
     <Text textWrap={"nowrap"}>Page not found!</Text>
     <GOCButton href="/">Go Home</GOCButton>
   </div>
 );
-

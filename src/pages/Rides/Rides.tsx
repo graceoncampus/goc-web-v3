@@ -6,11 +6,11 @@ import { createRide, deleteRide } from "graphql/mutations";
 import { useForm } from "react-hook-form";
 import { NavbarActiveKey } from "components/Navbar";
 import { generateClient } from "aws-amplify/api";
-import { getCurrentUser, GetCurrentUserOutput } from "aws-amplify/auth";
 import { useEffect, useState, useCallback } from "react";
 import { BannerTemplate } from "layouts/BannerTemplate";
 import RiderSignup from "components/RiderSignup/RiderSignup";
 import DriverSignup from "components/DriverSignup/DriverSignup";
+import { checkIsLoggedIn } from "auth/CheckLogin";
 import {
   Box,
   Button,
@@ -95,7 +95,6 @@ export const RidesLandingPage = () => {
         const result = (await client.graphql({
           query: listRides,
         })) as any;
-        // Extract rides from the connection object
         setRides(result.data.listRides.items);
       } catch (error) {
         console.error("Error fetching rides:", error);
@@ -105,7 +104,6 @@ export const RidesLandingPage = () => {
     fetchRides();
   }, []);
 
-  console.log("rides:", rides);
   return (
     <BannerTemplate
       title="Rides"
@@ -147,26 +145,14 @@ const RidesLandingBody = ({ rides, loading }: RidesProps) => {
       <Box flex={7}>
         {/* Rider Signup Form */}
         <Collapsible.Root lazyMount unmountOnExit open={riderOpen}>
-          <Collapsible.Content
-            borderRadius="1rem"
-            paddingX="1.5rem"
-            paddingY="2rem"
-            backgroundColor="goc.pale_blue"
-            marginBottom={{ base: "2.5rem", md: "2.5rem" }}
-          >
+          <Collapsible.Content paddingBottom="2rem" marginBottom="2.5rem">
             <RiderSignup />
           </Collapsible.Content>
         </Collapsible.Root>
 
         {/* Driver Signup Form */}
         <Collapsible.Root lazyMount unmountOnExit open={driverOpen}>
-          <Collapsible.Content
-            borderRadius="1rem"
-            paddingX="1.5rem"
-            paddingY="2rem"
-            backgroundColor="goc.pale_blue"
-            marginBottom={{ base: "2.5rem", md: "2.5rem" }}
-          >
+          <Collapsible.Content paddingBottom="2rem" marginBottom="2.5rem">
             <DriverSignup />
           </Collapsible.Content>
         </Collapsible.Root>
@@ -200,14 +186,13 @@ const RidesMenuSidebar = ({
   isRiderOpen,
   isDriverOpen,
 }: RidesMenuSidebarProps) => {
-  const [user, setUser] = useState<GetCurrentUserOutput | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const u = await getCurrentUser();
-      setUser(u);
+    const checkAuth = async () => {
+      await checkIsLoggedIn(setIsLoggedIn);
     };
-    fetchUser();
+    checkAuth();
   }, []);
 
   return (
@@ -222,7 +207,7 @@ const RidesMenuSidebar = ({
       borderRadius="1rem"
       boxShadow="md"
     >
-      {user ? (
+      {isLoggedIn ? (
         <RidesSettings />
       ) : (
         <VStack gap={0} textAlign="center" color="white" marginBottom="1rem">
@@ -279,7 +264,7 @@ const RidesMenuSidebar = ({
         </VStack>
       )}
 
-      {!user && (
+      {!isLoggedIn && (
         <Text
           fontSize={{ base: "2xs", xl: "sm" }}
           textAlign="center"

@@ -55,7 +55,7 @@ export default function Footer() {
 
   const onSubmit = handleSubmit((data) => {
     console.log(data);
-
+    // todo: send email
     toaster.create({ description: "Submitted!", type: "success" });
   });
 
@@ -154,6 +154,7 @@ export default function Footer() {
                   invalid={!!errors.name}
                 >
                   <Input
+                    type="name"
                     size="sm"
                     autoComplete="name"
                     {...register("name", { required: "Name is required" })}
@@ -171,6 +172,7 @@ export default function Footer() {
                   invalid={!!errors.email}
                 >
                   <Input
+                    type="email"
                     size="sm"
                     autoComplete="email"
                     {...register("email", { required: "Email is required" })}
