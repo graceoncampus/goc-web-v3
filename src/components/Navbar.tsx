@@ -3,7 +3,15 @@
  */
 
 import { useState, useEffect, useCallback } from "react";
-import { Box, Flex, Link, Button, IconButton, Icon } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Link,
+  Button,
+  IconButton,
+  Icon,
+  useDisclosure,
+} from "@chakra-ui/react";
 import {
   MenuContent,
   MenuItem,
@@ -21,7 +29,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "components/ui/drawer";
-
 // import { ColorModeButton } from "components/ui/color-mode";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { FiExternalLink } from "react-icons/fi";
@@ -74,6 +81,8 @@ const NavItem = ({
   selected,
   drawerOpen,
 }: NavItemProps) => {
+  const { open, onOpen, onClose } = useDisclosure();
+
   const fontSize = "md";
   const fontWeight = selected ? "bold" : "normal";
   const color =
@@ -89,11 +98,11 @@ const NavItem = ({
     return (
       // Dropdown menu
       <Box position={"relative"}>
-        <MenuRoot>
+        <MenuRoot open={open}>
           <MenuTrigger asChild={true}>
             <Button
               variant={"ghost"}
-              marginY={".5rem"}
+              paddingY={".5rem"}
               marginX={drawerOpen ? ".5rem" : "0"}
               fontSize={fontSize}
               fontWeight={fontWeight}
@@ -102,16 +111,28 @@ const NavItem = ({
               backgroundColor={"transparent"}
               outline={"none"}
               _hover={{ backgroundColor: bgHoverColor }}
+              onMouseEnter={onOpen}
+              onMouseLeave={onClose}
             >
-              {name} <RiArrowDropDownLine />
+              {name}{" "}
+              <RiArrowDropDownLine
+                style={{
+                  transition: "transform .3s ease 0s",
+                  transform: open ? "rotate(-180deg)" : "",
+                }}
+              />
             </Button>
           </MenuTrigger>
           <MenuContent
+            position="absolute"
+            top="-.5rem"
+            zIndex="1000"
             backgroundColor="white"
-            boxShadow="md"
+            boxShadow="lg"
             rounded="md"
             padding={".25rem"}
-            marginTop={".5rem"}
+            onMouseEnter={onOpen}
+            onMouseLeave={onClose}
           >
             {sublinks.map((sublink) => (
               <MenuItem
