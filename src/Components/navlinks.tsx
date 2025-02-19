@@ -1,6 +1,6 @@
-/* 
+/*
  *  FORMAT
- * 
+ *
  *  name: string
  *  link: string
  *  sublinks: SublinkProps[] (have dropdown)
@@ -48,8 +48,8 @@ const NavLinks = [
         link: "/sermons",
       },
       {
-        name: "Study Guide",
-        link: "/study-guide",
+        name: "John Study Guide",
+        link: "/john-study-guide",
       },
       {
         name: "Linktree",

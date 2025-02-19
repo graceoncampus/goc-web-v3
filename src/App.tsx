@@ -8,7 +8,7 @@ import { PrayerFormPage } from "pages/PrayerForm";
 import { SmallGroupsPage } from "pages/SmallGroups";
 import { StubbedRidesPage } from "pages/MinistryTeams/Rides/StubbedRidesPage";
 import { AboutUsPage } from "pages/AboutUs";
-import { StudyGuidePage } from "pages/Resources/JohnStudyGuide";
+import { JohnStudyGuidePage } from "pages/Resources/JohnStudyGuide";
 import { SermonsPage } from "pages/Sermons";
 import { RidesLandingPage } from "pages/Rides/Rides";
 import { OurBeliefsPage } from "pages/OurBeliefs";
@@ -46,7 +46,7 @@ const App = () => {
             <Route path={"/ministry_teams/*"} element={<NotFoundPage />} />
             <Route path="/prayer-request" element={<PrayerFormPage />} />
             <Route path={"/smallgroups"} element={<SmallGroupsPage />} />
-            <Route path={"/study-guide"} element={<StudyGuidePage />} />
+            <Route path={"/john-study-guide"} element={<JohnStudyGuidePage />} />
             <Route path={"/login"} element={<LoginPage />} />
             <Route path={"/reset"} element={<ResetPage />} />
             <Route path={"/signup"} element={<SignupPage />} />

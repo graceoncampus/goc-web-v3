@@ -10,7 +10,10 @@ import {
   VStack,
   List,
   Link,
+  AspectRatio,
+  Badge,
 } from "@chakra-ui/react";
+import { IoInformationCircle } from "react-icons/io5";
 
 const mockTeams: MinistryTeam[] = [
   {
@@ -41,10 +44,15 @@ export const MinistryTeamsPage: React.FC = () => {
 
   // Fire on refresh/load
   useEffect(() => {
+    document.documentElement.style.scrollBehavior = "smooth";
     const checkAuth = async () => {
       await checkIsLoggedIn(setIsLoggedIn);
     };
     checkAuth();
+
+    return () => {
+      document.documentElement.style.scrollBehavior = "";
+    };
   }, []);
 
   return (
@@ -86,11 +94,11 @@ interface SectionProps {
 const Section: React.FC<SectionProps> = ({ heading, id, children }) => {
   return (
     <Box width="100%" lineHeight="tall">
-      <Heading as="h2" id={id} marginBottom="400">
+      <Heading as="h2" id={id} marginBottom="1rem" scrollMarginTop={"6rem"}>
         {heading}
       </Heading>
       <hr />
-      <Box m="4">{children}</Box>
+      <Box marginTop="1rem">{children}</Box>
     </Box>
   );
 };
@@ -100,23 +108,23 @@ const TeamsBody: React.FC<{
   isUserLoggedIn: boolean;
 }> = ({ MinistryTeams, isUserLoggedIn }) => {
   return (
-    <Container maxWidth="800px" textAlign="left">
+    <Container maxWidth="800px" textAlign="left" scrollBehavior={"smooth"}>
       <VStack gap={"2.5rem"} margin={"auto"}>
         <Section heading="List of Ministry Teams">
-          <Text>
-            <List.Root>
-              {MinistryTeams.map((MinistryTeam) => (
-                <List.Item>
-                  <Link
-                    href={`#${slugify(MinistryTeam.title)}`}
-                    color="goc.blue"
-                  >
-                    {MinistryTeam.title}
-                  </Link>
-                </List.Item>
-              ))}
-            </List.Root>
-          </Text>
+          <List.Root>
+            {MinistryTeams.map((MinistryTeam) => (
+              <List.Item>
+                <Link href={`#${slugify(MinistryTeam.title)}`} color="goc.blue">
+                  <Text>{MinistryTeam.title}</Text>
+                </Link>
+              </List.Item>
+            ))}
+            <List.Item>
+              <Link href={`#video-resources`} color="goc.blue">
+                <Text>Ministry Teams: Video Resources</Text>
+              </Link>
+            </List.Item>
+          </List.Root>
         </Section>
 
         {MinistryTeams.map((MinistryTeam) => (
@@ -124,7 +132,7 @@ const TeamsBody: React.FC<{
             id={slugify(MinistryTeam.title)}
             heading={MinistryTeam.title}
           >
-            <Text marginBottom="4">{MinistryTeam.description}</Text>
+            <Text marginBottom="1rem">{MinistryTeam.description}</Text>
             {isUserLoggedIn ? (
               <>
                 <Text marginBottom="1">
@@ -135,13 +143,65 @@ const TeamsBody: React.FC<{
                 </Text>
               </>
             ) : (
-              <Text>
-                You need to be logged in to view the leader and contact
-                information.
+              <Text fontSize={"sm"} fontStyle={"italic"}>
+                <Link fontWeight={"bold"} href="/login">
+                  Log in
+                </Link>{" "}
+                to view the leader and contact information.
               </Text>
             )}
           </Section>
         ))}
+        <Section
+          id={"video-resources"}
+          heading={"Ministry Teams: Video Resources"}
+        >
+          <Badge
+            variant={"outline"}
+            size="lg"
+            colorPalette="orange"
+            marginBottom="1rem"
+          >
+            <IoInformationCircle />
+            Past videos
+          </Badge>
+          <AspectRatio
+            ratio={16 / 9}
+            w="full"
+            maxWidth="720px"
+            marginBottom="2rem"
+          >
+            <iframe
+              src="https://www.youtube.com/embed/QsfXoQRgdyg?si=GFnU9bNjWM_oETib"
+              title="Ministry Team Video | Outreach"
+              allowFullScreen={true}
+            />
+          </AspectRatio>
+          <AspectRatio
+            ratio={16 / 9}
+            w="full"
+            maxWidth="720px"
+            marginBottom="2rem"
+          >
+            <iframe
+              src="https://www.youtube.com/embed/sUNTOLDj1so?si=LzH8tu3rhloaKRUQ"
+              title="GOC Ministry Teams | InReach"
+              allowFullScreen={true}
+            />
+          </AspectRatio>
+          <AspectRatio
+            ratio={16 / 9}
+            w="full"
+            maxWidth="720px"
+            marginBottom="2rem"
+          >
+            <iframe
+              src="https://www.youtube.com/embed/sCT0HX7KycM?si=Ur95GuryvNZ7-XQQ"
+              title="GOC Ministry Teams | Friday Nights"
+              allowFullScreen={true}
+            />
+          </AspectRatio>
+        </Section>
       </VStack>
     </Container>
   );

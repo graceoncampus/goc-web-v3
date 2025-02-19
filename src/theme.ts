@@ -20,6 +20,7 @@ const textRecipe = defineRecipe({
     fontFamily: "'Poppins', sans-serif",
     fontSize: { sm: "md", xl: "lg" },
     textWrap: "pretty",
+    lineHeight: "1.8",
   },
 });
 

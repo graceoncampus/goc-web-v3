@@ -21,9 +21,12 @@ interface SectionHeadingProps {
 
 const SectionHeading: React.FC<SectionHeadingProps> = ({ children }) => {
   return (
-    <Heading as="h2" fontSize={"xl"} marginBottom={"1rem"}>
-      {children}
-    </Heading>
+    <Box width="100%" lineHeight="tall">
+      <Heading as="h2" fontSize={"2xl"} marginBottom={".5rem"}>
+        {children}
+      </Heading>
+      <hr />
+    </Box>
   );
 };
 
@@ -34,7 +37,7 @@ const OurBeliefsBody = () => {
         {/* Section 1 */}
         <Box>
           <SectionHeading>The Sinfulness of Man</SectionHeading>
-          <Text>
+          <Text marginTop={"1rem"}>
             When man was first created, man was in a perfect relationship with
             God. However, man sinned and disobeyed God’s law, ruining and
             distorting the perfect relationship between God and man. The Bible
@@ -50,7 +53,7 @@ const OurBeliefsBody = () => {
         {/* Section 2 */}
         <Box>
           <SectionHeading>God&apos;s Plan of Redemption</SectionHeading>
-          <Text>
+          <Text marginTop={"1rem"}>
             God’s plan to save man from His wrath was carried out through Jesus
             Christ. God so loved the world that He sent his only Son that
             whoever believes in him shall not perish but have eternal life. In
@@ -69,7 +72,7 @@ const OurBeliefsBody = () => {
         {/* Section 3 */}
         <Box>
           <SectionHeading>God&apos;s Call for Man to Be Saved</SectionHeading>
-          <Text>
+          <Text marginTop={"1rem"}>
             Saving faith in Christ is a gracious gift of God where the Holy
             Spirit transforms a person’s heart and opens his/her eyes to the
             gospel. At the same time, God calls every person to wholeheartedly

@@ -1,155 +1,165 @@
+import GOCButton from "@/components/GOCButton";
+import { Box, Container, Heading, Link, Text, VStack } from "@chakra-ui/react";
 import { NavbarActiveKey } from "components/Navbar";
 import { BannerTemplate } from "layouts/BannerTemplate";
 
-export const StudyGuidePage = () => {
+type SectionItem = {
+  text: string;
+  href: string;
+};
+
+type SectionProps = {
+  title: string;
+  items: SectionItem[];
+};
+
+export const JohnStudyGuidePage = () => {
   return (
     <BannerTemplate
-      title="Study Guide"
+      title="John Study Guide"
       activeKey={NavbarActiveKey.STUDY_GUIDE}
       imageSrc="/images/resources.jpeg"
       alt="Study Guide page banner"
     >
-      <StudyGuideBody />
+      <JohnStudyGuideBody />
     </BannerTemplate>
   );
 };
 
-const StudyGuideBody = () => {
+const JohnStudyGuideBody = () => {
   return (
-    <div className="study-guide-body">
-      <div className="study-guide-header">
-        <h1 className="study-guide-title">John Study Guide</h1>
-      </div>
-      <div className="contaiser-mt-4">
-        <div className="section-title">
-          <h2 className="section-subtitle">The Gospel of John</h2>
-          <p className="john-gospel-description">
-            A study through the "I am" statements of Jesus
-          </p>
-          <a
-            href="/docs/john-study-guide.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-btn-primary"
-          >
-            View The Study Guide
-          </a>
-        </div>
-        <p className="study-paragraph">
-          Here are some more resources to complement your study!
-        </p>
-        <div className="sections">
-          <div className="card">
-            <div className="card-header">Section 1</div>
-            <ul className="list-group ms-3">
-              <li className="list-group-item john-list-group-item">
-                <a href="https://www.gracechurch.org/sermons/14063">
-                  Who is Jesus? The Word
-                </a>
-              </li>
-              <li className="list-group-item john-list-group-item">
-                <a href="https://www.gracechurch.org/sermons/15003">
-                  I Am Not the Christ
-                </a>
-              </li>
-            </ul>
-          </div>
+    <Container fluid>
+      {/* Header */}
+      <Box textAlign="center" marginBottom={"2rem"}>
+        <Heading as="h1">The Gospel of John</Heading>
+        <Text fontSize="sm" textWrap={"balance"}>
+          A study through the &quot;I&nbsp;am&quot; statements of Jesus
+        </Text>
+        <GOCButton href="/docs/john-study-guide.pdf">
+          View Study Guide
+        </GOCButton>
+      </Box>
+      {/* Sections */}
+      <VStack align="center" gap={"1rem"}>
+        <Section
+          title="Section 1"
+          items={[
+            {
+              text: "Who is Jesus? The Word",
+              href: "https://www.gracechurch.org/sermons/14063",
+            },
+            {
+              text: "I Am Not the Christ",
+              href: "https://www.gracechurch.org/sermons/15003",
+            },
+          ]}
+        />
+        <Section
+          title="Section 2"
+          items={[
+            {
+              text: "You Must Be Born Again",
+              href: "https://www.gracechurch.org/sermons/4801",
+            },
+          ]}
+        />
+        <Section
+          title="Section 3"
+          items={[
+            {
+              text: "The Bread of Life",
+              href: "https://www.gracechurch.org/sermons/15008",
+            },
+          ]}
+        />
+        <Section
+          title="Section 4"
+          items={[
+            {
+              text: "The Light of the World",
+              href: "https://www.gracechurch.org/sermons/15026",
+            },
+          ]}
+        />
+        <Section
+          title="Section 5"
+          items={[
+            {
+              text: "The Door",
+              href: "https://www.gracechurch.org/sermons/15045",
+            },
+            {
+              text: "The Good Shepherd",
+              href: "https://www.gracechurch.org/sermons/15059",
+            },
+          ]}
+        />
+        <Section
+          title="Section 6"
+          items={[
+            {
+              text: "The Resurrection and the Life",
+              href: "https://www.gracechurch.org/sermons/15084",
+            },
+          ]}
+        />
+        <Section
+          title="Section 7"
+          items={[
+            {
+              text: "The Way, the Truth and the Life",
+              href: "https://www.gracechurch.org/sermons/15101",
+            },
+          ]}
+        />
+        <Section
+          title="Section 8"
+          items={[
+            {
+              text: "The True Vine",
+              href: "https://www.gracechurch.org/sermons/15115",
+            },
+          ]}
+        />
+        <Section
+          title="Section 9"
+          items={[
+            {
+              text: "How Important is the Resurrection?",
+              href: "https://www.gty.org/library/questions/QA66/every-easter-the-newspaper-runs-an-article-that-casts-doubt-on-the-resurrection-just-how-important-is-the-resurrection-to-the-christian-faith",
+            },
+          ]}
+        />
+      </VStack>
+    </Container>
+  );
+};
 
-          <div className="card">
-            <div className="card-header">Section 2</div>
-            <ul className="list-group ms-3">
-              <li className="list-group-item john-list-group-item">
-                <a href="https://www.gracechurch.org/sermons/4801">
-                  You Must Be Born Again
-                </a>
-              </li>
-            </ul>
-          </div>
+/**
+ * Renders an individual section with a title and list of links
+ */
+const Section = ({ title, items }: SectionProps) => {
+  return (
+    <Box
+      borderWidth="2px"
+      borderRadius="md"
+      padding={"1.5rem"}
+      boxShadow={"md"}
+      width={{ base: "100%", md: "27rem" }}
+    >
+      <Heading as="h2" fontSize="xl">
+        {title}
+      </Heading>
 
-          <div className="card">
-            <div className="card-header">Section 3</div>
-            <ul className="list-group ms-3">
-              <li className="list-group-item john-list-group-item">
-                <a href="https://www.gracechurch.org/sermons/15008">
-                  The Bread of Life
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div className="card">
-            <div className="card-header">Section 4</div>
-            <ul className="list-group ms-3">
-              <li className="list-group-item john-list-group-item">
-                <a href="https://www.gracechurch.org/sermons/15026">
-                  The Light of the World
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div className="card">
-            <div className="card-header">Section 5</div>
-            <ul className="list-group ms-3">
-              <li className="list-group-item john-list-group-item">
-                <a href="https://www.gracechurch.org/sermons/15045">The Door</a>
-              </li>
-              <li className="list-group-item john-list-group-item">
-                <a href="https://www.gracechurch.org/sermons/15059">
-                  The Good Shepherd
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div className="card">
-            <div className="card-header">Section 6</div>
-            <ul className="list-group ms-3">
-              <li className="list-group-item john-list-group-item">
-                <a href="https://www.gracechurch.org/sermons/15084">
-                  The Resurrection and the Life
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div className="card">
-            <div className="card-header">Section 7</div>
-            <ul className="list-group ms-3">
-              <li className="list-group-item john-list-group-item">
-                <a href="https://www.gracechurch.org/sermons/15101">
-                  The Way, the Truth and the Life
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div className="card">
-            <div className="card-header">Section 8</div>
-            <ul className="list-group ms-3">
-              <li className="list-group-item john-list-group-item">
-                <a href="https://www.gracechurch.org/sermons/15115">
-                  The True Vine
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div className="card">
-            <div className="card-header">Section 9</div>
-            <ul className="list-group ms-3">
-              <li className="list-group-item john-list-group-item">
-                <a href="https://www.gty.org/library/questions/QA66/every-easter-the-newspaper-runs-an-article-that-casts-doubt-on-the-resurrection-just-how-important-is-the-resurrection-to-the-christian-faith">
-                  How Important is the Resurrection?
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <a href="https://forms.gle/8qDquok7Q48CbMQJ8" className="feedback-link">
-          Feedback Form
-        </a>
-      </div>
-    </div>
+      <ul style={{ listStyleType: "disc", paddingLeft: "1.5rem" }}>
+        {items.map(({ text, href }, idx) => (
+          <li key={idx} style={{ marginBottom: "0.5rem" }}>
+            <Link fontSize="sm" href={href} target="_blank" color="goc.blue">
+              {text}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </Box>
   );
 };

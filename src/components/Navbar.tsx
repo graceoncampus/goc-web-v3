@@ -129,6 +129,7 @@ const NavItem = ({
                 value={sublink.name}
                 gap={".25rem"}
                 asChild={true}
+                textWrap={"nowrap"}
               >
                 {sublink.external ? (
                   <Link
