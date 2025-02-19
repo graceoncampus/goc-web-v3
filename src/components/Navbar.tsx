@@ -3,18 +3,13 @@
  */
 
 import { useState, useEffect, useCallback } from "react";
+import { Box, Flex, Link, Button, IconButton, Icon } from "@chakra-ui/react";
 import {
-  Box,
-  Flex,
-  Link,
-  Button,
-  IconButton,
-  MenuRoot,
-  MenuTrigger,
   MenuContent,
   MenuItem,
-  Icon,
-} from "@chakra-ui/react";
+  MenuRoot,
+  MenuTrigger,
+} from "@/components/ui/menu";
 import {
   DrawerBackdrop,
   DrawerBody,
@@ -93,7 +88,7 @@ const NavItem = ({
   if (sublinks.length > 0) {
     return (
       // Dropdown menu
-      <Box position="relative">
+      <Box position={"relative"}>
         <MenuRoot>
           <MenuTrigger asChild={true}>
             <Button
@@ -112,11 +107,7 @@ const NavItem = ({
             </Button>
           </MenuTrigger>
           <MenuContent
-            position="absolute"
-            top="100%"
-            left="5%"
             backgroundColor="white"
-            zIndex="1000"
             boxShadow="md"
             rounded="md"
             padding={".25rem"}
@@ -223,7 +214,7 @@ const Navbar = ({
       <Logo isScrolled={isScrolled} transition="fill .3s ease-out" />
 
       {/* Full Navbar */}
-      <Box display={{ base: "none", xl: "flex" }}>
+      <Box display={{ base: "none", xl: "flex" }} alignItems={"center"}>
         {NavLinks.map((navItem) => (
           <NavItem
             key={navItem.name}

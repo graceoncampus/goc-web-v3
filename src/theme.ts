@@ -46,14 +46,14 @@ const config = defineConfig({
       _focus: {
         outline: "none !important",
       },
-      // THIS ENABLES OUTLINE WHEN USER TABS (optional)
-      // _focusVisible: {
-      //   outline: "2px solid black !important",
-      //   outlineOffset: "2px !important",
-      // },
-      _hover: {
-        textDecoration: "none !important",
-      },
+    },
+    // // THIS ENABLES OUTLINE WHEN USER TABS (optional)
+    // _focusVisible: {
+    // outline: "2px solid black !important",
+    // outlineOffset: "2px !important",
+    // },
+    _hover: {
+      textDecoration: "none !important",
     },
   },
   theme: {
