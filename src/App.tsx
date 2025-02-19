@@ -18,6 +18,7 @@ import { MinistryTeamsPage } from "pages/MinistryTeams";
 import { LoginPage } from "pages/Login/Login";
 import { ResetPage } from "pages/Login/Reset";
 import { SignupPage } from "pages/Login/Signup";
+import { ProfilePage } from "./pages/Profile";
 import { NotFoundPage as UserNotFoundPage } from "pages/NotFound";
 import { NotFoundPage } from "pages/MinistryTeams/NotFound/NotFound";
 import "@fontsource/poppins";
@@ -39,10 +40,7 @@ const App = () => {
             <Route path={"/rides"} element={<RidesLandingPage />} />
             <Route path={"/ministry_teams"} element={<MinistryTeamLanding />} />
             <Route path={"/ministryteams"} element={<MinistryTeamsPage />} />
-            <Route
-              path={"/ministry_teams/rides"}
-              element={<StubbedRidesPage />}
-            />
+            <Route path={"/ministry_teams/rides"} element={<StubbedRidesPage />} />
             <Route path={"/ministry_teams/*"} element={<NotFoundPage />} />
             <Route path="/prayer-request" element={<PrayerFormPage />} />
             <Route path={"/smallgroups"} element={<SmallGroupsPage />} />
@@ -50,6 +48,7 @@ const App = () => {
             <Route path={"/login"} element={<LoginPage />} />
             <Route path={"/reset"} element={<ResetPage />} />
             <Route path={"/signup"} element={<SignupPage />} />
+            <Route path={"/profile"} element={<ProfilePage />} />
           </Routes>
         </BrowserRouter>
       </Provider>
