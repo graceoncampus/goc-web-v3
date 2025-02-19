@@ -6,8 +6,6 @@ import { useState, useEffect, useCallback } from "react";
 import {
   Box,
   Flex,
-  Image,
-  Center,
   Link,
   Button,
   IconButton,
@@ -35,6 +33,7 @@ import { FiExternalLink } from "react-icons/fi";
 import { IoMdMenu } from "react-icons/io";
 import NavLinks from "components/NavLinks";
 import LoginButton from "components/LoginButton";
+import Logo from "./Logo";
 
 export enum NavbarActiveKey {
   NONE = "",
@@ -104,7 +103,7 @@ const NavItem = ({
               fontSize={fontSize}
               fontWeight={fontWeight}
               color={color}
-              transition={"color 0.3s ease"}
+              transition={"color 0.3s linear"}
               backgroundColor={"transparent"}
               outline={"none"}
               _hover={{ backgroundColor: bgHoverColor }}
@@ -172,7 +171,7 @@ const NavItem = ({
         href={link}
         fontSize={fontSize}
         color={color}
-        transition="color 0.3s ease"
+        transition="color 0.3s linear"
         fontWeight={fontWeight}
       >
         {name}
@@ -217,15 +216,11 @@ const Navbar = ({
       zIndex="1000"
       backgroundColor={bgColor}
       boxShadow={shadow}
-      transition="background-color .3s ease, box-shadow .3s ease, color .3s ease"
+      transition="background-color .3s ease-out, box-shadow .3s ease-out, color .3s ease-out, filter .3s ease-out"
       as="nav"
     >
       {/* Logo */}
-      <Link href="/">
-        <Center margin="1rem">
-          <Image src="/assets/goc-header.svg" alt="Logo" />
-        </Center>
-      </Link>
+      <Logo isScrolled={isScrolled} transition="fill .3s ease-out" />
 
       {/* Full Navbar */}
       <Box display={{ base: "none", xl: "flex" }}>
@@ -267,7 +262,11 @@ const Navbar = ({
             backgroundColor={"transparent"}
             _hover={{ backgroundColor: "goc.gray/30" }}
           >
-            <Icon color={iconColor} transition={"color .3s ease"} size={"2xl"}>
+            <Icon
+              color={iconColor}
+              transition={"color .3s linear"}
+              size={"2xl"}
+            >
               <IoMdMenu />
             </Icon>
           </IconButton>
