@@ -1,6 +1,6 @@
 import { BannerTemplate } from "layouts/BannerTemplate";
 import { NavbarActiveKey } from "components/Navbar";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { checkIsLoggedIn } from "auth/CheckLogin";
 import {
   Box,

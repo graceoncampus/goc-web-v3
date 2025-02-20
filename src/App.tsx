@@ -1,8 +1,8 @@
 import React from "react";
-import ScrollToTop from "./hooks/ScrollToTop";
+import ScrollToTop from "hooks/ScrollToTop";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Provider } from "provider";
 import { LandingPage } from "pages/Landing";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { PrayerFormPage } from "pages/PrayerForm";
 import { SmallGroupsPage } from "pages/SmallGroups";
 import { AboutUsPage } from "pages/AboutUs";
@@ -16,7 +16,7 @@ import { MinistryTeamsPage } from "pages/MinistryTeams";
 import { LoginPage } from "pages/login/Login";
 import { ResetPage } from "pages/login/Reset";
 import { SignupPage } from "pages/login/Signup";
-import { ProfilePage } from "./pages/Profile";
+import { ProfilePage } from "pages/Profile";
 import { NotFoundPage as UserNotFoundPage } from "pages/NotFound";
 import "@fontsource/poppins";
 
