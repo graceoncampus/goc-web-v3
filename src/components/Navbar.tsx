@@ -17,7 +17,7 @@ import {
   MenuItem,
   MenuRoot,
   MenuTrigger,
-} from "../components/ui/menu";
+} from "components/ui/menu";
 import {
   DrawerBackdrop,
   DrawerBody,
@@ -35,7 +35,7 @@ import { FiExternalLink } from "react-icons/fi";
 import { IoMdMenu } from "react-icons/io";
 import NavLinks from "components/NavLinks";
 import LoginButton from "components/LoginButton";
-import Logo from "./Logo";
+import Logo from "components/Logo";
 
 export enum NavbarActiveKey {
   NONE = "",
@@ -81,7 +81,7 @@ const NavItem = ({
   selected,
   drawerOpen,
 }: NavItemProps) => {
-  const { open, onOpen, onClose } = useDisclosure();
+  const { open, onOpen, onClose, onToggle } = useDisclosure();
 
   const fontSize = "md";
   const fontWeight = selected ? "bold" : "normal";
@@ -94,15 +94,17 @@ const NavItem = ({
   const bgHoverColor =
     isScrolled || drawerOpen ? "{colors.goc.gray}" : "{colors.goc.gray/30}";
 
+  console.log("drawerOpen", drawerOpen);
+
   if (sublinks.length > 0) {
     return (
       // Dropdown menu
       <Box position={"relative"}>
-        <MenuRoot open={open}>
+        <MenuRoot open={drawerOpen ? undefined : open}>
           <MenuTrigger asChild={true}>
             <Button
               variant={"ghost"}
-              paddingY={".5rem"}
+              marginY={".5rem"}
               marginX={drawerOpen ? ".5rem" : "0"}
               fontSize={fontSize}
               fontWeight={fontWeight}
@@ -111,8 +113,9 @@ const NavItem = ({
               backgroundColor={"transparent"}
               outline={"none"}
               _hover={{ backgroundColor: bgHoverColor }}
-              onMouseEnter={onOpen}
-              onMouseLeave={onClose}
+              onMouseEnter={drawerOpen ? undefined : onOpen}
+              onMouseLeave={drawerOpen ? undefined : onClose}
+              onClick={drawerOpen ? onToggle : undefined}
             >
               {name}{" "}
               <RiArrowDropDownLine
@@ -124,15 +127,15 @@ const NavItem = ({
             </Button>
           </MenuTrigger>
           <MenuContent
-            position="absolute"
-            top="-.5rem"
-            zIndex="1000"
+            position={drawerOpen ? "static" : "absolute"}
+            top={drawerOpen ? "auto" : "-.5rem"}
+            zIndex={drawerOpen ? "5000" : "5000"}
             backgroundColor="white"
             boxShadow="lg"
             rounded="md"
             padding={".25rem"}
-            onMouseEnter={onOpen}
-            onMouseLeave={onClose}
+            onMouseEnter={drawerOpen ? undefined : onOpen}
+            onMouseLeave={drawerOpen ? undefined : onClose}
           >
             {sublinks.map((sublink) => (
               <MenuItem
