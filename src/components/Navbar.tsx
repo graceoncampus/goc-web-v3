@@ -17,7 +17,7 @@ import {
   MenuItem,
   MenuRoot,
   MenuTrigger,
-} from "@/components/ui/menu";
+} from "../components/ui/menu";
 import {
   DrawerBackdrop,
   DrawerBody,

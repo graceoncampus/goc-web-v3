@@ -1,4 +1,4 @@
-import GOCButton from "@/components/GOCButton";
+import GOCButton from "../components/GOCButton";
 import { Box, Container, Heading, Link, Text, VStack } from "@chakra-ui/react";
 import { NavbarActiveKey } from "components/Navbar";
 import { BannerTemplate } from "layouts/BannerTemplate";

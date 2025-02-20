@@ -4,7 +4,7 @@ import {
   MenuItem,
   MenuRoot,
   MenuTrigger,
-} from "@/components/ui/menu";
+} from "../components/ui/menu";
 import { getCurrentUser, signOut } from "aws-amplify/auth";
 import { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa6";

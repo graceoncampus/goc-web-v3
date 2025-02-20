@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { PrayerFormPage } from "pages/PrayerForm";
 import { SmallGroupsPage } from "pages/SmallGroups";
 import { AboutUsPage } from "pages/AboutUs";
-import { JohnStudyGuidePage } from "@/pages/JohnStudyGuide";
+import { JohnStudyGuidePage } from "pages/JohnStudyGuide";
 import { SermonsPage } from "pages/Sermons";
 import { RidesLandingPage } from "pages/rides/Rides";
 import { OurBeliefsPage } from "pages/OurBeliefs";
