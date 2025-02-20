@@ -38,10 +38,7 @@ const App = () => {
             <Route path={"/ministryteams"} element={<MinistryTeamsPage />} />
             <Route path="/prayer-request" element={<PrayerFormPage />} />
             <Route path={"/smallgroups"} element={<SmallGroupsPage />} />
-            <Route
-              path={"/john-study-guide"}
-              element={<JohnStudyGuidePage />}
-            />
+            <Route path={"/john-study-guide"} element={<JohnStudyGuidePage />} />
             <Route path={"/login"} element={<LoginPage />} />
             <Route path={"/reset"} element={<ResetPage />} />
             <Route path={"/signup"} element={<SignupPage />} />
