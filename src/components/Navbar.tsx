@@ -6,17 +6,18 @@ import { useState, useEffect, useCallback } from "react";
 import {
   Box,
   Flex,
-  Image,
-  Center,
   Link,
   Button,
   IconButton,
-  MenuRoot,
-  MenuTrigger,
+  Icon,
+  useDisclosure,
+} from "@chakra-ui/react";
+import {
   MenuContent,
   MenuItem,
-  Icon,
-} from "@chakra-ui/react";
+  MenuRoot,
+  MenuTrigger,
+} from "@/components/ui/menu";
 import {
   DrawerBackdrop,
   DrawerBody,
@@ -28,13 +29,13 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "components/ui/drawer";
-
 // import { ColorModeButton } from "components/ui/color-mode";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { FiExternalLink } from "react-icons/fi";
 import { IoMdMenu } from "react-icons/io";
 import NavLinks from "components/NavLinks";
 import LoginButton from "components/LoginButton";
+import Logo from "./Logo";
 
 export enum NavbarActiveKey {
   NONE = "",
@@ -80,6 +81,8 @@ const NavItem = ({
   selected,
   drawerOpen,
 }: NavItemProps) => {
+  const { open, onOpen, onClose } = useDisclosure();
+
   const fontSize = "md";
   const fontWeight = selected ? "bold" : "normal";
   const color =
@@ -94,34 +97,42 @@ const NavItem = ({
   if (sublinks.length > 0) {
     return (
       // Dropdown menu
-      <Box position="relative">
-        <MenuRoot>
+      <Box position={"relative"}>
+        <MenuRoot open={open}>
           <MenuTrigger asChild={true}>
             <Button
               variant={"ghost"}
-              marginY={".5rem"}
+              paddingY={".5rem"}
               marginX={drawerOpen ? ".5rem" : "0"}
               fontSize={fontSize}
               fontWeight={fontWeight}
               color={color}
-              transition={"color 0.3s ease"}
+              transition={"color 0.3s linear"}
               backgroundColor={"transparent"}
               outline={"none"}
               _hover={{ backgroundColor: bgHoverColor }}
+              onMouseEnter={onOpen}
+              onMouseLeave={onClose}
             >
-              {name} <RiArrowDropDownLine />
+              {name}{" "}
+              <RiArrowDropDownLine
+                style={{
+                  transition: "transform .3s ease 0s",
+                  transform: open ? "rotate(-180deg)" : "",
+                }}
+              />
             </Button>
           </MenuTrigger>
           <MenuContent
             position="absolute"
-            top="100%"
-            left="5%"
-            backgroundColor="white"
+            top="-.5rem"
             zIndex="1000"
-            boxShadow="md"
+            backgroundColor="white"
+            boxShadow="lg"
             rounded="md"
             padding={".25rem"}
-            marginTop={".5rem"}
+            onMouseEnter={onOpen}
+            onMouseLeave={onClose}
           >
             {sublinks.map((sublink) => (
               <MenuItem
@@ -129,6 +140,7 @@ const NavItem = ({
                 value={sublink.name}
                 gap={".25rem"}
                 asChild={true}
+                textWrap={"nowrap"}
               >
                 {sublink.external ? (
                   <Link
@@ -171,7 +183,7 @@ const NavItem = ({
         href={link}
         fontSize={fontSize}
         color={color}
-        transition="color 0.3s ease"
+        transition="color 0.3s linear"
         fontWeight={fontWeight}
       >
         {name}
@@ -216,18 +228,14 @@ const Navbar = ({
       zIndex="1000"
       backgroundColor={bgColor}
       boxShadow={shadow}
-      transition="background-color .3s ease, box-shadow .3s ease, color .3s ease"
+      transition="background-color .3s ease-out, box-shadow .3s ease-out, color .3s ease-out, filter .3s ease-out"
       as="nav"
     >
       {/* Logo */}
-      <Link href="/">
-        <Center margin="1rem">
-          <Image src="/assets/goc-header.svg" alt="Logo" />
-        </Center>
-      </Link>
+      <Logo isScrolled={isScrolled} transition="fill .3s ease-out" />
 
       {/* Full Navbar */}
-      <Box display={{ base: "none", xl: "flex" }}>
+      <Box display={{ base: "none", xl: "flex" }} alignItems={"center"}>
         {NavLinks.map((navItem) => (
           <NavItem
             key={navItem.name}
@@ -268,8 +276,8 @@ const Navbar = ({
           >
             <Icon
               color={iconColor}
-              fontSize={"2.5rem"}
-              transition={"color .3s ease"}
+              transition={"color .3s linear"}
+              size={"2xl"}
             >
               <IoMdMenu />
             </Icon>

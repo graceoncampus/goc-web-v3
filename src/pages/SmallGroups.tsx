@@ -27,10 +27,10 @@ const SmallGroupsBody = () => {
       >
         {/* What are Small Groups? */}
         <Box>
-          <Heading as="h2" fontSize={"2xl"} textAlign="center">
+          <Heading as="h2" textAlign="left">
             What are Small&nbsp;Groups?
           </Heading>
-          <Text lineHeight="1.8" textAlign="left">
+          <Text textAlign="left">
             Small groups are the backbone of our discipleship ministry. Each
             small group focuses on Bible study, prayer, fellowship, and
             accountability. In these smaller, more intimate groups, we have the
@@ -43,23 +43,19 @@ const SmallGroupsBody = () => {
 
         {/* Join a Small Group! */}
         <Box>
-          <Heading
-            as="h2"
-            fontSize={"2xl"}
-            textAlign="center"
-            textWrap={"balance"}
-          >
+          <Heading as="h2" textAlign="left" textWrap={"balance"}>
             I want to join a small group!
           </Heading>
-          <Text lineHeight="1.8" textAlign="center">
-            Awesome! Men's and women's small group leaders are listed in the
-            following links, along with a quick intro so you can get to know
-            them better.
+          <Text textAlign="left">
+            Awesome! The men's and women's small group leaders are listed in the
+            links below, along with a brief introduction to help you get to know
+            them better. You can connect with them in person, via messenger, or
+            by email as provided in the blurbs.
           </Text>
         </Box>
         <Stack
-          direction={{ base: "column", lg: "row" }}
-          gap={4}
+          direction={"column"}
+          gap={"1rem"}
           justifyContent="center"
           alignItems="center"
         >

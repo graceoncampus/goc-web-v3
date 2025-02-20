@@ -67,6 +67,7 @@ export const BannerTemplate: React.FC<BannerTemplateProps> = ({
           transform={"translate(-50%, -50%)"}
         >
           <Heading
+            as={"h1"}
             fontSize={{
               base: "2xl",
               sm: "4xl",

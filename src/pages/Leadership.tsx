@@ -40,7 +40,8 @@ const Profile: React.FC<ProfileProps> = ({ src, alt, name, biography }) => {
       >
         <Container
           paddingY={0}
-          paddingX={{ base: "0", lg: "2rem" }}
+          paddingLeft={0}
+          paddingRight={{ base: "0", lg: "2rem" }}
           width={{ base: "100%", lg: "50%" }}
           marginBottom={"2rem"}
         >

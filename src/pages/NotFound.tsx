@@ -1,5 +1,5 @@
 /**
- * 404 not found page for users.
+ * 404 not found page for users
  */
 
 import { NavbarActiveKey } from "components/Navbar";

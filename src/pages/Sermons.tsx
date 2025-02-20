@@ -144,7 +144,7 @@ const SermonsBody = (props: SermonBodyProps) => {
     <PaginationRoot
       count={totalPages}
       page={currentPage}
-      onPageChange={(e) => setCurrentPage(e.page)}
+      onPageChange={(e: any) => setCurrentPage(e.page)}
     >
       <HStack>
         <PaginationPrevTrigger />

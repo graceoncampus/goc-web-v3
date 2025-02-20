@@ -28,8 +28,10 @@ const AboutUsBody = () => {
     <Container maxWidth="800px" textAlign="center">
       <VStack gap={"2.5rem"} margin={"auto"}>
         <Box lineHeight="tall">
-          <Heading as="h2">Who We Are</Heading>
-          <Text>
+          <Heading as="h2" textAlign="left">
+            Who We Are
+          </Heading>
+          <Text textAlign="left">
             We are a ministry of Grace Community Church on the UCLA campus. We
             are a student group that exists to glorify God and spread a passion
             for His glory by making disciples, shepherding them to value Jesus
@@ -38,7 +40,7 @@ const AboutUsBody = () => {
             saints, evangelize the lost, and exalt the Lord Jesus Christ in all
             things.
           </Text>
-          <Text marginTop={"1rem"}>
+          <Text marginTop={"2rem"} textAlign="left">
             Every Friday night we gather for a time of singing, hearing God's
             Word taught, and fellowship. It is during these weekly large group
             meetings that GOC comes together corporately to worship our great

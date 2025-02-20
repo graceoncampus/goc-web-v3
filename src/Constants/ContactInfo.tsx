@@ -1,4 +1,4 @@
-interface ContactInfo {
+interface ContactInfoProps {
   name: string;
   email: string;
   phone: string;
@@ -7,7 +7,7 @@ interface ContactInfo {
   time: string;
 }
 
-export const contactInfo: ContactInfo = {
+export const contactInfo: ContactInfoProps = {
   name: "Ethan Lane",
   email: "gocateam@gmail.com",
   phone: "(707) 690-8525",

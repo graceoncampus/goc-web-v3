@@ -1,36 +1,37 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "types": ["vite/client", "vite-plugin-svgr/client"],
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
     "jsx": "react-jsx",
-    "useDefineForClassFields": true,
+
     "baseUrl": "src",
     "paths": {
-      "@/*": ["./src/*"],
-      "@/components/*": ["./src/components/*"],
-      "hooks/*": ["./src/hooks/*"],
-      "pages/*": ["pages/*"],
-      "layouts/*": ["layouts/*"],
-      "constants/*": ["constants/*"],
-      "components/*": ["components/*"],
-      "auth/*": ["auth/*"],
-      "store/*": ["store/*"],
-      "graphql/*": ["graphql/*"],
-      "ui-components/*": ["ui-components/*"]
-    }
+      "@/*": ["*"],
+      "@/components/*": ["components/*"],
+      "@/hooks/*": ["hooks/*"],
+      "@/pages/*": ["pages/*"],
+      "@/layouts/*": ["layouts/*"],
+      "@/constants/*": ["constants/*"],
+      "@/auth/*": ["auth/*"],
+      "@/store/*": ["store/*"],
+      "@/graphql/*": ["graphql/*"],
+      "@/ui-components/*": ["ui-components/*"]
+    },
+
+    "types": ["vite/client", "vite-plugin-svgr/client"],
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "noFallthroughCasesInSwitch": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "useDefineForClassFields": true
   },
   "include": ["src"]
 }

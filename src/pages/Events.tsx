@@ -76,7 +76,7 @@ const EventsBody: React.FC = () => {
           );
         })
         .catch((reason) => {
-          console.log(reason);
+          console.error(reason);
         });
     };
 

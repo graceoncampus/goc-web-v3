@@ -20,6 +20,7 @@ const textRecipe = defineRecipe({
     fontFamily: "'Poppins', sans-serif",
     fontSize: { sm: "md", xl: "lg" },
     textWrap: "pretty",
+    lineHeight: "1.8",
   },
 });
 
@@ -45,14 +46,14 @@ const config = defineConfig({
       _focus: {
         outline: "none !important",
       },
-      // THIS ENABLES OUTLINE WHEN USER TABS (optional)
-      // _focusVisible: {
-      //   outline: "2px solid black !important",
-      //   outlineOffset: "2px !important",
-      // },
-      _hover: {
-        textDecoration: "none !important",
-      },
+    },
+    // // THIS ENABLES OUTLINE WHEN USER TABS (optional)
+    // _focusVisible: {
+    // outline: "2px solid black !important",
+    // outlineOffset: "2px !important",
+    // },
+    _hover: {
+      textDecoration: "none !important",
     },
   },
   theme: {
@@ -67,9 +68,14 @@ const config = defineConfig({
       colors: {
         black: { value: "#000000" },
         goc: {
-          blue: { value: "#3366cc" }, // rgb(51, 102, 204)
-          gray: { value: "#f7f7f7" },
+          pale_blue: { value: "#E6F0FF" },
+          bright_blue: { value: "#5A86D9" },
+          blue: { value: "#3366CC" },
+          gray: { value: "#F7F7F7" },
+          orange: { value: "#CC9933" },
+          pale_orange: { value: "#D1A347" },
           darkgray: { value: "lightgray" },
+          beige: { value: "#FAF2E0" },
         },
       },
       sizes: {
