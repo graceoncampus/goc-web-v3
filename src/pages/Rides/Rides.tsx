@@ -8,8 +8,8 @@ import { NavbarActiveKey } from "components/Navbar";
 import { generateClient } from "aws-amplify/api";
 import { useEffect, useState, useCallback } from "react";
 import { BannerTemplate } from "layouts/BannerTemplate";
-import RiderSignup from "components/rider_signup/RiderSignup";
-import DriverSignup from "components/driver_signup/DriverSignup";
+import RiderSignup from "@/components/RiderSignup/RiderSignup";
+import DriverSignup from "components/DriverSignup/DriverSignup";
 import { checkIsLoggedIn } from "auth/CheckLogin";
 import {
   Box,
