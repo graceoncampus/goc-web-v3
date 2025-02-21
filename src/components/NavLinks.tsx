@@ -8,6 +8,7 @@
  *      link: string
  *      external: boolean (when true, adds external link icon)
  */
+import { SocialMedia } from "constants/SocialMedia";
 
 const NavLinks = [
   {
@@ -53,7 +54,7 @@ const NavLinks = [
       },
       {
         name: "Linktree",
-        link: "https://linktr.ee/goc_ucla",
+        link: SocialMedia.linktree,
         external: true,
       },
     ],

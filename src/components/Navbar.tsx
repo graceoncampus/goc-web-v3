@@ -82,7 +82,9 @@ const NavItem = ({
   drawerOpen,
 }: NavItemProps) => {
   const { open, onOpen, onClose, onToggle } = useDisclosure();
-
+  const isMobile = window.matchMedia(
+    "(hover: none) and (pointer: coarse)",
+  ).matches;
   const fontSize = "md";
   const fontWeight = selected ? "bold" : "normal";
   const color =
@@ -100,22 +102,20 @@ const NavItem = ({
     return (
       // Dropdown menu
       <Box position={"relative"}>
-        <MenuRoot open={drawerOpen ? undefined : open}>
+        <MenuRoot open={open}>
           <MenuTrigger asChild={true}>
             <Button
               variant={"ghost"}
               marginY={".5rem"}
-              marginX={drawerOpen ? ".5rem" : "0"}
               fontSize={fontSize}
               fontWeight={fontWeight}
               color={color}
               transition={"color 0.3s linear"}
-              backgroundColor={"transparent"}
+              backgroundColor={open ? bgHoverColor : "transparent"}
               outline={"none"}
-              _hover={{ backgroundColor: bgHoverColor }}
-              onMouseEnter={drawerOpen ? undefined : onOpen}
-              onMouseLeave={drawerOpen ? undefined : onClose}
-              onClick={drawerOpen ? onToggle : undefined}
+              onMouseEnter={isMobile ? undefined : onOpen}
+              onMouseLeave={onClose}
+              onClick={onToggle}
             >
               {name}{" "}
               <RiArrowDropDownLine
@@ -127,15 +127,15 @@ const NavItem = ({
             </Button>
           </MenuTrigger>
           <MenuContent
-            position={drawerOpen ? "static" : "absolute"}
-            top={drawerOpen ? "auto" : "-.5rem"}
-            zIndex={drawerOpen ? "5000" : "5000"}
-            backgroundColor="white"
-            boxShadow="lg"
-            rounded="md"
+            position={"absolute"}
+            top={"-.5rem"}
+            zIndex={"5000"}
+            backgroundColor={"white"}
+            boxShadow={"lg"}
+            rounded={"md"}
             padding={".25rem"}
-            onMouseEnter={drawerOpen ? undefined : onOpen}
-            onMouseLeave={drawerOpen ? undefined : onClose}
+            onMouseEnter={isMobile ? undefined : onOpen}
+            onMouseLeave={onClose}
           >
             {sublinks.map((sublink) => (
               <MenuItem
@@ -179,7 +179,7 @@ const NavItem = ({
     <Button
       variant={"ghost"}
       asChild={true}
-      margin={".5rem"}
+      marginY={".5rem"}
       _hover={{ backgroundColor: bgHoverColor }}
     >
       <Link
@@ -313,7 +313,7 @@ const Navbar = ({
             ))}
           </DrawerBody>
           <DrawerFooter>
-            <LoginButton />
+            <LoginButton drawerOpen />
           </DrawerFooter>
           <DrawerCloseTrigger />
         </DrawerContent>

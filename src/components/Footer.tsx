@@ -18,6 +18,7 @@ import { FaFacebook, FaWordpress, FaInstagram, FaVimeoV } from "react-icons/fa";
 import { TfiLocationPin } from "react-icons/tfi";
 import { LuClock7 } from "react-icons/lu";
 import { contactInfo } from "constants/ContactInfo";
+import { SocialMedia } from "constants/SocialMedia";
 
 interface FooterColumnProps {
   title: string;
@@ -201,7 +202,7 @@ export default function Footer() {
           <FooterColumn title="FOLLOW US">
             <Flex justify={"start"} align="center" flexDirection="row" gap={4}>
               <Link
-                href="https://www.facebook.com/GOCatUCLA"
+                href={SocialMedia.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 fontSize="4xl"
@@ -211,7 +212,7 @@ export default function Footer() {
                 <FaFacebook />
               </Link>
               <Link
-                href="https://www.instagram.com/goc_ucla/"
+                href={SocialMedia.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 fontSize="4xl"
@@ -221,7 +222,7 @@ export default function Footer() {
                 <FaInstagram />
               </Link>
               <Link
-                href="https://vimeo.com/user32835937"
+                href={SocialMedia.vimeo}
                 target="_blank"
                 rel="noopener noreferrer"
                 fontSize="4xl"
@@ -231,7 +232,7 @@ export default function Footer() {
                 <FaVimeoV />
               </Link>
               <Link
-                href="https://graceoncampusucla.wordpress.com/"
+                href={SocialMedia.wordpress}
                 target="_blank"
                 rel="noopener noreferrer"
                 fontSize="4xl"
