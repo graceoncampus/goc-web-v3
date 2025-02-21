@@ -2,7 +2,7 @@
  * GOC Navigation Bar
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   Box,
   Flex,
@@ -95,8 +95,6 @@ const NavItem = ({
       : "white";
   const bgHoverColor =
     isScrolled || drawerOpen ? "{colors.goc.gray}" : "{colors.goc.gray/30}";
-
-  console.log("drawerOpen", drawerOpen);
 
   if (sublinks.length > 0) {
     return (
@@ -201,9 +199,23 @@ const Navbar = ({
 }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(true);
+  const lastScrollYRef = useRef(0);
 
   const handleScroll = useCallback(() => {
     setIsScrolled(disableTransparent || window.scrollY > 50);
+
+    {
+      /* UNCOMMENT TO HIDE NAVBAR ON SCROLL DOWN */
+    }
+    // const THRESHOLD = 100;
+    // const currentScrollY = window.scrollY;
+    // if (currentScrollY > lastScrollYRef.current && currentScrollY > THRESHOLD) {
+    //   setShowNavbar(false);
+    // } else {
+    //   setShowNavbar(true);
+    // }
+    // lastScrollYRef.current = currentScrollY;
   }, [disableTransparent]);
 
   useEffect(() => {
@@ -232,6 +244,7 @@ const Navbar = ({
       backgroundColor={bgColor}
       boxShadow={shadow}
       transition="background-color .3s ease-out, box-shadow .3s ease-out, color .3s ease-out, filter .3s ease-out"
+      transform={showNavbar ? "translateY(0)" : "translateY(-100%)"}
       as="nav"
     >
       {/* Logo */}
