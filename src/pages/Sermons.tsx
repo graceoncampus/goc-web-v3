@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { listSermons } from "../graphql/queries";
 import { generateClient } from "aws-amplify/api";
 import { NavbarActiveKey } from "components/Navbar";

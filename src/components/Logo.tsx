@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, Center } from "@chakra-ui/react";
 
 interface LogoProps {
@@ -11,7 +10,7 @@ const Logo: React.FC<LogoProps> = ({
   transition = "fill 0.2s ease-out",
 }) => (
   <Link href="/">
-    <Center margin="1rem">
+    <Center margin={{ base: "1.2rem", md: "1rem" }}>
       <svg
         width="84"
         height="32"

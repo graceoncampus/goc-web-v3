@@ -80,7 +80,6 @@ export const RiderSignupForm = ({
       border={"3px solid {colors.goc.blue}"}
     >
       <Heading
-        id="rider-signup"
         as="h2"
         textAlign="center"
         fontWeight="bold"

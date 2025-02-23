@@ -51,37 +51,35 @@ interface Event {
 
 const EventsBody: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
+
   useEffect(() => {
     const fetchEvents = async () => {
-      await (client.graphql({ query: listGOCEvents }) as Promise<any>)
-        .then((result) => {
-          const eventsData = result.data.listGOCEvents.items.sort(
+      try {
+        const result = await client.graphql({ query: listGOCEvents });
+        const eventsData =
+          result.data?.listGOCEvents?.items?.sort(
             (a: any, b: any) =>
               new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
-          );
-          setEvents(
-            eventsData.map((event: any) => {
-              const item = {
-                id: event.id,
-                title: event.title,
-                startDate: event.startDate,
-                endDate: event.endDate,
-                price: event.price,
-                location: event.location,
-                description: event.description,
-                imageLink: event.imageLink,
-              };
-              return item;
-            }),
-          );
-        })
-        .catch((reason) => {
-          console.error(reason);
-        });
+          ) || [];
+        const mappedEvents = eventsData.map((event: any) => ({
+          id: event.id,
+          title: event.title,
+          startDate: event.startDate,
+          endDate: event.endDate,
+          price: event.price,
+          location: event.location,
+          description: event.description,
+          imageLink: event.imageLink,
+        }));
+        setEvents(mappedEvents);
+      } catch (reason) {
+        console.error(reason);
+      }
     };
 
     fetchEvents();
   }, []);
+
   function formatEventDate(startDateString: string, endDateString: string) {
     const startDate = new Date(startDateString);
     const endDate = new Date(endDateString);
@@ -150,10 +148,12 @@ const EventsBody: React.FC = () => {
         marginY={"1.8rem"}
       >
         <AccordionRoot
+          key={events.length}
           spaceY={"1rem"}
           variant={"plain"}
           collapsible={true}
-          multiple
+          multiple={true}
+          defaultValue={events.map((event) => event.id)}
         >
           {events.map((event, index) => (
             <AccordionItem key={index} value={event.id}>

@@ -2,7 +2,7 @@
  * GOC Navigation Bar
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   Box,
   Flex,
@@ -17,7 +17,7 @@ import {
   MenuItem,
   MenuRoot,
   MenuTrigger,
-} from "../components/ui/menu";
+} from "components/ui/menu";
 import {
   DrawerBackdrop,
   DrawerBody,
@@ -35,7 +35,7 @@ import { FiExternalLink } from "react-icons/fi";
 import { IoMdMenu } from "react-icons/io";
 import NavLinks from "components/NavLinks";
 import LoginButton from "components/LoginButton";
-import Logo from "./Logo";
+import Logo from "components/Logo";
 
 export enum NavbarActiveKey {
   NONE = "",
@@ -81,8 +81,10 @@ const NavItem = ({
   selected,
   drawerOpen,
 }: NavItemProps) => {
-  const { open, onOpen, onClose } = useDisclosure();
-
+  const { open, onOpen, onClose, onToggle } = useDisclosure();
+  const isMobile = window.matchMedia(
+    "(hover: none) and (pointer: coarse)",
+  ).matches;
   const fontSize = "md";
   const fontWeight = selected ? "bold" : "normal";
   const color =
@@ -102,17 +104,17 @@ const NavItem = ({
           <MenuTrigger asChild={true}>
             <Button
               variant={"ghost"}
-              paddingY={".5rem"}
-              marginX={drawerOpen ? ".5rem" : "0"}
+              marginY={".5rem"}
+              paddingX={"1rem"}
               fontSize={fontSize}
               fontWeight={fontWeight}
               color={color}
               transition={"color 0.3s linear"}
-              backgroundColor={"transparent"}
+              backgroundColor={open ? bgHoverColor : "transparent"}
               outline={"none"}
-              _hover={{ backgroundColor: bgHoverColor }}
-              onMouseEnter={onOpen}
-              onMouseLeave={onClose}
+              onMouseEnter={isMobile ? undefined : onOpen}
+              onMouseLeave={isMobile ? undefined : onClose}
+              onClick={onToggle}
             >
               {name}{" "}
               <RiArrowDropDownLine
@@ -124,15 +126,15 @@ const NavItem = ({
             </Button>
           </MenuTrigger>
           <MenuContent
-            position="absolute"
-            top="-.5rem"
-            zIndex="1000"
-            backgroundColor="white"
-            boxShadow="lg"
-            rounded="md"
+            position={"absolute"}
+            top={"-.5rem"}
+            zIndex={"5000"}
+            backgroundColor={"white"}
+            boxShadow={"lg"}
+            rounded={"md"}
             padding={".25rem"}
-            onMouseEnter={onOpen}
-            onMouseLeave={onClose}
+            onMouseEnter={isMobile ? undefined : onOpen}
+            onMouseLeave={isMobile ? undefined : onClose}
           >
             {sublinks.map((sublink) => (
               <MenuItem
@@ -176,7 +178,8 @@ const NavItem = ({
     <Button
       variant={"ghost"}
       asChild={true}
-      margin={".5rem"}
+      marginY={".5rem"}
+      paddingX={"1rem"}
       _hover={{ backgroundColor: bgHoverColor }}
     >
       <Link
@@ -198,9 +201,23 @@ const Navbar = ({
 }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(true);
+  const lastScrollYRef = useRef(0);
 
   const handleScroll = useCallback(() => {
     setIsScrolled(disableTransparent || window.scrollY > 50);
+
+    {
+      /* UNCOMMENT TO HIDE NAVBAR ON SCROLL DOWN */
+    }
+    // const THRESHOLD = 100;
+    // const currentScrollY = window.scrollY;
+    // if (currentScrollY > lastScrollYRef.current && currentScrollY > THRESHOLD) {
+    //   setShowNavbar(false);
+    // } else {
+    //   setShowNavbar(true);
+    // }
+    // lastScrollYRef.current = currentScrollY;
   }, [disableTransparent]);
 
   useEffect(() => {
@@ -229,6 +246,7 @@ const Navbar = ({
       backgroundColor={bgColor}
       boxShadow={shadow}
       transition="background-color .3s ease-out, box-shadow .3s ease-out, color .3s ease-out, filter .3s ease-out"
+      transform={showNavbar ? "translateY(0)" : "translateY(-100%)"}
       as="nav"
     >
       {/* Logo */}
@@ -260,8 +278,8 @@ const Navbar = ({
 
       {/* Hamburger Menu */}
       <DrawerRoot
-        size="lg"
-        placement="end"
+        size={"lg"}
+        placement={"end"}
         open={drawerOpen}
         onOpenChange={(e) => setDrawerOpen(e.open)}
       >
@@ -310,7 +328,7 @@ const Navbar = ({
             ))}
           </DrawerBody>
           <DrawerFooter>
-            <LoginButton />
+            <LoginButton drawerOpen />
           </DrawerFooter>
           <DrawerCloseTrigger />
         </DrawerContent>
