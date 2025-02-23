@@ -13,3 +13,6 @@ export const SocialMedia: SocialMediaProps = {
   wordpress: "https://graceoncampusucla.wordpress.com/",
   linktree: "https://linktr.ee/goc_ucla",
 };
+
+export const RIDES_GOOGLE_FORM_LINK: string =
+  "https://docs.google.com/forms/d/e/1FAIpQLSdNplYHbAWFr0yeFtC3YauiCi3Mtm0PMw0dby4OGUr6HVLLsg/viewform";

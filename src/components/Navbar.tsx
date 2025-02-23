@@ -105,6 +105,7 @@ const NavItem = ({
             <Button
               variant={"ghost"}
               marginY={".5rem"}
+              paddingX={"1rem"}
               fontSize={fontSize}
               fontWeight={fontWeight}
               color={color}
@@ -178,6 +179,7 @@ const NavItem = ({
       variant={"ghost"}
       asChild={true}
       marginY={".5rem"}
+      paddingX={"1rem"}
       _hover={{ backgroundColor: bgHoverColor }}
     >
       <Link
@@ -276,8 +278,8 @@ const Navbar = ({
 
       {/* Hamburger Menu */}
       <DrawerRoot
-        size="lg"
-        placement="end"
+        size={"lg"}
+        placement={"end"}
         open={drawerOpen}
         onOpenChange={(e) => setDrawerOpen(e.open)}
       >

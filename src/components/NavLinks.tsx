@@ -8,7 +8,7 @@
  *      link: string
  *      external: boolean (when true, adds external link icon)
  */
-import { SocialMedia } from "constants/SocialMedia";
+import { SocialMedia } from "@/constants/Links";
 
 const NavLinks = [
   {
