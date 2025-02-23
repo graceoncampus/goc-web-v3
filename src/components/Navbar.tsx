@@ -113,7 +113,7 @@ const NavItem = ({
               backgroundColor={open ? bgHoverColor : "transparent"}
               outline={"none"}
               onMouseEnter={isMobile ? undefined : onOpen}
-              onMouseLeave={onClose}
+              onMouseLeave={isMobile ? undefined : onClose}
               onClick={onToggle}
             >
               {name}{" "}
@@ -134,7 +134,7 @@ const NavItem = ({
             rounded={"md"}
             padding={".25rem"}
             onMouseEnter={isMobile ? undefined : onOpen}
-            onMouseLeave={onClose}
+            onMouseLeave={isMobile ? undefined : onClose}
           >
             {sublinks.map((sublink) => (
               <MenuItem

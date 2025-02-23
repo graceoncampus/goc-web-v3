@@ -63,7 +63,7 @@ const LoginButton = ({ drawerOpen = false }: LoginButtonProps) => {
                 outlineOffset: "2px",
               }}
               onMouseEnter={isMobile ? undefined : onOpen}
-              onMouseLeave={onClose}
+              onMouseLeave={isMobile ? undefined : onClose}
               onClick={onToggle}
             >
               {user}{" "}
@@ -85,7 +85,7 @@ const LoginButton = ({ drawerOpen = false }: LoginButtonProps) => {
             width="5rem"
             padding={".25rem"}
             onMouseEnter={isMobile ? undefined : onOpen}
-            onMouseLeave={onClose}
+            onMouseLeave={isMobile ? undefined : onClose}
           >
             <MenuItem asChild value="Profile">
               <Link href="/profile" color={"white"} cursor={"pointer"}>
