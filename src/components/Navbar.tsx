@@ -2,7 +2,7 @@
  * GOC Navigation Bar
  */
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import {
   Box,
   Flex,
@@ -11,13 +11,12 @@ import {
   IconButton,
   Icon,
   useDisclosure,
-} from "@chakra-ui/react";
-import {
   MenuContent,
   MenuItem,
   MenuRoot,
   MenuTrigger,
-} from "components/ui/menu";
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import {
   DrawerBackdrop,
   DrawerBody,
@@ -66,6 +65,8 @@ interface NavItemProps {
   selected: boolean;
   isScrolled: boolean;
   drawerOpen: boolean;
+  activeMenu: string | null;
+  setActiveMenu: (menu: string | null) => void;
 }
 
 interface NavbarProps {
@@ -80,61 +81,113 @@ const NavItem = ({
   isScrolled,
   selected,
   drawerOpen,
+  activeMenu,
+  setActiveMenu,
 }: NavItemProps) => {
-  const { open, onOpen, onClose, onToggle } = useDisclosure();
-  const isMobile = window.matchMedia(
-    "(hover: none) and (pointer: coarse)",
-  ).matches;
   const fontSize = "md";
   const fontWeight = selected ? "bold" : "normal";
+  const bgHoverColor =
+    isScrolled || drawerOpen ? "{colors.goc.gray}" : "{colors.goc.gray/30}";
   const color =
     isScrolled || drawerOpen
       ? selected
         ? "{colors.goc.blue}"
         : "black"
       : "white";
-  const bgHoverColor =
-    isScrolled || drawerOpen ? "{colors.goc.gray}" : "{colors.goc.gray/30}";
+  const isActive = activeMenu === name;
+  const { open, onOpen, onClose, onToggle } = useDisclosure();
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (activeMenu && activeMenu !== name) {
+      setActiveMenu(null);
+      onClose();
+      setTimeout(() => {
+        setActiveMenu(name);
+        onOpen();
+      }, 0);
+    } else if (activeMenu === name) {
+      setActiveMenu(null);
+      onClose();
+    } else {
+      setActiveMenu(name);
+      onOpen();
+    }
+  };
+
+  const handlePointerDownOutside = useCallback(() => {
+    if (isActive) {
+      setActiveMenu(null);
+      onClose();
+    }
+  }, [drawerOpen, isActive, onClose, setActiveMenu]);
+
+  const isMobile = useMemo(() => {
+    return (
+      ("maxTouchPoints" in navigator && navigator.maxTouchPoints > 0) ||
+      window.matchMedia("(hover: none) and (pointer: coarse)").matches
+    );
+  }, []);
 
   if (sublinks.length > 0) {
     return (
       // Dropdown menu
       <Box position={"relative"}>
-        <MenuRoot open={open}>
+        <MenuRoot
+          open={isMobile ? isActive : open}
+          onPointerDownOutside={handlePointerDownOutside}
+        >
           <MenuTrigger asChild={true}>
             <Button
-              variant={"ghost"}
-              marginY={".5rem"}
-              paddingX={"1rem"}
+              variant="ghost"
+              marginY=".5rem"
+              paddingX="1rem"
               fontSize={fontSize}
               fontWeight={fontWeight}
               color={color}
-              transition={"color 0.3s linear"}
-              backgroundColor={open ? bgHoverColor : "transparent"}
-              outline={"none"}
-              onMouseEnter={isMobile ? undefined : onOpen}
-              onMouseLeave={isMobile ? undefined : onClose}
-              onClick={onToggle}
+              transition="color .2s linear"
+              backgroundColor={
+                isMobile
+                  ? isActive
+                    ? bgHoverColor
+                    : "transparent"
+                  : open
+                    ? bgHoverColor
+                    : "transparent"
+              }
+              outline="none"
+              onMouseEnter={isMobile || drawerOpen ? undefined : onOpen}
+              onMouseLeave={isMobile || drawerOpen ? undefined : onClose}
+              onClick={isMobile ? handleClick : onToggle}
             >
               {name}{" "}
               <RiArrowDropDownLine
                 style={{
-                  transition: "transform .3s ease 0s",
-                  transform: open ? "rotate(-180deg)" : "",
+                  transition: "transform .2s ease",
+                  transform: isMobile
+                    ? isActive
+                      ? "rotate(-180deg)"
+                      : ""
+                    : open
+                      ? "rotate(-180deg)"
+                      : "",
                 }}
               />
             </Button>
           </MenuTrigger>
           <MenuContent
-            position={"absolute"}
-            top={"-.5rem"}
+            width={"fit-content"}
+            position={drawerOpen ? "static" : "absolute"}
+            top={"3rem"}
             zIndex={"5000"}
             backgroundColor={"white"}
             boxShadow={"lg"}
             rounded={"md"}
             padding={".25rem"}
-            onMouseEnter={isMobile ? undefined : onOpen}
-            onMouseLeave={isMobile ? undefined : onClose}
+            onMouseEnter={isMobile || drawerOpen ? undefined : onOpen}
+            onMouseLeave={isMobile || drawerOpen ? undefined : onClose}
           >
             {sublinks.map((sublink) => (
               <MenuItem
@@ -186,7 +239,7 @@ const NavItem = ({
         href={link}
         fontSize={fontSize}
         color={color}
-        transition="color 0.3s linear"
+        transition="color 0.2s linear"
         fontWeight={fontWeight}
       >
         {name}
@@ -201,15 +254,15 @@ const Navbar = ({
 }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [showNavbar, setShowNavbar] = useState(true);
   const lastScrollYRef = useRef(0);
+  const isXL = useBreakpointValue({ base: false, xl: true });
 
   const handleScroll = useCallback(() => {
     setIsScrolled(disableTransparent || window.scrollY > 50);
 
-    {
-      /* UNCOMMENT TO HIDE NAVBAR ON SCROLL DOWN */
-    }
+    /* UNCOMMENT TO HIDE NAVBAR ON SCROLL DOWN */
     // const THRESHOLD = 100;
     // const currentScrollY = window.scrollY;
     // if (currentScrollY > lastScrollYRef.current && currentScrollY > THRESHOLD) {
@@ -228,12 +281,24 @@ const Navbar = ({
     };
   }, [handleScroll]);
 
+  useEffect(() => {
+    setActiveMenu(null);
+  }, [isXL]);
+
+  useEffect(() => {
+    if (!drawerOpen) {
+      setActiveMenu(null);
+    }
+  }, [drawerOpen]);
+
   const bgColor = isScrolled ? "white" : "transparent";
   const shadow = isScrolled ? "md" : "none";
   const iconColor = isScrolled ? "black" : "goc.gray";
 
   return (
     <Flex
+      height={"4rem"}
+      width={"100%"}
       margin="0"
       paddingRight="1.5rem"
       align="center"
@@ -241,16 +306,15 @@ const Navbar = ({
       position="fixed"
       top="0"
       left="0"
-      width="100%"
       zIndex="1000"
       backgroundColor={bgColor}
       boxShadow={shadow}
-      transition="background-color .3s ease-out, box-shadow .3s ease-out, color .3s ease-out, filter .3s ease-out"
+      transition="background-color .2s ease-out, box-shadow .2s ease-out, color .2s ease-out, filter .2s ease-out"
       transform={showNavbar ? "translateY(0)" : "translateY(-100%)"}
       as="nav"
     >
       {/* Logo */}
-      <Logo isScrolled={isScrolled} transition="fill .3s ease-out" />
+      <Logo isScrolled={isScrolled} transition="fill .2s ease-out" />
 
       {/* Full Navbar */}
       <Box display={{ base: "none", xl: "flex" }} alignItems={"center"}>
@@ -270,6 +334,8 @@ const Navbar = ({
             }
             isScrolled={isScrolled}
             drawerOpen={drawerOpen}
+            activeMenu={activeMenu}
+            setActiveMenu={setActiveMenu}
           />
         ))}
         <LoginButton />
@@ -280,8 +346,9 @@ const Navbar = ({
       <DrawerRoot
         size={"lg"}
         placement={"end"}
-        open={drawerOpen}
+        open={drawerOpen && !isXL}
         onOpenChange={(e) => setDrawerOpen(e.open)}
+        onExitComplete={() => setDrawerOpen(false)}
       >
         <DrawerBackdrop />
         <DrawerTrigger asChild={true}>
@@ -294,7 +361,7 @@ const Navbar = ({
           >
             <Icon
               color={iconColor}
-              transition={"color .3s linear"}
+              transition={"color .2s linear"}
               size={"2xl"}
             >
               <IoMdMenu />
@@ -323,6 +390,8 @@ const Navbar = ({
                   }
                   isScrolled={isScrolled}
                   drawerOpen={drawerOpen}
+                  activeMenu={activeMenu}
+                  setActiveMenu={setActiveMenu}
                 />
               </Box>
             ))}

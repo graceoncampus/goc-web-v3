@@ -2,7 +2,7 @@
  * GOC Website Main Landing page
  */
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NavbarActiveKey } from "components/Navbar";
 import { Template } from "layouts/Template";
@@ -27,9 +27,12 @@ const LandingBody = observer(() => {
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(false);
   const userStore = useStore();
-  const isMobile =
-    ("maxTouchPoints" in navigator && navigator.maxTouchPoints > 0) ||
-    window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+  const isMobile = useMemo(() => {
+    return (
+      ("maxTouchPoints" in navigator && navigator.maxTouchPoints > 0) ||
+      window.matchMedia("(hover: none) and (pointer: coarse)").matches
+    );
+  }, []);
 
   return (
     <Container fluid={true} margin="0" padding="0">

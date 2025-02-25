@@ -4,7 +4,7 @@ import {
   MenuItem,
   MenuRoot,
   MenuTrigger,
-} from "../components/ui/menu";
+} from "@/components/ui/menu";
 import { getCurrentUser, signOut } from "aws-amplify/auth";
 import { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa6";
@@ -41,6 +41,7 @@ const LoginButton = ({ drawerOpen = false }: LoginButtonProps) => {
         <MenuRoot
           open={open}
           positioning={{ placement: drawerOpen ? "top-end" : "bottom-end" }}
+          onPointerDownOutside={onClose}
         >
           <MenuTrigger asChild>
             <Button
