@@ -14,6 +14,7 @@ import {
   Stack,
   Text,
   Container,
+  AspectRatio,
 } from "@chakra-ui/react";
 import {
   AccordionItem,
@@ -129,23 +130,24 @@ const EventsBody: React.FC = () => {
 
   return (
     <Container fluid={true}>
-      <Center>
-        <Heading
-          as="h2"
-          fontSize={{
-            base: "2xl",
-            md: "3xl",
-            lg: "4xl",
-            xl: "4xl",
-          }}
-        >
-          Upcoming Events
-        </Heading>
-      </Center>
+      <Heading
+        as="h2"
+        textAlign={"center"}
+        fontSize={{
+          base: "2xl",
+          md: "3xl",
+          lg: "4xl",
+          xl: "4xl",
+        }}
+      >
+        Upcoming Events
+      </Heading>
       <Stack
         width={{ sm: "100%", md: "4/5" }}
         marginX={"auto"}
         marginY={"1.8rem"}
+        align={"center"}
+        gap={"3rem"}
       >
         <AccordionRoot
           key={events.length}
@@ -253,6 +255,27 @@ const EventsBody: React.FC = () => {
             </AccordionItem>
           ))}
         </AccordionRoot>
+        <Stack id={"calendar"} as={"section"} width={"100%"} align={"center"}>
+          <Heading
+            as="h2"
+            textAlign={"center"}
+            marginBottom={"2rem"}
+            fontSize={{
+              base: "2xl",
+              md: "3xl",
+              lg: "4xl",
+              xl: "4xl",
+            }}
+          >
+            Calendar
+          </Heading>
+          <AspectRatio ratio={4 / 3} width={{ base: "100%", lg: "800px" }}>
+            <iframe
+              src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FLos_Angeles&showPrint=0&title&showCalendars=0&mode=MONTH&showTz=0&src=Z29jYXRlYW1AZ21haWwuY29t&color=%23C0CA33"
+              title="Google Calendar"
+            />
+          </AspectRatio>
+        </Stack>
       </Stack>
     </Container>
   );
