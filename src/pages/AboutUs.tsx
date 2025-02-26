@@ -48,7 +48,7 @@ const AboutUsBody = () => {
           </Text>
         </Box>
         <GOCButton
-          href=""
+          href="/docs/welcome-booklet.pdf"
           buttonProps={{ marginTop: "0", marginBottom: "1rem" }}
         >
           Welcome Packet

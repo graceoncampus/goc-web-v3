@@ -18,7 +18,6 @@ const GOCButton: React.FC<GOCButtonProps> = ({
   return href ? (
     <Button
       asChild={true}
-      width={"100%"}
       variant="solid"
       padding=".5rem 1rem"
       color="white"
