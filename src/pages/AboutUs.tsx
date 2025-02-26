@@ -1,6 +1,6 @@
-import { BannerTemplate } from "layouts/BannerTemplate";
-import { NavbarActiveKey } from "components/Navbar";
-import GOCButton from "components/GOCButton";
+import { BannerTemplate } from "@/layouts/BannerTemplate";
+import { NavbarActiveKey } from "@/components/Navbar";
+import GOCButton from "@/components/GOCButton";
 import {
   Box,
   Heading,

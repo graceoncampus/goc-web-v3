@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { listSermons } from "../graphql/queries";
+import { listSermons } from "@/graphql/queries";
 import { generateClient } from "aws-amplify/api";
-import { NavbarActiveKey } from "components/Navbar";
-import { BannerTemplate } from "layouts/BannerTemplate";
+import { NavbarActiveKey } from "@/components/Navbar";
+import { BannerTemplate } from "@/layouts/BannerTemplate";
 import {
   Box,
   Center,
@@ -19,8 +19,8 @@ import {
   PaginationNextTrigger,
   PaginationItems,
   PaginationPrevTrigger,
-} from "components/ui/pagination";
-import { InputGroup } from "components/ui/input-group";
+} from "@/components/ui/pagination";
+import { InputGroup } from "@/components/ui/input-group";
 import { LuSearch } from "react-icons/lu";
 const client = generateClient();
 

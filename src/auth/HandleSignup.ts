@@ -1,4 +1,4 @@
-import { SignupProps } from "pages/Login/Signup";
+import { SignupProps } from "@/pages/Login/Signup";
 import { signUp } from "aws-amplify/auth";
 import { confirmSignUp, type ConfirmSignUpInput } from "aws-amplify/auth";
 

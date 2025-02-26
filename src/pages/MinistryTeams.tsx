@@ -1,7 +1,7 @@
-import { BannerTemplate } from "layouts/BannerTemplate";
-import { NavbarActiveKey } from "components/Navbar";
 import { useEffect, useState } from "react";
-import { checkIsLoggedIn } from "auth/CheckLogin";
+import { BannerTemplate } from "@/layouts/BannerTemplate";
+import { NavbarActiveKey } from "@/components/Navbar";
+import { checkIsLoggedIn } from "@/auth/CheckLogin";
 import {
   Box,
   Container,

@@ -1,7 +1,7 @@
 import { Box, Container, Heading, Stack, Text, VStack } from "@chakra-ui/react";
-import { BannerTemplate } from "layouts/BannerTemplate";
-import { NavbarActiveKey } from "components/Navbar";
-import GOCButton from "components/GOCButton";
+import { BannerTemplate } from "@/layouts/BannerTemplate";
+import { NavbarActiveKey } from "@/components/Navbar";
+import GOCButton from "@/components/GOCButton";
 
 export const SmallGroupsPage = () => {
   return (

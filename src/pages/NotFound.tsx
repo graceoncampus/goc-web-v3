@@ -2,10 +2,10 @@
  * 404 not found page for users
  */
 
-import { NavbarActiveKey } from "components/Navbar";
-import { LoginTemplate } from "layouts/LoginTemplate";
+import { NavbarActiveKey } from "@/components/Navbar";
+import { LoginTemplate } from "@/layouts/LoginTemplate";
 import { Heading, Text } from "@chakra-ui/react";
-import GOCButton from "components/GOCButton";
+import GOCButton from "@/components/GOCButton";
 
 export const NotFoundPage = () => {
   return (

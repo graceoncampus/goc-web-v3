@@ -1,5 +1,5 @@
 import { Box, Center, Heading, Image } from "@chakra-ui/react";
-import { Template, TemplateProps } from "layouts/Template";
+import { Template, TemplateProps } from "@/layouts/Template";
 
 export interface BannerTemplateProps extends TemplateProps {
   title: string;

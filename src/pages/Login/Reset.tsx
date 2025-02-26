@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { resetPassword, confirmResetPassword } from "aws-amplify/auth";
+import { LoginTemplate } from "@/layouts/LoginTemplate";
 import {
   Box,
   Button,
@@ -11,11 +12,10 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { InputGroup } from "components/ui/input-group";
+import { InputGroup } from "@/components/ui/input-group";
+import GOCButton from "@/components/GOCButton";
+import { NavbarActiveKey } from "@/components/Navbar";
 import { MdOutlineEmail } from "react-icons/md";
-import GOCButton from "components/GOCButton";
-import { LoginTemplate } from "layouts/LoginTemplate";
-import { NavbarActiveKey } from "components/Navbar";
 
 interface RequestResetProps {
   email: string;

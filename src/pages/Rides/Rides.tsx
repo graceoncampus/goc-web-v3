@@ -3,14 +3,14 @@
 // import { listRides } from "graphql/queries";
 import { CreateCarInput, CreateRideInput, Ride, Car, Rider } from "Api";
 import { createRide, deleteRide } from "graphql/mutations";
-import { useForm } from "react-hook-form";
-import { NavbarActiveKey } from "components/Navbar";
-import { generateClient } from "aws-amplify/api";
 import { useEffect, useState, useCallback } from "react";
-import { BannerTemplate } from "layouts/BannerTemplate";
-import RiderSignup from "components/RiderSignup/RiderSignup";
-import DriverSignup from "components/DriverSignup/DriverSignup";
-import { checkIsLoggedIn } from "auth/CheckLogin";
+import { useForm } from "react-hook-form";
+import { generateClient } from "aws-amplify/api";
+import { NavbarActiveKey } from "@/components/Navbar";
+import { BannerTemplate } from "@/layouts/BannerTemplate";
+import RiderSignup from "@/components/RiderSignup/RiderSignup";
+import DriverSignup from "@/components/DriverSignup/DriverSignup";
+import { checkIsLoggedIn } from "@/auth/CheckLogin";
 import {
   Box,
   Button,
@@ -22,14 +22,14 @@ import {
   VStack,
   Collapsible,
   Table,
-  Spinner,
 } from "@chakra-ui/react";
-import { Field } from "components/ui/field";
+import { Field } from "@/components/ui/field";
 import { FaArrowTurnDown } from "react-icons/fa6";
 import { FaCarSide } from "react-icons/fa";
 import GOCButton from "@/components/GOCButton";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import { RIDES_GOOGLE_FORM_LINK } from "@/constants/Links";
+import GOCSpinner from "@/components/GOCSpinner";
 
 const client = generateClient();
 
@@ -396,13 +396,7 @@ const RidesMenuSidebar = ({
 };
 
 const RidesList = ({ rides, loading }: RidesProps) => {
-  if (loading)
-    return (
-      <VStack marginTop="3rem">
-        <Spinner color="goc.blue" animationDuration="0.8s" borderWidth="3px" />
-        <Text color="goc.blue">Loading...</Text>
-      </VStack>
-    );
+  if (loading) return <GOCSpinner />;
 
   return (
     <Table.Root size="sm" variant="outline" striped stickyHeader>

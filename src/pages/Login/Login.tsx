@@ -1,10 +1,10 @@
+import { LoginTemplate } from "@/layouts/LoginTemplate";
 import { signIn } from "aws-amplify/auth";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { NavbarActiveKey } from "components/Navbar";
-import { Field } from "components/ui/field";
-import { InputGroup } from "components/ui/input-group";
-import { LuLock, LuUser } from "react-icons/lu";
+import { NavbarActiveKey } from "@/components/Navbar";
+import { Field } from "@/components/ui/field";
+import { InputGroup } from "@/components/ui/input-group";
 import {
   Button,
   Fieldset,
@@ -14,7 +14,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { LoginTemplate } from "layouts/LoginTemplate";
+import { LuLock, LuUser } from "react-icons/lu";
 
 interface LoginFormProps {
   username: string;

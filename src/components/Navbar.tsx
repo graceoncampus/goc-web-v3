@@ -27,14 +27,14 @@ import {
   DrawerRoot,
   DrawerTitle,
   DrawerTrigger,
-} from "components/ui/drawer";
-// import { ColorModeButton } from "components/ui/color-mode";
+} from "@/components/ui/drawer";
+// import { ColorModeButton } from "@/components/ui/color-mode";
+import NavLinks from "@/components/NavLinks";
+import LoginButton from "@/components/LoginButton";
+import Logo from "@/components/Logo";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { FiExternalLink } from "react-icons/fi";
 import { IoMdMenu } from "react-icons/io";
-import NavLinks from "components/NavLinks";
-import LoginButton from "components/LoginButton";
-import Logo from "components/Logo";
 
 export enum NavbarActiveKey {
   NONE = "",

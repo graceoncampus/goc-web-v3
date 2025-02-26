@@ -2,7 +2,7 @@
  * EventList
  */
 
-import { EventCard, EventCardProps } from "components/EventCard";
+import { EventCard, EventCardProps } from "@/components/EventCard";
 
 export interface EventCardListProps {
   events: EventCardProps[];

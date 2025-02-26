@@ -12,7 +12,7 @@ import {
   Heading,
   Image,
 } from "@chakra-ui/react";
-import { Field } from "components/ui/field";
+import { Field } from "@/components/ui/field";
 
 interface RiderSignupFormProps {
   setRiderSignupCompleted: (riderSignupValue: boolean) => void;

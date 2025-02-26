@@ -1,6 +1,7 @@
-import { confirmSignUp, resendSignUpCode, signUp } from "aws-amplify/auth";
-import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { confirmSignUp, resendSignUpCode, signUp } from "aws-amplify/auth";
 import {
   Box,
   Button,
@@ -11,10 +12,9 @@ import {
   Link,
   Stack,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
-import { NavbarActiveKey } from "components/Navbar";
-import { LoginTemplate } from "layouts/LoginTemplate";
-import { Field } from "components/ui/field";
+import { NavbarActiveKey } from "@/components/Navbar";
+import { LoginTemplate } from "@/layouts/LoginTemplate";
+import { Field } from "@/components/ui/field";
 import { useHookFormMask } from "use-mask-input";
 import "react-phone-number-input/style.css";
 

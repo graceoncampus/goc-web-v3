@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { IoIosArrowDropupCircle } from "react-icons/io";
-import { Box, Icon } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 
 export default function ScrollToTopButton() {
   const [isVisible, setIsVisible] = useState(false);

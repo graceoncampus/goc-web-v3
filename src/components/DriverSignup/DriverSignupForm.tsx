@@ -11,7 +11,7 @@ import {
   VStack,
   HStack,
 } from "@chakra-ui/react";
-import { Field } from "components/ui/field";
+import { Field } from "@/components/ui/field";
 
 interface DriverSignupFormProps {
   setDriverSignupCompleted: (driverSignupValue: boolean) => void;

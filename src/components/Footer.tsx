@@ -12,13 +12,13 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { Field } from "components/ui/field";
-import { Toaster, toaster } from "components/ui/toaster";
+import { Field } from "@/components/ui/field";
+import { Toaster, toaster } from "@/components/ui/toaster";
+import { ContactInfo } from "@/constants/ContactInfo";
+import { SocialMedia } from "@/constants/Links";
 import { FaFacebook, FaWordpress, FaInstagram, FaVimeoV } from "react-icons/fa";
 import { TfiLocationPin } from "react-icons/tfi";
 import { LuClock7 } from "react-icons/lu";
-import { ContactInfo } from "constants/ContactInfo";
-import { SocialMedia } from "@/constants/Links";
 
 interface FooterColumnProps {
   title: string;
