@@ -75,11 +75,12 @@ const EventsBody: React.FC = () => {
         setEvents(mappedEvents);
       } catch (reason) {
         console.error(reason);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchEvents();
-    setLoading(false);
   }, []);
 
   return (
