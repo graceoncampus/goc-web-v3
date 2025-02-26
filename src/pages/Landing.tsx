@@ -13,7 +13,7 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "store/StoreContext";
 import { Box, Heading, Image, Stack, Text, Container } from "@chakra-ui/react";
 import { ContactInfo } from "constants/ContactInfo";
-import { SocialMedia } from "@/constants/Links";
+import { SocialMedia, RIDES_GOOGLE_FORM_LINK } from "@/constants/Links";
 
 export const LandingPage = () => {
   return (
@@ -218,7 +218,7 @@ const LandingBody = observer(() => {
           <br />
           9AM every Sunday
         </Text>
-        <OutlineButton href="/rides">SIGN UP</OutlineButton>
+        <OutlineButton href={RIDES_GOOGLE_FORM_LINK}>SIGN UP</OutlineButton>
       </Box>
     </Container>
   );

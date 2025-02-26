@@ -147,12 +147,12 @@ const RidesLandingBody = ({ rides, loading }: RidesProps) => {
   }, []);
 
   return (
-    <Flex direction={{ base: "column", md: "row" }}>
+    <Flex direction={{ base: "column", lg: "row" }}>
       <Box
         flex={3}
-        display={{ base: "none", md: "block" }}
-        marginRight={{ base: "0", md: "2rem" }}
-        marginBottom={{ base: "2.5rem", md: "0" }}
+        display={{ base: "none", lg: "block" }}
+        marginRight={{ base: "0", lg: "2rem" }}
+        marginBottom={{ base: "2.5rem", lg: "0" }}
       >
         <RidesMenuSidebar
           toggleRider={toggleRider}
@@ -191,13 +191,13 @@ const RidesLandingBody = ({ rides, loading }: RidesProps) => {
         <Flex
           direction="column"
           width="100%"
-          alignItems={{ base: "center", md: "flex-start" }}
+          alignItems={{ base: "center", lg: "flex-start" }}
         >
           <Heading
             as="h2"
             fontSize={"3xl"}
-            lineHeight={{ base: "1.5", md: "3rem", xl: "4rem" }}
-            textAlign={{ base: "center", md: "left" }}
+            lineHeight={{ base: "1.5", lg: "3rem", xl: "4rem" }}
+            textAlign={{ base: "center", lg: "left" }}
             textWrap="balance"
           >
             Check your rides for this{" "}
@@ -215,8 +215,8 @@ const RidesLandingBody = ({ rides, loading }: RidesProps) => {
             </span>
           </Heading>
           <Text
-            display={{ base: "none", md: "block" }}
-            fontSize={{ base: "sm", md: "md", xl: "lg" }}
+            display={{ base: "none", lg: "block" }}
+            fontSize={{ base: "sm", lg: "md", xl: "lg" }}
             textAlign={"left"}
             textWrap={"balance"}
           >
@@ -228,7 +228,7 @@ const RidesLandingBody = ({ rides, loading }: RidesProps) => {
           <GOCButton
             href={RIDES_GOOGLE_FORM_LINK}
             buttonProps={{
-              display: { md: "none" },
+              display: { lg: "none" },
               marginTop: "1rem",
               width: "8rem",
             }}
@@ -278,7 +278,9 @@ const SignUpButton = ({
       marginTop="1.5rem"
       borderRadius=".8rem"
       backgroundColor={isRiderOpen ? "goc.pale_orange" : "goc.pale_blue"}
-      _hover={{ transform: "scale(0.99)" }}
+      _hover={{
+        transform: "scale(0.99)",
+      }}
       onClick={onClick}
     >
       {children}
@@ -298,7 +300,9 @@ const SignUpButton = ({
       marginTop="1.5rem"
       borderRadius=".8rem"
       backgroundColor="goc.pale_blue"
-      _hover={{ transform: "scale(0.99)" }}
+      _hover={{
+        transform: "scale(0.99)",
+      }}
     >
       {children}
     </Button>
@@ -322,21 +326,21 @@ const RidesMenuSidebar = ({
 }: RidesMenuSidebarProps) => {
   return (
     <Box
-      position={{ base: "block", md: "sticky" }}
-      top={{ base: "0", md: "6rem" }}
+      position={{ base: "block", lg: "sticky" }}
+      top={{ base: "0", lg: "6rem" }}
       width="100%"
       zIndex="5"
       paddingX="1.5rem"
       paddingY="1.8rem"
       backgroundColor="goc.blue"
-      borderRadius={{ base: "0", md: "1rem" }}
+      borderRadius={{ base: "0", lg: "1rem" }}
       boxShadow="md"
     >
       <VStack gap={0} textAlign="center" color="white" marginBottom="1rem">
         <Heading
           as="h2"
-          fontSize={{ base: "xl", xl: "2xl" }}
-          marginBottom={{ base: 0, xl: ".5rem" }}
+          fontSize={{ base: "xl", lg: "2xl" }}
+          marginBottom={{ base: 0, lg: ".5rem" }}
         >
           Need a ride?
         </Heading>
@@ -363,7 +367,7 @@ const RidesMenuSidebar = ({
       </VStack>
       {isLoggedIn ? (
         <Text
-          fontSize={{ base: "xs", xl: "sm" }}
+          fontSize={{ base: "xs", lg: "sm" }}
           textAlign="center"
           color="white"
           marginTop="1.5rem"

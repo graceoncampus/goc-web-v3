@@ -5,7 +5,6 @@ import { generateClient } from "aws-amplify/api";
 import { useEffect, useState } from "react";
 import {
   Box,
-  Center,
   Flex,
   Heading,
   Icon,
@@ -129,7 +128,7 @@ const EventsBody: React.FC = () => {
   }
 
   return (
-    <Container fluid={true}>
+    <Container fluid={true} padding={0}>
       <Heading
         as="h2"
         textAlign={"center"}
@@ -259,7 +258,7 @@ const EventsBody: React.FC = () => {
           <Heading
             as="h2"
             textAlign={"center"}
-            marginBottom={"2rem"}
+            marginBottom={{ base: "1rem", md: "2rem" }}
             fontSize={{
               base: "2xl",
               md: "3xl",
@@ -269,7 +268,10 @@ const EventsBody: React.FC = () => {
           >
             Calendar
           </Heading>
-          <AspectRatio ratio={4 / 3} width={{ base: "100%", lg: "800px" }}>
+          <AspectRatio
+            ratio={{ base: 1, md: 4 / 3 }}
+            width={{ base: "100%", lg: "800px" }}
+          >
             <iframe
               src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FLos_Angeles&showPrint=0&title&showCalendars=0&mode=MONTH&showTz=0&src=Z29jYXRlYW1AZ21haWwuY29t&color=%23C0CA33"
               title="Google Calendar"
