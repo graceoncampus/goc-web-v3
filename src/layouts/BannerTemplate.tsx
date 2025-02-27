@@ -77,7 +77,6 @@ export const BannerTemplate: React.FC<BannerTemplateProps> = ({
             }}
             color={titleColor}
             lineHeight={"1.2"}
-            fontWeight={"bold"}
             marginX={"auto"}
           >
             {title}

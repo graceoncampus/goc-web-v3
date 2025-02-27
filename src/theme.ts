@@ -9,7 +9,7 @@ const headingRecipe = defineRecipe({
   base: {
     fontFamily: "'Poppins', sans-serif",
     fontSize: { sm: "2xl", xl: "3xl" },
-    fontWeight: "bold",
+    fontWeight: "semibold",
     lineHeight: "1.2",
     marginBottom: "1rem",
   },

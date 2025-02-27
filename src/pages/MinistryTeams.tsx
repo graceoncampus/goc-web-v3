@@ -155,7 +155,7 @@ const TeamsBody: React.FC<{
               </Text>
             ) : (
               <Text fontSize={"sm"} fontStyle={"italic"}>
-                <Link fontWeight={"bold"} href="/login">
+                <Link fontWeight={"semibold"} href="/login">
                   Log in
                 </Link>{" "}
                 to view the leader and contact information.

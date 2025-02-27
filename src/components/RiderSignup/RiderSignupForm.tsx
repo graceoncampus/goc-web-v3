@@ -82,7 +82,7 @@ export const RiderSignupForm = ({
       <Heading
         as="h2"
         textAlign="center"
-        fontWeight="bold"
+        fontWeight="semibold"
         color="black"
         marginBottom="1rem"
       >
@@ -244,7 +244,7 @@ export const RiderSignupForm = ({
                             style={{ marginRight: "8px" }}
                           />
                           <Box>
-                            <Text fontSize="sm" fontWeight="bold">
+                            <Text fontSize="sm" fontWeight="semibold">
                               {eventTime.heading}
                             </Text>
                             <Text fontSize="sm" color="gray.500">
@@ -276,7 +276,7 @@ export const RiderSignupForm = ({
             backgroundColor="goc.blue"
             type="submit"
             width="full"
-            fontWeight={"bold"}
+            fontWeight={"semibold"}
           >
             SIGN UP
           </Button>

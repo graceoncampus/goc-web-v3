@@ -206,6 +206,7 @@ const EventList = ({ events, loading }: EventListProps) => {
       variant="outline"
       collapsible={true}
       multiple={true}
+      // All events expanded by default
       defaultValue={events.map((event) => event.id)}
     >
       {events.map((event, index) => (
@@ -220,14 +221,14 @@ const EventList = ({ events, loading }: EventListProps) => {
                 marginLeft="10px"
               >
                 <Heading
-                  as="p"
+                  as="h3"
                   fontSize={{ base: "md", md: "xl", lg: "2xl" }}
                   margin={0}
                 >
                   {event.title}
                 </Heading>
                 <Text
-                  fontSize={{ base: "sm", md: "xl" }}
+                  fontSize={{ base: "sm", md: "lg" }}
                   marginRight="10px"
                   textAlign="right"
                 >
@@ -247,9 +248,7 @@ const EventList = ({ events, loading }: EventListProps) => {
                 />
                 <Box className="event-description-text" marginLeft="20px">
                   <Box>
-                    <Text fontSize={{ base: "md", md: "4xl" }} fontWeight="800">
-                      {event.title}
-                    </Text>
+                    <Heading as="h3">{event.title}</Heading>
                     <Box>
                       <Text fontSize={{ base: "xs", md: "md" }}>
                         {event.description}

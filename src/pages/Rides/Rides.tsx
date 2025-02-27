@@ -373,7 +373,7 @@ const RidesMenuSidebar = ({
           marginTop="1.5rem"
           textWrap="nowrap"
         >
-          <Link href="#admin-settings" color="white" fontWeight="bold">
+          <Link href="#admin-settings" color="white" fontWeight="semibold">
             Admin Settings <FaArrowTurnDown />
           </Link>
         </Text>
@@ -385,7 +385,7 @@ const RidesMenuSidebar = ({
           marginTop="1.5rem"
           textWrap="nowrap"
         >
-          <Link href="/login" color="white" fontWeight="bold">
+          <Link href="/login" color="white" fontWeight="semibold">
             Login
           </Link>{" "}
           to access admin settings
@@ -528,7 +528,7 @@ const RidesSettings = () => {
             backgroundColor="black"
             type="submit"
             width="full"
-            fontWeight="bold"
+            fontWeight="semibold"
             marginTop="1rem"
           >
             Upload Rides
