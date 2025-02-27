@@ -4,7 +4,9 @@
 
 import Footer from "@/components/Footer";
 import Navbar, { NavbarActiveKey } from "@/components/Navbar";
+import { ColorModeButton, useColorMode } from "@/components/ui/color-mode";
 import { Box } from "@chakra-ui/react";
+import { useEffect } from "react";
 
 export interface TemplateProps {
   activeKey: NavbarActiveKey;
@@ -17,6 +19,12 @@ export const Template: React.FC<TemplateProps> = ({
   children,
   disableTransparentNavbar = false,
 }) => {
+  const { setColorMode } = useColorMode();
+
+  useEffect(() => {
+    setColorMode("light");
+  }, []);
+
   return (
     <Box>
       <Navbar
