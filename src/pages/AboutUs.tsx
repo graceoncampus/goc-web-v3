@@ -8,6 +8,7 @@ import {
   VStack,
   AspectRatio,
   Container,
+  Link,
 } from "@chakra-ui/react";
 
 export const AboutUsPage = () => {
@@ -32,13 +33,21 @@ const AboutUsBody = () => {
             Who We Are
           </Heading>
           <Text textAlign="left">
-            We are a ministry of Grace Community Church on the UCLA campus. We
-            are a student group that exists to glorify God and spread a passion
-            for His glory by making disciples, shepherding them to value Jesus
-            Christ above all else, and training up the next generation of
-            Christian leaders. In other words, we exist to edify and equip the
-            saints, evangelize the lost, and exalt the Lord Jesus Christ in all
-            things.
+            We are a ministry of{" "}
+            <Link
+              href="https://www.gracechurch.org/"
+              target="_blank"
+              color="goc.blue"
+              display={"inline"}
+            >
+              Grace Community Church
+            </Link>{" "}
+            on the UCLA campus. We are a student group that exists to glorify
+            God and spread a passion for His glory by making disciples,
+            shepherding them to value Jesus Christ above all else, and training
+            up the next generation of Christian leaders. In other words, we
+            exist to edify and equip the saints, evangelize the lost, and exalt
+            the Lord Jesus Christ in all things.
           </Text>
           <Text marginTop={"2rem"} textAlign="left">
             Every Friday night we gather for a time of singing, hearing God's

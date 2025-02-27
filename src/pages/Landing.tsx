@@ -99,9 +99,9 @@ const LandingBody = observer(() => {
               Welcome&nbsp;to Grace&nbsp;on&nbsp;Campus!
             </Heading>
             <Text
-              fontSize={{ base: "xs", sm: "sm", md: "md", lg: "lg", xl: "xl" }}
-              textWrap="pretty"
-              marginBottom={{ sm: "0", md: "0", lg: "1rem", xl: "2rem" }}
+              fontSize={{ base: "xs", sm: "md", md: "lg", lg: "xl", xl: "2xl" }}
+              fontWeight={"medium"}
+              marginBottom={{ base: "1rem", xl: "2rem" }}
               animation="fadeIn .5s ease-in-out"
               animationDelay="0.25s"
               opacity="0"

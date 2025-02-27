@@ -55,9 +55,20 @@ export default function Footer() {
   } = useForm<FormValues>();
 
   const onSubmit = handleSubmit((data) => {
+    if (data.email == "gocateam@gmail.com") {
+      toaster.create({
+        description: "Hmm... I don't think that's your email 🤔",
+        type: "error",
+      });
+      return;
+    }
+
     console.log(data);
     // todo: send email
-    toaster.create({ description: "Submitted!", type: "success" });
+    toaster.create({
+      description: "Thank you! We will get back to you soon!",
+      type: "success",
+    });
   });
 
   return (
@@ -144,7 +155,7 @@ export default function Footer() {
               We'd love to get in touch with you!
             </Text>
             <form onSubmit={onSubmit}>
-              <Box marginBottom={2}>
+              <Box marginBottom={".5rem"}>
                 <Field
                   label={
                     <Text fontSize={"sm"} fontWeight={"semibold"}>
@@ -162,7 +173,7 @@ export default function Footer() {
                   />
                 </Field>
               </Box>
-              <Box marginBottom={2}>
+              <Box marginBottom={"1.5rem"}>
                 <Field
                   label={
                     <Text fontSize={"sm"} fontWeight={"semibold"}>

@@ -78,6 +78,8 @@ export const BannerTemplate: React.FC<BannerTemplateProps> = ({
             color={titleColor}
             lineHeight={"1.2"}
             marginX={"auto"}
+            marginTop={"1rem"}
+            marginBottom={0}
           >
             {title}
           </Heading>
