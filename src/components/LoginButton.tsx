@@ -51,7 +51,7 @@ const LoginButton = ({ drawerOpen = false }: LoginButtonProps) => {
               marginX="1rem .5rem"
               marginY={".5rem"}
               color="white"
-              fontWeight="bold"
+              fontWeight="semibold"
               backgroundColor={open ? "rgb(48, 90, 175)" : "goc.blue"}
               borderRadius={open ? "0" : "1.2rem"}
               transition="border-radius .3s ease-in, background-color .4s ease-in"
@@ -118,7 +118,7 @@ const LoginButton = ({ drawerOpen = false }: LoginButtonProps) => {
           marginX="1rem .5rem"
           marginY={".5rem"}
           color="white"
-          fontWeight="bold"
+          fontWeight="semibold"
           boxShadow="none"
           backgroundColor="goc.blue"
           borderRadius="1.2rem"

@@ -4,7 +4,7 @@ export const DriverSignupThankYou = () => {
   return (
     <Container fluid>
       <VStack gap={"1rem"} textAlign="center">
-        <Text fontSize="2xl" fontWeight="bold" color="black">
+        <Text fontSize="2xl" fontWeight="semibold" color="black">
           Thank you for signing up for a drive!
         </Text>
         <Text fontSize="lg" color="gray.600">

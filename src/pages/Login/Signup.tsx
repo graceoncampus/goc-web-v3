@@ -277,7 +277,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
               {errors.root.message}
             </Text>
           )}
-          <Button type="submit" width="100%">
+          <Button type="submit" width="100%" marginTop={"1.2rem"}>
             Sign Up
           </Button>
         </VStack>

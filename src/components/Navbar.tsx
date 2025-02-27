@@ -85,7 +85,7 @@ const NavItem = ({
   setActiveMenu,
 }: NavItemProps) => {
   const fontSize = "md";
-  const fontWeight = selected ? "bold" : "normal";
+  const fontWeight = selected ? "semibold" : "normal";
   const bgHoverColor =
     isScrolled || drawerOpen ? "{colors.goc.gray}" : "{colors.goc.gray/30}";
   const color =

@@ -89,14 +89,12 @@ const LandingBody = observer(() => {
                 xl: "6xl",
               }}
               lineHeight="1.2"
-              fontWeight="bold"
-              textWrap="pretty"
               marginBottom="1rem"
               animation="fadeIn .5s ease-in-out"
               animationDelay="0s"
               opacity="0"
               animationFillMode="forwards"
-              textShadow={"1px 1px rgba(0,0,0,0.5)"}
+              textShadow={isMobile ? "none" : "1px 1px rgba(0,0,0,0.5)"}
             >
               Welcome&nbsp;to Grace&nbsp;on&nbsp;Campus!
             </Heading>
@@ -108,7 +106,7 @@ const LandingBody = observer(() => {
               animationDelay="0.25s"
               opacity="0"
               animationFillMode="forwards"
-              textShadow={"1px 1px rgba(0,0,0,0.3)"}
+              textShadow={isMobile ? "none" : "1px 1px rgba(0,0,0,0.3)"}
             >
               {ContactInfo.day} at {ContactInfo.time}, {ContactInfo.location}
             </Text>
