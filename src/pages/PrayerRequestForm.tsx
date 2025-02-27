@@ -2,6 +2,8 @@
  * Prayer request form.
  */
 
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   Center,
   Fieldset,
@@ -10,10 +12,8 @@ import {
   Stack,
   Textarea,
 } from "@chakra-ui/react";
-import GOCButton from "components/GOCButton";
-import { Field } from "components/ui/field";
-import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import GOCButton from "@/components/GOCButton";
+import { Field } from "@/components/ui/field";
 //  import { CreatePrayerInput } from 'Api';
 // import { getEventsByEventId } from 'graphql/queries';
 // import { createDriver } from 'graphql/mutations';

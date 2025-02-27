@@ -2,17 +2,18 @@
  * GOC Website Main Landing page
  */
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { NavbarActiveKey } from "components/Navbar";
-import { Template } from "layouts/Template";
-import { RiArrowRightLine } from "react-icons/ri";
-import OutlineButton from "components/OutlineButton";
-import InfoBox from "components/InfoBox";
-import { observer } from "mobx-react-lite";
-import { useStore } from "store/StoreContext";
+import { Template } from "@/layouts/Template";
+import { NavbarActiveKey } from "@/components/Navbar";
+import OutlineButton from "@/components/OutlineButton";
+import InfoBox from "@/components/InfoBox";
 import { Box, Heading, Image, Stack, Text, Container } from "@chakra-ui/react";
-import { contactInfo } from "constants/ContactInfo";
+import { ContactInfo } from "@/constants/ContactInfo";
+import { SocialMedia, RIDES_GOOGLE_FORM_LINK } from "@/constants/Links";
+import { observer } from "mobx-react-lite";
+import { useStore } from "@/store/StoreContext";
+import { RiArrowRightLine } from "react-icons/ri";
 
 export const LandingPage = () => {
   return (
@@ -26,45 +27,22 @@ const LandingBody = observer(() => {
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(false);
   const userStore = useStore();
-
-  /* Example Events */
-  const events = [
-    {
-      purpose: "GET CONNECTED",
-      text: "SMALL GROUP",
-      action: "CHECK'EM OUT",
-      link: "/smallgroups",
-    },
-    {
-      purpose: "GET CONNECTED",
-      text: "RIDES",
-      action: "SIGN UP NOW",
-      link: "/rides/rider/signup",
-    },
-    {
-      purpose: "GET CONNECTED",
-      text: "UPCOMING EVENTS",
-      action: "TAKE A LOOK",
-      link: "/rides/rider/signup",
-    },
-    {
-      purpose: "GET CONNECTED",
-      text: "PRAYER REQUESTS",
-      action: "LOREUM IPSUM",
-      link: "/rides/rider/signup",
-    },
-    {
-      purpose: "GET CONNECTED",
-      text: "RIDES",
-      action: "Sign up",
-      link: "/rides/rider/signup",
-    },
-  ];
+  const isMobile = useMemo(() => {
+    return (
+      ("maxTouchPoints" in navigator && navigator.maxTouchPoints > 0) ||
+      window.matchMedia("(hover: none) and (pointer: coarse)").matches
+    );
+  }, []);
 
   return (
     <Container fluid={true} margin="0" padding="0">
       {/* Banner */}
-      <Box position="relative" width="100%" height="100vh" overflow="hidden">
+      <Box
+        position="relative"
+        width="100%"
+        height={{ base: "25rem", md: "100vh" }}
+        overflow="hidden"
+      >
         {/* Banner image */}
         <Image
           position="absolute"
@@ -100,7 +78,7 @@ const LandingBody = observer(() => {
           color="white"
           padding="1.5rem"
         >
-          <Stack gap="0" align="center">
+          <Stack gap="0" align="center" marginTop={{ base: "4rem", md: "0" }}>
             <Heading
               as="h1"
               fontSize={{
@@ -113,14 +91,14 @@ const LandingBody = observer(() => {
               lineHeight="1.2"
               fontWeight="bold"
               textWrap="pretty"
-              marginBottom="0.5rem"
+              marginBottom="1rem"
               animation="fadeIn .5s ease-in-out"
               animationDelay="0s"
               opacity="0"
               animationFillMode="forwards"
-              textShadow={"2px 2px rgba(0,0,0,0.3)"}
+              textShadow={"1px 1px rgba(0,0,0,0.5)"}
             >
-              Welcome to Grace on Campus!
+              Welcome&nbsp;to Grace&nbsp;on&nbsp;Campus!
             </Heading>
             <Text
               fontSize={{ base: "xs", sm: "sm", md: "md", lg: "lg", xl: "xl" }}
@@ -132,7 +110,7 @@ const LandingBody = observer(() => {
               animationFillMode="forwards"
               textShadow={"1px 1px rgba(0,0,0,0.3)"}
             >
-              {contactInfo.day} at {contactInfo.time}, {contactInfo.location}
+              {ContactInfo.day} at {ContactInfo.time}, {ContactInfo.location}
             </Text>
             <Box
               animation="fadeIn .5s ease-in-out"
@@ -141,10 +119,10 @@ const LandingBody = observer(() => {
               animationFillMode="forwards"
             >
               <OutlineButton
-                href="https://www.facebook.com/groups/gocatucla"
+                href={SocialMedia.facebook}
                 onWhite={false}
                 icon={<RiArrowRightLine />}
-                animateIcon={true}
+                animateIcon={isMobile ? false : true}
               >
                 JOIN US!
               </OutlineButton>
@@ -202,31 +180,45 @@ const LandingBody = observer(() => {
         }}
         paddingY={{
           base: "2rem",
-          sm: "7rem",
-          md: "8rem",
-          lg: "9rem",
+          sm: "5rem",
+          md: "6rem",
+          lg: "7rem",
           xl: "12rem",
         }}
         textAlign="center"
         color="white"
       >
-        <Heading
-          as={"h2"}
-          size={{ base: "2xl", sm: "2xl", md: "4xl", lg: "4xl", xl: "6xl" }}
-          marginTop="0.5rem"
-          textWrap="pretty"
-        >
-          Sign up for a ride to church!
-        </Heading>
+        {isMobile ? (
+          <Heading
+            as={"h2"}
+            size={{ sm: "4xl", xl: "6xl" }}
+            marginBottom="2rem"
+            textWrap="pretty"
+          >
+            Rides to church!
+          </Heading>
+        ) : (
+          <Heading
+            as={"h2"}
+            size={{ sm: "3xl", xl: "6xl" }}
+            marginBottom={isMobile ? "2rem" : "1.2rem"}
+            textWrap="pretty"
+          >
+            Sign&nbsp;up for a ride&nbsp;to&nbsp;church!
+          </Heading>
+        )}
+
         <Text
           fontSize={{ base: "sm", sm: "sm", md: "md", lg: "lg", xl: "lg" }}
           marginTop="0.5rem"
           marginBottom="1rem"
-          textWrap="pretty"
+          textWrap="nowrap"
         >
-          Grace Community Church - 9am every Sunday
+          Grace Community Church
+          <br />
+          9AM every Sunday
         </Text>
-        <OutlineButton href="/rides">SIGN UP</OutlineButton>
+        <OutlineButton href={RIDES_GOOGLE_FORM_LINK}>SIGN UP</OutlineButton>
       </Box>
     </Container>
   );

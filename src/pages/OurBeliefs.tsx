@@ -1,5 +1,5 @@
-import { BannerTemplate } from "layouts/BannerTemplate";
-import { NavbarActiveKey } from "components/Navbar";
+import { BannerTemplate } from "@/layouts/BannerTemplate";
+import { NavbarActiveKey } from "@/components/Navbar";
 import { Box, Heading, Text, VStack, Container } from "@chakra-ui/react";
 
 export const OurBeliefsPage = () => {
@@ -22,7 +22,11 @@ interface SectionHeadingProps {
 const SectionHeading: React.FC<SectionHeadingProps> = ({ children }) => {
   return (
     <Box width="100%" lineHeight="tall">
-      <Heading as="h2" fontSize={"2xl"} marginBottom={".5rem"}>
+      <Heading
+        as="h2"
+        fontSize={{ base: "lg", md: "2xl" }}
+        marginBottom={".5rem"}
+      >
         {children}
       </Heading>
       <hr />

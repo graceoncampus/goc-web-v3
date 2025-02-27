@@ -1,5 +1,5 @@
 import { Box, Heading, Text } from "@chakra-ui/react";
-import OutlineButton from "components/OutlineButton";
+import OutlineButton from "@/components/OutlineButton";
 
 interface InfoBoxProps {
   title: string;

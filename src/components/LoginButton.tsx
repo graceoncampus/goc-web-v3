@@ -4,14 +4,18 @@ import {
   MenuItem,
   MenuRoot,
   MenuTrigger,
-} from "../components/ui/menu";
+} from "@/components/ui/menu";
 import { getCurrentUser, signOut } from "aws-amplify/auth";
 import { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
 import { RiArrowDropDownLine } from "react-icons/ri";
 
-const LoginButton = () => {
+interface LoginButtonProps {
+  drawerOpen?: boolean;
+}
+
+const LoginButton = ({ drawerOpen = false }: LoginButtonProps) => {
   const [user, setUser] = useState<string | null>(null);
   useEffect(() => {
     const fetchUser = async () => {
@@ -26,18 +30,26 @@ const LoginButton = () => {
     fetchUser();
   }, []);
 
-  const { open, onOpen, onClose } = useDisclosure();
+  const { open, onOpen, onClose, onToggle } = useDisclosure();
+  const isMobile = window.matchMedia(
+    "(hover: none) and (pointer: coarse)",
+  ).matches;
 
   return (
     <>
       {user ? (
-        <MenuRoot open={open} positioning={{ placement: "bottom-end" }}>
+        <MenuRoot
+          open={open}
+          positioning={{ placement: drawerOpen ? "top-end" : "bottom-end" }}
+          onPointerDownOutside={onClose}
+        >
           <MenuTrigger asChild>
             <Button
               position={"relative"}
               outline="none"
               border="none"
               marginX="1rem .5rem"
+              marginY={".5rem"}
               color="white"
               fontWeight="bold"
               backgroundColor={open ? "rgb(48, 90, 175)" : "goc.blue"}
@@ -51,8 +63,9 @@ const LoginButton = () => {
                 outline: "2px solid black",
                 outlineOffset: "2px",
               }}
-              onMouseEnter={onOpen}
-              onMouseLeave={onClose}
+              onMouseEnter={isMobile ? undefined : onOpen}
+              onMouseLeave={isMobile ? undefined : onClose}
+              onClick={onToggle}
             >
               {user}{" "}
               <RiArrowDropDownLine
@@ -64,16 +77,16 @@ const LoginButton = () => {
             </Button>
           </MenuTrigger>
           <MenuContent
-            position="absolute"
-            top="-.5rem"
-            right={0}
-            zIndex="1000"
+            position={"absolute"}
+            top={drawerOpen ? "-4rem" : "-.5rem"}
+            right={drawerOpen ? "100%" : "0"}
+            zIndex="2000"
             backgroundColor="goc.bright_blue"
             borderRadius={0}
             width="5rem"
             padding={".25rem"}
-            onMouseEnter={onOpen}
-            onMouseLeave={onClose}
+            onMouseEnter={isMobile ? undefined : onOpen}
+            onMouseLeave={isMobile ? undefined : onClose}
           >
             <MenuItem asChild value="Profile">
               <Link href="/profile" color={"white"} cursor={"pointer"}>
@@ -102,7 +115,8 @@ const LoginButton = () => {
           position="relative"
           outline="none"
           border="none"
-          margin=".5rem"
+          marginX="1rem .5rem"
+          marginY={".5rem"}
           color="white"
           fontWeight="bold"
           boxShadow="none"

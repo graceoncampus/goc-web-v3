@@ -19,7 +19,6 @@ const GOCButton: React.FC<GOCButtonProps> = ({
     <Button
       asChild={true}
       variant="solid"
-      outline="none"
       padding=".5rem 1rem"
       color="white"
       fontSize={{ base: "sm", md: "md" }}
@@ -49,7 +48,6 @@ const GOCButton: React.FC<GOCButtonProps> = ({
     <Button
       type={type}
       variant="solid"
-      outline="none"
       color="white"
       fontSize={{ base: "xs", md: "sm" }}
       fontWeight="medium"

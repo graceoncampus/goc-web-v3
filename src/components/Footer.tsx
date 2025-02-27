@@ -12,12 +12,13 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { Field } from "components/ui/field";
-import { Toaster, toaster } from "components/ui/toaster";
+import { Field } from "@/components/ui/field";
+import { Toaster, toaster } from "@/components/ui/toaster";
+import { ContactInfo } from "@/constants/ContactInfo";
+import { SocialMedia } from "@/constants/Links";
 import { FaFacebook, FaWordpress, FaInstagram, FaVimeoV } from "react-icons/fa";
 import { TfiLocationPin } from "react-icons/tfi";
 import { LuClock7 } from "react-icons/lu";
-import { contactInfo } from "constants/ContactInfo";
 
 interface FooterColumnProps {
   title: string;
@@ -105,14 +106,14 @@ export default function Footer() {
               <Flex alignItems={"center"}>
                 <LuClock7 />
                 <Text fontSize={"md"} marginLeft={".2rem"}>
-                  {contactInfo.day} at {contactInfo.time}
+                  {ContactInfo.day} at {ContactInfo.time}
                 </Text>
               </Flex>
 
               <Flex alignItems={"center"}>
                 <TfiLocationPin />
                 <Text fontSize={"md"} marginLeft={".2rem"}>
-                  {contactInfo.location}
+                  {ContactInfo.location}
                 </Text>
               </Flex>
             </Stack>
@@ -126,9 +127,9 @@ export default function Footer() {
         >
           <FooterColumn title="CONTACT US">
             <Stack gap={".1rem"}>
-              <Text fontSize={"md"}>{contactInfo.name}</Text>
-              <Text fontSize={"md"}>{contactInfo.phone}</Text>
-              <Text fontSize={"md"}>{contactInfo.email}</Text>
+              <Text fontSize={"md"}>{ContactInfo.name}</Text>
+              <Text fontSize={"md"}>{ContactInfo.phone}</Text>
+              <Text fontSize={"md"}>{ContactInfo.email}</Text>
             </Stack>
           </FooterColumn>
         </GridItem>
@@ -201,7 +202,7 @@ export default function Footer() {
           <FooterColumn title="FOLLOW US">
             <Flex justify={"start"} align="center" flexDirection="row" gap={4}>
               <Link
-                href="https://www.facebook.com/GOCatUCLA"
+                href={SocialMedia.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 fontSize="4xl"
@@ -211,7 +212,7 @@ export default function Footer() {
                 <FaFacebook />
               </Link>
               <Link
-                href="https://www.instagram.com/goc_ucla/"
+                href={SocialMedia.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 fontSize="4xl"
@@ -221,7 +222,7 @@ export default function Footer() {
                 <FaInstagram />
               </Link>
               <Link
-                href="https://vimeo.com/user32835937"
+                href={SocialMedia.vimeo}
                 target="_blank"
                 rel="noopener noreferrer"
                 fontSize="4xl"
@@ -231,7 +232,7 @@ export default function Footer() {
                 <FaVimeoV />
               </Link>
               <Link
-                href="https://graceoncampusucla.wordpress.com/"
+                href={SocialMedia.wordpress}
                 target="_blank"
                 rel="noopener noreferrer"
                 fontSize="4xl"

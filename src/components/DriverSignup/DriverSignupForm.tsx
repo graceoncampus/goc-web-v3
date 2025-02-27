@@ -11,7 +11,7 @@ import {
   VStack,
   HStack,
 } from "@chakra-ui/react";
-import { Field } from "components/ui/field";
+import { Field } from "@/components/ui/field";
 
 interface DriverSignupFormProps {
   setDriverSignupCompleted: (driverSignupValue: boolean) => void;
@@ -71,7 +71,6 @@ export const DriverSignupForm = ({
       border={"3px solid {colors.goc.blue}"}
     >
       <Heading
-        id="driver-signup"
         as={"h2"}
         textAlign="center"
         fontWeight="bold"

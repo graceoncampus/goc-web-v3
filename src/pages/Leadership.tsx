@@ -7,8 +7,8 @@ import {
   Separator,
   Text,
 } from "@chakra-ui/react";
-import { NavbarActiveKey } from "components/Navbar";
-import { BannerTemplate } from "layouts/BannerTemplate";
+import { NavbarActiveKey } from "@/components/Navbar";
+import { BannerTemplate } from "@/layouts/BannerTemplate";
 
 export const LeadershipPage = () => {
   return (

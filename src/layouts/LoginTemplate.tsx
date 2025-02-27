@@ -1,5 +1,5 @@
 import { Box, Container, Image } from "@chakra-ui/react";
-import { Template, TemplateProps } from "layouts/Template";
+import { Template, TemplateProps } from "@/layouts/Template";
 
 export interface LoginTemplateProps extends TemplateProps {
   imageSrc?: string;

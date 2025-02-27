@@ -1,6 +1,6 @@
-import { BannerTemplate } from "layouts/BannerTemplate";
-import { NavbarActiveKey } from "components/Navbar";
-import GOCButton from "components/GOCButton";
+import { BannerTemplate } from "@/layouts/BannerTemplate";
+import { NavbarActiveKey } from "@/components/Navbar";
+import GOCButton from "@/components/GOCButton";
 import {
   Box,
   Heading,
@@ -48,7 +48,7 @@ const AboutUsBody = () => {
           </Text>
         </Box>
         <GOCButton
-          href=""
+          href="/docs/welcome-booklet.pdf"
           buttonProps={{ marginTop: "0", marginBottom: "1rem" }}
         >
           Welcome Packet

@@ -1,7 +1,7 @@
-import { BannerTemplate } from "layouts/BannerTemplate";
-import { NavbarActiveKey } from "components/Navbar";
-import React, { useEffect, useState } from "react";
-import { checkIsLoggedIn } from "auth/CheckLogin";
+import { useEffect, useState } from "react";
+import { BannerTemplate } from "@/layouts/BannerTemplate";
+import { NavbarActiveKey } from "@/components/Navbar";
+import { checkIsLoggedIn } from "@/auth/CheckLogin";
 import {
   Box,
   Container,
@@ -94,7 +94,14 @@ interface SectionProps {
 const Section: React.FC<SectionProps> = ({ heading, id, children }) => {
   return (
     <Box width="100%" lineHeight="tall">
-      <Heading as="h2" id={id} marginBottom="1rem" scrollMarginTop={"6rem"}>
+      <Heading
+        as="h2"
+        id={id}
+        fontSize={{ base: "lg", md: "2xl" }}
+        marginBottom={{ base: "0.5rem", md: "1rem" }}
+        scrollMarginTop={"6rem"}
+        textWrap={"balance"}
+      >
         {heading}
       </Heading>
       <hr />
@@ -108,10 +115,10 @@ const TeamsBody: React.FC<{
   isUserLoggedIn: boolean;
 }> = ({ MinistryTeams, isUserLoggedIn }) => {
   return (
-    <Container maxWidth="800px" textAlign="left" scrollBehavior={"smooth"}>
+    <Container fluid maxWidth="800px" padding={0} textAlign="left">
       <VStack gap={"2.5rem"} margin={"auto"}>
         <Section heading="List of Ministry Teams">
-          <List.Root>
+          <List.Root paddingX={"1rem"}>
             {MinistryTeams.map((MinistryTeam) => (
               <List.Item>
                 <Link href={`#${slugify(MinistryTeam.title)}`} color="goc.blue">
@@ -121,7 +128,7 @@ const TeamsBody: React.FC<{
             ))}
             <List.Item>
               <Link href={`#video-resources`} color="goc.blue">
-                <Text>Ministry Teams: Video Resources</Text>
+                <Text>Video Resources</Text>
               </Link>
             </List.Item>
           </List.Root>
@@ -132,16 +139,20 @@ const TeamsBody: React.FC<{
             id={slugify(MinistryTeam.title)}
             heading={MinistryTeam.title}
           >
-            <Text marginBottom="1rem">{MinistryTeam.description}</Text>
+            <Text
+              fontSize={{ base: "sm", md: "md", xl: "lg" }}
+              marginBottom="1rem"
+            >
+              {MinistryTeam.description}
+            </Text>
             {isUserLoggedIn ? (
-              <>
-                <Text marginBottom="1">
-                  <strong>Leader(s):</strong> {MinistryTeam.leaders}
-                </Text>
-                <Text>
-                  <strong>Contact:</strong> {MinistryTeam.contact}
-                </Text>
-              </>
+              <Text
+                marginBottom="1"
+                fontSize={{ base: "sm", md: "md", xl: "lg" }}
+              >
+                <strong>Leader(s):</strong> {MinistryTeam.leaders} <br />
+                <strong>Contact:</strong> {MinistryTeam.contact}
+              </Text>
             ) : (
               <Text fontSize={"sm"} fontStyle={"italic"}>
                 <Link fontWeight={"bold"} href="/login">
@@ -152,10 +163,7 @@ const TeamsBody: React.FC<{
             )}
           </Section>
         ))}
-        <Section
-          id={"video-resources"}
-          heading={"Ministry Teams: Video Resources"}
-        >
+        <Section id={"video-resources"} heading={"Video Resources"}>
           <Badge
             variant={"outline"}
             size="lg"
