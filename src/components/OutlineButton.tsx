@@ -21,14 +21,14 @@ const OutlineButton = ({
       variant="outline"
       marginTop="1.5rem"
       asChild={true}
-      color={onWhite ? "inherit" : "white"}
-      backgroundColor="transparent"
+      color={onWhite ? "black" : "white"}
+      backgroundColor={"transparent"}
       borderRadius={onWhite ? ".4rem" : "1.2rem"}
-      borderWidth="2px"
+      borderWidth={"2px"}
       borderColor={onWhite ? "gray.700" : "white"}
       paddingX={
         onWhite
-          ? { sm: "0.6rem", md: "0.8rem", lg: "1rem", xl: "1.2rem" }
+          ? { base: "1rem", xl: "1.2rem" }
           : { sm: "1.5rem", md: "1.8rem", lg: "2rem", xl: "2.2rem" }
       }
       paddingY={{ sm: "0", md: "0", lg: "0.5rem", xl: "1.2rem" }}
