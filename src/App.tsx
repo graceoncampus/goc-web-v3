@@ -18,7 +18,6 @@ import { ResetPage } from "pages/Login/Reset";
 import { SignupPage } from "pages/Login/Signup";
 import { ProfilePage } from "pages/Profile";
 import { NotFoundPage as UserNotFoundPage } from "pages/NotFound";
-import "@fontsource/poppins";
 
 const App = () => {
   return (
