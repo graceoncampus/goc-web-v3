@@ -156,7 +156,7 @@ const SermonsBody = (props: SermonBodyProps) => {
 
   return (
     <Center>
-      <Box width={"100%"}>
+      <Box width={"100%"} maxWidth={"60rem"}>
         <Flex
           justifyContent={{ base: "center", md: "space-between" }}
           marginBottom={".5rem"}

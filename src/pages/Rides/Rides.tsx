@@ -22,6 +22,7 @@ import {
   VStack,
   Collapsible,
   Table,
+  Container,
 } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { FaArrowTurnDown } from "react-icons/fa6";
@@ -147,109 +148,113 @@ const RidesLandingBody = ({ rides, loading }: RidesProps) => {
   }, []);
 
   return (
-    <Flex direction={{ base: "column", lg: "row" }}>
-      <Box
-        flex={3}
-        display={{ base: "none", lg: "block" }}
-        marginRight={{ base: "0", lg: "2rem" }}
-        marginBottom={{ base: "2.5rem", lg: "0" }}
-      >
-        <RidesMenuSidebar
-          toggleRider={toggleRider}
-          toggleDriver={toggleDriver}
-          isRiderOpen={riderOpen}
-          isDriverOpen={driverOpen}
-          isLoggedIn={isLoggedIn}
-        />
-      </Box>
-      <Box flex={7}>
-        {/* Rider Signup Form */}
-        <Collapsible.Root lazyMount unmountOnExit open={riderOpen}>
-          <Collapsible.Content
-            id="rider-signup"
-            scrollMarginTop="6rem"
-            paddingBottom="2rem"
-            marginBottom="2.5rem"
-          >
-            <RiderSignup />
-          </Collapsible.Content>
-        </Collapsible.Root>
-
-        {/* Driver Signup Form */}
-        <Collapsible.Root lazyMount unmountOnExit open={driverOpen}>
-          <Collapsible.Content
-            id="driver-signup"
-            scrollMarginTop="6rem"
-            paddingBottom="2rem"
-            marginBottom="2.5rem"
-          >
-            <DriverSignup />
-          </Collapsible.Content>
-        </Collapsible.Root>
-
-        {/* Heading */}
-        <Flex
-          direction="column"
-          width="100%"
-          alignItems={{ base: "center", lg: "flex-start" }}
+    <Container fluid maxWidth={"90rem"} padding={0}>
+      <Flex direction={{ base: "column", lg: "row" }}>
+        <Box
+          flex={3}
+          maxWidth={"25rem"}
+          display={{ base: "none", lg: "block" }}
+          marginRight={{ base: "0", lg: "2rem" }}
+          marginBottom={{ base: "2.5rem", lg: "0" }}
         >
-          <Heading
-            as="h2"
-            fontSize={"3xl"}
-            lineHeight={{ base: "1.5", lg: "3rem", xl: "4rem" }}
-            textAlign={{ base: "center", lg: "left" }}
-            textWrap="balance"
-          >
-            Check your rides for this{" "}
-            <span
-              style={{
-                whiteSpace: "nowrap",
-                display: "inline-flex",
-                alignItems: "center",
+          <RidesMenuSidebar
+            toggleRider={toggleRider}
+            toggleDriver={toggleDriver}
+            isRiderOpen={riderOpen}
+            isDriverOpen={driverOpen}
+            isLoggedIn={isLoggedIn}
+          />
+        </Box>
+        <Box flex={7}>
+          {/* Rider Signup Form */}
+          <Collapsible.Root lazyMount unmountOnExit open={riderOpen}>
+            <Collapsible.Content
+              id="rider-signup"
+              scrollMarginTop="6rem"
+              paddingBottom="2rem"
+              marginBottom="2.5rem"
+            >
+              <RiderSignup />
+            </Collapsible.Content>
+          </Collapsible.Root>
+
+          {/* Driver Signup Form */}
+          <Collapsible.Root lazyMount unmountOnExit open={driverOpen}>
+            <Collapsible.Content
+              id="driver-signup"
+              scrollMarginTop="6rem"
+              paddingBottom="2rem"
+              marginBottom="2.5rem"
+            >
+              <DriverSignup />
+            </Collapsible.Content>
+          </Collapsible.Root>
+
+          {/* Heading */}
+          <Flex direction="column" width="100%" alignItems={"center"}>
+            <Heading
+              as="h2"
+              fontSize={"3xl"}
+              lineHeight={{ base: "1.5", lg: "3rem", xl: "4rem" }}
+              textAlign={{ base: "center", lg: "left" }}
+              textWrap="balance"
+            >
+              Check your rides for this{" "}
+              <span
+                style={{
+                  whiteSpace: "nowrap",
+                  display: "inline-flex",
+                  alignItems: "center",
+                }}
+              >
+                week!{" "}
+                <FaCarSide
+                  style={{ marginLeft: "0.5rem", verticalAlign: "middle" }}
+                />
+              </span>
+            </Heading>
+            <Text
+              display={{ base: "none", md: "block" }}
+              fontSize={{ base: "sm", lg: "md", xl: "lg" }}
+              textAlign={"center"}
+              textWrap={"balance"}
+            >
+              As a ministry of Grace Community Church, we provide rides to and
+              from our church every Sunday.
+            </Text>
+
+            {/* Google Form Signup Button */}
+            <GOCButton
+              href={RIDES_GOOGLE_FORM_LINK}
+              buttonProps={{
+                display: { lg: "none" },
+                marginTop: "1rem",
+                width: "8rem",
               }}
             >
-              week!{" "}
-              <FaCarSide
-                style={{ marginLeft: "0.5rem", verticalAlign: "middle" }}
-              />
-            </span>
-          </Heading>
-          <Text
-            display={{ base: "none", lg: "block" }}
-            fontSize={{ base: "sm", lg: "md", xl: "lg" }}
-            textAlign={"left"}
-            textWrap={"balance"}
-          >
-            As a ministry of Grace Community Church, we provide rides to and
-            from our church every Sunday.
-          </Text>
+              Sign up
+            </GOCButton>
+            {/* Rides List */}
+            <Box
+              marginTop={"3rem"}
+              width={"100%"}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <RidesList rides={rides} loading={loading} />
+            </Box>
+          </Flex>
 
-          {/* Google Form Signup Button */}
-          <GOCButton
-            href={RIDES_GOOGLE_FORM_LINK}
-            buttonProps={{
-              display: { lg: "none" },
-              marginTop: "1rem",
-              width: "8rem",
-            }}
-          >
-            Sign up
-          </GOCButton>
-        </Flex>
-
-        {/* Rides List */}
-        <Box marginTop={"3rem"}>
-          <RidesList rides={rides} loading={loading} />
+          {/* Admin Settings */}
+          {isLoggedIn && (
+            <Box marginTop={"3rem"}>
+              <RidesSettings />
+            </Box>
+          )}
         </Box>
-
-        {/* Admin Settings */}
-        {isLoggedIn && (
-          <Box marginTop={"3rem"}>
-            <RidesSettings />
-          </Box>
-        )}
-      </Box>
-    </Flex>
+      </Flex>
+    </Container>
   );
 };
 
@@ -399,7 +404,13 @@ const RidesList = ({ rides, loading }: RidesProps) => {
   if (loading) return <GOCSpinner />;
 
   return (
-    <Table.Root size="sm" variant="outline" striped stickyHeader>
+    <Table.Root
+      size="sm"
+      maxWidth={"60rem"}
+      variant="outline"
+      striped
+      stickyHeader
+    >
       <Table.Header backgroundColor={"goc.blue"}>
         <Table.Row>
           <Table.ColumnHeader

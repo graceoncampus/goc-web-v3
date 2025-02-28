@@ -51,7 +51,7 @@ const OutlineButton = ({
               xl: "3rem",
             },
           }),
-        transition: "all 0.4s ease",
+        transition: "all 0.3s ease",
       }}
       className="group"
     >

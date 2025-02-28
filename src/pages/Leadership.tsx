@@ -60,7 +60,7 @@ const Profile: React.FC<ProfileProps> = ({ src, alt, name, biography }) => {
 
 const LeadershipBody = () => {
   return (
-    <Container maxWidth={"800px"}>
+    <Container maxWidth={"800px"} padding={0}>
       <Heading as={"h2"} textAlign={"left"} marginBottom={".7rem"}>
         Shepherd
       </Heading>
