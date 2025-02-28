@@ -8,6 +8,7 @@ import { Template } from "@/layouts/Template";
 import { NavbarActiveKey } from "@/components/Navbar";
 import OutlineButton from "@/components/OutlineButton";
 import InfoBox from "@/components/InfoBox";
+import GOCat from "@/components/GOCat";
 import { Box, Heading, Image, Stack, Text, Container } from "@chakra-ui/react";
 import { ContactInfo } from "@/constants/ContactInfo";
 import { SocialMedia, RIDES_GOOGLE_FORM_LINK } from "@/constants/Links";
@@ -89,6 +90,7 @@ const LandingBody = observer(() => {
                 xl: "6xl",
               }}
               lineHeight="1.2"
+              fontWeight={"bold"}
               marginBottom="1rem"
               animation="fadeIn .5s ease-in-out"
               animationDelay="0s"
@@ -99,9 +101,9 @@ const LandingBody = observer(() => {
               Welcome&nbsp;to Grace&nbsp;on&nbsp;Campus!
             </Heading>
             <Text
-              fontSize={{ base: "xs", sm: "sm", md: "md", lg: "lg", xl: "xl" }}
-              textWrap="pretty"
-              marginBottom={{ sm: "0", md: "0", lg: "1rem", xl: "2rem" }}
+              fontSize={{ base: "xs", sm: "md", md: "lg", lg: "xl", xl: "2xl" }}
+              fontWeight={"medium"}
+              marginBottom={{ base: "1rem", xl: "2rem" }}
               animation="fadeIn .5s ease-in-out"
               animationDelay="0.25s"
               opacity="0"
@@ -218,6 +220,7 @@ const LandingBody = observer(() => {
         </Text>
         <OutlineButton href={RIDES_GOOGLE_FORM_LINK}>SIGN UP</OutlineButton>
       </Box>
+      {!isMobile && <GOCat />}
     </Container>
   );
 });

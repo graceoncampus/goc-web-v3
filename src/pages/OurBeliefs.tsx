@@ -1,6 +1,6 @@
 import { BannerTemplate } from "@/layouts/BannerTemplate";
 import { NavbarActiveKey } from "@/components/Navbar";
-import { Box, Heading, Text, VStack, Container } from "@chakra-ui/react";
+import { Box, Heading, Text, VStack, Container, Link } from "@chakra-ui/react";
 
 export const OurBeliefsPage = () => {
   return (
@@ -34,6 +34,23 @@ const SectionHeading: React.FC<SectionHeadingProps> = ({ children }) => {
   );
 };
 
+const VerseLink: React.FC<{ href: string; children: string }> = ({
+  href,
+  children,
+}) => {
+  return (
+    <Link
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      color="goc.blue"
+      display={"inline"}
+    >
+      {children}
+    </Link>
+  );
+};
+
 const OurBeliefsBody = () => {
   return (
     <Container maxWidth="800px">
@@ -49,8 +66,19 @@ const OurBeliefsBody = () => {
             to God’s absolutely holy and just character, He cannot approve of
             evil and declares that the punishment for sin is death and eternity
             spent in hell. However, in His loving kindness and mercy, He
-            provided a way for man to be saved from the punishment of sin!
-            (Romans 3:22-23, Romans 3:10-12, Romans 1:18)
+            provided a way for man to be saved from the punishment of sin! (
+            <VerseLink href="https://www.biblegateway.com/passage/?search=Romans%203%3A22-23&version=ESV">
+              Romans 3:22-23
+            </VerseLink>
+            ,{" "}
+            <VerseLink href="https://www.biblegateway.com/passage/?search=Romans%203%3A10-12&version=ESV">
+              Romans 3:10-12
+            </VerseLink>
+            ,{" "}
+            <VerseLink href="https://www.biblegateway.com/passage/?search=Romans%201%3A18&version=ESV">
+              Romans 1:18
+            </VerseLink>
+            )
           </Text>
         </Box>
 
@@ -68,8 +96,27 @@ const OurBeliefsBody = () => {
             God’s wrath is miraculously satisfied, the punishment is finally
             paid for, and man is fully forgiven of his sin. Three days after His
             crucifixion, Jesus resurrected victoriously from death, securing
-            hope for all who would trust in Him. (John 3:16, 1 Corinthians
-            15:3-5, Romans 5:1, Romans 5:6, Romans 8:1)
+            hope for all who would trust in Him. (
+            <VerseLink href="https://www.biblegateway.com/passage/?search=John%203%3A16&version=ESV">
+              John 3:16
+            </VerseLink>
+            ,{" "}
+            <VerseLink href="https://www.biblegateway.com/passage/?search=1%20Corinthians%2015%3A3-5&version=ESV">
+              1 Corinthians 15:3-5
+            </VerseLink>
+            ,{" "}
+            <VerseLink href="https://www.biblegateway.com/passage/?search=Romans%205%3A1&version=ESV">
+              Romans 5:1
+            </VerseLink>
+            ,{" "}
+            <VerseLink href="https://www.biblegateway.com/passage/?search=Romans%205%3A6&version=ESV">
+              Romans 5:6
+            </VerseLink>
+            ,{" "}
+            <VerseLink href="https://www.biblegateway.com/passage/?search=Romans%208%3A1&version=ESV">
+              Romans 8:1
+            </VerseLink>
+            )
           </Text>
         </Box>
 
@@ -81,8 +128,27 @@ const OurBeliefsBody = () => {
             Spirit transforms a person’s heart and opens his/her eyes to the
             gospel. At the same time, God calls every person to wholeheartedly
             repent from their sin, to believe in and commit his/her life to
-            Jesus Christ. (Romans 10:10-13, John 3:36, John 14:6, Ephesians
-            2:8-9, Romans 1:16)
+            Jesus Christ. (
+            <VerseLink href="https://www.biblegateway.com/passage/?search=Romans%2010%3A10-13&version=ESV">
+              Romans 10:10-13
+            </VerseLink>
+            ,{" "}
+            <VerseLink href="https://www.biblegateway.com/passage/?search=John%203%3A36&version=ESV">
+              John 3:36
+            </VerseLink>
+            ,{" "}
+            <VerseLink href="https://www.biblegateway.com/passage/?search=John%2014%3A6&version=ESV">
+              John 14:6
+            </VerseLink>
+            ,{" "}
+            <VerseLink href="https://www.biblegateway.com/passage/?search=Ephesians%202%3A8-9&version=ESV">
+              Ephesians 2:8-9
+            </VerseLink>
+            ,{" "}
+            <VerseLink href="https://www.biblegateway.com/passage/?search=Romans%201%3A16&version=ESV">
+              Romans 1:16
+            </VerseLink>
+            )
           </Text>
         </Box>
       </VStack>

@@ -339,7 +339,7 @@ const Navbar = ({
           />
         ))}
         <LoginButton />
-        {/* <ColorModeButton /> TODO */}
+        {/* <ColorModeButton /> TODO: Add dark mode toggle button */}
       </Box>
 
       {/* Hamburger Menu */}

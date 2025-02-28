@@ -206,8 +206,6 @@ const EventList = ({ events, loading }: EventListProps) => {
       variant="outline"
       collapsible={true}
       multiple={true}
-      // All events expanded by default
-      defaultValue={events.map((event) => event.id)}
     >
       {events.map((event, index) => (
         <AccordionItem key={index} value={event.id}>

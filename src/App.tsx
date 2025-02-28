@@ -1,23 +1,23 @@
 import React from "react";
-import ScrollToTop from "hooks/ScrollToTop";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Provider } from "provider";
-import { LandingPage } from "pages/Landing";
-import { PrayerFormPage } from "pages/PrayerForm";
-import { SmallGroupsPage } from "pages/SmallGroups";
-import { AboutUsPage } from "pages/AboutUs";
-import { JohnStudyGuidePage } from "pages/JohnStudyGuide";
-import { SermonsPage } from "pages/Sermons";
-import { RidesLandingPage } from "pages/Rides/Rides";
-import { OurBeliefsPage } from "pages/OurBeliefs";
-import { LeadershipPage } from "pages/Leadership";
-import { EventsPage } from "pages/Events";
-import { MinistryTeamsPage } from "pages/MinistryTeams";
-import { LoginPage } from "pages/Login/Login";
-import { ResetPage } from "pages/Login/Reset";
-import { SignupPage } from "pages/Login/Signup";
-import { ProfilePage } from "pages/Profile";
-import { NotFoundPage as UserNotFoundPage } from "pages/NotFound";
+import ScrollToTop from "@/hooks/ScrollToTop";
+import { LandingPage } from "@/pages/Landing";
+import { PrayerFormPage } from "@/pages/PrayerForm";
+import { SmallGroupsPage } from "@/pages/SmallGroups";
+import { AboutUsPage } from "@/pages/AboutUs";
+import { JohnStudyGuidePage } from "@/pages/JohnStudyGuide";
+import { SermonsPage } from "@/pages/Sermons";
+import { RidesLandingPage } from "@/pages/Rides/Rides";
+import { OurBeliefsPage } from "@/pages/OurBeliefs";
+import { LeadershipPage } from "@/pages/Leadership";
+import { EventsPage } from "@/pages/Events";
+import { MinistryTeamsPage } from "@/pages/MinistryTeams";
+import { LoginPage } from "@/pages/Login/Login";
+import { ResetPage } from "@/pages/Login/Reset";
+import { SignupPage } from "@/pages/Login/Signup";
+import { ProfilePage } from "@/pages/Profile";
+import { NotFoundPage } from "@/pages/NotFound";
 
 const App = () => {
   return (
@@ -26,7 +26,7 @@ const App = () => {
         <BrowserRouter>
           <ScrollToTop />
           <Routes>
-            <Route path={"*"} element={<UserNotFoundPage />} /> {/* 404 */}
+            <Route path={"*"} element={<NotFoundPage />} /> {/* 404 */}
             <Route path={"/"} element={<LandingPage />} />
             <Route path={"/about"} element={<AboutUsPage />} />
             <Route path={"/sermons"} element={<SermonsPage />} />
