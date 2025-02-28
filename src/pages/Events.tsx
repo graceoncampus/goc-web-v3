@@ -206,6 +206,7 @@ const EventList = ({ events, loading }: EventListProps) => {
       variant="outline"
       collapsible={true}
       multiple={true}
+      maxWidth={"60rem"}
     >
       {events.map((event, index) => (
         <AccordionItem key={index} value={event.id}>

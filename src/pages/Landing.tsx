@@ -134,9 +134,11 @@ const LandingBody = observer(() => {
       {/* Info cards */}
       <Stack
         direction={{ base: "column", lg: "row" }}
-        maxWidth="100%"
+        maxWidth={"90rem"}
+        marginX={"auto"}
         gap={1}
-        alignItems="center"
+        alignItems={"center"}
+        justifyContent={"center"}
         separator={
           <Box
             height={{ base: "2px", lg: "180px" }}
