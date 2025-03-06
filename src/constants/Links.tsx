@@ -1,3 +1,7 @@
+/**
+ * Static links
+ */
+
 interface SocialMediaProps {
   facebook: string;
   instagram: string;

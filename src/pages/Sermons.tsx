@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/pagination";
 import { InputGroup } from "@/components/ui/input-group";
 import { LuSearch } from "react-icons/lu";
+
 const client = generateClient();
 
 export const SermonsPage = () => {
