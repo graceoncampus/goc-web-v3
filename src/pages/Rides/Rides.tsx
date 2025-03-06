@@ -1,8 +1,4 @@
-// import { JWT } from "google-auth-library";
-// import { GoogleSpreadsheet } from "google-spreadsheet";
-import { CreateCarInput, CreateRideInput, Ride, Car, Rider } from "Api";
-// import { listRides } from "graphql/queries";
-import { createRide, deleteRide } from "graphql/mutations";
+import { Ride, Car, Rider } from "Api";
 import { useForm } from "react-hook-form";
 import { NavbarActiveKey } from "components/Navbar";
 import { post } from "aws-amplify/api";
@@ -65,9 +61,10 @@ const updateRidesClient = async (
       res &&
       typeof res === "object" &&
       "statusCode" in res &&
-      res.statusCode === 500
+      res.statusCode !== 200
     ) {
       const error = res.body;
+      console.log(error);
     } else {
       console.log("Successfully uploaded rides");
     }
@@ -109,18 +106,20 @@ export const RidesLandingPage = () => {
   const [rides, setRides] = useState<Ride[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  const fetchRides = async () => {
+    setLoading(true);
+    try {
+      const result = (await client.graphql({
+        query: listRides,
+      })) as any;
+      setRides(result.data.listRides.items);
+    } catch (error) {
+      console.error("Error fetching rides:", error);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchRides = async () => {
-      try {
-        const result = (await client.graphql({
-          query: listRides,
-        })) as any;
-        setRides(result.data.listRides.items);
-      } catch (error) {
-        console.error("Error fetching rides:", error);
-      }
-      setLoading(false);
-    };
     fetchRides();
   }, []);
 
@@ -131,7 +130,11 @@ export const RidesLandingPage = () => {
       imageSrc="/images/rides2.png"
       alt="Rides page banner"
     >
-      <RidesLandingBody rides={rides} loading={loading} />
+      <RidesLandingBody
+        rides={rides}
+        fetchRides={fetchRides}
+        loading={loading}
+      />
     </BannerTemplate>
   );
 };
@@ -139,9 +142,10 @@ export const RidesLandingPage = () => {
 interface RidesProps {
   rides: Ride[];
   loading: boolean;
+  fetchRides: () => void;
 }
 
-const RidesLandingBody = ({ rides, loading }: RidesProps) => {
+const RidesLandingBody = ({ rides, fetchRides, loading }: RidesProps) => {
   const [riderOpen, setRiderOpen] = useState(false);
   const [driverOpen, setDriverOpen] = useState(false);
 
@@ -160,6 +164,7 @@ const RidesLandingBody = ({ rides, loading }: RidesProps) => {
           toggleDriver={toggleDriver}
           isRiderOpen={riderOpen}
           isDriverOpen={driverOpen}
+          fetchRides={fetchRides}
         />
       </Box>
       <Box flex={7}>
@@ -187,7 +192,7 @@ const RidesLandingBody = ({ rides, loading }: RidesProps) => {
         </Text>
 
         {/* Rides List */}
-        <RidesList rides={rides} loading={loading} />
+        <RidesList rides={rides} fetchRides={fetchRides} loading={loading} />
       </Box>
     </Flex>
   );
@@ -198,6 +203,7 @@ interface RidesMenuSidebarProps {
   toggleDriver: () => void;
   isRiderOpen: boolean;
   isDriverOpen: boolean;
+  fetchRides: () => void;
 }
 
 const RidesMenuSidebar = ({
@@ -205,6 +211,7 @@ const RidesMenuSidebar = ({
   toggleDriver,
   isRiderOpen,
   isDriverOpen,
+  fetchRides,
 }: RidesMenuSidebarProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -228,7 +235,7 @@ const RidesMenuSidebar = ({
       boxShadow="md"
     >
       {isLoggedIn ? (
-        <RidesSettings />
+        <RidesSettings fetchRides={fetchRides} />
       ) : (
         <VStack gap={0} textAlign="center" color="white" marginBottom="1rem">
           <Heading
@@ -366,12 +373,22 @@ const RidesList = ({ rides, loading }: RidesProps) => {
   );
 };
 
-const RidesSettings = () => {
+interface RidesSettingsProps {
+  fetchRides: () => void;
+}
+
+interface FormData {
+  url: string;
+  date: string;
+  emailMsg?: string;
+}
+
+const RidesSettings = ({ fetchRides }: RidesSettingsProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<FormData>({
     defaultValues: {
       url: "",
       date: "",
@@ -379,9 +396,14 @@ const RidesSettings = () => {
     },
   });
 
-  const onSubmit = async (data: any) => {
+  const [uploadingRides, setUploadingRides] = useState<boolean>(false);
+
+  const onSubmit = async (data: FormData) => {
     const { url, date, emailMsg } = data;
+    setUploadingRides(true);
     await updateRidesClient(url, date, emailMsg);
+    setUploadingRides(false);
+    fetchRides();
   };
 
   return (
@@ -434,7 +456,7 @@ const RidesSettings = () => {
             fontWeight="bold"
             marginTop="1rem"
             loadingText="Uploading"
-            // loading={uploadingRides}
+            loading={uploadingRides}
           >
             Upload Rides
           </Button>
