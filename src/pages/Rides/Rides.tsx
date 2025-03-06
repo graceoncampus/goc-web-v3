@@ -1,4 +1,5 @@
 import { Ride, Car, Rider } from "Api";
+import { toaster } from "@/components/ui/toaster";
 import { useForm } from "react-hook-form";
 import { NavbarActiveKey } from "components/Navbar";
 import { post } from "aws-amplify/api";
@@ -65,11 +66,27 @@ const updateRidesClient = async (
     ) {
       const error = res.body;
       console.log(error);
+      toaster.create({
+        title: "Spreadsheet error: " + String(error),
+        type: "error",
+      });
+      return false;
     } else {
       console.log("Successfully uploaded rides");
+      toaster.create({
+        title: "Success",
+        type: "success",
+      });
+      return true;
     }
   } catch (e: any) {
+    toaster.create({
+      title:
+        "Failed to update rides. Failed to call lambda function. Please contact the developers",
+      type: "error",
+    });
     console.log("POST call failed: ", JSON.parse(e.response.body));
+    return false;
   }
 };
 
@@ -401,9 +418,9 @@ const RidesSettings = ({ fetchRides }: RidesSettingsProps) => {
   const onSubmit = async (data: FormData) => {
     const { url, date, emailMsg } = data;
     setUploadingRides(true);
-    await updateRidesClient(url, date, emailMsg);
+    const status = await updateRidesClient(url, date, emailMsg);
     setUploadingRides(false);
-    fetchRides();
+    if (status) fetchRides();
   };
 
   return (
