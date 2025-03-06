@@ -417,16 +417,16 @@ const RidesList = ({ rides, loading }: RidesProps) => {
             color={"white"}
             padding={{ base: ".5rem", md: ".75rem" }}
           >
-            <Text fontSize={"sm"}>Driver</Text>
+            <Text fontSize={{ base: "sm", xl: "md" }}>Driver</Text>
           </Table.ColumnHeader>
-          <Table.ColumnHeader color={"white"}>
-            <Text fontSize={"sm"}>Rider(s)</Text>
+          <Table.ColumnHeader color={"white"} paddingX={0}>
+            <Text fontSize={{ base: "sm", xl: "md" }}>Rider(s)</Text>
           </Table.ColumnHeader>
           <Table.ColumnHeader
             color={"white"}
             display={{ base: "none", md: "table-cell" }}
           >
-            <Text fontSize={"sm"}>Comments</Text>
+            <Text fontSize={{ base: "sm", xl: "md" }}>Comments</Text>
           </Table.ColumnHeader>
         </Table.Row>
       </Table.Header>
@@ -436,16 +436,25 @@ const RidesList = ({ rides, loading }: RidesProps) => {
             if (!car) return null;
             return (
               <Table.Row key={`${rideIndex}-${carIndex}`}>
-                <Table.Cell verticalAlign={"top"} paddingY={"1rem"}>
-                  <Text fontSize={"sm"}>{car.driver_name}</Text>
+                <Table.Cell verticalAlign={"top"} padding={"1rem"}>
+                  <Text fontSize={{ base: "sm", xl: "md" }}>
+                    {car.driver_name}
+                  </Text>
                 </Table.Cell>
-                <Table.Cell verticalAlign={"top"} paddingY={"1rem"}>
+                <Table.Cell
+                  verticalAlign={"top"}
+                  paddingY={"1rem"}
+                  paddingX={0}
+                >
                   {car.riders && car.riders.length > 0 ? (
                     <VStack align="start" gap={0}>
                       {car.riders.map(
                         (rider: Rider | null, riderIndex: number) =>
                           rider ? (
-                            <Text key={riderIndex} fontSize="sm">
+                            <Text
+                              key={riderIndex}
+                              fontSize={{ base: "sm", xl: "md" }}
+                            >
                               {rider.name} {rider.staying ? "(staying)" : ""}
                             </Text>
                           ) : null,
@@ -460,7 +469,7 @@ const RidesList = ({ rides, loading }: RidesProps) => {
                   paddingY={"1rem"}
                   display={{ base: "none", md: "table-cell" }}
                 >
-                  <Text fontSize="sm">
+                  <Text fontSize={{ base: "sm", xl: "md" }}>
                     {car.driver?.comment || "No comments"}
                   </Text>
                 </Table.Cell>

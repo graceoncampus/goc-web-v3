@@ -66,7 +66,6 @@ const config = defineConfig({
     },
     tokens: {
       colors: {
-        black: { value: "#000000" },
         goc: {
           pale_blue: { value: "#E6F0FF" },
           bright_blue: { value: "#5A86D9" },
