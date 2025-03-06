@@ -13,31 +13,10 @@ import {
   AspectRatio,
   Badge,
 } from "@chakra-ui/react";
+import { MinistryTeamsInfo, MinistryTeam } from "@/constants/MinistryTeamsInfo";
 import { IoInformationCircle } from "react-icons/io5";
 
-const mockTeams: MinistryTeam[] = [
-  {
-    title: "Welcome and Follow Up Team",
-    description:
-      "Welcome and Follow Up is an outreach ministry team that exists to obey the call of Romans 15:7 to “welcome one another as Christ has welcomed you, for the glory of God”. We serve on Fridays during large group and have biweekly meetings every even Monday. Our ministry team seeks to encourage our members to grow a greater love for the church body and for nonbelievers through the means of outreach.",
-    leaders: "Shawn Zhuang",
-    contact: "redacted@x.com, (XXX) XXX-XXXX",
-  },
-  {
-    title: "Music Team",
-    description:
-      "Welcome and Follow Up is an outreach ministry team that exists to obey the call of Romans 15:7 to “welcome one another as Christ has welcomed you, for the glory of God”. We serve on Fridays during large group and have biweekly meetings every even Monday. Our ministry team seeks to encourage our members to grow a greater love for the church body and for nonbelievers through the means of outreach.",
-    leaders: "Shawn Zhuang",
-    contact: "redacted@x.com, (XXX) XXX-XXXX",
-  },
-  {
-    title: "Sound Team",
-    description:
-      "Welcome and Follow Up is an outreach ministry team that exists to obey the call of Romans 15:7 to “welcome one another as Christ has welcomed you, for the glory of God”. We serve on Fridays during large group and have biweekly meetings every even Monday. Our ministry team seeks to encourage our members to grow a greater love for the church body and for nonbelievers through the means of outreach.",
-    leaders: "Shawn Zhuang",
-    contact: "redacted@x.com, (XXX) XXX-XXXX",
-  },
-];
+const MinistryTeams: MinistryTeam[] = MinistryTeamsInfo;
 
 export const MinistryTeamsPage: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -62,17 +41,10 @@ export const MinistryTeamsPage: React.FC = () => {
       imageSrc="/images/landing3.jpg"
       alt="Ministry Teams page banner"
     >
-      <TeamsBody MinistryTeams={mockTeams} isUserLoggedIn={isLoggedIn} />
+      <TeamsBody MinistryTeams={MinistryTeams} isUserLoggedIn={isLoggedIn} />
     </BannerTemplate>
   );
 };
-
-interface MinistryTeam {
-  title: string;
-  description: string;
-  leaders: string;
-  contact: string;
-}
 
 function slugify(text: string): string {
   return text
@@ -116,17 +88,17 @@ const TeamsBody: React.FC<{
 }> = ({ MinistryTeams, isUserLoggedIn }) => {
   return (
     <Container fluid maxWidth="800px" padding={0} textAlign="left">
-      <VStack gap={"2.5rem"} margin={"auto"}>
+      <VStack gap={"4rem"} margin={"auto"}>
         <Section heading="List of Ministry Teams">
           <List.Root paddingX={"1rem"}>
             {MinistryTeams.map((MinistryTeam) => (
-              <List.Item>
+              <List.Item key={slugify(MinistryTeam.title)}>
                 <Link href={`#${slugify(MinistryTeam.title)}`} color="goc.blue">
                   <Text>{MinistryTeam.title}</Text>
                 </Link>
               </List.Item>
             ))}
-            <List.Item>
+            <List.Item key="video-resources">
               <Link href={`#video-resources`} color="goc.blue">
                 <Text>Video Resources</Text>
               </Link>
@@ -136,6 +108,7 @@ const TeamsBody: React.FC<{
 
         {MinistryTeams.map((MinistryTeam) => (
           <Section
+            key={slugify(MinistryTeam.title)}
             id={slugify(MinistryTeam.title)}
             heading={MinistryTeam.title}
           >
@@ -150,15 +123,14 @@ const TeamsBody: React.FC<{
                 marginBottom="1"
                 fontSize={{ base: "sm", md: "md", xl: "lg" }}
               >
-                <strong>Leader(s):</strong> {MinistryTeam.leaders} <br />
-                <strong>Contact:</strong> {MinistryTeam.contact}
+                Leader(s): {MinistryTeam.leaders} <br />
               </Text>
             ) : (
-              <Text fontSize={"sm"} fontStyle={"italic"}>
+              <Text fontSize={{ base: "xs", md: "sm" }} fontStyle={"italic"}>
                 <Link fontWeight={"semibold"} href="/login">
                   Log in
                 </Link>{" "}
-                to view the leader and contact information.
+                to view the leader(s) of this ministry team.
               </Text>
             )}
           </Section>
