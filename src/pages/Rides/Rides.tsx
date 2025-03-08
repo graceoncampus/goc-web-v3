@@ -22,9 +22,13 @@ import {
   Collapsible,
   Table,
   Spinner,
+  Container,
 } from "@chakra-ui/react";
 import { Field } from "components/ui/field";
 import { FaCarSide } from "react-icons/fa";
+import GOCButton from "@/components/GOCButton";
+import { RIDES_GOOGLE_FORM_LINK } from "@/constants/Links";
+import { FaArrowTurnDown } from "react-icons/fa6";
 
 const client = generateClient();
 
@@ -165,53 +169,192 @@ interface RidesProps {
 const RidesLandingBody = ({ rides, fetchRides, loading }: RidesProps) => {
   const [riderOpen, setRiderOpen] = useState(false);
   const [driverOpen, setDriverOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.style.scrollBehavior = "smooth";
+    const checkAuth = async () => {
+      await checkIsLoggedIn(setIsLoggedIn);
+    };
+    checkAuth();
+
+    return () => {
+      document.documentElement.style.scrollBehavior = "";
+    };
+  }, []);
 
   const toggleRider = useCallback(() => setRiderOpen((prev) => !prev), []);
   const toggleDriver = useCallback(() => setDriverOpen((prev) => !prev), []);
 
   return (
-    <Flex direction={{ base: "column", md: "row" }}>
-      <Box
-        flex={3}
-        marginRight={{ base: "0", md: "2rem" }}
-        marginBottom={{ base: "2.5rem", md: "0" }}
-      >
-        <RidesMenuSidebar
-          toggleRider={toggleRider}
-          toggleDriver={toggleDriver}
-          isRiderOpen={riderOpen}
-          isDriverOpen={driverOpen}
-          fetchRides={fetchRides}
-        />
-      </Box>
-      <Box flex={7}>
-        {/* Rider Signup Form */}
-        <Collapsible.Root lazyMount unmountOnExit open={riderOpen}>
-          <Collapsible.Content paddingBottom="2rem" marginBottom="2.5rem">
-            <RiderSignup />
-          </Collapsible.Content>
-        </Collapsible.Root>
+    <Container fluid maxWidth={"90rem"} padding={0}>
+      <Flex direction={{ base: "column", lg: "row" }}>
+        <Box
+          flex={3}
+          maxWidth={"25rem"}
+          display={{ base: "none", lg: "block" }}
+          marginRight={{ base: "0", lg: "2rem" }}
+          marginBottom={{ base: "2.5rem", lg: "0" }}
+        >
+          <RidesMenuSidebar
+            toggleRider={toggleRider}
+            toggleDriver={toggleDriver}
+            isRiderOpen={riderOpen}
+            isDriverOpen={driverOpen}
+            isLoggedIn={isLoggedIn}
+            fetchRides={fetchRides}
+          />
+        </Box>
+        <Box flex={7}>
+          {/* Rider Signup Form */}
+          <Collapsible.Root lazyMount unmountOnExit open={riderOpen}>
+            <Collapsible.Content
+              id="rider-signup"
+              scrollMarginTop="6rem"
+              paddingBottom="2rem"
+              marginBottom="2.5rem"
+            >
+              <RiderSignup />
+            </Collapsible.Content>
+          </Collapsible.Root>
 
-        {/* Driver Signup Form */}
-        <Collapsible.Root lazyMount unmountOnExit open={driverOpen}>
-          <Collapsible.Content paddingBottom="2rem" marginBottom="2.5rem">
-            <DriverSignup />
-          </Collapsible.Content>
-        </Collapsible.Root>
+          {/* Driver Signup Form */}
+          <Collapsible.Root lazyMount unmountOnExit open={driverOpen}>
+            <Collapsible.Content
+              id="driver-signup"
+              scrollMarginTop="6rem"
+              paddingBottom="2rem"
+              marginBottom="2.5rem"
+            >
+              <DriverSignup />
+            </Collapsible.Content>
+          </Collapsible.Root>
 
-        {/* Heading */}
-        <Heading as="h2" display="inline-flex" gap="1rem">
-          Check your rides for this week! <FaCarSide />
-        </Heading>
-        <Text marginBottom="1.5rem" marginRight={{ base: "0", md: "3rem" }}>
-          As a ministry of Grace Community Church, we provide rides to and from
-          our church every Sunday.
-        </Text>
+          {/* Heading */}
+          <Flex direction="column" width="100%" alignItems={"center"}>
+            <Heading
+              as="h2"
+              fontSize={"3xl"}
+              lineHeight={{ base: "1.5", lg: "3rem", xl: "4rem" }}
+              textAlign={{ base: "center", lg: "left" }}
+              textWrap="balance"
+            >
+              Check your rides for this{" "}
+              <span
+                style={{
+                  whiteSpace: "nowrap",
+                  display: "inline-flex",
+                  alignItems: "center",
+                }}
+              >
+                week!{" "}
+                <FaCarSide
+                  style={{ marginLeft: "0.5rem", verticalAlign: "middle" }}
+                />
+              </span>
+            </Heading>
+            <Text
+              display={{ base: "none", md: "block" }}
+              fontSize={{ base: "sm", lg: "md", xl: "lg" }}
+              textAlign={"center"}
+              textWrap={"balance"}
+            >
+              As a ministry of Grace Community Church, we provide rides to and
+              from our church every Sunday.
+            </Text>
 
-        {/* Rides List */}
-        <RidesList rides={rides} fetchRides={fetchRides} loading={loading} />
-      </Box>
-    </Flex>
+            {/* Google Form Signup Button */}
+            <GOCButton
+              href={RIDES_GOOGLE_FORM_LINK}
+              buttonProps={{
+                display: { lg: "none" },
+                marginTop: "1rem",
+                width: "8rem",
+              }}
+            >
+              Sign up
+            </GOCButton>
+            {/* Rides List */}
+            <Box
+              marginTop={"3rem"}
+              width={"100%"}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <RidesList
+                rides={rides}
+                fetchRides={fetchRides}
+                loading={loading}
+              />
+            </Box>
+          </Flex>
+
+          {/* Admin Settings */}
+          {isLoggedIn && (
+            <Box marginTop={"3rem"}>
+              <RidesSettings fetchRides={fetchRides} />
+            </Box>
+          )}
+        </Box>
+      </Flex>
+    </Container>
+  );
+};
+
+interface SignUpButtonProps {
+  children: React.ReactNode;
+  isRiderOpen?: boolean;
+  onClick?: () => void;
+}
+
+const SignUpButton = ({
+  children,
+  isRiderOpen,
+  onClick,
+}: SignUpButtonProps) => {
+  return onClick ? (
+    <Button
+      width="10rem"
+      height="3rem"
+      variant="solid"
+      outline="none"
+      color="black"
+      fontSize=".875rem"
+      fontWeight="semibold"
+      boxShadow="none"
+      border="none"
+      marginTop="1.5rem"
+      borderRadius=".8rem"
+      backgroundColor={isRiderOpen ? "goc.pale_orange" : "goc.pale_blue"}
+      _hover={{
+        transform: "scale(0.99)",
+      }}
+      onClick={onClick}
+    >
+      {children}
+    </Button>
+  ) : (
+    <Button
+      asChild
+      width="10rem"
+      height="3rem"
+      variant="solid"
+      outline="none"
+      color="black"
+      fontSize=".875rem"
+      fontWeight="semibold"
+      boxShadow="none"
+      border="none"
+      marginTop="1.5rem"
+      borderRadius=".8rem"
+      backgroundColor="goc.pale_blue"
+      _hover={{
+        transform: "scale(0.99)",
+      }}
+    >
+      {children}
+    </Button>
   );
 };
 
@@ -220,6 +363,7 @@ interface RidesMenuSidebarProps {
   toggleDriver: () => void;
   isRiderOpen: boolean;
   isDriverOpen: boolean;
+  isLoggedIn: boolean;
   fetchRides: () => void;
 }
 
@@ -228,87 +372,63 @@ const RidesMenuSidebar = ({
   toggleDriver,
   isRiderOpen,
   isDriverOpen,
+  isLoggedIn,
   fetchRides,
 }: RidesMenuSidebarProps) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      await checkIsLoggedIn(setIsLoggedIn);
-    };
-    checkAuth();
-  }, []);
-
   return (
     <Box
-      position={{ base: "block", md: "sticky" }}
-      top={{ base: "0", md: "6rem" }}
+      position={{ base: "block", lg: "sticky" }}
+      top={{ base: "0", lg: "6rem" }}
       width="100%"
       zIndex="5"
       paddingX="1.5rem"
       paddingY="1.8rem"
       backgroundColor="goc.blue"
-      borderRadius="1rem"
+      borderRadius={{ base: "0", lg: "1rem" }}
       boxShadow="md"
     >
+      <VStack gap={0} textAlign="center" color="white" marginBottom="1rem">
+        <Heading
+          as="h2"
+          fontSize={{ base: "xl", lg: "2xl" }}
+          marginBottom={{ base: 0, lg: ".5rem" }}
+        >
+          Need a ride?
+        </Heading>
+        <Text fontSize={{ base: "sm", xl: "lg" }} textWrap="nowrap">
+          We've got you covered!
+        </Text>
+
+        {/* Google Form Signup Button */}
+        <SignUpButton>
+          <Link href={RIDES_GOOGLE_FORM_LINK} target="_blank">
+            Sign up
+          </Link>
+        </SignUpButton>
+
+        {/* Ride Signup Button */}
+        {/* <SignUpButton isRiderOpen={isRiderOpen} onClick={toggleRider}>
+          I need a ride
+        </SignUpButton> */}
+
+        {/* Driver Signup Button */}
+        {/* <SignUpButton isRiderOpen={isDriverOpen} onClick={toggleDriver}>
+          I can drive
+        </SignUpButton> */}
+      </VStack>
       {isLoggedIn ? (
-        <RidesSettings fetchRides={fetchRides} />
+        <Text
+          fontSize={{ base: "xs", lg: "sm" }}
+          textAlign="center"
+          color="white"
+          marginTop="1.5rem"
+          textWrap="nowrap"
+        >
+          <Link href="#admin-settings" color="white" fontWeight="semibold">
+            Admin Settings <FaArrowTurnDown />
+          </Link>
+        </Text>
       ) : (
-        <VStack gap={0} textAlign="center" color="white" marginBottom="1rem">
-          <Heading
-            as="h2"
-            fontSize={{ base: "xl", xl: "2xl" }}
-            marginBottom={{ base: 0, xl: ".5rem" }}
-          >
-            Need a ride?
-          </Heading>
-          <Text fontSize={{ base: "sm", xl: "lg" }} textWrap="nowrap">
-            We've got you covered!
-          </Text>
-
-          {/* Ride Signup Button */}
-          <Button
-            width="10rem"
-            height="3rem"
-            variant="solid"
-            outline="none"
-            color="black"
-            fontSize=".875rem"
-            fontWeight="semibold"
-            boxShadow="none"
-            border="none"
-            marginTop="1.5rem"
-            borderRadius=".8rem"
-            backgroundColor={isRiderOpen ? "goc.pale_orange" : "goc.pale_blue"}
-            _hover={{ transform: "scale(0.99)" }}
-            onClick={toggleRider}
-          >
-            I need a ride
-          </Button>
-
-          {/* Driver Signup Button */}
-          <Button
-            width="10rem"
-            height="3rem"
-            variant="solid"
-            outline="none"
-            color="black"
-            fontSize=".875rem"
-            fontWeight="semibold"
-            boxShadow="none"
-            border="none"
-            marginTop="1.5rem"
-            borderRadius=".8rem"
-            backgroundColor={isDriverOpen ? "goc.pale_orange" : "goc.pale_blue"}
-            _hover={{ transform: "scale(0.99)" }}
-            onClick={toggleDriver}
-          >
-            I can drive
-          </Button>
-        </VStack>
-      )}
-
-      {!isLoggedIn && (
         <Text
           fontSize={{ base: "2xs", xl: "sm" }}
           textAlign="center"
@@ -316,7 +436,7 @@ const RidesMenuSidebar = ({
           marginTop="1.5rem"
           textWrap="nowrap"
         >
-          <Link href="/login" color="white" fontWeight="bold">
+          <Link href="/login" color="white" fontWeight="semibold">
             Login
           </Link>{" "}
           to access admin settings
@@ -336,7 +456,13 @@ const RidesList = ({ rides, loading }: RidesProps) => {
     );
 
   return (
-    <Table.Root size="sm" variant="outline" striped stickyHeader>
+    <Table.Root
+      size="sm"
+      maxWidth={"60rem"}
+      variant="outline"
+      striped
+      stickyHeader
+    >
       <Table.Header backgroundColor={"goc.blue"}>
         <Table.Row>
           <Table.ColumnHeader color={"white"} padding={".75rem"}>
@@ -425,25 +551,26 @@ const RidesSettings = ({ fetchRides }: RidesSettingsProps) => {
 
   return (
     <Box
+      id="admin-settings"
+      scrollMarginTop={"6rem"}
       display="flex"
       flexDirection="column"
       justifyContent="center"
       alignItems="center"
     >
-      <Heading as="h2" textAlign="center" color="white">
-        Admin Settings
-      </Heading>
-
       <Box
         as="form"
         onSubmit={handleSubmit(onSubmit)}
         padding="1.5rem"
-        border="1px solid #ccc"
+        border={"3px solid {colors.goc.blue}"}
         borderRadius="8px"
         backgroundColor="white"
         boxShadow="lg"
         width="100%"
       >
+        <Heading as="h2" textAlign="center">
+          Admin Settings
+        </Heading>
         <VStack gap="1rem">
           {/* Spreadsheet URL */}
           <Field label="Spreadsheet URL" invalid={!!errors.url} required>
