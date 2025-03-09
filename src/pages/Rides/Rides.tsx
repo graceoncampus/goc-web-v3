@@ -274,7 +274,7 @@ const RidesLandingBody = ({
             </GOCButton>
             {/* Admin Settings */}
             {isLoggedIn && (
-              <Box marginTop={"3rem"} width={"60%"}>
+              <Box marginTop={"3rem"} width={{ base: "100%", md: "60%" }}>
                 <RidesSettings fetchRides={fetchRides} />
               </Box>
             )}
