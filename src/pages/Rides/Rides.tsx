@@ -1,15 +1,8 @@
-import { Ride, Car, Rider } from "Api";
-import { toaster } from "@/components/ui/toaster";
-import { useForm } from "react-hook-form";
-import { NavbarActiveKey } from "components/Navbar";
-import { post } from "aws-amplify/api";
-import { generateClient } from "aws-amplify/api";
 import { useEffect, useState, useCallback } from "react";
-import { BannerTemplate } from "layouts/BannerTemplate";
-import RiderSignup from "components/RiderSignup/RiderSignup";
-import DriverSignup from "components/DriverSignup/DriverSignup";
-import { checkIsLoggedIn } from "auth/CheckLogin";
-
+import { Ride, Car, Rider } from "Api";
+import { post, generateClient } from "aws-amplify/api";
+import { checkIsLoggedIn } from "@/auth/CheckLogin";
+import { useForm } from "react-hook-form";
 import {
   Box,
   Button,
@@ -21,39 +14,46 @@ import {
   VStack,
   Collapsible,
   Table,
-  Spinner,
   Container,
 } from "@chakra-ui/react";
-import { Field } from "components/ui/field";
-import { FaCarSide } from "react-icons/fa";
+import { BannerTemplate } from "@/layouts/BannerTemplate";
+import { toaster } from "@/components/ui/toaster";
+import { NavbarActiveKey } from "@/components/Navbar";
+import { Field } from "@/components/ui/field";
+import RiderSignup from "@/components/RiderSignup/RiderSignup";
+import DriverSignup from "@/components/DriverSignup/DriverSignup";
+import GOCSpinner from "@/components/GOCSpinner";
 import GOCButton from "@/components/GOCButton";
-import { RIDES_GOOGLE_FORM_LINK } from "@/constants/Links";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
+import { FaCarSide } from "react-icons/fa";
 import { FaArrowTurnDown } from "react-icons/fa6";
+import { RIDES_GOOGLE_FORM_LINK } from "@/constants/Links";
 
 const client = generateClient();
 
 /**
- * New client-side function to call your backend API.
+ * Client-side function to update rides.
  * This function sends the spreadsheet URL, date, and email message
  * to an endpoint that performs the rides update logic.
  */
+interface UpdateRidesResult {
+  success: boolean;
+  errorMessage?: string;
+}
+
 const updateRidesClient = async (
   url: string,
   date: string,
   emailMsg?: string,
-) => {
+): Promise<UpdateRidesResult> => {
   try {
-    const body = {
-      url: url,
-      date: date,
-      emailMsg: emailMsg || "", // Optional field
-    };
+    const body = { url, date, emailMsg: emailMsg || "" };
 
     const restOperation = post({
       apiName: "updateRides",
       path: "/",
       options: {
-        body: body,
+        body,
         headers: {
           "Content-Type": "application/json",
         },
@@ -62,6 +62,7 @@ const updateRidesClient = async (
 
     const response = await restOperation.response;
     const res = await response.body.json();
+
     if (
       res &&
       typeof res === "object" &&
@@ -69,28 +70,16 @@ const updateRidesClient = async (
       res.statusCode !== 200
     ) {
       const error = res.body;
-      console.log(error);
-      toaster.create({
-        title: "Spreadsheet error: " + String(error),
-        type: "error",
-      });
-      return false;
+      console.error("Error updating rides:", error);
+      return { success: false, errorMessage: String(error) };
     } else {
       console.log("Successfully uploaded rides");
-      toaster.create({
-        title: "Success",
-        type: "success",
-      });
-      return true;
+      return { success: true };
     }
-  } catch (e: any) {
-    toaster.create({
-      title:
-        "Failed to update rides. Failed to call lambda function. Please contact the developers",
-      type: "error",
-    });
-    console.log("POST call failed: ", JSON.parse(e.response.body));
-    return false;
+  } catch (error: any) {
+    console.error("POST call failed: ", error);
+    let errorMessage = "POST call failed.";
+    return { success: false, errorMessage };
   }
 };
 
@@ -135,6 +124,11 @@ export const RidesLandingPage = () => {
       })) as any;
       setRides(result.data.listRides.items);
     } catch (error) {
+      toaster.create({
+        title: "Error",
+        description: "Failed to fetch rides.",
+        type: "error",
+      });
       console.error("Error fetching rides:", error);
     }
     setLoading(false);
@@ -151,10 +145,11 @@ export const RidesLandingPage = () => {
       imageSrc="/images/rides2.png"
       alt="Rides page banner"
     >
+      <ScrollToTopButton />
       <RidesLandingBody
         rides={rides}
-        fetchRides={fetchRides}
         loading={loading}
+        fetchRides={fetchRides}
       />
     </BannerTemplate>
   );
@@ -163,10 +158,14 @@ export const RidesLandingPage = () => {
 interface RidesProps {
   rides: Ride[];
   loading: boolean;
-  fetchRides: () => void;
+  fetchRides?: () => void;
 }
 
-const RidesLandingBody = ({ rides, fetchRides, loading }: RidesProps) => {
+const RidesLandingBody = ({
+  rides,
+  loading,
+  fetchRides = () => {},
+}: RidesProps) => {
   const [riderOpen, setRiderOpen] = useState(false);
   const [driverOpen, setDriverOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -202,7 +201,6 @@ const RidesLandingBody = ({ rides, fetchRides, loading }: RidesProps) => {
             isRiderOpen={riderOpen}
             isDriverOpen={driverOpen}
             isLoggedIn={isLoggedIn}
-            fetchRides={fetchRides}
           />
         </Box>
         <Box flex={7}>
@@ -282,11 +280,7 @@ const RidesLandingBody = ({ rides, fetchRides, loading }: RidesProps) => {
               justifyContent="center"
               alignItems="center"
             >
-              <RidesList
-                rides={rides}
-                fetchRides={fetchRides}
-                loading={loading}
-              />
+              <RidesList rides={rides} loading={loading} />
             </Box>
           </Flex>
 
@@ -364,7 +358,6 @@ interface RidesMenuSidebarProps {
   isRiderOpen: boolean;
   isDriverOpen: boolean;
   isLoggedIn: boolean;
-  fetchRides: () => void;
 }
 
 const RidesMenuSidebar = ({
@@ -373,7 +366,6 @@ const RidesMenuSidebar = ({
   isRiderOpen,
   isDriverOpen,
   isLoggedIn,
-  fetchRides,
 }: RidesMenuSidebarProps) => {
   return (
     <Box
@@ -447,13 +439,7 @@ const RidesMenuSidebar = ({
 };
 
 const RidesList = ({ rides, loading }: RidesProps) => {
-  if (loading)
-    return (
-      <VStack marginTop="3rem">
-        <Spinner color="goc.blue" animationDuration="0.8s" borderWidth="3px" />
-        <Text color="goc.blue">Loading...</Text>
-      </VStack>
-    );
+  if (loading) return <GOCSpinner text="Loading rides..." />;
 
   return (
     <Table.Root
@@ -471,7 +457,10 @@ const RidesList = ({ rides, loading }: RidesProps) => {
           <Table.ColumnHeader color={"white"}>
             <Text fontSize={"sm"}>Rider(s)</Text>
           </Table.ColumnHeader>
-          <Table.ColumnHeader color={"white"}>
+          <Table.ColumnHeader
+            color={"white"}
+            display={{ base: "none", md: "table-cell" }}
+          >
             <Text fontSize={"sm"}>Comments</Text>
           </Table.ColumnHeader>
         </Table.Row>
@@ -502,7 +491,11 @@ const RidesList = ({ rides, loading }: RidesProps) => {
                     "No riders"
                   )}
                 </Table.Cell>
-                <Table.Cell verticalAlign={"top"} paddingY={"1rem"}>
+                <Table.Cell
+                  verticalAlign={"top"}
+                  paddingY={"1rem"}
+                  display={{ base: "none", md: "table-cell" }}
+                >
                   <Text fontSize="sm">
                     {car.driver?.comment || "No comments"}
                   </Text>
@@ -544,9 +537,32 @@ const RidesSettings = ({ fetchRides }: RidesSettingsProps) => {
   const onSubmit = async (data: FormData) => {
     const { url, date, emailMsg } = data;
     setUploadingRides(true);
-    const status = await updateRidesClient(url, date, emailMsg);
-    setUploadingRides(false);
-    if (status) fetchRides();
+    try {
+      const result = await updateRidesClient(url, date, emailMsg);
+      if (result.success) {
+        toaster.create({
+          title: "Success",
+          description: "Successfully uploaded rides!",
+          type: "success",
+        });
+        fetchRides();
+      } else {
+        toaster.create({
+          title: "Failed to update rides",
+          description: result.errorMessage + " Please contact web team.",
+          type: "error",
+        });
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      toaster.create({
+        title: "Unexpected error",
+        description: "Please contact web team.",
+        type: "error",
+      });
+    } finally {
+      setUploadingRides(false);
+    }
   };
 
   return (
