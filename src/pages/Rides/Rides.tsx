@@ -26,7 +26,7 @@ import GOCSpinner from "@/components/GOCSpinner";
 import GOCButton from "@/components/GOCButton";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import { FaCarSide } from "react-icons/fa";
-import { FaArrowTurnDown } from "react-icons/fa6";
+import { LuUpload } from "react-icons/lu";
 import { RIDES_GOOGLE_FORM_LINK } from "@/constants/Links";
 
 const client = generateClient();
@@ -272,6 +272,12 @@ const RidesLandingBody = ({
             >
               Sign up
             </GOCButton>
+            {/* Admin Settings */}
+            {isLoggedIn && (
+              <Box marginTop={"3rem"} width={"60%"}>
+                <RidesSettings fetchRides={fetchRides} />
+              </Box>
+            )}
             {/* Rides List */}
             <Box
               marginTop={"3rem"}
@@ -283,13 +289,6 @@ const RidesLandingBody = ({
               <RidesList rides={rides} loading={loading} />
             </Box>
           </Flex>
-
-          {/* Admin Settings */}
-          {isLoggedIn && (
-            <Box marginTop={"3rem"}>
-              <RidesSettings fetchRides={fetchRides} />
-            </Box>
-          )}
         </Box>
       </Flex>
     </Container>
@@ -417,7 +416,7 @@ const RidesMenuSidebar = ({
           textWrap="nowrap"
         >
           <Link href="#admin-settings" color="white" fontWeight="semibold">
-            Admin Settings <FaArrowTurnDown />
+            Admin Settings <LuUpload />
           </Link>
         </Text>
       ) : (
@@ -584,7 +583,7 @@ const RidesSettings = ({ fetchRides }: RidesSettingsProps) => {
         boxShadow="lg"
         width="100%"
       >
-        <Heading as="h2" textAlign="center">
+        <Heading as="h2" textAlign="center" marginBottom={"2rem"}>
           Admin Settings
         </Heading>
         <VStack gap="1rem">
