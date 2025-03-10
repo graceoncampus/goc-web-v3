@@ -1,16 +1,8 @@
-// import { JWT } from "google-auth-library";
-// import { GoogleSpreadsheet } from "google-spreadsheet";
-// import { listRides } from "graphql/queries";
-import { CreateCarInput, CreateRideInput, Ride, Car, Rider } from "Api";
-import { createRide, deleteRide } from "graphql/mutations";
 import { useEffect, useState, useCallback } from "react";
-import { useForm } from "react-hook-form";
-import { generateClient } from "aws-amplify/api";
-import { NavbarActiveKey } from "@/components/Navbar";
-import { BannerTemplate } from "@/layouts/BannerTemplate";
-import RiderSignup from "@/components/RiderSignup/RiderSignup";
-import DriverSignup from "@/components/DriverSignup/DriverSignup";
+import { Ride, Car, Rider } from "Api";
+import { post, generateClient } from "aws-amplify/api";
 import { checkIsLoggedIn } from "@/auth/CheckLogin";
+import { useForm } from "react-hook-form";
 import {
   Box,
   Button,
@@ -24,40 +16,70 @@ import {
   Table,
   Container,
 } from "@chakra-ui/react";
+import { BannerTemplate } from "@/layouts/BannerTemplate";
+import { toaster } from "@/components/ui/toaster";
+import { NavbarActiveKey } from "@/components/Navbar";
 import { Field } from "@/components/ui/field";
-import { FaArrowTurnDown } from "react-icons/fa6";
-import { FaCarSide } from "react-icons/fa";
+import RiderSignup from "@/components/RiderSignup/RiderSignup";
+import DriverSignup from "@/components/DriverSignup/DriverSignup";
+import GOCSpinner from "@/components/GOCSpinner";
 import GOCButton from "@/components/GOCButton";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
+import { FaCarSide } from "react-icons/fa";
+import { LuUpload } from "react-icons/lu";
 import { RIDES_GOOGLE_FORM_LINK } from "@/constants/Links";
-import GOCSpinner from "@/components/GOCSpinner";
 
 const client = generateClient();
 
 /**
- * New client-side function to call your backend API.
+ * Client-side function to update rides.
  * This function sends the spreadsheet URL, date, and email message
  * to an endpoint that performs the rides update logic.
  */
+interface UpdateRidesResult {
+  success: boolean;
+  errorMessage?: string;
+}
+
 const updateRidesClient = async (
   url: string,
   date: string,
   emailMsg?: string,
-) => {
+): Promise<UpdateRidesResult> => {
   try {
-    const response = await fetch("/api/updateRides", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url, date, emailMsg }),
+    const body = { url, date, emailMsg: emailMsg || "" };
+
+    const restOperation = post({
+      apiName: "updateRides",
+      path: "/",
+      options: {
+        body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
     });
-    const result = await response.json();
-    if (result.success) {
-      window.location.reload();
+
+    const response = await restOperation.response;
+    const res = await response.body.json();
+
+    if (
+      res &&
+      typeof res === "object" &&
+      "statusCode" in res &&
+      res.statusCode !== 200
+    ) {
+      const error = res.body;
+      console.error("Error updating rides:", error);
+      return { success: false, errorMessage: String(error) };
     } else {
-      console.error("Update rides failed:", result.message);
+      console.log("Successfully uploaded rides");
+      return { success: true };
     }
-  } catch (error) {
-    console.error("Error updating rides:", error);
+  } catch (error: any) {
+    console.error("POST call failed: ", error);
+    let errorMessage = "POST call failed.";
+    return { success: false, errorMessage };
   }
 };
 
@@ -94,18 +116,25 @@ export const RidesLandingPage = () => {
   const [rides, setRides] = useState<Ride[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  const fetchRides = async () => {
+    setLoading(true);
+    try {
+      const result = (await client.graphql({
+        query: listRides,
+      })) as any;
+      setRides(result.data.listRides.items);
+    } catch (error) {
+      toaster.create({
+        title: "Error",
+        description: "Failed to fetch rides.",
+        type: "error",
+      });
+      console.error("Error fetching rides:", error);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchRides = async () => {
-      try {
-        const result = (await client.graphql({
-          query: listRides,
-        })) as any;
-        setRides(result.data.listRides.items);
-      } catch (error) {
-        console.error("Error fetching rides:", error);
-      }
-      setLoading(false);
-    };
     fetchRides();
   }, []);
 
@@ -117,7 +146,11 @@ export const RidesLandingPage = () => {
       alt="Rides page banner"
     >
       <ScrollToTopButton />
-      <RidesLandingBody rides={rides} loading={loading} />
+      <RidesLandingBody
+        rides={rides}
+        loading={loading}
+        fetchRides={fetchRides}
+      />
     </BannerTemplate>
   );
 };
@@ -125,15 +158,17 @@ export const RidesLandingPage = () => {
 interface RidesProps {
   rides: Ride[];
   loading: boolean;
+  fetchRides?: () => void;
 }
 
-const RidesLandingBody = ({ rides, loading }: RidesProps) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+const RidesLandingBody = ({
+  rides,
+  loading,
+  fetchRides = () => {},
+}: RidesProps) => {
   const [riderOpen, setRiderOpen] = useState(false);
   const [driverOpen, setDriverOpen] = useState(false);
-
-  const toggleRider = useCallback(() => setRiderOpen((prev) => !prev), []);
-  const toggleDriver = useCallback(() => setDriverOpen((prev) => !prev), []);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     document.documentElement.style.scrollBehavior = "smooth";
@@ -146,6 +181,9 @@ const RidesLandingBody = ({ rides, loading }: RidesProps) => {
       document.documentElement.style.scrollBehavior = "";
     };
   }, []);
+
+  const toggleRider = useCallback(() => setRiderOpen((prev) => !prev), []);
+  const toggleDriver = useCallback(() => setDriverOpen((prev) => !prev), []);
 
   return (
     <Container fluid maxWidth={"90rem"} padding={0}>
@@ -234,6 +272,12 @@ const RidesLandingBody = ({ rides, loading }: RidesProps) => {
             >
               Sign up
             </GOCButton>
+            {/* Admin Settings */}
+            {isLoggedIn && (
+              <Box marginTop={"3rem"} width={{ base: "100%", md: "60%" }}>
+                <RidesSettings fetchRides={fetchRides} />
+              </Box>
+            )}
             {/* Rides List */}
             <Box
               marginTop={"3rem"}
@@ -245,13 +289,6 @@ const RidesLandingBody = ({ rides, loading }: RidesProps) => {
               <RidesList rides={rides} loading={loading} />
             </Box>
           </Flex>
-
-          {/* Admin Settings */}
-          {isLoggedIn && (
-            <Box marginTop={"3rem"}>
-              <RidesSettings />
-            </Box>
-          )}
         </Box>
       </Flex>
     </Container>
@@ -379,7 +416,7 @@ const RidesMenuSidebar = ({
           textWrap="nowrap"
         >
           <Link href="#admin-settings" color="white" fontWeight="semibold">
-            Admin Settings <FaArrowTurnDown />
+            Admin Settings <LuUpload />
           </Link>
         </Text>
       ) : (
@@ -401,7 +438,7 @@ const RidesMenuSidebar = ({
 };
 
 const RidesList = ({ rides, loading }: RidesProps) => {
-  if (loading) return <GOCSpinner />;
+  if (loading) return <GOCSpinner text="Loading rides..." />;
 
   return (
     <Table.Root
@@ -413,10 +450,7 @@ const RidesList = ({ rides, loading }: RidesProps) => {
     >
       <Table.Header backgroundColor={"goc.blue"}>
         <Table.Row>
-          <Table.ColumnHeader
-            color={"white"}
-            padding={{ base: ".5rem", md: ".75rem" }}
-          >
+          <Table.ColumnHeader color={"white"} padding={".75rem"}>
             <Text fontSize={"sm"}>Driver</Text>
           </Table.ColumnHeader>
           <Table.ColumnHeader color={"white"}>
@@ -431,6 +465,7 @@ const RidesList = ({ rides, loading }: RidesProps) => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
+        {/* For each Ride, iterate over its cars */}
         {rides.map((ride: Ride, rideIndex: number) =>
           ride.cars?.map((car: Car | null, carIndex: number) => {
             if (!car) return null;
@@ -473,12 +508,22 @@ const RidesList = ({ rides, loading }: RidesProps) => {
   );
 };
 
-const RidesSettings = () => {
+interface RidesSettingsProps {
+  fetchRides: () => void;
+}
+
+interface FormData {
+  url: string;
+  date: string;
+  emailMsg?: string;
+}
+
+const RidesSettings = ({ fetchRides }: RidesSettingsProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<FormData>({
     defaultValues: {
       url: "",
       date: "",
@@ -486,9 +531,37 @@ const RidesSettings = () => {
     },
   });
 
-  const onSubmit = async (data: any) => {
+  const [uploadingRides, setUploadingRides] = useState<boolean>(false);
+
+  const onSubmit = async (data: FormData) => {
     const { url, date, emailMsg } = data;
-    await updateRidesClient(url, date, emailMsg);
+    setUploadingRides(true);
+    try {
+      const result = await updateRidesClient(url, date, emailMsg);
+      if (result.success) {
+        toaster.create({
+          title: "Success",
+          description: "Successfully uploaded rides!",
+          type: "success",
+        });
+        fetchRides();
+      } else {
+        toaster.create({
+          title: "Failed to update rides",
+          description: result.errorMessage + " Please contact web team.",
+          type: "error",
+        });
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      toaster.create({
+        title: "Unexpected error",
+        description: "Please contact web team.",
+        type: "error",
+      });
+    } finally {
+      setUploadingRides(false);
+    }
   };
 
   return (
@@ -510,7 +583,7 @@ const RidesSettings = () => {
         boxShadow="lg"
         width="100%"
       >
-        <Heading as="h2" textAlign="center" color="black">
+        <Heading as="h2" textAlign="center" marginBottom={"2rem"}>
           Admin Settings
         </Heading>
         <VStack gap="1rem">
@@ -539,8 +612,10 @@ const RidesSettings = () => {
             backgroundColor="black"
             type="submit"
             width="full"
-            fontWeight="semibold"
+            fontWeight="bold"
             marginTop="1rem"
+            loadingText="Uploading"
+            loading={uploadingRides}
           >
             Upload Rides
           </Button>

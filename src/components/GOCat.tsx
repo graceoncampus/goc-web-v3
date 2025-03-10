@@ -7,8 +7,14 @@ const ScrollToBottomButton = () => {
 
   const handleClick = () => {
     toaster.create({
-      description: "Congrats! You've found the Bongo Cat! 👀",
+      title: "Congrats! (Easter Egg 🥚)",
+      description: "You've found the Bongo Cat!",
       type: "success",
+      duration: 144_000,
+      action: {
+        label: "👀",
+        onClick: () => toaster.dismiss(),
+      },
     });
   };
 
