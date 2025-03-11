@@ -1,3 +1,7 @@
+/**
+ * Contact information
+ */
+
 interface ContactInfoProps {
   name: string;
   email: string;
