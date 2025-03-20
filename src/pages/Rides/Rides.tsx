@@ -15,6 +15,7 @@ import {
   Collapsible,
   Table,
   Container,
+  Textarea,
 } from "@chakra-ui/react";
 import { BannerTemplate } from "@/layouts/BannerTemplate";
 import { toaster } from "@/components/ui/toaster";
@@ -604,8 +605,14 @@ const RidesSettings = ({ fetchRides }: RidesSettingsProps) => {
           </Field>
 
           {/* Custom Email Message (Optional) */}
-          <Field label="Comments" invalid={!!errors.emailMsg}>
-            <Input type="text" {...register("emailMsg")} />
+          <Field label="Custom Email Message" invalid={!!errors.emailMsg}>
+            <Textarea
+              height={"120px"}
+              {...register("emailMsg")}
+              value={
+                "Please message your riders BEFORE Sunday. If you can't, let us know and we'll message them for you. Aim to pick up dormies at their respective turnaround @8:15AM. If you are not driving your riders back, please tell them to find us IMMEDIATELY after Crossroads."
+              }
+            />
           </Field>
           <Button
             color="white"
