@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { Ride, Car, Rider } from "Api";
 import { post, generateClient } from "aws-amplify/api";
-import { checkIsLoggedIn } from "@/auth/CheckLogin";
+import { checkIsLoggedIn, checkInRidesTeam } from "@/auth/CheckUser";
 import { useForm } from "react-hook-form";
 import {
   Box,
@@ -12,16 +12,14 @@ import {
   Input,
   Text,
   VStack,
-  Collapsible,
   Table,
   Container,
+  Textarea,
 } from "@chakra-ui/react";
 import { BannerTemplate } from "@/layouts/BannerTemplate";
 import { toaster } from "@/components/ui/toaster";
 import { NavbarActiveKey } from "@/components/Navbar";
 import { Field } from "@/components/ui/field";
-import RiderSignup from "@/components/RiderSignup/RiderSignup";
-import DriverSignup from "@/components/DriverSignup/DriverSignup";
 import GOCSpinner from "@/components/GOCSpinner";
 import GOCButton from "@/components/GOCButton";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
@@ -166,14 +164,14 @@ const RidesLandingBody = ({
   loading,
   fetchRides = () => {},
 }: RidesProps) => {
-  const [riderOpen, setRiderOpen] = useState(false);
-  const [driverOpen, setDriverOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [inRidesTeam, setInRidesTeam] = useState(false);
 
   useEffect(() => {
     document.documentElement.style.scrollBehavior = "smooth";
     const checkAuth = async () => {
       await checkIsLoggedIn(setIsLoggedIn);
+      await checkInRidesTeam(setInRidesTeam);
     };
     checkAuth();
 
@@ -181,9 +179,6 @@ const RidesLandingBody = ({
       document.documentElement.style.scrollBehavior = "";
     };
   }, []);
-
-  const toggleRider = useCallback(() => setRiderOpen((prev) => !prev), []);
-  const toggleDriver = useCallback(() => setDriverOpen((prev) => !prev), []);
 
   return (
     <Container fluid maxWidth={"90rem"} padding={0}>
@@ -195,39 +190,9 @@ const RidesLandingBody = ({
           marginRight={{ base: "0", lg: "2rem" }}
           marginBottom={{ base: "2.5rem", lg: "0" }}
         >
-          <RidesMenuSidebar
-            toggleRider={toggleRider}
-            toggleDriver={toggleDriver}
-            isRiderOpen={riderOpen}
-            isDriverOpen={driverOpen}
-            isLoggedIn={isLoggedIn}
-          />
+          <RidesMenuSidebar isLoggedIn={isLoggedIn} inRidesTeam={inRidesTeam} />
         </Box>
         <Box flex={7}>
-          {/* Rider Signup Form */}
-          <Collapsible.Root lazyMount unmountOnExit open={riderOpen}>
-            <Collapsible.Content
-              id="rider-signup"
-              scrollMarginTop="6rem"
-              paddingBottom="2rem"
-              marginBottom="2.5rem"
-            >
-              <RiderSignup />
-            </Collapsible.Content>
-          </Collapsible.Root>
-
-          {/* Driver Signup Form */}
-          <Collapsible.Root lazyMount unmountOnExit open={driverOpen}>
-            <Collapsible.Content
-              id="driver-signup"
-              scrollMarginTop="6rem"
-              paddingBottom="2rem"
-              marginBottom="2.5rem"
-            >
-              <DriverSignup />
-            </Collapsible.Content>
-          </Collapsible.Root>
-
           {/* Heading */}
           <Flex direction="column" width="100%" alignItems={"center"}>
             <Heading
@@ -273,7 +238,7 @@ const RidesLandingBody = ({
               Sign up
             </GOCButton>
             {/* Admin Settings */}
-            {isLoggedIn && (
+            {inRidesTeam && (
               <Box marginTop={"3rem"} width={{ base: "100%", md: "60%" }}>
                 <RidesSettings fetchRides={fetchRides} />
               </Box>
@@ -297,15 +262,10 @@ const RidesLandingBody = ({
 
 interface SignUpButtonProps {
   children: React.ReactNode;
-  isRiderOpen?: boolean;
   onClick?: () => void;
 }
 
-const SignUpButton = ({
-  children,
-  isRiderOpen,
-  onClick,
-}: SignUpButtonProps) => {
+const SignUpButton = ({ children, onClick }: SignUpButtonProps) => {
   return onClick ? (
     <Button
       width="10rem"
@@ -319,7 +279,6 @@ const SignUpButton = ({
       border="none"
       marginTop="1.5rem"
       borderRadius=".8rem"
-      backgroundColor={isRiderOpen ? "goc.pale_orange" : "goc.pale_blue"}
       _hover={{
         transform: "scale(0.99)",
       }}
@@ -352,19 +311,13 @@ const SignUpButton = ({
 };
 
 interface RidesMenuSidebarProps {
-  toggleRider: () => void;
-  toggleDriver: () => void;
-  isRiderOpen: boolean;
-  isDriverOpen: boolean;
   isLoggedIn: boolean;
+  inRidesTeam: boolean;
 }
 
 const RidesMenuSidebar = ({
-  toggleRider,
-  toggleDriver,
-  isRiderOpen,
-  isDriverOpen,
   isLoggedIn,
+  inRidesTeam,
 }: RidesMenuSidebarProps) => {
   return (
     <Box
@@ -396,29 +349,21 @@ const RidesMenuSidebar = ({
             Sign up
           </Link>
         </SignUpButton>
-
-        {/* Ride Signup Button */}
-        {/* <SignUpButton isRiderOpen={isRiderOpen} onClick={toggleRider}>
-          I need a ride
-        </SignUpButton> */}
-
-        {/* Driver Signup Button */}
-        {/* <SignUpButton isRiderOpen={isDriverOpen} onClick={toggleDriver}>
-          I can drive
-        </SignUpButton> */}
       </VStack>
       {isLoggedIn ? (
-        <Text
-          fontSize={{ base: "xs", lg: "sm" }}
-          textAlign="center"
-          color="white"
-          marginTop="1.5rem"
-          textWrap="nowrap"
-        >
-          <Link href="#admin-settings" color="white" fontWeight="semibold">
-            Admin Settings <LuUpload />
-          </Link>
-        </Text>
+        inRidesTeam && (
+          <Text
+            fontSize={{ base: "xs", lg: "sm" }}
+            textAlign="center"
+            color="white"
+            marginTop="1.5rem"
+            textWrap="nowrap"
+          >
+            <Link href="#admin-settings" color="white" fontWeight="semibold">
+              Admin Settings <LuUpload />
+            </Link>
+          </Text>
+        )
       ) : (
         <Text
           fontSize={{ base: "2xs", xl: "sm" }}
@@ -447,6 +392,7 @@ const RidesList = ({ rides, loading }: RidesProps) => {
       variant="outline"
       striped
       stickyHeader
+      tableLayout={"fixed"}
     >
       <Table.Header backgroundColor={"goc.blue"}>
         <Table.Row>
@@ -604,8 +550,14 @@ const RidesSettings = ({ fetchRides }: RidesSettingsProps) => {
           </Field>
 
           {/* Custom Email Message (Optional) */}
-          <Field label="Comments" invalid={!!errors.emailMsg}>
-            <Input type="text" {...register("emailMsg")} />
+          <Field label="Custom Email Message" invalid={!!errors.emailMsg}>
+            <Textarea
+              height={"120px"}
+              {...register("emailMsg")}
+              value={
+                "Please message your riders BEFORE Sunday. If you can't, let us know and we'll message them for you. Aim to pick up dormies at their respective turnaround @8:15AM. If you are not driving your riders back, please tell them to find us IMMEDIATELY after Crossroads."
+              }
+            />
           </Field>
           <Button
             color="white"
