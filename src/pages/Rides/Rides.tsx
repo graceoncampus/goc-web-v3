@@ -12,7 +12,6 @@ import {
   Input,
   Text,
   VStack,
-  Collapsible,
   Table,
   Container,
   Textarea,
@@ -21,8 +20,6 @@ import { BannerTemplate } from "@/layouts/BannerTemplate";
 import { toaster } from "@/components/ui/toaster";
 import { NavbarActiveKey } from "@/components/Navbar";
 import { Field } from "@/components/ui/field";
-import RiderSignup from "@/components/RiderSignup/RiderSignup";
-import DriverSignup from "@/components/DriverSignup/DriverSignup";
 import GOCSpinner from "@/components/GOCSpinner";
 import GOCButton from "@/components/GOCButton";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
@@ -167,8 +164,6 @@ const RidesLandingBody = ({
   loading,
   fetchRides = () => {},
 }: RidesProps) => {
-  const [riderOpen, setRiderOpen] = useState(false);
-  const [driverOpen, setDriverOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [inRidesTeam, setInRidesTeam] = useState(false);
 
@@ -185,9 +180,6 @@ const RidesLandingBody = ({
     };
   }, []);
 
-  const toggleRider = useCallback(() => setRiderOpen((prev) => !prev), []);
-  const toggleDriver = useCallback(() => setDriverOpen((prev) => !prev), []);
-
   return (
     <Container fluid maxWidth={"90rem"} padding={0}>
       <Flex direction={{ base: "column", lg: "row" }}>
@@ -201,30 +193,6 @@ const RidesLandingBody = ({
           <RidesMenuSidebar isLoggedIn={isLoggedIn} inRidesTeam={inRidesTeam} />
         </Box>
         <Box flex={7}>
-          {/* Rider Signup Form */}
-          <Collapsible.Root lazyMount unmountOnExit open={riderOpen}>
-            <Collapsible.Content
-              id="rider-signup"
-              scrollMarginTop="6rem"
-              paddingBottom="2rem"
-              marginBottom="2.5rem"
-            >
-              <RiderSignup />
-            </Collapsible.Content>
-          </Collapsible.Root>
-
-          {/* Driver Signup Form */}
-          <Collapsible.Root lazyMount unmountOnExit open={driverOpen}>
-            <Collapsible.Content
-              id="driver-signup"
-              scrollMarginTop="6rem"
-              paddingBottom="2rem"
-              marginBottom="2.5rem"
-            >
-              <DriverSignup />
-            </Collapsible.Content>
-          </Collapsible.Root>
-
           {/* Heading */}
           <Flex direction="column" width="100%" alignItems={"center"}>
             <Heading
@@ -294,15 +262,10 @@ const RidesLandingBody = ({
 
 interface SignUpButtonProps {
   children: React.ReactNode;
-  isRiderOpen?: boolean;
   onClick?: () => void;
 }
 
-const SignUpButton = ({
-  children,
-  isRiderOpen,
-  onClick,
-}: SignUpButtonProps) => {
+const SignUpButton = ({ children, onClick }: SignUpButtonProps) => {
   return onClick ? (
     <Button
       width="10rem"
@@ -316,7 +279,6 @@ const SignUpButton = ({
       border="none"
       marginTop="1.5rem"
       borderRadius=".8rem"
-      backgroundColor={isRiderOpen ? "goc.pale_orange" : "goc.pale_blue"}
       _hover={{
         transform: "scale(0.99)",
       }}
@@ -387,16 +349,6 @@ const RidesMenuSidebar = ({
             Sign up
           </Link>
         </SignUpButton>
-
-        {/* Ride Signup Button */}
-        {/* <SignUpButton isRiderOpen={isRiderOpen} onClick={toggleRider}>
-          I need a ride
-        </SignUpButton> */}
-
-        {/* Driver Signup Button */}
-        {/* <SignUpButton isRiderOpen={isDriverOpen} onClick={toggleDriver}>
-          I can drive
-        </SignUpButton> */}
       </VStack>
       {isLoggedIn ? (
         inRidesTeam && (
