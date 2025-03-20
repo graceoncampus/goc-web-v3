@@ -448,6 +448,7 @@ const RidesList = ({ rides, loading }: RidesProps) => {
       variant="outline"
       striped
       stickyHeader
+      tableLayout={"fixed"}
     >
       <Table.Header backgroundColor={"goc.blue"}>
         <Table.Row>
@@ -457,12 +458,12 @@ const RidesList = ({ rides, loading }: RidesProps) => {
           <Table.ColumnHeader color={"white"}>
             <Text fontSize={"sm"}>Rider(s)</Text>
           </Table.ColumnHeader>
-          <Table.ColumnHeader
+          {/* <Table.ColumnHeader
             color={"white"}
             display={{ base: "none", md: "table-cell" }}
           >
             <Text fontSize={"sm"}>Comments</Text>
-          </Table.ColumnHeader>
+          </Table.ColumnHeader> */}
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -491,7 +492,7 @@ const RidesList = ({ rides, loading }: RidesProps) => {
                     "No riders"
                   )}
                 </Table.Cell>
-                <Table.Cell
+                {/* <Table.Cell
                   verticalAlign={"top"}
                   paddingY={"1rem"}
                   display={{ base: "none", md: "table-cell" }}
@@ -499,7 +500,7 @@ const RidesList = ({ rides, loading }: RidesProps) => {
                   <Text fontSize="sm">
                     {car.driver?.comment || "No comments"}
                   </Text>
-                </Table.Cell>
+                </Table.Cell> */}
               </Table.Row>
             );
           }),
