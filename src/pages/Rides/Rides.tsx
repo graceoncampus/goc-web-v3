@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { Ride, Car, Rider } from "Api";
 import { post, generateClient } from "aws-amplify/api";
-import { checkIsLoggedIn } from "@/auth/CheckLogin";
+import { checkIsLoggedIn, checkInRidesTeam } from "@/auth/CheckUser";
 import { useForm } from "react-hook-form";
 import {
   Box,
@@ -170,11 +170,13 @@ const RidesLandingBody = ({
   const [riderOpen, setRiderOpen] = useState(false);
   const [driverOpen, setDriverOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [inRidesTeam, setInRidesTeam] = useState(false);
 
   useEffect(() => {
     document.documentElement.style.scrollBehavior = "smooth";
     const checkAuth = async () => {
       await checkIsLoggedIn(setIsLoggedIn);
+      await checkInRidesTeam(setInRidesTeam);
     };
     checkAuth();
 
@@ -196,13 +198,7 @@ const RidesLandingBody = ({
           marginRight={{ base: "0", lg: "2rem" }}
           marginBottom={{ base: "2.5rem", lg: "0" }}
         >
-          <RidesMenuSidebar
-            toggleRider={toggleRider}
-            toggleDriver={toggleDriver}
-            isRiderOpen={riderOpen}
-            isDriverOpen={driverOpen}
-            isLoggedIn={isLoggedIn}
-          />
+          <RidesMenuSidebar isLoggedIn={isLoggedIn} inRidesTeam={inRidesTeam} />
         </Box>
         <Box flex={7}>
           {/* Rider Signup Form */}
@@ -274,7 +270,7 @@ const RidesLandingBody = ({
               Sign up
             </GOCButton>
             {/* Admin Settings */}
-            {isLoggedIn && (
+            {inRidesTeam && (
               <Box marginTop={"3rem"} width={{ base: "100%", md: "60%" }}>
                 <RidesSettings fetchRides={fetchRides} />
               </Box>
@@ -353,19 +349,13 @@ const SignUpButton = ({
 };
 
 interface RidesMenuSidebarProps {
-  toggleRider: () => void;
-  toggleDriver: () => void;
-  isRiderOpen: boolean;
-  isDriverOpen: boolean;
   isLoggedIn: boolean;
+  inRidesTeam: boolean;
 }
 
 const RidesMenuSidebar = ({
-  toggleRider,
-  toggleDriver,
-  isRiderOpen,
-  isDriverOpen,
   isLoggedIn,
+  inRidesTeam,
 }: RidesMenuSidebarProps) => {
   return (
     <Box
@@ -409,17 +399,19 @@ const RidesMenuSidebar = ({
         </SignUpButton> */}
       </VStack>
       {isLoggedIn ? (
-        <Text
-          fontSize={{ base: "xs", lg: "sm" }}
-          textAlign="center"
-          color="white"
-          marginTop="1.5rem"
-          textWrap="nowrap"
-        >
-          <Link href="#admin-settings" color="white" fontWeight="semibold">
-            Admin Settings <LuUpload />
-          </Link>
-        </Text>
+        inRidesTeam && (
+          <Text
+            fontSize={{ base: "xs", lg: "sm" }}
+            textAlign="center"
+            color="white"
+            marginTop="1.5rem"
+            textWrap="nowrap"
+          >
+            <Link href="#admin-settings" color="white" fontWeight="semibold">
+              Admin Settings <LuUpload />
+            </Link>
+          </Text>
+        )
       ) : (
         <Text
           fontSize={{ base: "2xs", xl: "sm" }}

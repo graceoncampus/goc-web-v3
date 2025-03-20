@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BannerTemplate } from "@/layouts/BannerTemplate";
 import { NavbarActiveKey } from "@/components/Navbar";
-import { checkIsLoggedIn } from "@/auth/CheckLogin";
+import { checkIsLoggedIn } from "@/auth/CheckUser";
 import {
   Box,
   Container,
