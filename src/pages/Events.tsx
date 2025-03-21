@@ -144,16 +144,19 @@ const EventList = ({ events, loading }: EventListProps) => {
     const startDate = new Date(startDateString);
     const endDate = new Date(endDateString);
     const formattedStartDate = `${startDate.toLocaleString("en-US", {
-      month: "long",
+      month: "numeric",
       day: "numeric",
-      year: "numeric",
+      year: "2-digit",
       hour: "numeric",
-      minute: "2-digit",
+      minute: "numeric",
       hour12: true,
     })}`;
     const formattedEndDate = `${endDate.toLocaleString("en-US", {
+      month: "numeric",
+      day: "numeric",
+      year: "2-digit",
       hour: "numeric",
-      minute: "2-digit",
+      minute: "numeric",
       hour12: true,
     })}`;
 
@@ -241,7 +244,7 @@ const EventList = ({ events, loading }: EventListProps) => {
               <Flex>
                 <Image
                   width={{ base: "100px", md: "200px" }}
-                  height={{ base: "200px", md: "200px" }}
+                  height={{ base: "150px", md: "200px" }}
                   borderRadius="20px"
                   src={event.imageLink}
                 />
@@ -254,11 +257,11 @@ const EventList = ({ events, loading }: EventListProps) => {
                       <Text fontSize={{ base: "xs", md: "md" }}>
                         {event.description}
                       </Text>
-                      <Box className="event-info" marginTop="10px">
+                      {/* <Box className="event-info" marginTop="10px">
                         <Text fontSize={{ base: "xs", md: "md" }}>
                           {formatEventDate(event.startDate, event.endDate)}
                         </Text>
-                      </Box>
+                      </Box> */}
                     </Box>
                   </Box>
                   {/* Location info for desktop */}
