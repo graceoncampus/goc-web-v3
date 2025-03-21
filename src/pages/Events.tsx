@@ -241,13 +241,15 @@ const EventList = ({ events, loading }: EventListProps) => {
               <Flex>
                 <Image
                   width={{ base: "100px", md: "200px" }}
-                  height={{ base: "175px", md: "200px" }}
+                  height={{ base: "200px", md: "200px" }}
                   borderRadius="20px"
                   src={event.imageLink}
                 />
                 <Box className="event-description-text" marginLeft="20px">
                   <Box>
-                    <Heading as="h3">{event.title}</Heading>
+                    <Heading as="h3" display={{ base: "none", md: "block" }}>
+                      {event.title}
+                    </Heading>
                     <Box>
                       <Text fontSize={{ base: "xs", md: "md" }}>
                         {event.description}
@@ -256,33 +258,54 @@ const EventList = ({ events, loading }: EventListProps) => {
                         <Text fontSize={{ base: "xs", md: "md" }}>
                           {formatEventDate(event.startDate, event.endDate)}
                         </Text>
-                        <Flex
-                          className="location-info"
-                          alignItems="center"
-                          marginTop="10px"
-                        >
-                          <Icon fontSize={{ base: "20px", md: "24px" }}>
-                            <MdLocationPin />
-                          </Icon>
-                          <Text
-                            fontSize={{ base: "sm", md: "md" }}
-                            marginRight="10px"
-                          >
-                            {event.location}
-                          </Text>
-                          <Icon fontSize={{ base: "20px", md: "24px" }}>
-                            <MdAttachMoney />
-                          </Icon>
-                          <Text fontSize={{ base: "sm", md: "md" }}>
-                            {event.price === 0
-                              ? "free"
-                              : event.price.toString()}
-                          </Text>
-                        </Flex>
                       </Box>
                     </Box>
                   </Box>
+                  {/* Location info for desktop */}
+                  <Flex
+                    className="location-info"
+                    alignItems="center"
+                    marginTop="10px"
+                    display={{ base: "none", md: "flex" }}
+                  >
+                    <Icon fontSize={{ base: "20px", md: "24px" }}>
+                      <MdLocationPin />
+                    </Icon>
+                    <Text
+                      fontSize={{ base: "sm", md: "md" }}
+                      marginRight="10px"
+                    >
+                      {event.location}
+                    </Text>
+                    <Icon fontSize={{ base: "20px", md: "24px" }}>
+                      <MdAttachMoney />
+                    </Icon>
+                    <Text fontSize={{ base: "sm", md: "md" }}>
+                      {event.price === 0 ? "free" : event.price.toString()}
+                    </Text>
+                  </Flex>
                 </Box>
+              </Flex>
+              {/* Location info for mobile */}
+              <Flex
+                className="location-info"
+                alignItems="center"
+                marginTop="10px"
+                justifyContent={"space-evenly"}
+                display={{ base: "flex", md: "none" }}
+              >
+                <Icon fontSize={{ base: "20px", md: "24px" }}>
+                  <MdLocationPin />
+                </Icon>
+                <Text fontSize={{ base: "sm", md: "md" }} marginRight="10px">
+                  {event.location}
+                </Text>
+                <Icon fontSize={{ base: "20px", md: "24px" }}>
+                  <MdAttachMoney />
+                </Icon>
+                <Text fontSize={{ base: "sm", md: "md" }}>
+                  {event.price === 0 ? "free" : event.price.toString()}
+                </Text>
               </Flex>
             </Box>
           </AccordionItemContent>
