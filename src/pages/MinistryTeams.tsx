@@ -14,33 +14,35 @@ import {
   Badge,
 } from "@chakra-ui/react";
 import { IoInformationCircle } from "react-icons/io5";
-
-const mockTeams: MinistryTeam[] = [
-  {
-    title: "Welcome and Follow Up Team",
-    description:
-      "Welcome and Follow Up is an outreach ministry team that exists to obey the call of Romans 15:7 to “welcome one another as Christ has welcomed you, for the glory of God”. We serve on Fridays during large group and have biweekly meetings every even Monday. Our ministry team seeks to encourage our members to grow a greater love for the church body and for nonbelievers through the means of outreach.",
-    leaders: "Shawn Zhuang",
-    contact: "redacted@x.com, (XXX) XXX-XXXX",
-  },
-  {
-    title: "Music Team",
-    description:
-      "Welcome and Follow Up is an outreach ministry team that exists to obey the call of Romans 15:7 to “welcome one another as Christ has welcomed you, for the glory of God”. We serve on Fridays during large group and have biweekly meetings every even Monday. Our ministry team seeks to encourage our members to grow a greater love for the church body and for nonbelievers through the means of outreach.",
-    leaders: "Shawn Zhuang",
-    contact: "redacted@x.com, (XXX) XXX-XXXX",
-  },
-  {
-    title: "Sound Team",
-    description:
-      "Welcome and Follow Up is an outreach ministry team that exists to obey the call of Romans 15:7 to “welcome one another as Christ has welcomed you, for the glory of God”. We serve on Fridays during large group and have biweekly meetings every even Monday. Our ministry team seeks to encourage our members to grow a greater love for the church body and for nonbelievers through the means of outreach.",
-    leaders: "Shawn Zhuang",
-    contact: "redacted@x.com, (XXX) XXX-XXXX",
-  },
-];
+import { listMinistryTeams } from "@/graphql/queries";
+import { generateClient } from "aws-amplify/api";
+const client = generateClient();
 
 export const MinistryTeamsPage: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [ministryTeams, setMinistryTeams] = useState<MinistryTeam[]>([]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const result = await client.graphql({ query: listMinistryTeams });
+        const ministryTeams = result.data?.listMinistryTeams?.items || [];
+        const formattedMinistryTeams: MinistryTeam[] = ministryTeams.map(
+          (team: any) => ({
+            title: team.name || "",
+            description: team.description || "",
+            leaders: team.leaders || "",
+            contact: team.contact || "",
+          }),
+        );
+        setMinistryTeams(formattedMinistryTeams);
+      } catch (reason) {
+        console.error(reason);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   // Fire on refresh/load
   useEffect(() => {
@@ -62,7 +64,7 @@ export const MinistryTeamsPage: React.FC = () => {
       imageSrc="/images/landing3.jpg"
       alt="Ministry Teams page banner"
     >
-      <TeamsBody MinistryTeams={mockTeams} isUserLoggedIn={isLoggedIn} />
+      <TeamsBody ministryTeams={ministryTeams} isUserLoggedIn={isLoggedIn} />
     </BannerTemplate>
   );
 };
@@ -111,15 +113,15 @@ const Section: React.FC<SectionProps> = ({ heading, id, children }) => {
 };
 
 const TeamsBody: React.FC<{
-  MinistryTeams: MinistryTeam[];
+  ministryTeams: MinistryTeam[];
   isUserLoggedIn: boolean;
-}> = ({ MinistryTeams, isUserLoggedIn }) => {
+}> = ({ ministryTeams, isUserLoggedIn }) => {
   return (
     <Container fluid maxWidth="800px" padding={0} textAlign="left">
       <VStack gap={"2.5rem"} margin={"auto"}>
         <Section heading="List of Ministry Teams">
           <List.Root paddingX={"1rem"}>
-            {MinistryTeams.map((MinistryTeam) => (
+            {ministryTeams.map((MinistryTeam) => (
               <List.Item>
                 <Link href={`#${slugify(MinistryTeam.title)}`} color="goc.blue">
                   <Text>{MinistryTeam.title}</Text>
@@ -134,7 +136,7 @@ const TeamsBody: React.FC<{
           </List.Root>
         </Section>
 
-        {MinistryTeams.map((MinistryTeam) => (
+        {ministryTeams.map((MinistryTeam) => (
           <Section
             id={slugify(MinistryTeam.title)}
             heading={MinistryTeam.title}
