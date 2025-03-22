@@ -399,7 +399,7 @@ const RidesList = ({ rides, loading }: RidesProps) => {
           <Table.ColumnHeader color={"white"} padding={".75rem"}>
             <Text fontSize={"sm"}>Driver</Text>
           </Table.ColumnHeader>
-          <Table.ColumnHeader color={"white"}>
+          <Table.ColumnHeader color={"white"} padding={".75rem"}>
             <Text fontSize={"sm"}>Rider(s)</Text>
           </Table.ColumnHeader>
           <Table.ColumnHeader

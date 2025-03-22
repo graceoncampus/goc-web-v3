@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { NavbarActiveKey } from "@/components/Navbar";
 import { Field } from "@/components/ui/field";
 import { InputGroup } from "@/components/ui/input-group";
+import { toaster } from "@/components/ui/toaster";
 import {
   Button,
   Fieldset,
@@ -40,6 +41,15 @@ const LoginBody = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data: LoginFormProps) => {
+    // Detect SQL injection
+    const pattern = /(?=.{2,})(?:'|--|;|\b(?:or|and)\b)/i;
+    if (pattern.test(data.username) || pattern.test(data.password)) {
+      toaster.create({
+        description: "Nice try, your attempt has been logged.",
+        type: "error",
+      });
+      return;
+    }
     try {
       await signIn({ username: data.username, password: data.password });
       navigate("/"); // Redirect on successful sign-in
