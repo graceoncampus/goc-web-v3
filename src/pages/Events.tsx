@@ -85,7 +85,7 @@ const EventsBody: React.FC = () => {
 
   return (
     <Container fluid={true} padding={0}>
-      <Heading
+      {/* <Heading
         as="h2"
         textAlign={"center"}
         fontSize={{
@@ -96,7 +96,7 @@ const EventsBody: React.FC = () => {
         }}
       >
         Upcoming Events
-      </Heading>
+      </Heading> */}
       <Stack
         width={{ sm: "100%", md: "4/5" }}
         marginX={"auto"}
@@ -104,7 +104,7 @@ const EventsBody: React.FC = () => {
         align={"center"}
         gap={"3rem"}
       >
-        <EventList events={events} loading={loading} />
+        {/* <EventList events={events} loading={loading} /> */}
         <Stack id={"calendar"} as={"section"} width={"100%"} align={"center"}>
           <Heading
             as="h2"
