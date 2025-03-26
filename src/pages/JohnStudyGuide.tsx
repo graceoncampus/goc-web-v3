@@ -18,7 +18,7 @@ export const JohnStudyGuidePage = () => {
     <BannerTemplate
       title="John Study Guide"
       activeKey={NavbarActiveKey.STUDY_GUIDE}
-      imageSrc="/images/resources.jpeg"
+      imageSrc="/images/bible.jpg"
       alt="Study Guide page banner"
     >
       <JohnStudyGuideBody />
