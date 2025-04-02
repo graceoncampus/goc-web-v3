@@ -1,4 +1,4 @@
-import { signOut, AuthUser } from "aws-amplify/auth";
+import { signOut } from "aws-amplify/auth";
 import { makeAutoObservable } from "mobx";
 
 export class User {
@@ -62,22 +62,22 @@ export class User {
     this.phone_number = "";
   }
 
-  async login() {
-    // try {
-    //   const user = (await AuthUser.current()) as any;
-    //   const attributes = user.attributes;
-    //   this.setUserData({
-    //     name: attributes.given_name || "",
-    //     family_name: attributes.family_name || "",
-    //     email: attributes.email || "",
-    //     phone_number: attributes.phone_number || "",
-    //     address: attributes.address || "",
-    //     gradYear: attributes["custom:gradYear"] || "",
-    //   });
-    // } catch (error) {
-    //   console.error("Error during login:", error);
-    // }
-  }
+  // async login() {
+  //   try {
+  //     const user = await Auth.currentAuthenticatedUser();
+  //     const attributes = user.attributes;
+  //     this.setUserData({
+  //       name: attributes.given_name || "",
+  //       family_name: attributes.family_name || "",
+  //       email: attributes.email || "",
+  //       phone_number: attributes.phone_number || "",
+  //       address: attributes.address || "",
+  //       gradYear: attributes["custom:gradYear"] || "",
+  //     });
+  //   } catch (error) {
+  //     console.error("Error during login:", error);
+  //   }
+  // }
 
   async logout() {
     try {
