@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { BannerTemplate } from "@/layouts/BannerTemplate";
 import { NavbarActiveKey } from "@/components/Navbar";
+import GOCSpinner from "@/components/GOCSpinner";
 import { checkIsLoggedIn } from "@/auth/CheckUser";
 import {
   Box,
@@ -20,9 +21,11 @@ const client = generateClient();
 
 export const MinistryTeamsPage: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [ministryTeams, setMinistryTeams] = useState<MinistryTeam[]>([]);
 
   useEffect(() => {
+    setLoading(true);
     const fetchEvents = async () => {
       try {
         const result = await client.graphql({ query: listMinistryTeams });
@@ -38,6 +41,8 @@ export const MinistryTeamsPage: React.FC = () => {
         setMinistryTeams(formattedMinistryTeams);
       } catch (reason) {
         console.error(reason);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -64,7 +69,11 @@ export const MinistryTeamsPage: React.FC = () => {
       imageSrc="/images/landing3.jpg"
       alt="Ministry Teams page banner"
     >
-      <TeamsBody ministryTeams={ministryTeams} isUserLoggedIn={isLoggedIn} />
+      <TeamsBody
+        ministryTeams={ministryTeams}
+        isUserLoggedIn={isLoggedIn}
+        loading={loading}
+      />
     </BannerTemplate>
   );
 };
@@ -115,7 +124,9 @@ const Section: React.FC<SectionProps> = ({ heading, id, children }) => {
 const TeamsBody: React.FC<{
   ministryTeams: MinistryTeam[];
   isUserLoggedIn: boolean;
-}> = ({ ministryTeams, isUserLoggedIn }) => {
+  loading: boolean;
+}> = ({ ministryTeams, isUserLoggedIn, loading }) => {
+  if (loading) return <GOCSpinner text="Loading ministry teams..." />;
   return (
     <Container fluid maxWidth="800px" padding={0} textAlign="left">
       <VStack gap={"2.5rem"} margin={"auto"}>
