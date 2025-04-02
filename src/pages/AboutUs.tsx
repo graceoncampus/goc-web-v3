@@ -57,8 +57,9 @@ const AboutUsBody = () => {
           </Text>
         </Box>
         <GOCButton
-          href="/docs/welcome-booklet.pdf"
+          href="https://drive.google.com/file/d/1ianlpg8Z0lxr2EOt249HosHIv1TrHn2L/view?usp=sharing"
           buttonProps={{ marginTop: "0", marginBottom: "1rem" }}
+          target="_blank"
         >
           Welcome Packet
         </GOCButton>

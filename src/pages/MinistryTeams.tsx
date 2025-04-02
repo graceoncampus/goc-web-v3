@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BannerTemplate } from "@/layouts/BannerTemplate";
 import { NavbarActiveKey } from "@/components/Navbar";
-import { checkIsLoggedIn } from "@/auth/CheckLogin";
+import { checkIsLoggedIn } from "@/auth/CheckUser";
 import {
   Box,
   Container,
@@ -13,13 +13,36 @@ import {
   AspectRatio,
   Badge,
 } from "@chakra-ui/react";
-import { MinistryTeamsInfo, MinistryTeam } from "@/constants/MinistryTeamsInfo";
 import { IoInformationCircle } from "react-icons/io5";
-
-const MinistryTeams: MinistryTeam[] = MinistryTeamsInfo;
+import { listMinistryTeams } from "@/graphql/queries";
+import { generateClient } from "aws-amplify/api";
+const client = generateClient();
 
 export const MinistryTeamsPage: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [ministryTeams, setMinistryTeams] = useState<MinistryTeam[]>([]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const result = await client.graphql({ query: listMinistryTeams });
+        const ministryTeams = result.data?.listMinistryTeams?.items || [];
+        const formattedMinistryTeams: MinistryTeam[] = ministryTeams.map(
+          (team: any) => ({
+            title: team.name || "",
+            description: team.description || "",
+            leaders: team.leaders || "",
+            contact: team.contact || "",
+          }),
+        );
+        setMinistryTeams(formattedMinistryTeams);
+      } catch (reason) {
+        console.error(reason);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   // Fire on refresh/load
   useEffect(() => {
@@ -41,10 +64,17 @@ export const MinistryTeamsPage: React.FC = () => {
       imageSrc="/images/landing3.jpg"
       alt="Ministry Teams page banner"
     >
-      <TeamsBody MinistryTeams={MinistryTeams} isUserLoggedIn={isLoggedIn} />
+      <TeamsBody ministryTeams={ministryTeams} isUserLoggedIn={isLoggedIn} />
     </BannerTemplate>
   );
 };
+
+interface MinistryTeam {
+  title: string;
+  description: string;
+  leaders: string;
+  contact: string;
+}
 
 function slugify(text: string): string {
   return text
@@ -83,22 +113,22 @@ const Section: React.FC<SectionProps> = ({ heading, id, children }) => {
 };
 
 const TeamsBody: React.FC<{
-  MinistryTeams: MinistryTeam[];
+  ministryTeams: MinistryTeam[];
   isUserLoggedIn: boolean;
-}> = ({ MinistryTeams, isUserLoggedIn }) => {
+}> = ({ ministryTeams, isUserLoggedIn }) => {
   return (
     <Container fluid maxWidth="800px" padding={0} textAlign="left">
-      <VStack gap={"4rem"} margin={"auto"}>
+      <VStack gap={"2.5rem"} margin={"auto"}>
         <Section heading="List of Ministry Teams">
           <List.Root paddingX={"1rem"}>
-            {MinistryTeams.map((MinistryTeam) => (
-              <List.Item key={slugify(MinistryTeam.title)}>
+            {ministryTeams.map((MinistryTeam) => (
+              <List.Item>
                 <Link href={`#${slugify(MinistryTeam.title)}`} color="goc.blue">
                   <Text>{MinistryTeam.title}</Text>
                 </Link>
               </List.Item>
             ))}
-            <List.Item key="video-resources">
+            <List.Item>
               <Link href={`#video-resources`} color="goc.blue">
                 <Text>Video Resources</Text>
               </Link>
@@ -106,9 +136,8 @@ const TeamsBody: React.FC<{
           </List.Root>
         </Section>
 
-        {MinistryTeams.map((MinistryTeam) => (
+        {ministryTeams.map((MinistryTeam) => (
           <Section
-            key={slugify(MinistryTeam.title)}
             id={slugify(MinistryTeam.title)}
             heading={MinistryTeam.title}
           >
@@ -123,14 +152,15 @@ const TeamsBody: React.FC<{
                 marginBottom="1"
                 fontSize={{ base: "sm", md: "md", xl: "lg" }}
               >
-                Leader(s): {MinistryTeam.leaders} <br />
+                <strong>Leader(s):</strong> {MinistryTeam.leaders} <br />
+                <strong>Contact:</strong> {MinistryTeam.contact}
               </Text>
             ) : (
-              <Text fontSize={{ base: "xs", md: "sm" }} fontStyle={"italic"}>
+              <Text fontSize={"sm"} fontStyle={"italic"}>
                 <Link fontWeight={"semibold"} href="/login">
                   Log in
                 </Link>{" "}
-                to view the leader(s) of this ministry team.
+                to view the leader and contact information.
               </Text>
             )}
           </Section>

@@ -60,7 +60,8 @@ const SmallGroupsBody = () => {
           alignItems="center"
         >
           <GOCButton
-            href="/docs/sgl-men.pdf"
+            target="_blank"
+            href="https://drive.google.com/file/d/1bJ22fpqKJwOymrnaqCF1k-9GlwrWefCO/view?usp=sharing"
             buttonProps={{
               width: "18rem",
               paddingY: "1.4rem",
@@ -71,7 +72,8 @@ const SmallGroupsBody = () => {
             Men's Small Group Leaders
           </GOCButton>
           <GOCButton
-            href="/docs/sgl-women.pdf"
+            target="_blank"
+            href="https://drive.google.com/file/d/1cScBhMquQvNaWwT4zaAupWr15FfTP1Et/view?usp=sharing"
             buttonProps={{
               width: "18rem",
               paddingY: "1.4rem",

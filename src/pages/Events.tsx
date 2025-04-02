@@ -85,7 +85,7 @@ const EventsBody: React.FC = () => {
 
   return (
     <Container fluid={true} padding={0}>
-      <Heading
+      {/* <Heading
         as="h2"
         textAlign={"center"}
         fontSize={{
@@ -96,7 +96,7 @@ const EventsBody: React.FC = () => {
         }}
       >
         Upcoming Events
-      </Heading>
+      </Heading> */}
       <Stack
         width={{ sm: "100%", md: "4/5" }}
         marginX={"auto"}
@@ -104,7 +104,7 @@ const EventsBody: React.FC = () => {
         align={"center"}
         gap={"3rem"}
       >
-        <EventList events={events} loading={loading} />
+        {/* <EventList events={events} loading={loading} /> */}
         <Stack id={"calendar"} as={"section"} width={"100%"} align={"center"}>
           <Heading
             as="h2"
@@ -144,16 +144,19 @@ const EventList = ({ events, loading }: EventListProps) => {
     const startDate = new Date(startDateString);
     const endDate = new Date(endDateString);
     const formattedStartDate = `${startDate.toLocaleString("en-US", {
-      month: "long",
+      month: "numeric",
       day: "numeric",
-      year: "numeric",
+      year: "2-digit",
       hour: "numeric",
-      minute: "2-digit",
+      minute: "numeric",
       hour12: true,
     })}`;
     const formattedEndDate = `${endDate.toLocaleString("en-US", {
+      month: "numeric",
+      day: "numeric",
+      year: "2-digit",
       hour: "numeric",
-      minute: "2-digit",
+      minute: "numeric",
       hour12: true,
     })}`;
 
@@ -241,48 +244,71 @@ const EventList = ({ events, loading }: EventListProps) => {
               <Flex>
                 <Image
                   width={{ base: "100px", md: "200px" }}
-                  height={{ base: "175px", md: "200px" }}
+                  height={{ base: "150px", md: "200px" }}
                   borderRadius="20px"
                   src={event.imageLink}
                 />
                 <Box className="event-description-text" marginLeft="20px">
                   <Box>
-                    <Heading as="h3">{event.title}</Heading>
+                    <Heading as="h3" display={{ base: "none", md: "block" }}>
+                      {event.title}
+                    </Heading>
                     <Box>
                       <Text fontSize={{ base: "xs", md: "md" }}>
                         {event.description}
                       </Text>
-                      <Box className="event-info" marginTop="10px">
+                      {/* <Box className="event-info" marginTop="10px">
                         <Text fontSize={{ base: "xs", md: "md" }}>
                           {formatEventDate(event.startDate, event.endDate)}
                         </Text>
-                        <Flex
-                          className="location-info"
-                          alignItems="center"
-                          marginTop="10px"
-                        >
-                          <Icon fontSize={{ base: "20px", md: "24px" }}>
-                            <MdLocationPin />
-                          </Icon>
-                          <Text
-                            fontSize={{ base: "sm", md: "md" }}
-                            marginRight="10px"
-                          >
-                            {event.location}
-                          </Text>
-                          <Icon fontSize={{ base: "20px", md: "24px" }}>
-                            <MdAttachMoney />
-                          </Icon>
-                          <Text fontSize={{ base: "sm", md: "md" }}>
-                            {event.price === 0
-                              ? "free"
-                              : event.price.toString()}
-                          </Text>
-                        </Flex>
-                      </Box>
+                      </Box> */}
                     </Box>
                   </Box>
+                  {/* Location info for desktop */}
+                  <Flex
+                    className="location-info"
+                    alignItems="center"
+                    marginTop="10px"
+                    display={{ base: "none", md: "flex" }}
+                  >
+                    <Icon fontSize={{ base: "20px", md: "24px" }}>
+                      <MdLocationPin />
+                    </Icon>
+                    <Text
+                      fontSize={{ base: "sm", md: "md" }}
+                      marginRight="10px"
+                    >
+                      {event.location}
+                    </Text>
+                    <Icon fontSize={{ base: "20px", md: "24px" }}>
+                      <MdAttachMoney />
+                    </Icon>
+                    <Text fontSize={{ base: "sm", md: "md" }}>
+                      {event.price === 0 ? "free" : event.price.toString()}
+                    </Text>
+                  </Flex>
                 </Box>
+              </Flex>
+              {/* Location info for mobile */}
+              <Flex
+                className="location-info"
+                alignItems="center"
+                marginTop="10px"
+                justifyContent={"space-evenly"}
+                display={{ base: "flex", md: "none" }}
+              >
+                <Icon fontSize={{ base: "20px", md: "24px" }}>
+                  <MdLocationPin />
+                </Icon>
+                <Text fontSize={{ base: "sm", md: "md" }} marginRight="10px">
+                  {event.location}
+                </Text>
+                <Icon fontSize={{ base: "20px", md: "24px" }}>
+                  <MdAttachMoney />
+                </Icon>
+                <Text fontSize={{ base: "sm", md: "md" }}>
+                  {event.price === 0 ? "free" : event.price.toString()}
+                </Text>
               </Flex>
             </Box>
           </AccordionItemContent>

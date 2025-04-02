@@ -18,7 +18,7 @@ export const JohnStudyGuidePage = () => {
     <BannerTemplate
       title="John Study Guide"
       activeKey={NavbarActiveKey.STUDY_GUIDE}
-      imageSrc="/images/resources.jpeg"
+      imageSrc="/images/bible.jpg"
       alt="Study Guide page banner"
     >
       <JohnStudyGuideBody />
@@ -35,7 +35,10 @@ const JohnStudyGuideBody = () => {
         <Text fontSize="sm" textWrap={"balance"}>
           A study through the &quot;I&nbsp;am&quot; statements of Jesus
         </Text>
-        <GOCButton href="/docs/john-study-guide.pdf">
+        <GOCButton
+          target="_blank"
+          href="https://drive.google.com/file/d/1LNmd5he0IE8wHblZvNIlsdnAQjMpwBLX/view?usp=sharing"
+        >
           View Study Guide
         </GOCButton>
       </Box>
