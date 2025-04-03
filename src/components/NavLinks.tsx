@@ -59,10 +59,11 @@ const NavLinks = [
       },
     ],
   },
-  {
-    name: "Prayer Requests",
-    link: "/prayer-request",
-  },
+  // NOT CURRENTLY IN USE
+  // {
+  //   name: "Prayer Requests",
+  //   link: "/prayer-request",
+  // },
   {
     name: "Events",
     link: "/events",
