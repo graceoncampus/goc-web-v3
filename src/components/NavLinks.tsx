@@ -52,12 +52,20 @@ const NavLinks = [
         name: "John Study Guide",
         link: "/john-study-guide",
       },
+      {
+        name: "Gallery",
+        link: "/gallery",
+      },
+      {
+        name: "Linktree",
+        link: SocialMedia.linktree,
+        external: true,
+      },
     ],
   },
   {
-    name: "Linktree",
-    link: SocialMedia.linktree,
-    external: true,
+    name: "Prayer Requests",
+    link: "/prayer-request",
   },
   {
     name: "Events",
