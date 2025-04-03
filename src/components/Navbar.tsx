@@ -50,6 +50,7 @@ export enum NavbarActiveKey {
   PRAYER = "Prayer Requests",
   LEADERSHIP = "Leadership",
   LOGIN = "Login",
+  GALLERY = "Gallery",
 }
 
 interface SublinkProps {

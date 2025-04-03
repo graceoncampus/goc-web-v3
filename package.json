@@ -10,7 +10,7 @@
     "@aws-amplify/backend": "^1.4.0",
     "@aws-amplify/ui-react": "^6.5.2",
     "@aws-sdk/client-dynamodb": "^3.662.0",
-    "@chakra-ui/react": "^3.1.0",
+    "@chakra-ui/react": "^3.15.0",
     "@emotion/babel-plugin": "^11.13.5",
     "@emotion/react": "^11.13.3",
     "@testing-library/jest-dom": "^6.5.0",

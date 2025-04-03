@@ -53,6 +53,10 @@ const NavLinks = [
         link: "/john-study-guide",
       },
       {
+        name: "Gallery",
+        link: "/gallery",
+      },
+      {
         name: "Linktree",
         link: SocialMedia.linktree,
         external: true,
