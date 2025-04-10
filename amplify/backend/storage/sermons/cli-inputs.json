@@ -1,0 +1,13 @@
+{
+  "resourceName": "sermons",
+  "policyUUID": "bbeca4c1",
+  "bucketName": "gocwebv33659dcc621154f51904047ab480f9bae",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE"
+}

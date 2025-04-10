@@ -1,0 +1,549 @@
+type Driver {
+  createdAt: AWSDateTime!
+  driverAddress: String!
+  driverComments: String!
+  driverEmail: String!
+  driverEventTime: String!
+  driverName: String!
+  driverNumRiderSeats: Int!
+  driverPhoneNumber: String!
+  driverSignupStatus: RideSignupStatus!
+  eventId: ID!
+  id: ID!
+  updatedAt: AWSDateTime!
+}
+
+type Event {
+  createdAt: AWSDateTime!
+  eventId: ID!
+  eventName: String!
+  eventPickupLocations: [String]!
+  eventStatus: EventStatus!
+  eventTimes: [EventTimeOption]!
+  id: ID!
+  updatedAt: AWSDateTime!
+}
+
+type EventTimeOption {
+  timeHeading: String!
+  timeSubtext: String!
+}
+
+type ModelDriverConnection {
+  items: [Driver]!
+  nextToken: String
+}
+
+type ModelEventConnection {
+  items: [Event]!
+  nextToken: String
+}
+
+type ModelRiderConnection {
+  items: [Rider]!
+  nextToken: String
+}
+
+type Mutation {
+  b: Boolean
+  createDriver(condition: ModelDriverConditionInput, input: CreateDriverInput!): Driver
+  createEvent(condition: ModelEventConditionInput, input: CreateEventInput!): Event
+  createPrayerRequest(input: CreatePrayerRequestInput!): PrayerRequest
+  createRider(condition: ModelRiderConditionInput, input: CreateRiderInput!): Rider
+  createSermon(input: CreateSermonInput!): Sermon
+  deleteDriver(condition: ModelDriverConditionInput, input: DeleteDriverInput!): Driver
+  deleteEvent(condition: ModelEventConditionInput, input: DeleteEventInput!): Event
+  deletePrayerRequest(input: DeletePrayerRequestInput!): PrayerRequest
+  deleteRider(condition: ModelRiderConditionInput, input: DeleteRiderInput!): Rider
+  deleteSermon(input: DeleteSermonInput!): Sermon
+  updateDriver(condition: ModelDriverConditionInput, input: UpdateDriverInput!): Driver
+  updateEvent(condition: ModelEventConditionInput, input: UpdateEventInput!): Event
+  updatePrayerRequest(input: UpdatePrayerRequestInput!): PrayerRequest
+  updateRider(condition: ModelRiderConditionInput, input: UpdateRiderInput!): Rider
+  updateSermon(input: UpdateSermonInput!): Sermon
+}
+
+type PrayerRequest {
+  completed: Boolean!
+  content: String!
+  date: String!
+  id: ID!
+  name: String
+  title: String!
+}
+
+type PrayerRequestConnection {
+  items: [PrayerRequest]
+  nextToken: String
+}
+
+type Query {
+  a: Boolean
+  getDriver(id: ID!): Driver
+  getDriversByEventId(eventId: ID, filter: ModelDriverFilterInput, limit: Int, nextToken: String, sortDirection: ModelSortDirection): ModelDriverConnection
+  getDriversByEventIdAndEmail(driverEmail: ModelStringKeyConditionInput, eventId: ID, filter: ModelDriverFilterInput, limit: Int, nextToken: String, sortDirection: ModelSortDirection): ModelDriverConnection
+  getDriversByEventIdAndSignupStatus(driverSignupStatus: ModelStringKeyConditionInput, eventId: ID, filter: ModelDriverFilterInput, limit: Int, nextToken: String, sortDirection: ModelSortDirection): ModelDriverConnection
+  getEvent(id: ID!): Event
+  getEventsByEventId(eventId: ID, filter: ModelEventFilterInput, limit: Int, nextToken: String, sortDirection: ModelSortDirection): ModelEventConnection
+  getPrayerRequest(id: ID!): PrayerRequest
+  getRider(id: ID!): Rider
+  getRidersByEventId(eventId: ID, filter: ModelRiderFilterInput, limit: Int, nextToken: String, sortDirection: ModelSortDirection): ModelRiderConnection
+  getRidersByEventIdAndEmail(eventId: ID, filter: ModelRiderFilterInput, limit: Int, nextToken: String, riderEmail: ModelStringKeyConditionInput, sortDirection: ModelSortDirection): ModelRiderConnection
+  getRidersByEventIdAndSignupStatus(eventId: ID, filter: ModelRiderFilterInput, limit: Int, nextToken: String, riderSignupStatus: ModelStringKeyConditionInput, sortDirection: ModelSortDirection): ModelRiderConnection
+  getSermon(date: String!, id: ID!): Sermon
+  listDrivers(filter: ModelDriverFilterInput, limit: Int, nextToken: String): ModelDriverConnection
+  listEvents(filter: ModelEventFilterInput, limit: Int, nextToken: String): ModelEventConnection
+  listPrayerRequests(filter: TablePrayerRequestFilterInput, limit: Int, nextToken: String): PrayerRequestConnection
+  listRiders(filter: ModelRiderFilterInput, limit: Int, nextToken: String): ModelRiderConnection
+  listSermons(filter: TableSermonFilterInput, limit: Int, nextToken: String): SermonConnection
+}
+
+type Rider {
+  createdAt: AWSDateTime!
+  eventId: ID!
+  id: ID!
+  riderComments: String
+  riderEmail: String!
+  riderEventPickupLocation: String!
+  riderEventTime: String!
+  riderName: String!
+  riderPhoneNumber: String!
+  riderSignupStatus: RideSignupStatus!
+  updatedAt: AWSDateTime!
+}
+
+type Sermon {
+  URI: String!
+  date: String!
+  id: ID!
+  passage: String
+  speaker: String
+  title: String
+}
+
+type SermonConnection {
+  items: [Sermon]
+  nextToken: String
+}
+
+type Subscription {
+  c: Boolean
+  onCreateDriver: Driver @aws_subscribe(mutations: ["createDriver"])
+  onCreateEvent: Event @aws_subscribe(mutations: ["createEvent"])
+  onCreatePrayerRequest(completed: Boolean, content: String, date: String, id: ID, title: String): PrayerRequest @aws_subscribe(mutations: ["createPrayerRequest"])
+  onCreateRider: Rider @aws_subscribe(mutations: ["createRider"])
+  onCreateSermon(URI: String, date: String, id: ID, passage: String, title: String): Sermon @aws_subscribe(mutations: ["createSermon"])
+  onDeleteDriver: Driver @aws_subscribe(mutations: ["deleteDriver"])
+  onDeleteEvent: Event @aws_subscribe(mutations: ["deleteEvent"])
+  onDeletePrayerRequest(completed: Boolean, content: String, date: String, id: ID, title: String): PrayerRequest @aws_subscribe(mutations: ["deletePrayerRequest"])
+  onDeleteRider: Rider @aws_subscribe(mutations: ["deleteRider"])
+  onDeleteSermon(URI: String, date: String, id: ID, passage: String, title: String): Sermon @aws_subscribe(mutations: ["deleteSermon"])
+  onUpdateDriver: Driver @aws_subscribe(mutations: ["updateDriver"])
+  onUpdateEvent: Event @aws_subscribe(mutations: ["updateEvent"])
+  onUpdatePrayerRequest(completed: Boolean, content: String, date: String, id: ID, title: String): PrayerRequest @aws_subscribe(mutations: ["updatePrayerRequest"])
+  onUpdateRider: Rider @aws_subscribe(mutations: ["updateRider"])
+  onUpdateSermon(URI: String, date: String, id: ID, passage: String, title: String): Sermon @aws_subscribe(mutations: ["updateSermon"])
+}
+
+enum EventStatus {
+  ACTIVE
+  ARCHIVED
+  CLOSED
+  UNPUBLISHED
+}
+
+enum ModelAttributeTypes {
+  _null
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+enum RideSignupStatus {
+  IN_PROGRESS
+  MATCHED
+}
+
+input CreateDriverInput {
+  driverAddress: String!
+  driverComments: String!
+  driverEmail: String!
+  driverEventTime: String!
+  driverName: String!
+  driverNumRiderSeats: Int!
+  driverPhoneNumber: String!
+  driverSignupStatus: RideSignupStatus!
+  eventId: ID!
+  id: ID
+}
+
+input CreateEventInput {
+  eventId: ID!
+  eventName: String!
+  eventPickupLocations: [String]!
+  eventStatus: EventStatus!
+  eventTimes: [EventTimeOptionInput]!
+  id: ID
+}
+
+input CreatePrayerRequestInput {
+  completed: Boolean!
+  content: String!
+  date: String!
+  name: String
+  title: String!
+}
+
+input CreateRiderInput {
+  eventId: ID!
+  id: ID
+  riderComments: String
+  riderEmail: String!
+  riderEventPickupLocation: String!
+  riderEventTime: String!
+  riderName: String!
+  riderPhoneNumber: String!
+  riderSignupStatus: RideSignupStatus!
+}
+
+input CreateSermonInput {
+  URI: String!
+  date: String!
+  id: ID!
+  passage: String
+  speaker: String
+  title: String
+}
+
+input DeleteDriverInput {
+  id: ID!
+}
+
+input DeleteEventInput {
+  id: ID!
+}
+
+input DeletePrayerRequestInput {
+  id: ID!
+}
+
+input DeleteRiderInput {
+  id: ID!
+}
+
+input DeleteSermonInput {
+  date: String!
+  id: ID!
+}
+
+input EventTimeOptionInput {
+  timeHeading: String!
+  timeSubtext: String!
+}
+
+input ModelBooleanInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  eq: Boolean
+  ne: Boolean
+}
+
+input ModelDriverConditionInput {
+  and: [ModelDriverConditionInput]
+  driverAddress: ModelStringInput
+  driverComments: ModelStringInput
+  driverEmail: ModelStringInput
+  driverEventTime: ModelStringInput
+  driverName: ModelStringInput
+  driverNumRiderSeats: ModelIntInput
+  driverPhoneNumber: ModelStringInput
+  driverSignupStatus: ModelRideSignupStatusInput
+  eventId: ModelIDInput
+  not: ModelDriverConditionInput
+  or: [ModelDriverConditionInput]
+}
+
+input ModelDriverFilterInput {
+  and: [ModelDriverFilterInput]
+  driverAddress: ModelStringInput
+  driverComments: ModelStringInput
+  driverEmail: ModelStringInput
+  driverEventTime: ModelStringInput
+  driverName: ModelStringInput
+  driverNumRiderSeats: ModelIntInput
+  driverPhoneNumber: ModelStringInput
+  driverSignupStatus: ModelRideSignupStatusInput
+  eventId: ModelIDInput
+  not: ModelDriverFilterInput
+  or: [ModelDriverFilterInput]
+}
+
+input ModelEventConditionInput {
+  and: [ModelEventConditionInput]
+  eventId: ModelIDInput
+  eventName: ModelStringInput
+  eventPickupLocations: ModelStringInput
+  eventStatus: ModelEventStatusInput
+  not: ModelEventConditionInput
+  or: [ModelEventConditionInput]
+}
+
+input ModelEventFilterInput {
+  and: [ModelEventFilterInput]
+  eventId: ModelIDInput
+  eventName: ModelStringInput
+  eventPickupLocations: ModelStringInput
+  eventStatus: ModelEventStatusInput
+  not: ModelEventFilterInput
+  or: [ModelEventFilterInput]
+}
+
+input ModelEventStatusInput {
+  eq: EventStatus
+  ne: EventStatus
+}
+
+input ModelFloatInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  between: [Float]
+  eq: Float
+  ge: Float
+  gt: Float
+  le: Float
+  lt: Float
+  ne: Float
+}
+
+input ModelIDInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  beginsWith: ID
+  between: [ID]
+  contains: ID
+  eq: ID
+  ge: ID
+  gt: ID
+  le: ID
+  lt: ID
+  ne: ID
+  notContains: ID
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  between: [Int]
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+}
+
+input ModelRideSignupStatusInput {
+  eq: RideSignupStatus
+  ne: RideSignupStatus
+}
+
+input ModelRiderConditionInput {
+  and: [ModelRiderConditionInput]
+  eventId: ModelIDInput
+  not: ModelRiderConditionInput
+  or: [ModelRiderConditionInput]
+  riderComments: ModelStringInput
+  riderEmail: ModelStringInput
+  riderEventPickupLocation: ModelStringInput
+  riderEventTime: ModelStringInput
+  riderName: ModelStringInput
+  riderPhoneNumber: ModelStringInput
+  riderSignupStatus: ModelRideSignupStatusInput
+}
+
+input ModelRiderFilterInput {
+  and: [ModelRiderFilterInput]
+  eventId: ModelIDInput
+  not: ModelRiderFilterInput
+  or: [ModelRiderFilterInput]
+  riderComments: ModelStringInput
+  riderEmail: ModelStringInput
+  riderEventPickupLocation: ModelStringInput
+  riderEventTime: ModelStringInput
+  riderName: ModelStringInput
+  riderPhoneNumber: ModelStringInput
+  riderSignupStatus: ModelRideSignupStatusInput
+}
+
+input ModelSizeInput {
+  between: [Int]
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+}
+
+input ModelStringInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  beginsWith: String
+  between: [String]
+  contains: String
+  eq: String
+  ge: String
+  gt: String
+  le: String
+  lt: String
+  ne: String
+  notContains: String
+  size: ModelSizeInput
+}
+
+input ModelStringKeyConditionInput {
+  beginsWith: String
+  between: [String]
+  eq: String
+  ge: String
+  gt: String
+  le: String
+  lt: String
+}
+
+input TableBooleanFilterInput {
+  eq: Boolean
+  ne: Boolean
+}
+
+input TableFloatFilterInput {
+  between: [Float]
+  contains: Float
+  eq: Float
+  ge: Float
+  gt: Float
+  le: Float
+  lt: Float
+  ne: Float
+  notContains: Float
+}
+
+input TableIDFilterInput {
+  beginsWith: ID
+  between: [ID]
+  contains: ID
+  eq: ID
+  ge: ID
+  gt: ID
+  le: ID
+  lt: ID
+  ne: ID
+  notContains: ID
+}
+
+input TableIntFilterInput {
+  between: [Int]
+  contains: Int
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+  notContains: Int
+}
+
+input TablePrayerRequestFilterInput {
+  completed: TableBooleanFilterInput
+  content: TableStringFilterInput
+  date: TableStringFilterInput
+  id: TableIDFilterInput
+  name: TableStringFilterInput
+  title: TableStringFilterInput
+}
+
+input TableSermonFilterInput {
+  URI: TableStringFilterInput
+  date: TableStringFilterInput
+  id: TableIDFilterInput
+  passage: TableStringFilterInput
+  speaker: TableStringFilterInput
+  title: TableStringFilterInput
+}
+
+input TableStringFilterInput {
+  beginsWith: String
+  between: [String]
+  contains: String
+  eq: String
+  ge: String
+  gt: String
+  le: String
+  lt: String
+  ne: String
+  notContains: String
+}
+
+input UpdateDriverInput {
+  driverAddress: String
+  driverComments: String
+  driverEmail: String
+  driverEventTime: String
+  driverName: String
+  driverNumRiderSeats: Int
+  driverPhoneNumber: String
+  driverSignupStatus: RideSignupStatus
+  eventId: ID
+  id: ID!
+}
+
+input UpdateEventInput {
+  eventId: ID
+  eventName: String
+  eventPickupLocations: [String]
+  eventStatus: EventStatus
+  eventTimes: [EventTimeOptionInput]
+  id: ID!
+}
+
+input UpdatePrayerRequestInput {
+  completed: Boolean
+  content: String
+  date: String
+  id: ID!
+  name: String
+  title: String
+}
+
+input UpdateRiderInput {
+  eventId: ID
+  id: ID!
+  riderComments: String
+  riderEmail: String
+  riderEventPickupLocation: String
+  riderEventTime: String
+  riderName: String
+  riderPhoneNumber: String
+  riderSignupStatus: RideSignupStatus
+}
+
+input UpdateSermonInput {
+  URI: String
+  date: String!
+  id: ID!
+  passage: String
+  speaker: String
+  title: String
+}

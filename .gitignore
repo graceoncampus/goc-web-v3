@@ -36,11 +36,23 @@ yarn-error.log*
 # amplify stuff
 src/ui-components/
 src/graphql/
-amplify/
 src/Api.tsx
 src/models
 
+
 #amplify-do-not-edit-begin
+amplify/\#current-cloud-backend
+amplify/.config/local-*
+amplify/mock-data
+amplify/backend/amplify-meta.json
+amplify/backend/awscloudformation
+awsconfiguration.json
+amplifyconfiguration.json
+amplify-gradle-config.json
+amplifyxc.config
+amplify/team-provider-info.json
+amplify/backend/function/submissionsLambda/src/*.js
+amplify/backend/function/submissionsLambda/src/controllers
 amplify/\#current-cloud-backend
 amplify/.config/local-*
 amplify/logs
