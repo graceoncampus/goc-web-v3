@@ -35,6 +35,7 @@ import Logo from "@/components/Logo";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { FiExternalLink } from "react-icons/fi";
 import { IoMdMenu } from "react-icons/io";
+import { PRAYER_GOOGLE_FORM_LINK } from "@/constants/Links";
 
 export enum NavbarActiveKey {
   NONE = "",
@@ -241,6 +242,7 @@ const NavItem = ({
         color={color}
         transition="color 0.2s linear"
         fontWeight={fontWeight}
+        target={link && link === PRAYER_GOOGLE_FORM_LINK ? "_blank" : undefined}
       >
         {name}
       </Link>

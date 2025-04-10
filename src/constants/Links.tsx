@@ -16,3 +16,6 @@ export const SocialMedia: SocialMediaProps = {
 
 export const RIDES_GOOGLE_FORM_LINK: string =
   "https://docs.google.com/forms/d/e/1FAIpQLSdNplYHbAWFr0yeFtC3YauiCi3Mtm0PMw0dby4OGUr6HVLLsg/viewform";
+
+export const PRAYER_GOOGLE_FORM_LINK: string =
+  "https://docs.google.com/forms/d/e/1FAIpQLSc0PR3d6NL1YqWMoYZ9X1Y9aBN4y91FfXz152I2_h7HQaHAwA/viewform?usp=dialog";

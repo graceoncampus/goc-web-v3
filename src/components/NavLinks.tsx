@@ -8,7 +8,7 @@
  *      link: string
  *      external: boolean (when true, adds external link icon)
  */
-import { SocialMedia } from "@/constants/Links";
+import { PRAYER_GOOGLE_FORM_LINK, SocialMedia } from "@/constants/Links";
 
 const NavLinks = [
   {
@@ -61,7 +61,8 @@ const NavLinks = [
   },
   {
     name: "Prayer Requests",
-    link: "/prayer-request",
+    link: PRAYER_GOOGLE_FORM_LINK,
+    external: true,
   },
   {
     name: "Events",
