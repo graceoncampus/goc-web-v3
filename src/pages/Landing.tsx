@@ -2,8 +2,7 @@
  * GOC Website Main Landing page
  */
 
-import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useMemo } from "react";
 import { Template } from "@/layouts/Template";
 import { NavbarActiveKey } from "@/components/Navbar";
 import OutlineButton from "@/components/OutlineButton";
@@ -13,7 +12,6 @@ import { Box, Heading, Image, Stack, Text, Container } from "@chakra-ui/react";
 import { ContactInfo } from "@/constants/ContactInfo";
 import { SocialMedia, RIDES_GOOGLE_FORM_LINK } from "@/constants/Links";
 import { observer } from "mobx-react-lite";
-import { useStore } from "@/store/StoreContext";
 import { RiArrowRightLine } from "react-icons/ri";
 
 export const LandingPage = () => {
@@ -25,9 +23,6 @@ export const LandingPage = () => {
 };
 
 const LandingBody = observer(() => {
-  const navigate = useNavigate();
-  const [loggedIn, setLoggedIn] = useState(false);
-  const userStore = useStore();
   const isMobile = useMemo(() => {
     return (
       ("maxTouchPoints" in navigator && navigator.maxTouchPoints > 0) ||

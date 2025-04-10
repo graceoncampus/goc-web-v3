@@ -262,7 +262,7 @@ const Navbar = ({
   const isXL = useBreakpointValue({ base: false, xl: true });
 
   const handleScroll = useCallback(() => {
-    setIsScrolled(disableTransparent || window.scrollY > 50);
+    setIsScrolled(disableTransparent || window.scrollY > 30);
 
     /* UNCOMMENT TO HIDE NAVBAR ON SCROLL DOWN */
     // const THRESHOLD = 100;

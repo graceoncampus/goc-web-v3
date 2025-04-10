@@ -1,3 +1,7 @@
+/**
+ * Contact information
+ */
+
 interface ContactInfoProps {
   name: string;
   email: string;
@@ -8,10 +12,10 @@ interface ContactInfoProps {
 }
 
 export const ContactInfo: ContactInfoProps = {
-  name: "Ethan Lane",
+  name: "Isaac Wong",
   email: "gocateam@gmail.com",
-  phone: "(707) 690-8525",
-  location: "Rolfe 1200",
+  phone: "(510) 480-8831",
+  location: "Broad 2160E",
   day: "Fridays",
   time: "7pm",
 };

@@ -5,7 +5,11 @@ import {
   MenuRoot,
   MenuTrigger,
 } from "@/components/ui/menu";
-import { getCurrentUser, signOut } from "aws-amplify/auth";
+import {
+  fetchUserAttributes,
+  FetchUserAttributesOutput,
+  signOut,
+} from "aws-amplify/auth";
 import { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
@@ -16,13 +20,12 @@ interface LoginButtonProps {
 }
 
 const LoginButton = ({ drawerOpen = false }: LoginButtonProps) => {
-  const [user, setUser] = useState<string | null>(null);
+  const [user, setUser] = useState<FetchUserAttributesOutput | null>(null);
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { username } = await getCurrentUser();
-        setUser(username);
-        console.log("User details:", username);
+        const attr = await fetchUserAttributes();
+        setUser(attr);
       } catch {
         console.log("No user signed in.");
       }
@@ -67,7 +70,7 @@ const LoginButton = ({ drawerOpen = false }: LoginButtonProps) => {
               onMouseLeave={isMobile ? undefined : onClose}
               onClick={onToggle}
             >
-              {user}{" "}
+              Hello, {user.name}{" "}
               <RiArrowDropDownLine
                 style={{
                   transition: "transform .3s ease 0s",

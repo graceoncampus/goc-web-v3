@@ -1,6 +1,6 @@
-// currently works by running node load-sermons.ts
-// make sure to have correct .env file
-// todo: aws lambda to run this every week
+// Currently works by running node load-sermons.ts
+// Make sure to have correct .env file
+// TODO: aws lambda to run this every week
 require('dotenv').config();
 const Parser = require("rss-parser");
 const { Amplify } = require("aws-amplify");
@@ -102,7 +102,7 @@ const createSermons = async (sermons) => {
       status = response.Table.TableStatus;
       tries += 1;
     } catch (e) {
-      // console.log(e);
+      console.log(e);
     }
   }
 

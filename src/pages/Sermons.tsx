@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { listSermons } from "@/graphql/queries";
 import { generateClient } from "aws-amplify/api";
-import { NavbarActiveKey } from "@/components/Navbar";
 import { BannerTemplate } from "@/layouts/BannerTemplate";
+import { NavbarActiveKey } from "@/components/Navbar";
+import { InputGroup } from "@/components/ui/input-group";
+import GOCSpinner from "@/components/GOCSpinner";
 import {
   Box,
   Center,
@@ -20,47 +22,48 @@ import {
   PaginationItems,
   PaginationPrevTrigger,
 } from "@/components/ui/pagination";
-import { InputGroup } from "@/components/ui/input-group";
 import { LuSearch } from "react-icons/lu";
+
 const client = generateClient();
 
 export const SermonsPage = () => {
+  const [loading, setLoading] = useState<boolean>(true);
   const [sermons, setSermons] = useState<SermonItemProps[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchSermons = async () => {
-      await (client.graphql({ query: listSermons }) as Promise<any>)
-        .then((result) => {
-          const sermonData = result.data.listSermons.items.sort(
-            (a: any, b: any) =>
-              new Date(b.date).getTime() - new Date(a.date).getTime(),
-          );
-          setSermons(
-            sermonData.map((sermon: any) => {
-              const convertedDate = new Date(sermon.date).toLocaleString(
-                "en-US",
-                {
-                  month: "short",
-                  day: "2-digit",
-                  year: "numeric",
-                },
-              );
-              const item = {
-                title: sermon.title,
-                speaker: sermon.speaker,
-                passage: sermon.passage,
-                date: convertedDate,
-                URI: sermon.URI,
-              };
-              return item;
-            }),
-          );
-        })
-        .catch((reason) => {
-          console.log(reason);
-        });
+      setLoading(true);
+      try {
+        const result = await (client.graphql({ query: listSermons }) as Promise<any>);
+        const sermonData = result.data.listSermons.items.sort(
+          (a: any, b: any) =>
+            new Date(b.date).getTime() - new Date(a.date).getTime(),
+        );
+        setSermons(
+          sermonData.map((sermon: any) => {
+            const convertedDate = new Date(sermon.date).toLocaleString("en-US", {
+              month: "short",
+              day: "2-digit",
+              year: "numeric",
+            });
+            const item = {
+              title: sermon.title,
+              speaker: sermon.speaker,
+              passage: sermon.passage,
+              date: convertedDate,
+              URI: sermon.URI,
+            };
+            return item;
+          })
+        );
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
     };
+    
     fetchSermons();
   }, []);
 
@@ -82,6 +85,7 @@ export const SermonsPage = () => {
         sermons={filteredSermons}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        loading={loading}
       />
     </BannerTemplate>
   );
@@ -118,6 +122,7 @@ interface SermonBodyProps {
   sermons: SermonItemProps[];
   searchQuery: string;
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+  loading: boolean;
 }
 
 const SermonsBody = (props: SermonBodyProps) => {
@@ -153,6 +158,8 @@ const SermonsBody = (props: SermonBodyProps) => {
       </HStack>
     </PaginationRoot>
   );
+
+  if (props.loading) return <GOCSpinner text="Loading sermons..." />;
 
   return (
     <Center>
