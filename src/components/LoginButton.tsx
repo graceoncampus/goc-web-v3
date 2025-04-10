@@ -8,7 +8,6 @@ import {
 import {
   fetchUserAttributes,
   FetchUserAttributesOutput,
-  getCurrentUser,
   signOut,
 } from "aws-amplify/auth";
 import { useEffect, useState } from "react";

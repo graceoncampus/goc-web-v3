@@ -180,6 +180,26 @@ const RidesLandingBody = ({
     };
   }, []);
 
+  const getRelevantSunday = () => {
+    const today = new Date();
+    const day = today.getDay(); // 0 = Sunday, 1 = Monday, …, 6 = Saturday
+    const relevantSunday = new Date(today);
+    if (day === 5 || day === 6 || day === 0) {
+      // Friday, Saturday, or Sunday -> use next Sunday
+      const daysToAdd = day === 0 ? 7 : 7 - day;
+      relevantSunday.setDate(today.getDate() + daysToAdd);
+    } else {
+      // For Monday-Thursday, use the previous Sunday
+      relevantSunday.setDate(today.getDate() - day);
+    }
+    return relevantSunday;
+  };
+
+  const today = new Date();
+  const relevantSunday = getRelevantSunday();
+  const numericSunday = `(${relevantSunday.getMonth() + 1}/${relevantSunday.getDate()})`;
+  const disableSignUp = today.getDay() >= 1 && today.getDay() <= 4;
+
   return (
     <Container fluid maxWidth={"90rem"} padding={0}>
       <Flex direction={{ base: "column", lg: "row" }}>
@@ -190,7 +210,12 @@ const RidesLandingBody = ({
           marginRight={{ base: "0", lg: "2rem" }}
           marginBottom={{ base: "2.5rem", lg: "0" }}
         >
-          <RidesMenuSidebar isLoggedIn={isLoggedIn} inRidesTeam={inRidesTeam} />
+          <RidesMenuSidebar
+            isLoggedIn={isLoggedIn}
+            inRidesTeam={inRidesTeam}
+            numericSunday={numericSunday}
+            disabledSignUp={disableSignUp}
+          />
         </Box>
         <Box flex={7}>
           {/* Heading */}
@@ -229,13 +254,15 @@ const RidesLandingBody = ({
             {/* Google Form Signup Button */}
             <GOCButton
               href={RIDES_GOOGLE_FORM_LINK}
+              disabled={disableSignUp}
               buttonProps={{
                 display: { lg: "none" },
-                marginTop: "1rem",
-                width: "8rem",
+                marginTop: "1.2rem",
+                width: "11rem",
+                height: "2.8rem",
               }}
             >
-              Sign up
+              Sign up {numericSunday}
             </GOCButton>
             {/* Admin Settings */}
             {inRidesTeam && (
@@ -263,11 +290,13 @@ const RidesLandingBody = ({
 interface SignUpButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
-const SignUpButton = ({ children, onClick }: SignUpButtonProps) => {
+const SignUpButton = ({ children, onClick, disabled }: SignUpButtonProps) => {
   return onClick ? (
     <Button
+      disabled={disabled}
       width="10rem"
       height="3rem"
       variant="solid"
@@ -279,9 +308,7 @@ const SignUpButton = ({ children, onClick }: SignUpButtonProps) => {
       border="none"
       marginTop="1.5rem"
       borderRadius=".8rem"
-      _hover={{
-        transform: "scale(0.99)",
-      }}
+      _hover={disabled ? {} : { transform: "scale(0.99)" }}
       onClick={onClick}
     >
       {children}
@@ -289,6 +316,7 @@ const SignUpButton = ({ children, onClick }: SignUpButtonProps) => {
   ) : (
     <Button
       asChild
+      disabled={disabled}
       width="10rem"
       height="3rem"
       variant="solid"
@@ -301,9 +329,7 @@ const SignUpButton = ({ children, onClick }: SignUpButtonProps) => {
       marginTop="1.5rem"
       borderRadius=".8rem"
       backgroundColor="goc.pale_blue"
-      _hover={{
-        transform: "scale(0.99)",
-      }}
+      _hover={disabled ? {} : { transform: "scale(0.99)" }}
     >
       {children}
     </Button>
@@ -313,11 +339,15 @@ const SignUpButton = ({ children, onClick }: SignUpButtonProps) => {
 interface RidesMenuSidebarProps {
   isLoggedIn: boolean;
   inRidesTeam: boolean;
+  numericSunday: string;
+  disabledSignUp: boolean;
 }
 
 const RidesMenuSidebar = ({
   isLoggedIn,
   inRidesTeam,
+  numericSunday,
+  disabledSignUp,
 }: RidesMenuSidebarProps) => {
   return (
     <Box
@@ -344,10 +374,14 @@ const RidesMenuSidebar = ({
         </Text>
 
         {/* Google Form Signup Button */}
-        <SignUpButton>
-          <Link href={RIDES_GOOGLE_FORM_LINK} target="_blank">
-            Sign up
-          </Link>
+        <SignUpButton disabled={disabledSignUp}>
+          {disabledSignUp ? (
+            <Text>Sign up {numericSunday}</Text>
+          ) : (
+            <Link href={RIDES_GOOGLE_FORM_LINK} target="_blank">
+              Sign up {numericSunday}
+            </Link>
+          )}
         </SignUpButton>
       </VStack>
       {isLoggedIn ? (
