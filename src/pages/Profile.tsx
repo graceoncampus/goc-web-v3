@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { confirmSignUp, resendSignUpCode, signUp } from "aws-amplify/auth";
+import {
+  fetchUserAttributes,
+  updateUserAttributes,
+  type UpdateUserAttributesOutput,
+  signOut,
+} from "aws-amplify/auth";
 import {
   Box,
   Button,
@@ -13,8 +18,9 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { NavbarActiveKey } from "@/components/Navbar";
-import { LoginTemplate } from "@/layouts/LoginTemplate";
 import { Field } from "@/components/ui/field";
+import { toaster } from "@/components/ui/toaster";
+import { LoginTemplate } from "@/layouts/LoginTemplate";
 import { useHookFormMask } from "use-mask-input";
 import "react-phone-number-input/style.css";
 
@@ -23,8 +29,8 @@ export interface SignupProps {
   lastName: string;
   email: string;
   phoneNumber: string;
-  password: string;
-  confirmPassword: string;
+  password?: string;
+  confirmPassword?: string;
   address?: string;
   gradYear?: string;
 }
@@ -38,80 +44,96 @@ export const ProfilePage = () => {
 };
 
 const ProfileBody = () => {
-  const [signedUp, setSignedUp] = useState(false);
-  const [username, setUsername] = useState("");
-
-  return !signedUp ? (
-    <ProfileForm setSignedUp={setSignedUp} setUsername={setUsername} />
-  ) : (
-    <ConfirmationForm username={username} />
-  );
-};
-
-interface SignupFormProps {
-  setSignedUp: React.Dispatch<React.SetStateAction<boolean>>;
-  setUsername: React.Dispatch<React.SetStateAction<string>>;
-}
-
-const ProfileForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 77 }, (_, i) => currentYear - 70 + i);
-
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    watch,
     setError,
+    reset,
     formState: { errors },
   } = useForm<SignupProps>({
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      password: "",
+      confirmPassword: "",
+      address: "",
+      gradYear: "",
+    },
     mode: "onChange",
   });
+
+  // Register the masked input
   const registerWithMask = useHookFormMask(register);
 
-  const password = watch("password");
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 77 }, (_, i) => currentYear - 70 + i);
 
-  const onSignup = async (data: SignupProps) => {
+  // Fetch the user attributes when the component mounts
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const attr = await fetchUserAttributes();
+
+        // Pre-fill form values from the fetched user attributes
+        reset({
+          firstName: attr.name || "",
+          lastName: attr.family_name || "",
+          email: attr.email || "",
+          phoneNumber: attr.phone_number
+            ? attr.phone_number.replace(/^\+1/, "")
+            : "",
+          address: attr["custom:address"] || "",
+          gradYear: attr["custom:grad_year"] || "",
+          password: "",
+          confirmPassword: "",
+        });
+      } catch (error) {
+        console.log("No user signed in or error fetching user data.");
+      }
+    };
+    fetchUser();
+  }, [reset]);
+
+  const onUpdate = async (data: SignupProps) => {
+    const formattedPhoneNumber =
+      "+1" + data.phoneNumber.replace(/[()-\s]/g, "");
+
+    const newUserAttributes: { [key: string]: string } = {
+      email: data.email,
+      phone_number: formattedPhoneNumber,
+      name: data.firstName,
+      family_name: data.lastName,
+    };
+
+    if (data.address) {
+      newUserAttributes["custom:address"] = data.address;
+    }
+    if (data.gradYear) {
+      newUserAttributes["custom:grad_year"] = data.gradYear;
+    }
+
+    // Optionally update password if provided
+    if (data.password && data.password === data.confirmPassword) {
+      newUserAttributes["password"] = data.password;
+    }
+
     try {
-      const formattedPhoneNumber =
-        "+1" + data.phoneNumber.replace(/[()-\s]/g, "");
-
-      // Required fields
-      const userAttributes: { [key: string]: string } = {
-        email: data.email,
-        phone_number: formattedPhoneNumber,
-        name: data.firstName,
-        family_name: data.lastName,
-      };
-
-      // Optional fields
-      if (data.address) {
-        userAttributes["custom:address"] = data.address;
-      }
-      if (data.gradYear) {
-        userAttributes["custom:grad_year"] = data.gradYear;
-      }
-
-      await signUp({
-        username: data.email,
-        password: data.password,
-        options: {
-          userAttributes,
-        },
+      const response: UpdateUserAttributesOutput = await updateUserAttributes({
+        userAttributes: newUserAttributes,
       });
-      setUsername(data.email);
-      setSignedUp(true);
+      console.log("Profile updated successfully:", response);
+      toaster.create({
+        title: "Success",
+        description: "Profile updated successfully",
+        type: "success",
+        duration: 2000,
+      });
     } catch (error: any) {
-      console.error("Error signing up: ", error);
-      if (error.name === "UsernameExistsException") {
-        try {
-          await resendSignUpCode({ username: data.email });
-          setSignedUp(true);
-        } catch (resendError: any) {
-          setError("email", { message: "That email already exists :(" });
-        }
-      } else {
-        setError("root", { message: error.message });
-      }
+      console.error("Error updating profile: ", error);
+      setError("root", { message: error.message });
     }
   };
 
@@ -124,13 +146,13 @@ const ProfileForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
       padding="1rem"
     >
       <Heading as="h2" fontSize="2xl">
-        Profile
+        PROFILE
       </Heading>
       <Box
         as="form"
         width="100%"
         maxWidth="500px"
-        onSubmit={handleSubmit(onSignup)}
+        onSubmit={handleSubmit(onUpdate)}
       >
         <VStack gap="1rem">
           <Stack direction={{ base: "column", lg: "row" }} width="100%" gap={4}>
@@ -139,7 +161,7 @@ const ProfileForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                 {...register("firstName", {
                   required: "First name is required",
                 })}
-                placeholder="Shawn"
+                placeholder="First Name"
                 variant="subtle"
                 backgroundColor="#D9D9D9B2"
               />
@@ -152,7 +174,7 @@ const ProfileForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
             <Field label="Last Name" required={true}>
               <Input
                 {...register("lastName", { required: "Last name is required" })}
-                placeholder="Zhuang"
+                placeholder="Last Name"
                 variant="subtle"
                 backgroundColor="#D9D9D9B2"
               />
@@ -172,9 +194,10 @@ const ProfileForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                   message: "Invalid email address",
                 },
               })}
-              placeholder="graceoncampus@gmail.com"
+              placeholder="yourname@example.com"
               variant="subtle"
               backgroundColor="#D9D9D9B2"
+              disabled
             />
             {errors.email && (
               <Text color="red" fontSize={"sm"}>
@@ -188,7 +211,7 @@ const ProfileForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                 required: "Phone number is required",
               })}
               type="text"
-              placeholder="Enter phone number"
+              placeholder="(123) 456-7890"
               variant="subtle"
               backgroundColor="#D9D9D9B2"
             />
@@ -198,48 +221,10 @@ const ProfileForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
               </Text>
             )}
           </Field>
-          <Field label="Password" required={true}>
-            <Input
-              type="password"
-              {...register("password", {
-                required: "Password is required",
-                minLength: {
-                  value: 8,
-                  message: "Password must be at least 8 characters",
-                },
-              })}
-              placeholder="Password"
-              variant="subtle"
-              backgroundColor="#D9D9D9B2"
-            />
-            {errors.password && (
-              <Text color="red" fontSize={"sm"}>
-                {errors.password.message}
-              </Text>
-            )}
-          </Field>
-          <Field label="Confirm Password" required={true}>
-            <Input
-              type="password"
-              {...register("confirmPassword", {
-                required: "Please confirm your password",
-                validate: (value) =>
-                  value === password || "Passwords do not match",
-              })}
-              placeholder="Password again"
-              variant="subtle"
-              backgroundColor="#D9D9D9B2"
-            />
-            {errors.confirmPassword && (
-              <Text color="red" fontSize={"sm"}>
-                {errors.confirmPassword.message}
-              </Text>
-            )}
-          </Field>
           <Field label="Address / Dorm">
             <Input
               {...register("address")}
-              placeholder="Sproul Landing"
+              placeholder="Address or Dorm"
               variant="subtle"
               backgroundColor="#D9D9D9B2"
             />
@@ -278,97 +263,28 @@ const ProfileForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
             </Text>
           )}
           <Button type="submit" width="100%">
-            Update profile
+            Update
           </Button>
         </VStack>
       </Box>
       <Text fontSize="sm" textWrap="nowrap">
-        Already have an account?{" "}
-        <Link color="goc.blue" href="/login" paddingLeft=".5rem">
-          Login
+        Need to log out?
+        <Link
+          color={"goc.blue"}
+          paddingLeft={".6rem"}
+          fontWeight={"semibold"}
+          cursor={"pointer"}
+          onClick={async (e) => {
+            e.preventDefault();
+            await signOut();
+            navigate("/");
+          }}
+        >
+          Log out
         </Link>
       </Text>
     </VStack>
   );
 };
 
-interface ConfirmationFormProps {
-  username: string;
-}
-
-const ConfirmationForm = ({ username }: ConfirmationFormProps) => {
-  const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    setError,
-    formState: { errors },
-  } = useForm<{ code: string }>();
-
-  console.log("Username passed to ConfirmationForm:", username);
-
-  const onConfirm = async ({ code }: { code: string }) => {
-    try {
-      const { isSignUpComplete } = await confirmSignUp({
-        username: username,
-        confirmationCode: code,
-      });
-      if (isSignUpComplete) navigate("/");
-    } catch (error: any) {
-      console.error("Error confirming sign up", error);
-      setError("root", { message: error.message });
-    }
-  };
-
-  return (
-    <VStack
-      gap="1rem"
-      align="center"
-      minWidth={"15rem"}
-      width="100%"
-      padding="1rem"
-    >
-      <Heading
-        as="h2"
-        fontSize="lg"
-        textAlign="center"
-        marginBottom={"1rem"}
-        textWrap={"balance"}
-      >
-        Check your email for a confirmation code!
-      </Heading>
-      <Box
-        as="form"
-        width="100%"
-        maxWidth="500px"
-        onSubmit={handleSubmit(onConfirm)}
-      >
-        <VStack gap="1rem">
-          <Field label="Confirmation Code" required={true}>
-            <Input
-              {...register("code", {
-                required: "Confirmation code is required",
-              })}
-              placeholder="Enter your confirmation code"
-              variant="subtle"
-              backgroundColor="#D9D9D9B2"
-            />
-            {errors.code && (
-              <Text color="red" fontSize="sm">
-                {errors.code.message}
-              </Text>
-            )}
-          </Field>
-          {errors.root && (
-            <Text color="red" fontSize={"sm"}>
-              {errors.root.message}
-            </Text>
-          )}
-          <Button type="submit" width="100%">
-            Verify
-          </Button>
-        </VStack>
-      </Box>
-    </VStack>
-  );
-};
+export default ProfilePage;

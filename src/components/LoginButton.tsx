@@ -26,7 +26,6 @@ const LoginButton = ({ drawerOpen = false }: LoginButtonProps) => {
       try {
         const attr = await fetchUserAttributes();
         setUser(attr);
-        console.log("User details:", attr);
       } catch {
         console.log("No user signed in.");
       }
