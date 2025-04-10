@@ -1,0 +1,26 @@
+{
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "viteGooglePrivateKey",
+      "environmentVariableName": "VITE_GOOGLE_PRIVATE_KEY"
+    },
+    {
+      "cloudFormationParameterName": "viteGoogleServiceAccountEmail",
+      "environmentVariableName": "VITE_GOOGLE_SERVICE_ACCOUNT_EMAIL"
+    },
+    {
+      "cloudFormationParameterName": "mailgunApiKey",
+      "environmentVariableName": "MAILGUN_API_KEY"
+    }
+  ],
+  "permissions": {
+    "api": {
+      "gocbackendv3": [
+        "Query",
+        "Mutation",
+        "Subscription"
+      ]
+    }
+  }
+}

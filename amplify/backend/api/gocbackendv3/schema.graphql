@@ -1,0 +1,686 @@
+type Car {
+  driver: Driver!
+  driver_id: String
+  driver_name: String!
+  riders: [Rider]!
+}
+
+input CreateCarInput {
+  driver: CreateDriverInput!
+  driver_id: String
+  driver_name: String!
+  riders: [CreateRiderInput]!
+}
+
+input CreateDriverInput {
+  comment: String
+  email: String!
+  evening: String
+  morning: String
+  name: String!
+  phone: String
+  seats: String!
+  send_email: Boolean!
+  staying: String
+  uid: String
+}
+
+input CreateGOCEventsInput {
+  description: String!
+  endDate: String
+  id: String!
+  imageLink: String!
+  location: String!
+  price: Float!
+  startDate: String!
+  title: String!
+}
+
+input CreateMinistryTeamInput {
+  name: String!
+  description: String!
+  leaders: String!
+  contact: String
+}
+
+input CreatePrayerRequestInput {
+  completed: Boolean!
+  content: String!
+  date: String!
+  name: String
+  title: String!
+}
+
+input CreateRideInput {
+  cars: [CreateCarInput]!
+  date: String!
+  emailMessage: String!
+}
+
+input CreateRiderInput {
+  comment: String
+  email: String
+  evening: String
+  morning: String
+  name: String!
+  phone: String
+  pickup_location: String!
+  staying: String
+  uid: String
+}
+
+input CreateSermonInput {
+  URI: String!
+  date: String!
+  id: ID!
+  passage: String
+  speaker: String
+  title: String
+}
+
+input DeleteGOCEventsInput {
+  id: String!
+}
+
+input DeleteMinistryTeamInput {
+  id: ID!
+}
+
+input DeletePrayerRequestInput {
+  id: ID!
+}
+
+input DeleteRideInput {
+  id: ID!
+}
+
+input DeleteSermonInput {
+  date: String!
+  id: ID!
+}
+
+type Driver {
+  comment: String
+  email: String!
+  evening: String
+  morning: String
+  name: String!
+  phone: String
+  seats: String!
+  send_email: Boolean!
+  staying: String
+  uid: String
+}
+
+type DriverConnection {
+  items: [Driver]
+  nextToken: String
+}
+
+type GOCEvents {
+  description: String!
+  endDate: String
+  id: String!
+  imageLink: String!
+  location: String!
+  price: Float!
+  startDate: String!
+  title: String!
+}
+
+type GOCEventsConnection {
+  items: [GOCEvents]
+  nextToken: String
+}
+
+type MinistryTeam {
+  id: ID!
+  name: String!
+  description: String!
+  leaders: String!
+  contact: String
+}
+
+type MinistryTeamConnection {
+  items: [MinistryTeam]
+  nextToken: String
+}
+
+enum ModelAttributeTypes {
+  _null
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+}
+
+input ModelBooleanInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  eq: Boolean
+  ne: Boolean
+}
+
+input ModelFloatInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  between: [Float]
+  eq: Float
+  ge: Float
+  gt: Float
+  le: Float
+  lt: Float
+  ne: Float
+}
+
+input ModelIDInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  beginsWith: ID
+  between: [ID]
+  contains: ID
+  eq: ID
+  ge: ID
+  gt: ID
+  le: ID
+  lt: ID
+  ne: ID
+  notContains: ID
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  between: [Int]
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+}
+
+input ModelSizeInput {
+  between: [Int]
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+input ModelStringInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  beginsWith: String
+  between: [String]
+  contains: String
+  eq: String
+  ge: String
+  gt: String
+  le: String
+  lt: String
+  ne: String
+  notContains: String
+  size: ModelSizeInput
+}
+
+input ModelStringKeyConditionInput {
+  beginsWith: String
+  between: [String]
+  eq: String
+  ge: String
+  gt: String
+  le: String
+  lt: String
+}
+
+input ModelSubscriptionBooleanInput {
+  eq: Boolean
+  ne: Boolean
+}
+
+input ModelSubscriptionFloatInput {
+  between: [Float]
+  eq: Float
+  ge: Float
+  gt: Float
+  in: [Float]
+  le: Float
+  lt: Float
+  ne: Float
+  notIn: [Float]
+}
+
+input ModelSubscriptionIDInput {
+  beginsWith: ID
+  between: [ID]
+  contains: ID
+  eq: ID
+  ge: ID
+  gt: ID
+  in: [ID]
+  le: ID
+  lt: ID
+  ne: ID
+  notContains: ID
+  notIn: [ID]
+}
+
+input ModelSubscriptionIntInput {
+  between: [Int]
+  eq: Int
+  ge: Int
+  gt: Int
+  in: [Int]
+  le: Int
+  lt: Int
+  ne: Int
+  notIn: [Int]
+}
+
+input ModelSubscriptionStringInput {
+  beginsWith: String
+  between: [String]
+  contains: String
+  eq: String
+  ge: String
+  gt: String
+  in: [String]
+  le: String
+  lt: String
+  ne: String
+  notContains: String
+  notIn: [String]
+}
+
+type PrayerRequest {
+  completed: Boolean!
+  content: String!
+  date: String!
+  id: ID!
+  name: String
+  title: String!
+}
+
+type PrayerRequestConnection {
+  items: [PrayerRequest]
+  nextToken: String
+}
+
+type Ride {
+  cars: [Car]!
+  date: String!
+  emailMessage: String!
+  id: ID!
+}
+
+type RideConnection {
+  items: [Ride]
+  nextToken: String
+}
+
+type Rider {
+  comment: String
+  email: String
+  evening: String
+  morning: String
+  name: String!
+  phone: String
+  pickup_location: String!
+  staying: String
+  uid: String
+}
+
+type RiderConnection {
+  items: [Rider]
+  nextToken: String
+}
+
+type Sermon {
+  URI: String!
+  date: String!
+  id: ID!
+  passage: String!
+  speaker: String
+  title: String
+}
+
+type SermonConnection {
+  items: [Sermon]
+  nextToken: String
+}
+
+input TableBooleanFilterInput {
+  eq: Boolean
+  ne: Boolean
+}
+
+input TableCarFilterInput {
+  driver_id: TableStringFilterInput
+  driver_name: TableStringFilterInput
+  id: TableIDFilterInput
+}
+
+input TableDriverFilterInput {
+  comment: TableStringFilterInput
+  email: TableStringFilterInput
+  evening: TableStringFilterInput
+  id: TableIDFilterInput
+  morning: TableStringFilterInput
+  name: TableStringFilterInput
+  phone: TableStringFilterInput
+  seats: TableStringFilterInput
+  send_email: TableStringFilterInput
+  staying: TableStringFilterInput
+  uid: TableStringFilterInput
+}
+
+input TableFloatFilterInput {
+  between: [Float]
+  contains: Float
+  eq: Float
+  ge: Float
+  gt: Float
+  le: Float
+  lt: Float
+  ne: Float
+  notContains: Float
+}
+
+input TableGOCEventsFilterInput {
+  description: TableStringFilterInput
+  endDate: TableStringFilterInput
+  id: TableStringFilterInput
+  imageLink: TableStringFilterInput
+  location: TableStringFilterInput
+  price: TableFloatFilterInput
+  startDate: TableStringFilterInput
+  title: TableStringFilterInput
+}
+
+input TableIDFilterInput {
+  beginsWith: ID
+  between: [ID]
+  contains: ID
+  eq: ID
+  ge: ID
+  gt: ID
+  le: ID
+  lt: ID
+  ne: ID
+  notContains: ID
+}
+
+input TableIntFilterInput {
+  between: [Int]
+  contains: Int
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+  notContains: Int
+}
+
+input TableMinistryTeamFilterInput {
+  id: TableIDFilterInput
+  name: TableStringFilterInput
+  description: TableStringFilterInput
+  leaders: TableStringFilterInput
+  contact: TableStringFilterInput
+}
+
+input TablePrayerRequestFilterInput {
+  completed: TableBooleanFilterInput
+  content: TableStringFilterInput
+  date: TableStringFilterInput
+  id: TableIDFilterInput
+  name: TableStringFilterInput
+  title: TableStringFilterInput
+}
+
+input TableRideFilterInput {
+  date: TableStringFilterInput
+  emailMessage: TableStringFilterInput
+  id: TableIDFilterInput
+}
+
+input TableRiderFilterInput {
+  comment: TableStringFilterInput
+  email: TableStringFilterInput
+  evening: TableStringFilterInput
+  id: TableIDFilterInput
+  morning: TableStringFilterInput
+  name: TableStringFilterInput
+  phone: TableStringFilterInput
+  pickup_location: TableStringFilterInput
+  staying: TableStringFilterInput
+  uid: TableStringFilterInput
+}
+
+input TableSermonFilterInput {
+  URI: TableStringFilterInput
+  date: TableStringFilterInput
+  id: TableIDFilterInput
+  passage: TableStringFilterInput
+  speaker: TableStringFilterInput
+  title: TableStringFilterInput
+}
+
+input TableStringFilterInput {
+  beginsWith: String
+  between: [String]
+  contains: String
+  eq: String
+  ge: String
+  gt: String
+  le: String
+  lt: String
+  ne: String
+  notContains: String
+}
+
+input UpdateGOCEventsInput {
+  description: String
+  endDate: String
+  id: String!
+  imageLink: String
+  location: String
+  price: Float
+  startDate: String
+  title: String
+}
+
+input UpdateMinistryTeamInput {
+  id: ID!
+  name: String
+  description: String
+  leaders: String
+  contact: String
+}
+
+input UpdatePrayerRequestInput {
+  completed: Boolean
+  content: String
+  date: String
+  id: ID!
+  name: String
+  title: String
+}
+
+input UpdateRideInput {
+  date: String
+  emailMessage: String
+  id: ID!
+}
+
+input UpdateSermonInput {
+  URI: String
+  date: String!
+  id: ID!
+  passage: String
+  speaker: String
+  title: String
+}
+
+type Mutation {
+  b: Boolean
+  createGOCEvents(input: CreateGOCEventsInput!): GOCEvents
+  createPrayerRequest(input: CreatePrayerRequestInput!): PrayerRequest
+  createRide(input: CreateRideInput!): Ride
+  createSermon(input: CreateSermonInput!): Sermon
+  deleteGOCEvents(input: DeleteGOCEventsInput!): GOCEvents
+  deletePrayerRequest(input: DeletePrayerRequestInput!): PrayerRequest
+  deleteRide(input: DeleteRideInput!): Ride
+  deleteSermon(input: DeleteSermonInput!): Sermon
+  updateGOCEvents(input: UpdateGOCEventsInput!): GOCEvents
+  updatePrayerRequest(input: UpdatePrayerRequestInput!): PrayerRequest
+  updateRide(input: UpdateRideInput!): Ride
+  updateSermon(input: UpdateSermonInput!): Sermon
+  createMinistryTeam(input: CreateMinistryTeamInput!): MinistryTeam
+  updateMinistryTeam(input: UpdateMinistryTeamInput!): MinistryTeam
+  deleteMinistryTeam(input: DeleteMinistryTeamInput!): MinistryTeam
+}
+
+type Query {
+  a: Boolean
+  getAllRides: [Ride]
+  getGOCEvents(id: String!): GOCEvents
+  getPrayerRequest(id: ID!): PrayerRequest
+  getRide(id: ID!): Ride
+  getSermon(date: String!, id: ID!): Sermon
+  listGOCEvents(
+    filter: TableGOCEventsFilterInput
+    limit: Int
+    nextToken: String
+  ): GOCEventsConnection
+  listPrayerRequests(
+    filter: TablePrayerRequestFilterInput
+    limit: Int
+    nextToken: String
+  ): PrayerRequestConnection
+  listRides(
+    filter: TableRideFilterInput
+    limit: Int
+    nextToken: String
+  ): RideConnection
+  listSermons(
+    filter: TableSermonFilterInput
+    limit: Int
+    nextToken: String
+  ): SermonConnection
+  getMinistryTeam(id: ID!): MinistryTeam
+  listMinistryTeams(
+    filter: TableMinistryTeamFilterInput
+    limit: Int
+    nextToken: String
+  ): MinistryTeamConnection
+}
+
+type Subscription {
+  c: Boolean
+  onCreateGOCEvents(
+    endDate: String
+    id: String
+    price: Float
+    startDate: String
+    title: String
+  ): GOCEvents @aws_subscribe(mutations: ["createGOCEvents"])
+  onCreatePrayerRequest(
+    completed: Boolean
+    content: String
+    date: String
+    id: ID
+    title: String
+  ): PrayerRequest @aws_subscribe(mutations: ["createPrayerRequest"])
+  onCreateRide(date: String, emailMessage: String, id: ID): Ride
+    @aws_subscribe(mutations: ["createRide"])
+  onCreateSermon(
+    URI: String
+    date: String
+    id: ID
+    passage: String
+    title: String
+  ): Sermon @aws_subscribe(mutations: ["createSermon"])
+  onDeleteGOCEvents(
+    endDate: String
+    id: String
+    price: Float
+    startDate: String
+    title: String
+  ): GOCEvents @aws_subscribe(mutations: ["deleteGOCEvents"])
+  onDeletePrayerRequest(
+    completed: Boolean
+    content: String
+    date: String
+    id: ID
+    title: String
+  ): PrayerRequest @aws_subscribe(mutations: ["deletePrayerRequest"])
+  onDeleteRide(date: String, emailMessage: String, id: ID): Ride
+    @aws_subscribe(mutations: ["deleteRide"])
+  onDeleteSermon(
+    URI: String
+    date: String
+    id: ID
+    passage: String
+    title: String
+  ): Sermon @aws_subscribe(mutations: ["deleteSermon"])
+  onUpdateGOCEvents(
+    endDate: String
+    id: String
+    price: Float
+    startDate: String
+    title: String
+  ): GOCEvents @aws_subscribe(mutations: ["updateGOCEvents"])
+  onUpdatePrayerRequest(
+    completed: Boolean
+    content: String
+    date: String
+    id: ID
+    title: String
+  ): PrayerRequest @aws_subscribe(mutations: ["updatePrayerRequest"])
+  onUpdateRide(date: String, emailMessage: String, id: ID): Ride
+    @aws_subscribe(mutations: ["updateRide"])
+  onUpdateSermon(
+    URI: String
+    date: String
+    id: ID
+    passage: String
+    title: String
+  ): Sermon @aws_subscribe(mutations: ["updateSermon"])
+  onCreateMinistryTeam(
+    id: ID
+    name: String
+    description: String
+    leaders: String
+    contact: String
+  ): MinistryTeam @aws_subscribe(mutations: ["createMinistryTeam"])
+  onUpdateMinistryTeam(
+    id: ID
+    name: String
+    description: String
+    leaders: String
+    contact: String
+  ): MinistryTeam @aws_subscribe(mutations: ["updateMinistryTeam"])
+  onDeleteMinistryTeam(
+    id: ID
+    name: String
+    description: String
+    leaders: String
+    contact: String
+  ): MinistryTeam @aws_subscribe(mutations: ["deleteMinistryTeam"])
+}
