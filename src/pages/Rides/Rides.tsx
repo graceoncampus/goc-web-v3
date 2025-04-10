@@ -26,6 +26,7 @@ import ScrollToTopButton from "@/components/ScrollToTopButton";
 import { FaCarSide } from "react-icons/fa";
 import { LuUpload } from "react-icons/lu";
 import { RIDES_GOOGLE_FORM_LINK } from "@/constants/Links";
+import { ConsoleLogger } from "aws-amplify/utils";
 
 const client = generateClient();
 
@@ -473,7 +474,8 @@ const RidesSettings = ({ fetchRides }: RidesSettingsProps) => {
     defaultValues: {
       url: "",
       date: "",
-      emailMsg: "",
+      emailMsg:
+        "Please message your riders BEFORE Sunday. If you can't, let us know and we'll message them for you. Aim to pick up dormies at their respective turnaround @8:15AM. If you are not driving your riders back, please tell them to find us IMMEDIATELY after Crossroads.",
     },
   });
 
@@ -554,7 +556,7 @@ const RidesSettings = ({ fetchRides }: RidesSettingsProps) => {
             <Textarea
               height={"120px"}
               {...register("emailMsg")}
-              value={
+              defaultValue={
                 "Please message your riders BEFORE Sunday. If you can't, let us know and we'll message them for you. Aim to pick up dormies at their respective turnaround @8:15AM. If you are not driving your riders back, please tell them to find us IMMEDIATELY after Crossroads."
               }
             />
