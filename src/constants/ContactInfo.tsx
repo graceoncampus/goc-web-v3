@@ -15,7 +15,7 @@ export const ContactInfo: ContactInfoProps = {
   name: "Isaac Wong",
   email: "gocateam@gmail.com",
   phone: "(510) 480-8831",
-  location: "Rolfe 1200",
+  location: "Broad 2160E",
   day: "Fridays",
   time: "7pm",
 };
