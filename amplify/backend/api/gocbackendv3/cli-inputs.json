@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "serviceName": "AppSync",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "expirationTime": 365,
+      "apiKeyExpirationDate": "2025-02-12T23:51:43.538Z",
+      "keyDescription": "General access API key for GraphQL backend."
+    },
+    "conflictResolution": {},
+    "apiName": "gocbackendv3",
+    "additionalAuthTypes": []
+  }
+}

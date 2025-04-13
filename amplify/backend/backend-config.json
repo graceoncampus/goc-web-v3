@@ -1,0 +1,143 @@
+{
+  "api": {
+    "gocbackendv3": {
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 365,
+              "description": "General access API key for GraphQL backend."
+            },
+            "authenticationType": "API_KEY"
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    },
+    "updateRides": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "updateRides"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "auth": {
+    "gocwebv3265a1135": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito"
+    },
+    "userPoolGroups": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId",
+            "AppClientIDWeb",
+            "AppClientID",
+            "IdentityPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "gocwebv3265a1135"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito-UserPool-Groups"
+    }
+  },
+  "function": {
+    "updateRides": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "gocbackendv3"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_updateRides_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateRides"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateRides_mailgunApiKey": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateRides"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateRides_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateRides"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateRides_viteGooglePrivateKey": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateRides"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateRides_viteGoogleServiceAccountEmail": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateRides"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "sermons": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3"
+    }
+  }
+}
