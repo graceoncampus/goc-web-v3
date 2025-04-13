@@ -61,6 +61,7 @@ interface SublinkProps {
 
 interface NavItemProps {
   name: string;
+  external?: boolean;
   link?: string;
   sublinks?: SublinkProps[];
   selected: boolean;
@@ -78,6 +79,7 @@ interface NavbarProps {
 const NavItem = ({
   name,
   link,
+  external,
   sublinks = [],
   isScrolled,
   selected,
@@ -242,9 +244,16 @@ const NavItem = ({
         color={color}
         transition="color 0.2s linear"
         fontWeight={fontWeight}
-        target={link && link === PRAYER_GOOGLE_FORM_LINK ? "_blank" : undefined}
+        padding={".5rem 1rem"}
+        cursor={"pointer"}
+        target={external ? "_blank" : undefined}
       >
         {name}
+        {external && (
+          <Icon width={"15px"} marginBottom={".2rem"}>
+            <FiExternalLink />
+          </Icon>
+        )}
       </Link>
     </Button>
   );
@@ -323,6 +332,7 @@ const Navbar = ({
         {NavLinks.map((navItem) => (
           <NavItem
             key={navItem.name}
+            external={navItem.external}
             name={navItem.name}
             link={navItem.link}
             sublinks={navItem.sublinks}
