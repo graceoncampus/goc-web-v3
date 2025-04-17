@@ -1,9 +1,9 @@
 /* Amplify Params - DO NOT EDIT
-	API_GOCBACKENDV3_GRAPHQLAPIENDPOINTOUTPUT
-	API_GOCBACKENDV3_GRAPHQLAPIIDOUTPUT
-	API_GOCBACKENDV3_GRAPHQLAPIKEYOUTPUT
-	ENV
-	REGION
+  API_GOCBACKENDV3_GRAPHQLAPIENDPOINTOUTPUT
+  API_GOCBACKENDV3_GRAPHQLAPIIDOUTPUT
+  API_GOCBACKENDV3_GRAPHQLAPIKEYOUTPUT
+  ENV
+  REGION
 Amplify Params - DO NOT EDIT */ /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
@@ -46,10 +46,12 @@ exports.handler = async (event) => {
     console.error("Email sending failed:", err),
   );
 
+  const drivers = body.filter((car) => car.driver.send_email).map((car) => { return { name: car.driver_name, email: car.driver.email } });
+
   return {
     statusCode: 200,
     // Uncomment below to enable CORS requests
     headers: cors,
-    body: JSON.stringify("success"),
+    body: JSON.stringify({ message: "success", drivers }),
   };
 };
