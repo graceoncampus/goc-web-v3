@@ -16,6 +16,8 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { LuLock, LuUser } from "react-icons/lu";
+import { useEffect, useState } from "react";
+import LoggedOutTemplate from "@/layouts/LoggedOutTemplate";
 
 interface LoginFormProps {
   username: string;
@@ -66,85 +68,87 @@ const LoginBody = () => {
   };
 
   return (
-    <VStack minWidth={"12rem"} width="100%" gap="0" align="center">
-      <Heading
-        as="h2"
-        fontSize={{ base: "2xl", sm: "2xl", md: "2xl", lg: "2xl", xl: "3xl" }}
-        lineHeight="1.2"
-        fontWeight="semibold"
-        textAlign="center"
-        width="100%"
-        marginBottom="2rem"
-      >
-        Welcome back!
-      </Heading>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Fieldset.Root size="lg" maxWidth="xl">
-          <Fieldset.Content>
-            <Field required={true}>
-              <InputGroup flex="1" startElement={<LuUser />}>
-                <Input
-                  variant="subtle"
-                  backgroundColor="#D9D9D9B2"
-                  type="username"
-                  placeholder="Username"
-                  paddingX="2rem"
-                  {...register("username", {
-                    required: "Username is required",
-                  })}
-                />
-              </InputGroup>
-              {errors.username && (
-                <Text margin="0" color="red" fontSize="sm">
-                  {errors.username.message}
-                </Text>
-              )}
-            </Field>
+    <LoggedOutTemplate>
+      <VStack minWidth={"12rem"} width="100%" gap="0" align="center">
+        <Heading
+          as="h2"
+          fontSize={{ base: "2xl", sm: "2xl", md: "2xl", lg: "2xl", xl: "3xl" }}
+          lineHeight="1.2"
+          fontWeight="semibold"
+          textAlign="center"
+          width="100%"
+          marginBottom="2rem"
+        >
+          Welcome back!
+        </Heading>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Fieldset.Root size="lg" maxWidth="xl">
+            <Fieldset.Content>
+              <Field required={true}>
+                <InputGroup flex="1" startElement={<LuUser />}>
+                  <Input
+                    variant="subtle"
+                    backgroundColor="#D9D9D9B2"
+                    type="username"
+                    placeholder="Username"
+                    paddingX="2rem"
+                    {...register("username", {
+                      required: "Username is required",
+                    })}
+                  />
+                </InputGroup>
+                {errors.username && (
+                  <Text margin="0" color="red" fontSize="sm">
+                    {errors.username.message}
+                  </Text>
+                )}
+              </Field>
 
-            <Field required={true}>
-              <InputGroup flex="1" startElement={<LuLock />}>
-                <Input
-                  variant="subtle"
-                  backgroundColor="#D9D9D9B2"
-                  type="password"
-                  placeholder="Password"
-                  paddingX="2rem"
-                  {...register("password", {
-                    required: "Password is required",
-                  })}
-                />
-              </InputGroup>
-              {errors.password && (
+              <Field required={true}>
+                <InputGroup flex="1" startElement={<LuLock />}>
+                  <Input
+                    variant="subtle"
+                    backgroundColor="#D9D9D9B2"
+                    type="password"
+                    placeholder="Password"
+                    paddingX="2rem"
+                    {...register("password", {
+                      required: "Password is required",
+                    })}
+                  />
+                </InputGroup>
+                {errors.password && (
+                  <Text margin="0" color="red" fontSize="sm">
+                    {errors.password.message}
+                  </Text>
+                )}
+              </Field>
+              {errors.root && (
                 <Text margin="0" color="red" fontSize="sm">
-                  {errors.password.message}
+                  {errors.root.message}
                 </Text>
               )}
-            </Field>
-            {errors.root && (
-              <Text margin="0" color="red" fontSize="sm">
-                {errors.root.message}
-              </Text>
-            )}
-          </Fieldset.Content>
-          <Link
-            alignSelf="center"
-            fontSize="xs"
-            href="/reset"
-            textWrap="nowrap"
-          >
-            Forgot your password?
-          </Link>
-          <Button type="submit" bg="goc.blue" marginTop="1rem">
-            Log In
-          </Button>
-          <Text fontSize="sm" marginTop="1rem" textWrap="nowrap">
-            Don't have an account?{" "}
-            <Link color="goc.blue" href="/signup" paddingLeft=".5rem">
-              Sign up
+            </Fieldset.Content>
+            <Link
+              alignSelf="center"
+              fontSize="xs"
+              href="/reset"
+              textWrap="nowrap"
+            >
+              Forgot your password?
             </Link>
-          </Text>
-        </Fieldset.Root>
-      </form>
-    </VStack>
+            <Button type="submit" bg="goc.blue" marginTop="1rem">
+              Log In
+            </Button>
+            <Text fontSize="sm" marginTop="1rem" textWrap="nowrap">
+              Don't have an account?{" "}
+              <Link color="goc.blue" href="/signup" paddingLeft=".5rem">
+                Sign up
+              </Link>
+            </Text>
+          </Fieldset.Root>
+        </form>
+      </VStack>
+    </LoggedOutTemplate>
   );
 };

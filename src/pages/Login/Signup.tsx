@@ -17,6 +17,7 @@ import { NavbarActiveKey } from "@/components/Navbar";
 import { Field } from "@/components/ui/field";
 import { useHookFormMask } from "use-mask-input";
 import "react-phone-number-input/style.css";
+import LoggedOutTemplate from "@/layouts/LoggedOutTemplate";
 
 export interface SignupProps {
   firstName: string;
@@ -116,179 +117,187 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
   };
 
   return (
-    <VStack
-      gap="2rem"
-      align="center"
-      minWidth={"17rem"}
-      width="100%"
-      padding="1rem"
-    >
-      <Heading as="h2" fontSize="2xl">
-        Welcome to GOC!
-      </Heading>
-      <Box
-        as="form"
+    <LoggedOutTemplate>
+      <VStack
+        gap="2rem"
+        align="center"
+        minWidth={"17rem"}
         width="100%"
-        maxWidth="500px"
-        onSubmit={handleSubmit(onSignup)}
+        padding="1rem"
       >
-        <VStack gap="1rem">
-          <Stack direction={{ base: "column", lg: "row" }} width="100%" gap={4}>
-            <Field label="First Name" required={true}>
-              <Input
-                {...register("firstName", {
-                  required: "First name is required",
-                })}
-                placeholder="Shawn"
-                variant="subtle"
-                backgroundColor="#D9D9D9B2"
-              />
-              {errors.firstName && (
-                <Text color="red" fontSize={"sm"}>
-                  {errors.firstName.message}
-                </Text>
-              )}
-            </Field>
-            <Field label="Last Name" required={true}>
-              <Input
-                {...register("lastName", { required: "Last name is required" })}
-                placeholder="Zhuang"
-                variant="subtle"
-                backgroundColor="#D9D9D9B2"
-              />
-              {errors.lastName && (
-                <Text color="red" fontSize={"sm"}>
-                  {errors.lastName.message}
-                </Text>
-              )}
-            </Field>
-          </Stack>
-          <Field label="Email" required={true}>
-            <Input
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
-                  message: "Invalid email address",
-                },
-              })}
-              placeholder="graceoncampus@gmail.com"
-              variant="subtle"
-              backgroundColor="#D9D9D9B2"
-            />
-            {errors.email && (
-              <Text color="red" fontSize={"sm"}>
-                {errors.email.message}
-              </Text>
-            )}
-          </Field>
-          <Field label="Phone Number" required={true}>
-            <Input
-              {...registerWithMask("phoneNumber", ["(999) 999-9999"], {
-                required: "Phone number is required",
-              })}
-              type="text"
-              placeholder="Enter phone number"
-              variant="subtle"
-              backgroundColor="#D9D9D9B2"
-            />
-            {errors.phoneNumber && (
-              <Text color="red" fontSize={"sm"}>
-                Phone number is required
-              </Text>
-            )}
-          </Field>
-          <Field label="Password" required={true}>
-            <Input
-              type="password"
-              {...register("password", {
-                required: "Password is required",
-                minLength: {
-                  value: 8,
-                  message: "Password must be at least 8 characters",
-                },
-              })}
-              placeholder="Password"
-              variant="subtle"
-              backgroundColor="#D9D9D9B2"
-            />
-            {errors.password && (
-              <Text color="red" fontSize={"sm"}>
-                {errors.password.message}
-              </Text>
-            )}
-          </Field>
-          <Field label="Confirm Password" required={true}>
-            <Input
-              type="password"
-              {...register("confirmPassword", {
-                required: "Please confirm your password",
-                validate: (value) =>
-                  value === password || "Passwords do not match",
-              })}
-              placeholder="Password again"
-              variant="subtle"
-              backgroundColor="#D9D9D9B2"
-            />
-            {errors.confirmPassword && (
-              <Text color="red" fontSize={"sm"}>
-                {errors.confirmPassword.message}
-              </Text>
-            )}
-          </Field>
-          <Field label="Address / Dorm">
-            <Input
-              {...register("address")}
-              placeholder="Sproul Landing"
-              variant="subtle"
-              backgroundColor="#D9D9D9B2"
-            />
-            {errors.address && (
-              <Text color="red" fontSize={"sm"}>
-                {errors.address.message}
-              </Text>
-            )}
-          </Field>
-          <Field label="Graduation Year">
-            <select
-              {...register("gradYear")}
-              style={{
-                backgroundColor: "#D9D9D9B2",
-                width: "100%",
-                borderRadius: "6px",
-                padding: "0.5rem",
-              }}
+        <Heading as="h2" fontSize="2xl">
+          Welcome to GOC!
+        </Heading>
+        <Box
+          as="form"
+          width="100%"
+          maxWidth="500px"
+          onSubmit={handleSubmit(onSignup)}
+        >
+          <VStack gap="1rem">
+            <Stack
+              direction={{ base: "column", lg: "row" }}
+              width="100%"
+              gap={4}
             >
-              <option value="">Select</option>
-              {years.map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
-            {errors.gradYear && (
+              <Field label="First Name" required={true}>
+                <Input
+                  {...register("firstName", {
+                    required: "First name is required",
+                  })}
+                  placeholder="Shawn"
+                  variant="subtle"
+                  backgroundColor="#D9D9D9B2"
+                />
+                {errors.firstName && (
+                  <Text color="red" fontSize={"sm"}>
+                    {errors.firstName.message}
+                  </Text>
+                )}
+              </Field>
+              <Field label="Last Name" required={true}>
+                <Input
+                  {...register("lastName", {
+                    required: "Last name is required",
+                  })}
+                  placeholder="Zhuang"
+                  variant="subtle"
+                  backgroundColor="#D9D9D9B2"
+                />
+                {errors.lastName && (
+                  <Text color="red" fontSize={"sm"}>
+                    {errors.lastName.message}
+                  </Text>
+                )}
+              </Field>
+            </Stack>
+            <Field label="Email" required={true}>
+              <Input
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                    message: "Invalid email address",
+                  },
+                })}
+                placeholder="graceoncampus@gmail.com"
+                variant="subtle"
+                backgroundColor="#D9D9D9B2"
+              />
+              {errors.email && (
+                <Text color="red" fontSize={"sm"}>
+                  {errors.email.message}
+                </Text>
+              )}
+            </Field>
+            <Field label="Phone Number" required={true}>
+              <Input
+                {...registerWithMask("phoneNumber", ["(999) 999-9999"], {
+                  required: "Phone number is required",
+                })}
+                type="text"
+                placeholder="Enter phone number"
+                variant="subtle"
+                backgroundColor="#D9D9D9B2"
+              />
+              {errors.phoneNumber && (
+                <Text color="red" fontSize={"sm"}>
+                  Phone number is required
+                </Text>
+              )}
+            </Field>
+            <Field label="Password" required={true}>
+              <Input
+                type="password"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 8,
+                    message: "Password must be at least 8 characters",
+                  },
+                })}
+                placeholder="Password"
+                variant="subtle"
+                backgroundColor="#D9D9D9B2"
+              />
+              {errors.password && (
+                <Text color="red" fontSize={"sm"}>
+                  {errors.password.message}
+                </Text>
+              )}
+            </Field>
+            <Field label="Confirm Password" required={true}>
+              <Input
+                type="password"
+                {...register("confirmPassword", {
+                  required: "Please confirm your password",
+                  validate: (value) =>
+                    value === password || "Passwords do not match",
+                })}
+                placeholder="Password again"
+                variant="subtle"
+                backgroundColor="#D9D9D9B2"
+              />
+              {errors.confirmPassword && (
+                <Text color="red" fontSize={"sm"}>
+                  {errors.confirmPassword.message}
+                </Text>
+              )}
+            </Field>
+            <Field label="Address / Dorm">
+              <Input
+                {...register("address")}
+                placeholder="Sproul Landing"
+                variant="subtle"
+                backgroundColor="#D9D9D9B2"
+              />
+              {errors.address && (
+                <Text color="red" fontSize={"sm"}>
+                  {errors.address.message}
+                </Text>
+              )}
+            </Field>
+            <Field label="Graduation Year">
+              <select
+                {...register("gradYear")}
+                style={{
+                  backgroundColor: "#D9D9D9B2",
+                  width: "100%",
+                  borderRadius: "6px",
+                  padding: "0.5rem",
+                }}
+              >
+                <option value="">Select</option>
+                {years.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+              {errors.gradYear && (
+                <Text color="red" fontSize={"sm"}>
+                  {errors.gradYear.message}
+                </Text>
+              )}
+            </Field>
+            {errors.root && (
               <Text color="red" fontSize={"sm"}>
-                {errors.gradYear.message}
+                {errors.root.message}
               </Text>
             )}
-          </Field>
-          {errors.root && (
-            <Text color="red" fontSize={"sm"}>
-              {errors.root.message}
-            </Text>
-          )}
-          <Button type="submit" width="100%" marginTop={"1.2rem"}>
-            Sign Up
-          </Button>
-        </VStack>
-      </Box>
-      <Text fontSize="sm" textWrap="nowrap">
-        Already have an account?{" "}
-        <Link color="goc.blue" href="/login" paddingLeft=".5rem">
-          Login
-        </Link>
-      </Text>
-    </VStack>
+            <Button type="submit" width="100%" marginTop={"1.2rem"}>
+              Sign Up
+            </Button>
+          </VStack>
+        </Box>
+        <Text fontSize="sm" textWrap="nowrap">
+          Already have an account?{" "}
+          <Link color="goc.blue" href="/login" paddingLeft=".5rem">
+            Login
+          </Link>
+        </Text>
+      </VStack>
+    </LoggedOutTemplate>
   );
 };
 
