@@ -124,13 +124,15 @@ const ProfileBody = () => {
       const response: UpdateUserAttributesOutput = await updateUserAttributes({
         userAttributes: newUserAttributes,
       });
-      console.log("Profile updated successfully:", response);
       toaster.create({
-        title: "Success",
-        description: "Profile updated successfully",
+        title: "Profile updated successfully",
+        description: "Reloading in 1 second...",
         type: "success",
-        duration: 2000,
+        duration: 1000,
       });
+      setTimeout(() => {
+        window.location.reload();
+      }, 1400);
     } catch (error: any) {
       console.error("Error updating profile: ", error);
       setError("root", { message: error.message });
@@ -160,6 +162,10 @@ const ProfileBody = () => {
               <Input
                 {...register("firstName", {
                   required: "First name is required",
+                  maxLength: {
+                    value: 20,
+                    message: "You have a long name ^^;",
+                  },
                 })}
                 placeholder="First Name"
                 variant="subtle"
@@ -173,7 +179,13 @@ const ProfileBody = () => {
             </Field>
             <Field label="Last Name" required={true}>
               <Input
-                {...register("lastName", { required: "Last name is required" })}
+                {...register("lastName", {
+                  required: "Last name is required",
+                  maxLength: {
+                    value: 15,
+                    message: "Must be less than 15 chars",
+                  },
+                })}
                 placeholder="Last Name"
                 variant="subtle"
                 backgroundColor="#D9D9D9B2"

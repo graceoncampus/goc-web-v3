@@ -17,6 +17,7 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { BannerTemplate } from "@/layouts/BannerTemplate";
+import GOCat from "@/components/GOCat";
 import { toaster } from "@/components/ui/toaster";
 import { NavbarActiveKey } from "@/components/Navbar";
 import { Field } from "@/components/ui/field";
@@ -277,6 +278,7 @@ const RidesLandingBody = ({
           </Flex>
         </Box>
       </Flex>
+      <GOCat />
     </Container>
   );
 };
