@@ -87,7 +87,7 @@ const LandingBody = observer(() => {
               lineHeight="1.2"
               fontWeight={"bold"}
               marginBottom="1rem"
-              animation="fadeIn .5s ease-in-out"
+              animation="fadeInUp .5s ease-in-out"
               animationDelay="0s"
               opacity="0"
               animationFillMode="forwards"
@@ -99,7 +99,7 @@ const LandingBody = observer(() => {
               fontSize={{ base: "xs", sm: "md", md: "lg", lg: "xl", xl: "2xl" }}
               fontWeight={"medium"}
               marginBottom={{ base: "1rem", xl: "2rem" }}
-              animation="fadeIn .5s ease-in-out"
+              animation="fadeInUp .5s ease-in-out"
               animationDelay="0.25s"
               opacity="0"
               animationFillMode="forwards"
@@ -108,7 +108,7 @@ const LandingBody = observer(() => {
               {ContactInfo.day} at {ContactInfo.time}, {ContactInfo.location}
             </Text>
             <Box
-              animation="fadeIn .5s ease-in-out"
+              animation="fadeInUp .5s ease-in-out"
               animationDelay="0.6s"
               opacity="0"
               animationFillMode="forwards"

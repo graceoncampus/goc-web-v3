@@ -3,6 +3,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { fetchUserAttributes } from "aws-amplify/auth";
 import {
   Box,
   Flex,
@@ -35,7 +36,6 @@ import Logo from "@/components/Logo";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { FiExternalLink } from "react-icons/fi";
 import { IoMdMenu } from "react-icons/io";
-import { PRAYER_GOOGLE_FORM_LINK } from "@/constants/Links";
 
 export enum NavbarActiveKey {
   NONE = "",
@@ -269,6 +269,21 @@ const Navbar = ({
   const [showNavbar, setShowNavbar] = useState(true);
   const lastScrollYRef = useRef(0);
   const isXL = useBreakpointValue({ base: false, xl: true });
+  const [username, setUsername] = useState<string | null | undefined>(
+    undefined,
+  );
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const attr = await fetchUserAttributes();
+        setUsername(attr.name ?? null);
+      } catch {
+        setUsername(null);
+      }
+    };
+    fetchUser();
+  }, []);
 
   const handleScroll = useCallback(() => {
     setIsScrolled(disableTransparent || window.scrollY > 30);
@@ -328,31 +343,40 @@ const Navbar = ({
       <Logo isScrolled={isScrolled} transition="fill .2s ease-out" />
 
       {/* Full Navbar */}
-      <Box display={{ base: "none", xl: "flex" }} alignItems={"center"}>
-        {NavLinks.map((navItem) => (
-          <NavItem
-            key={navItem.name}
-            external={navItem.external}
-            name={navItem.name}
-            link={navItem.link}
-            sublinks={navItem.sublinks}
-            selected={
-              !!(
-                selectedNavItemName === navItem.name ||
-                navItem.sublinks?.some(
-                  (sublink) => sublink.name === selectedNavItemName,
+      {username !== undefined && (
+        <Box
+          display={{ base: "none", xl: "flex" }}
+          alignItems={"center"}
+          animation="fadeInDown .25s ease-in"
+          animationDelay="0s"
+          opacity="0"
+          animationFillMode="forwards"
+        >
+          {NavLinks.map((navItem) => (
+            <NavItem
+              key={navItem.name}
+              external={navItem.external}
+              name={navItem.name}
+              link={navItem.link}
+              sublinks={navItem.sublinks}
+              selected={
+                !!(
+                  selectedNavItemName === navItem.name ||
+                  navItem.sublinks?.some(
+                    (sublink) => sublink.name === selectedNavItemName,
+                  )
                 )
-              )
-            }
-            isScrolled={isScrolled}
-            drawerOpen={drawerOpen}
-            activeMenu={activeMenu}
-            setActiveMenu={setActiveMenu}
-          />
-        ))}
-        <LoginButton />
-        {/* <ColorModeButton /> TODO: Add dark mode toggle button */}
-      </Box>
+              }
+              isScrolled={isScrolled}
+              drawerOpen={drawerOpen}
+              activeMenu={activeMenu}
+              setActiveMenu={setActiveMenu}
+            />
+          ))}
+          <LoginButton username={username} />
+          {/* <ColorModeButton /> TODO: Add dark mode toggle button */}
+        </Box>
+      )}
 
       {/* Hamburger Menu */}
       <DrawerRoot
@@ -409,7 +433,7 @@ const Navbar = ({
             ))}
           </DrawerBody>
           <DrawerFooter>
-            <LoginButton drawerOpen />
+            <LoginButton username={username} drawerOpen />
           </DrawerFooter>
           <DrawerCloseTrigger />
         </DrawerContent>
