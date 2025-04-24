@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { Ride, Car, Rider } from "Api";
 import { post, generateClient } from "aws-amplify/api";
 import { checkIsLoggedIn, checkInRidesTeam } from "@/auth/CheckUser";
@@ -23,7 +23,6 @@ import { Field } from "@/components/ui/field";
 import GOCSpinner from "@/components/GOCSpinner";
 import GOCButton from "@/components/GOCButton";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
-import { FaCarSide } from "react-icons/fa";
 import { LuUpload } from "react-icons/lu";
 import { RIDES_GOOGLE_FORM_LINK } from "@/constants/Links";
 import { ConsoleLogger } from "aws-amplify/utils";
@@ -143,7 +142,7 @@ export const RidesLandingPage = () => {
     <BannerTemplate
       title="Rides"
       activeKey={NavbarActiveKey.RIDES}
-      imageSrc="/images/rides2.png"
+      imageSrc="/images/rides.jpg"
       alt="Rides page banner"
     >
       <ScrollToTopButton />
@@ -198,10 +197,8 @@ const RidesLandingBody = ({
     return relevantSunday;
   };
 
-  const today = new Date();
   const relevantSunday = getRelevantSunday();
-  const numericSunday = `(${relevantSunday.getMonth() + 1}/${relevantSunday.getDate()})`;
-  const disableSignUp = today.getDay() >= 1 && today.getDay() <= 4;
+  const numericSunday = `${relevantSunday.getMonth() + 1}/${relevantSunday.getDate()}`;
 
   return (
     <Container fluid maxWidth={"90rem"} padding={0}>
@@ -217,7 +214,6 @@ const RidesLandingBody = ({
             isLoggedIn={isLoggedIn}
             inRidesTeam={inRidesTeam}
             numericSunday={numericSunday}
-            disabledSignUp={disableSignUp}
           />
         </Box>
         <Box flex={7}>
@@ -229,6 +225,7 @@ const RidesLandingBody = ({
               lineHeight={{ base: "1.5", lg: "3rem", xl: "4rem" }}
               textAlign={{ base: "center", lg: "left" }}
               textWrap="balance"
+              marginBottom={{ base: "1rem", xl: "0" }}
             >
               Check your rides for this{" "}
               <span
@@ -239,9 +236,6 @@ const RidesLandingBody = ({
                 }}
               >
                 week!{" "}
-                <FaCarSide
-                  style={{ marginLeft: "0.5rem", verticalAlign: "middle" }}
-                />
               </span>
             </Heading>
             <Text
@@ -257,15 +251,14 @@ const RidesLandingBody = ({
             {/* Google Form Signup Button */}
             <GOCButton
               href={RIDES_GOOGLE_FORM_LINK}
-              disabled={disableSignUp}
               buttonProps={{
                 display: { lg: "none" },
                 marginTop: "1.2rem",
-                width: "11rem",
+                width: "14rem",
                 height: "2.8rem",
               }}
             >
-              Sign up {numericSunday}
+              Sign up for Sunday ({numericSunday})
             </GOCButton>
             {/* Admin Settings */}
             {inRidesTeam && (
@@ -293,14 +286,12 @@ const RidesLandingBody = ({
 interface SignUpButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
-  disabled?: boolean;
 }
 
-const SignUpButton = ({ children, onClick, disabled }: SignUpButtonProps) => {
+const SignUpButton = ({ children, onClick }: SignUpButtonProps) => {
   return onClick ? (
     <Button
-      disabled={disabled}
-      width="10rem"
+      width="14rem"
       height="3rem"
       variant="solid"
       outline="none"
@@ -311,7 +302,6 @@ const SignUpButton = ({ children, onClick, disabled }: SignUpButtonProps) => {
       border="none"
       marginTop="1.5rem"
       borderRadius=".8rem"
-      _hover={disabled ? {} : { transform: "scale(0.99)" }}
       onClick={onClick}
     >
       {children}
@@ -319,8 +309,7 @@ const SignUpButton = ({ children, onClick, disabled }: SignUpButtonProps) => {
   ) : (
     <Button
       asChild
-      disabled={disabled}
-      width="10rem"
+      width="14rem"
       height="3rem"
       variant="solid"
       outline="none"
@@ -332,7 +321,6 @@ const SignUpButton = ({ children, onClick, disabled }: SignUpButtonProps) => {
       marginTop="1.5rem"
       borderRadius=".8rem"
       backgroundColor="goc.pale_blue"
-      _hover={disabled ? {} : { transform: "scale(0.99)" }}
     >
       {children}
     </Button>
@@ -343,14 +331,12 @@ interface RidesMenuSidebarProps {
   isLoggedIn: boolean;
   inRidesTeam: boolean;
   numericSunday: string;
-  disabledSignUp: boolean;
 }
 
 const RidesMenuSidebar = ({
   isLoggedIn,
   inRidesTeam,
   numericSunday,
-  disabledSignUp,
 }: RidesMenuSidebarProps) => {
   return (
     <Box
@@ -377,14 +363,10 @@ const RidesMenuSidebar = ({
         </Text>
 
         {/* Google Form Signup Button */}
-        <SignUpButton disabled={disabledSignUp}>
-          {disabledSignUp ? (
-            <Text>Sign up {numericSunday}</Text>
-          ) : (
-            <Link href={RIDES_GOOGLE_FORM_LINK} target="_blank">
-              Sign up {numericSunday}
-            </Link>
-          )}
+        <SignUpButton>
+          <Link href={RIDES_GOOGLE_FORM_LINK} target="_blank">
+            Sign up for Sunday ({numericSunday})
+          </Link>
         </SignUpButton>
       </VStack>
       {isLoggedIn ? (
