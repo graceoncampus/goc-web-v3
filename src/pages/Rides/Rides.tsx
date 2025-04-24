@@ -38,6 +38,7 @@ const client = generateClient();
 interface UpdateRidesResult {
   success: boolean;
   errorMessage?: string;
+  drivers?: { name: string; email: string }[];
 }
 
 const updateRidesClient = async (
@@ -73,7 +74,8 @@ const updateRidesClient = async (
       return { success: false, errorMessage: String(error) };
     } else {
       console.log("Successfully uploaded rides");
-      return { success: true };
+      const data = JSON.parse((res as any).body);
+      return { success: true, drivers: data.drivers };
     }
   } catch (error: any) {
     console.error("POST call failed: ", error);
@@ -521,11 +523,13 @@ const RidesSettings = ({ fetchRides }: RidesSettingsProps) => {
     try {
       const result = await updateRidesClient(url, date, emailMsg);
       if (result.success) {
-        toaster.create({
-          title: "Success",
-          description: "Successfully uploaded rides!",
-          type: "success",
-        });
+        for (const driver of result.drivers || []) {
+          toaster.create({
+            title: "Success",
+            description: `Successfully sent email to ${driver.name}`,
+            type: "success",
+          });
+        }
         fetchRides();
       } else {
         toaster.create({
