@@ -30,10 +30,10 @@ const AboutUsBody = () => {
       <VStack gap={"2.5rem"} margin={"auto"}>
         <Box lineHeight="tall">
           <Heading as="h2" textAlign="left">
-            Who We Are
+            Grace on Campus
           </Heading>
           <Text textAlign="left">
-            We are a ministry of{" "}
+            is a ministry of{" "}
             <Link
               href="https://www.gracechurch.org/"
               target="_blank"

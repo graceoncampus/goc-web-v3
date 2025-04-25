@@ -143,20 +143,16 @@ const LandingBody = observer(() => {
         backgroundColor={"white"}
       >
         <Stack
+          width={"64rem"}
           padding={"2rem"}
           align={"center"}
-          marginY={{ base: "1rem", md: "2rem" }}
+          marginY={{ base: "1rem", lg: "2rem" }}
           textAlign={{ base: "left", md: "center" }}
-          width={"80ch"}
         >
           <Heading>Who we are</Heading>
-          <Text
-            maxWidth="45rem"
-            fontSize={{ base: "sm", md: "md" }}
-            lineHeight="1.6"
-          >
-            <strong>Grace on Campus</strong>, GOC for short, is a Christian
-            fellowship at UCLA. As a ministry of{" "}
+          <Text fontSize={{ base: "sm", md: "md" }} lineHeight="1.6">
+            <strong>Grace on Campus</strong> is a Christian fellowship at UCLA.
+            As a ministry of{" "}
             <Link
               href="https://www.gracechurch.org/"
               target="_blank"
@@ -177,23 +173,27 @@ const LandingBody = observer(() => {
               color="goc.blue"
               display={"inline"}
             >
-              Facebook group
+              Facebook Group
             </Link>{" "}
-            to attend our weekly Bible study, every Friday at 7pm.
+            to attend our weekly large group, every Friday at 7pm.
           </Text>
         </Stack>
       </Box>
 
       <Box
-        width={{ base: "30%", md: "10%" }}
-        height={"7px"}
-        bg="gray.800"
+        width={"65%"}
+        height={"3px"}
+        bg="goc.blue"
         marginX="auto"
         marginY="auto"
       />
 
       {/* Info cards */}
-      <Box width={"100%"} backgroundColor={"white"} marginTop={"2rem"}>
+      <Box
+        width={"100%"}
+        backgroundColor={"white"}
+        marginY={{ base: "1rem", lg: "0" }}
+      >
         <Stack
           direction={{ base: "column", lg: "row" }}
           maxWidth={"70rem"}
