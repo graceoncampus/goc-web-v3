@@ -1,10 +1,16 @@
-const Parser = require("rss-parser");
+/* Amplify Params - DO NOT EDIT
+	ENV
+	REGION
+	STORAGE_SERMONS_BUCKETNAME
+Amplify Params - DO NOT EDIT */const Parser = require("rss-parser");
 const {
   DynamoDBClient,
   DeleteTableCommand,
   DescribeTableCommand,
   CreateTableCommand,
   PutItemCommand,
+  GetItemCommand,
+  QueryCommand,
 } = require("@aws-sdk/client-dynamodb");
 
 /**
@@ -16,14 +22,15 @@ exports.handler = async (event) => {
     try {
         // Initialize DynamoDB client
         const client = new DynamoDBClient({
-            region: process.env.AWS_REGION,
-            credentials: {
-                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-                secretAccessKey: process.env.AWS_SECRET_KEY_ID,
-            },
+            region: process.env.AWS_REGION || 'us-west-2'
         });
         
-        const sermons = await loadSermons(client);
+
+        // Get the latest sermon from the table
+        const latestSermon = await getLatestSermon(client);
+        console.log(latestSermon);
+        
+        // const sermons = await loadSermons(client);
         
         return {
             statusCode: 200,
@@ -34,8 +41,8 @@ exports.handler = async (event) => {
             },
             body: JSON.stringify({
                 message: 'Sermons updated successfully',
-                sermons: sermons,
-                count: sermons.length
+                sermons: latestSermon,
+                count: latestSermon.length
             }),
         };
     } catch (error) {
@@ -139,37 +146,40 @@ const createSermons = async (sermons, client) => {
   }
 
   let id = 0;
-  sermons.forEach(async (sermon) => {
-    const {
-      title,
-      date,
-      speaker,
-      passage,
-      URI,
-    } = sermon;
-    const putInput = {
-      "TableName": "Sermons",
-      "Item": {
-        "id": {
-          "S": id.toString(),
-        },
-        "title": {
-          "S": title,
-        },
-        "date": {
-          "S": date,
-        },
-        "speaker": {
-          "S": speaker,
-        },
-        "passage": {
-          "S": passage,
-        },
-        "URI": {
-          "S": URI,
-        },
-      },
-    }
+
+  
+
+  // sermons.forEach(async (sermon) => {
+  //   const {
+  //     title,
+  //     date,
+  //     speaker,
+  //     passage,
+  //     URI,
+  //   } = sermon;
+  //   const putInput = {
+  //     "TableName": "Sermons",
+  //     "Item": {
+  //       "id": {
+  //         "S": id.toString(),
+  //       },
+  //       "title": {
+  //         "S": title,
+  //       },
+  //       "date": {
+  //         "S": date,
+  //       },
+  //       "speaker": {
+  //         "S": speaker,
+  //       },
+  //       "passage": {
+  //         "S": passage,
+  //       },
+  //       "URI": {
+  //         "S": URI,
+  //       },
+  //     },
+  //   }
     const putCommand = new PutItemCommand(putInput);
     id += 1
 
@@ -199,8 +209,31 @@ const loadSermons = async (client) => {
     // await cleanupSermons(client);
     // await createSermons(sermons, client);
 
-    return sermons.map(sermon => {return { id: sermon.id, title: sermon.title, date: sermon.date, speaker: sermon.speaker, passage: sermon.passage, URI: sermon.URI }});
+    return sermons;
   } catch (error) {
     console.log(error);
+  }
+};
+
+const getLatestSermon = async (client) => {
+  const queryCommand = new QueryCommand({
+    TableName: "Sermons",
+    KeyConditionExpression: "id = :id",
+    ExpressionAttributeValues: {
+      ":id": { S: "1" }
+    },
+    ScanIndexForward: false,
+    Limit: 1
+  });
+
+  try {
+    const response = await client.send(queryCommand);
+    if (response.Items && response.Items.length > 0) {
+      return response.Items[0];
+    }
+    return null;
+  } catch (error) {
+    console.error("Error getting latest sermon:", error);
+    throw error;
   }
 };
