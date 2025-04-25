@@ -146,9 +146,6 @@ const createSermons = async (sermons, client) => {
   }
 
   let id = 0;
-
-  
-
   // sermons.forEach(async (sermon) => {
   //   const {
   //     title,
@@ -180,16 +177,16 @@ const createSermons = async (sermons, client) => {
   //       },
   //     },
   //   }
-    const putCommand = new PutItemCommand(putInput);
-    id += 1
+  //   const putCommand = new PutItemCommand(putInput);
+  //   id += 1
 
-    try {
-      await client.send(putCommand);
-    } catch (err) {
-      console.error(`Failed to add Sermon: ${passage}`);
-      console.log(err)
-    }
-  });
+  //   try {
+  //     await client.send(putCommand);
+  //   } catch (err) {
+  //     console.error(`Failed to add Sermon: ${passage}`);
+  //     console.log(err)
+  //   }
+  // });
 }
 
 const parser = new Parser();

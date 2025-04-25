@@ -136,6 +136,22 @@
           "resourceName": "updateRides"
         }
       ]
+    },
+    "AMPLIFY_function_updateSermons_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateSermons"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateSermons_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateSermons"
+        }
+      ]
     }
   },
   "storage": {
