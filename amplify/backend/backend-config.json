@@ -89,6 +89,11 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "updateSermons": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "parameters": {
@@ -129,6 +134,22 @@
         {
           "category": "function",
           "resourceName": "updateRides"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateSermons_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateSermons"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateSermons_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateSermons"
         }
       ]
     }

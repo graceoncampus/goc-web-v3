@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "storage": {
+      "sermons": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": [],
+  "environmentVariableList": []
+}

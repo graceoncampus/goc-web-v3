@@ -5,34 +5,17 @@ import {
   MenuRoot,
   MenuTrigger,
 } from "@/components/ui/menu";
-import {
-  fetchUserAttributes,
-  FetchUserAttributesOutput,
-  signOut,
-} from "aws-amplify/auth";
-import { useEffect, useState } from "react";
+import { signOut } from "aws-amplify/auth";
 import { FaUser } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
 import { RiArrowDropDownLine } from "react-icons/ri";
 
 interface LoginButtonProps {
+  username: string | null | undefined;
   drawerOpen?: boolean;
 }
 
-const LoginButton = ({ drawerOpen = false }: LoginButtonProps) => {
-  const [user, setUser] = useState<FetchUserAttributesOutput | null>(null);
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const attr = await fetchUserAttributes();
-        setUser(attr);
-      } catch {
-        console.log("No user signed in.");
-      }
-    };
-    fetchUser();
-  }, []);
-
+const LoginButton = ({ username, drawerOpen = false }: LoginButtonProps) => {
   const { open, onOpen, onClose, onToggle } = useDisclosure();
   const isMobile = window.matchMedia(
     "(hover: none) and (pointer: coarse)",
@@ -40,7 +23,7 @@ const LoginButton = ({ drawerOpen = false }: LoginButtonProps) => {
 
   return (
     <>
-      {user ? (
+      {username ? (
         <MenuRoot
           open={open}
           positioning={{ placement: drawerOpen ? "top-end" : "bottom-end" }}
@@ -70,7 +53,7 @@ const LoginButton = ({ drawerOpen = false }: LoginButtonProps) => {
               onMouseLeave={isMobile ? undefined : onClose}
               onClick={onToggle}
             >
-              Hello, {user.name}{" "}
+              Hello, {username}{" "}
               <RiArrowDropDownLine
                 style={{
                   transition: "transform .3s ease 0s",
