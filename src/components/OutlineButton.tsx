@@ -57,7 +57,7 @@ const OutlineButton = ({
     >
       <Link
         href={href}
-        fontSize={{ base: "xs", sm: "xs", md: "sm", lg: "sm", xl: "md" }}
+        fontSize={{ base: "xs", sm: "xs", md: "sm" }}
         fontWeight="semibold"
         textTransform="uppercase"
         textDecoration="none"

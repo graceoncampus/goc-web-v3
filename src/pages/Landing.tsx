@@ -8,7 +8,15 @@ import { NavbarActiveKey } from "@/components/Navbar";
 import OutlineButton from "@/components/OutlineButton";
 import InfoBox from "@/components/InfoBox";
 import GOCat from "@/components/GOCat";
-import { Box, Heading, Image, Stack, Text, Container } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Image,
+  Stack,
+  Text,
+  Container,
+  Link,
+} from "@chakra-ui/react";
 import { ContactInfo } from "@/constants/ContactInfo";
 import { SocialMedia } from "@/constants/Links";
 import { observer } from "mobx-react-lite";
@@ -126,48 +134,108 @@ const LandingBody = observer(() => {
         </Container>
       </Box>
 
-      {/* Info cards */}
-      <Stack
-        direction={{ base: "column", lg: "row" }}
-        maxWidth={"90rem"}
-        marginX={"auto"}
-        gap={1}
-        alignItems={"center"}
-        justifyContent={"center"}
-        separator={
-          <Box
-            height={{ base: "2px", lg: "180px" }}
-            width={{ base: "80%", lg: "2.5px" }}
-            bg="gray.300"
-            marginX="auto"
-            marginY="auto"
-          />
-        }
+      {/* Welcome message */}
+      <Box
+        width={"100%"}
+        display="flex"
+        justifyContent="center"
+        color="black"
+        backgroundColor={"white"}
       >
-        <InfoBox
-          title="New Here?"
-          description="Learn more about GOC"
-          buttonText="ABOUT US"
-          link="/about"
-        />
-        <InfoBox
-          title="Small Groups"
-          description="Get plugged in!"
-          buttonText="LEARN MORE"
-          link="/smallgroups"
-        />
-        <InfoBox
-          title="Events"
-          description="Join us for upcoming happenings"
-          buttonText="LEARN MORE"
-          link="/events"
-        />
-      </Stack>
+        <Stack
+          padding={"2rem"}
+          align={"center"}
+          marginY={{ base: "1rem", md: "2rem" }}
+          textAlign={{ base: "left", md: "center" }}
+          width={"80ch"}
+        >
+          <Heading>Who we are</Heading>
+          <Text
+            maxWidth="45rem"
+            fontSize={{ base: "sm", md: "md" }}
+            lineHeight="1.6"
+          >
+            <strong>Grace on Campus</strong>, GOC for short, is a Christian
+            fellowship at UCLA. As a ministry of{" "}
+            <Link
+              href="https://www.gracechurch.org/"
+              target="_blank"
+              color="goc.blue"
+              display={"inline"}
+            >
+              Grace Community Church
+            </Link>
+            , we focus on Bible teaching, leadership training, evangelism, and
+            discipleship. We also provide{" "}
+            <Link href={"/rides"} color="goc.blue" display={"inline"}>
+              rides
+            </Link>{" "}
+            to church every Sunday! Sign up for a ride to church and join our{" "}
+            <Link
+              href={SocialMedia.facebook}
+              target="_blank"
+              color="goc.blue"
+              display={"inline"}
+            >
+              Facebook group
+            </Link>{" "}
+            to attend our weekly Bible study, every Friday at 7pm.
+          </Text>
+        </Stack>
+      </Box>
+
+      <Box
+        width={{ base: "30%", md: "10%" }}
+        height={"7px"}
+        bg="gray.800"
+        marginX="auto"
+        marginY="auto"
+      />
+
+      {/* Info cards */}
+      <Box width={"100%"} backgroundColor={"white"} marginTop={"2rem"}>
+        <Stack
+          direction={{ base: "column", lg: "row" }}
+          maxWidth={"70rem"}
+          marginX={"auto"}
+          gap={1}
+          alignItems={"center"}
+          justifyContent={"center"}
+          separator={
+            <Box
+              height={{ base: "2px", lg: "180px" }}
+              width={{ base: "80%", lg: "2.5px" }}
+              bg="gray.300"
+              marginX="auto"
+              marginY="auto"
+            />
+          }
+        >
+          <InfoBox
+            title="New Here?"
+            description="Learn more about GOC"
+            buttonText="ABOUT US"
+            link="/about"
+          />
+          <InfoBox
+            title="Small Groups"
+            description="Get plugged in!"
+            buttonText="LEARN MORE"
+            link="/smallgroups"
+          />
+          <InfoBox
+            title="Events"
+            description="Come join us!"
+            buttonText="LEARN MORE"
+            link="/events"
+          />
+        </Stack>
+      </Box>
 
       {/* Ride Signup */}
       <Box
         maxWidth="100%"
-        bg="goc.blue"
+        backgroundColor="goc.blue"
         paddingX={{
           base: "2rem",
           sm: "2rem",
