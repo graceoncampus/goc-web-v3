@@ -19,11 +19,12 @@ const ScrollToBottomButton = () => {
   };
 
   useEffect(() => {
+    const min = 200;
+    const max = 800;
+    const start = Math.floor(Math.random() * (max - min)) + min;
+    const end = start + 7;
+
     const toggleVisibility = () => {
-      const min = 200;
-      const max = 1000;
-      const start = Math.floor(Math.random() * (max - min)) + min;
-      const end = start + 5;
       if (window.scrollY > start && window.scrollY < end) {
         setIsVisible(true);
       } else {
