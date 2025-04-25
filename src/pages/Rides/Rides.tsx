@@ -524,6 +524,7 @@ const RidesSettings = ({ fetchRides }: RidesSettingsProps) => {
             title: "Success",
             description: `Successfully sent email to ${driver.name}`,
             type: "success",
+            duration: 5000,
           });
         }
         fetchRides();
@@ -531,6 +532,7 @@ const RidesSettings = ({ fetchRides }: RidesSettingsProps) => {
         toaster.create({
           title: "Failed to update rides",
           description: result.errorMessage + " Please contact web team.",
+          duration: 5000,
           type: "error",
         });
       }
@@ -540,6 +542,7 @@ const RidesSettings = ({ fetchRides }: RidesSettingsProps) => {
         title: "Unexpected error",
         description: "Please contact web team.",
         type: "error",
+        duration: 5000,
       });
     } finally {
       setUploadingRides(false);
