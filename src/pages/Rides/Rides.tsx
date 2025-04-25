@@ -15,6 +15,7 @@ import {
   Table,
   Container,
   Textarea,
+  Center,
 } from "@chakra-ui/react";
 import { BannerTemplate } from "@/layouts/BannerTemplate";
 import GOCat from "@/components/GOCat";
@@ -25,8 +26,8 @@ import GOCSpinner from "@/components/GOCSpinner";
 import GOCButton from "@/components/GOCButton";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import { LuUpload } from "react-icons/lu";
+import { FaCarSide } from "react-icons/fa";
 import { RIDES_GOOGLE_FORM_LINK } from "@/constants/Links";
-import { ConsoleLogger } from "aws-amplify/utils";
 
 const client = generateClient();
 
@@ -370,7 +371,7 @@ const RidesMenuSidebar = ({
         </SignUpButton>
       </VStack>
       {isLoggedIn ? (
-        inRidesTeam && (
+        inRidesTeam ? (
           <Text
             fontSize={{ base: "xs", lg: "sm" }}
             textAlign="center"
@@ -381,6 +382,17 @@ const RidesMenuSidebar = ({
             <Link href="#admin-settings" color="white" fontWeight="semibold">
               Admin Settings <LuUpload />
             </Link>
+          </Text>
+        ) : (
+          <Text
+            fontSize={{ base: "xs", lg: "sm" }}
+            fontWeight="medium"
+            textAlign="center"
+            color="white"
+            marginTop="1.5rem"
+            textWrap="nowrap"
+          >
+            UCLA&nbsp;&harr;&nbsp;Grace Community Church
           </Text>
         )
       ) : (
