@@ -185,9 +185,9 @@ const LandingBody = observer(() => {
       </Box>
 
       <Box
-        width={{ base: "30%", md: "10%" }}
-        height={"7px"}
-        bg="gray.800"
+        width={{ base: "40%", md: "60rem" }}
+        height={{ base: "5px", md: "3px" }}
+        bg="goc.blue"
         marginX="auto"
         marginY="auto"
       />
