@@ -143,7 +143,6 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                     message: "You have a long name ^^;",
                   },
                 })}
-                placeholder="Shawn"
                 variant="subtle"
                 backgroundColor="#D9D9D9B2"
               />
@@ -162,7 +161,6 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                     message: "Must be less than 15 chars",
                   },
                 })}
-                placeholder="Zhuang"
                 variant="subtle"
                 backgroundColor="#D9D9D9B2"
               />
@@ -182,7 +180,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                   message: "Invalid email address",
                 },
               })}
-              placeholder="graceoncampus@gmail.com"
+              placeholder="This will be your username!"
               variant="subtle"
               backgroundColor="#D9D9D9B2"
             />
@@ -198,7 +196,6 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                 required: "Phone number is required",
               })}
               type="text"
-              placeholder="Enter phone number"
               variant="subtle"
               backgroundColor="#D9D9D9B2"
             />
@@ -218,7 +215,6 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                   message: "Password must be at least 8 characters",
                 },
               })}
-              placeholder="Password"
               variant="subtle"
               backgroundColor="#D9D9D9B2"
             />
@@ -236,7 +232,6 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                 validate: (value) =>
                   value === password || "Passwords do not match",
               })}
-              placeholder="Password again"
               variant="subtle"
               backgroundColor="#D9D9D9B2"
             />
