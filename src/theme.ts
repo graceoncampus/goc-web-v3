@@ -112,7 +112,25 @@ const config = defineConfig({
       fadeIn: {
         from: {
           opacity: 0,
+        },
+        to: {
+          opacity: 1,
+        },
+      },
+      fadeInUp: {
+        from: {
+          opacity: 0,
           transform: "translateY(10px)",
+        },
+        to: {
+          opacity: 1,
+          transform: "none",
+        },
+      },
+      fadeInDown: {
+        from: {
+          opacity: 0,
+          transform: "translateY(-5px)",
         },
         to: {
           opacity: 1,

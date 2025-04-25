@@ -10,7 +10,7 @@ import InfoBox from "@/components/InfoBox";
 import GOCat from "@/components/GOCat";
 import { Box, Heading, Image, Stack, Text, Container } from "@chakra-ui/react";
 import { ContactInfo } from "@/constants/ContactInfo";
-import { SocialMedia, RIDES_GOOGLE_FORM_LINK } from "@/constants/Links";
+import { SocialMedia } from "@/constants/Links";
 import { observer } from "mobx-react-lite";
 import { RiArrowRightLine } from "react-icons/ri";
 
@@ -87,7 +87,7 @@ const LandingBody = observer(() => {
               lineHeight="1.2"
               fontWeight={"bold"}
               marginBottom="1rem"
-              animation="fadeIn .5s ease-in-out"
+              animation="fadeInUp .5s ease-in-out"
               animationDelay="0s"
               opacity="0"
               animationFillMode="forwards"
@@ -99,7 +99,7 @@ const LandingBody = observer(() => {
               fontSize={{ base: "xs", sm: "md", md: "lg", lg: "xl", xl: "2xl" }}
               fontWeight={"medium"}
               marginBottom={{ base: "1rem", xl: "2rem" }}
-              animation="fadeIn .5s ease-in-out"
+              animation="fadeInUp .5s ease-in-out"
               animationDelay="0.25s"
               opacity="0"
               animationFillMode="forwards"
@@ -108,7 +108,7 @@ const LandingBody = observer(() => {
               {ContactInfo.day} at {ContactInfo.time}, {ContactInfo.location}
             </Text>
             <Box
-              animation="fadeIn .5s ease-in-out"
+              animation="fadeInUp .5s ease-in-out"
               animationDelay="0.6s"
               opacity="0"
               animationFillMode="forwards"
@@ -215,9 +215,9 @@ const LandingBody = observer(() => {
           <br />
           9AM every Sunday
         </Text>
-        <OutlineButton href={RIDES_GOOGLE_FORM_LINK}>SIGN UP</OutlineButton>
+        <OutlineButton href={"/rides"}>SIGN UP</OutlineButton>
       </Box>
-      {!isMobile && <GOCat />}
+      <GOCat />
     </Container>
   );
 });

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Box, Image, Text } from "@chakra-ui/react";
+import { Box, Image } from "@chakra-ui/react";
 import { toaster } from "@/components/ui/toaster";
 
 const ScrollToBottomButton = () => {
@@ -20,7 +20,11 @@ const ScrollToBottomButton = () => {
 
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.scrollY > 295 && window.scrollY < 300) {
+      const min = 200;
+      const max = 1000;
+      const start = Math.floor(Math.random() * (max - min)) + min;
+      const end = start + 5;
+      if (window.scrollY > start && window.scrollY < end) {
         setIsVisible(true);
       } else {
         setIsVisible(false);

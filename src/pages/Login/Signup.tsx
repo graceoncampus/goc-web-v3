@@ -138,6 +138,10 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
               <Input
                 {...register("firstName", {
                   required: "First name is required",
+                  maxLength: {
+                    value: 15,
+                    message: "You have a long name ^^;",
+                  },
                 })}
                 placeholder="Shawn"
                 variant="subtle"
@@ -151,7 +155,13 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
             </Field>
             <Field label="Last Name" required={true}>
               <Input
-                {...register("lastName", { required: "Last name is required" })}
+                {...register("lastName", {
+                  required: "Last name is required",
+                  maxLength: {
+                    value: 15,
+                    message: "Must be less than 15 chars",
+                  },
+                })}
                 placeholder="Zhuang"
                 variant="subtle"
                 backgroundColor="#D9D9D9B2"
