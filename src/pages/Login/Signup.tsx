@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import {
   confirmSignUp,
   resendSignUpCode,
-  signIn,
+  signOut,
   signUp,
 } from "aws-amplify/auth";
 import { LoginTemplate } from "@/layouts/LoginTemplate";
@@ -45,30 +45,20 @@ export const SignupPage = () => {
 const SignupBody = () => {
   const [signedUp, setSignedUp] = useState(false);
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
 
   return !signedUp ? (
-    <SignupForm
-      setSignedUp={setSignedUp}
-      setUsername={setUsername}
-      setPassword={setPassword}
-    />
+    <SignupForm setSignedUp={setSignedUp} setUsername={setUsername} />
   ) : (
-    <ConfirmationForm username={username} password={password} />
+    <ConfirmationForm username={username} />
   );
 };
 
 interface SignupFormProps {
   setSignedUp: React.Dispatch<React.SetStateAction<boolean>>;
   setUsername: React.Dispatch<React.SetStateAction<string>>;
-  setPassword: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const SignupForm = ({
-  setSignedUp,
-  setUsername,
-  setPassword,
-}: SignupFormProps) => {
+const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 77 }, (_, i) => currentYear - 70 + i);
 
@@ -114,8 +104,8 @@ const SignupForm = ({
         },
       });
       setUsername(data.email);
-      setPassword(data.password);
       setSignedUp(true);
+      window.scrollTo(0, 0);
     } catch (error: any) {
       console.error("Error signing up: ", error);
       if (error.name === "UsernameExistsException") {
@@ -123,7 +113,7 @@ const SignupForm = ({
           await resendSignUpCode({ username: data.email });
           setSignedUp(true);
         } catch (resendError: any) {
-          setError("email", { message: "That email already exists :(" });
+          setError("email", { message: "This email already exists 😔" });
         }
       } else {
         setError("root", { message: error.message });
@@ -315,10 +305,9 @@ const SignupForm = ({
 
 interface ConfirmationFormProps {
   username: string;
-  password: string;
 }
 
-const ConfirmationForm = ({ username, password }: ConfirmationFormProps) => {
+const ConfirmationForm = ({ username }: ConfirmationFormProps) => {
   const navigate = useNavigate();
   const {
     register,
@@ -327,8 +316,6 @@ const ConfirmationForm = ({ username, password }: ConfirmationFormProps) => {
     formState: { errors },
   } = useForm<{ code: string }>();
 
-  console.log("Username passed to ConfirmationForm:", username);
-
   const onConfirm = async ({ code }: { code: string }) => {
     try {
       const { isSignUpComplete } = await confirmSignUp({
@@ -336,8 +323,8 @@ const ConfirmationForm = ({ username, password }: ConfirmationFormProps) => {
         confirmationCode: code,
       });
       if (isSignUpComplete) {
-        await signIn({ username: username, password: password });
-        navigate("/");
+        await signOut();
+        navigate("/login");
       }
     } catch (error: any) {
       console.error("Error confirming sign up", error);
@@ -371,9 +358,7 @@ const ConfirmationForm = ({ username, password }: ConfirmationFormProps) => {
         <VStack gap="1rem">
           <Field label="Confirmation Code" required={true}>
             <Input
-              {...register("code", {
-                required: "Confirmation code is required",
-              })}
+              {...register("code")}
               placeholder="Enter your confirmation code"
               variant="subtle"
               backgroundColor="#D9D9D9B2"
