@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { confirmSignUp, resendSignUpCode, signUp } from "aws-amplify/auth";
+import {
+  confirmSignUp,
+  resendSignUpCode,
+  signIn,
+  signUp,
+} from "aws-amplify/auth";
 import { LoginTemplate } from "@/layouts/LoginTemplate";
 import {
   Box,
@@ -40,20 +45,30 @@ export const SignupPage = () => {
 const SignupBody = () => {
   const [signedUp, setSignedUp] = useState(false);
   const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   return !signedUp ? (
-    <SignupForm setSignedUp={setSignedUp} setUsername={setUsername} />
+    <SignupForm
+      setSignedUp={setSignedUp}
+      setUsername={setUsername}
+      setPassword={setPassword}
+    />
   ) : (
-    <ConfirmationForm username={username} />
+    <ConfirmationForm username={username} password={password} />
   );
 };
 
 interface SignupFormProps {
   setSignedUp: React.Dispatch<React.SetStateAction<boolean>>;
   setUsername: React.Dispatch<React.SetStateAction<string>>;
+  setPassword: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
+const SignupForm = ({
+  setSignedUp,
+  setUsername,
+  setPassword,
+}: SignupFormProps) => {
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 77 }, (_, i) => currentYear - 70 + i);
 
@@ -99,6 +114,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
         },
       });
       setUsername(data.email);
+      setPassword(data.password);
       setSignedUp(true);
     } catch (error: any) {
       console.error("Error signing up: ", error);
@@ -299,9 +315,10 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
 
 interface ConfirmationFormProps {
   username: string;
+  password: string;
 }
 
-const ConfirmationForm = ({ username }: ConfirmationFormProps) => {
+const ConfirmationForm = ({ username, password }: ConfirmationFormProps) => {
   const navigate = useNavigate();
   const {
     register,
@@ -318,7 +335,10 @@ const ConfirmationForm = ({ username }: ConfirmationFormProps) => {
         username: username,
         confirmationCode: code,
       });
-      if (isSignUpComplete) navigate("/");
+      if (isSignUpComplete) {
+        await signIn({ username: username, password: password });
+        navigate("/");
+      }
     } catch (error: any) {
       console.error("Error confirming sign up", error);
       setError("root", { message: error.message });
