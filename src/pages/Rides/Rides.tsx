@@ -128,7 +128,6 @@ export const RidesLandingPage = () => {
         query: listRides,
       })) as any;
       setRides(result.data.listRides.items);
-      console.log(result.data.listRides.items[0].cars[0]);
     } catch (error) {
       toaster.create({
         title: "Error",
