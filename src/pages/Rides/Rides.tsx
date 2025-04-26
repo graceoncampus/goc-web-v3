@@ -100,6 +100,9 @@ export const listRides = /* GraphQL */ `
         cars {
           driver_id
           driver_name
+          driver {
+            comment
+          }
           riders {
             name
             __typename
@@ -125,6 +128,7 @@ export const RidesLandingPage = () => {
         query: listRides,
       })) as any;
       setRides(result.data.listRides.items);
+      console.log(result.data.listRides.items[0].cars[0]);
     } catch (error) {
       toaster.create({
         title: "Error",

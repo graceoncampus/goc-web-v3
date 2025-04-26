@@ -9,7 +9,6 @@ export const checkIsLoggedIn = async (
 ) => {
   await getCurrentUser()
     .then((value: any) => {
-      console.log(value);
       setLoggedIn(true);
     })
     .catch((reason) => {
@@ -24,7 +23,6 @@ export const checkInRidesTeam = async (
     const session = await fetchAuthSession();
     const groups = session.tokens?.idToken?.payload["cognito:groups"];
     setInRidesTeam(Array.isArray(groups) && groups.includes("RidesTeam"));
-    console.log(groups);
   } catch (error) {
     // not signed in, probably
     console.error("Error fetching auth session:", error);
