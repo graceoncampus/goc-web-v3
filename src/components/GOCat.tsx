@@ -8,22 +8,24 @@ const ScrollToBottomButton = () => {
   const handleClick = () => {
     toaster.create({
       title: "Congrats! (Easter Egg 🥚)",
-      description: "You've found the Bongo Cat!",
+      description:
+        "You've found the Bongo Cat! Perhaps there is more..? Let Yeadam know for a prize 🎁",
       type: "success",
-      duration: 144_000,
-      action: {
-        label: "👀",
-        onClick: () => toaster.dismiss(),
-      },
+      duration: 7000,
+      // action: {
+      //   label: "👀",
+      //   onClick: () => toaster.dismiss(),
+      // },
     });
   };
 
   useEffect(() => {
+    const min = 200;
+    const max = 800;
+    const start = Math.floor(Math.random() * (max - min)) + min;
+    const end = start + 7;
+
     const toggleVisibility = () => {
-      const min = 200;
-      const max = 1000;
-      const start = Math.floor(Math.random() * (max - min)) + min;
-      const end = start + 5;
       if (window.scrollY > start && window.scrollY < end) {
         setIsVisible(true);
       } else {

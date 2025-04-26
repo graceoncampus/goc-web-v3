@@ -37,7 +37,7 @@ const InfoBox = ({
       border={showBorder ? { base: "none", md: "2px solid #ddd" } : "none"}
     >
       <Heading
-        size={{ base: "2xl", md: "4xl", lg: "2xl", xl: "4xl" }}
+        size={{ base: "2xl", md: "3xl", lg: "2xl", xl: "3xl" }}
         fontWeight="semibold"
         marginBottom={".5rem"}
         textWrap={"nowrap"}

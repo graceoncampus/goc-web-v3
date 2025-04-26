@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { confirmSignUp, resendSignUpCode, signUp } from "aws-amplify/auth";
+import {
+  confirmSignUp,
+  resendSignUpCode,
+  signOut,
+  signUp,
+} from "aws-amplify/auth";
 import { LoginTemplate } from "@/layouts/LoginTemplate";
 import {
   Box,
@@ -100,6 +105,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
       });
       setUsername(data.email);
       setSignedUp(true);
+      window.scrollTo(0, 0);
     } catch (error: any) {
       console.error("Error signing up: ", error);
       if (error.name === "UsernameExistsException") {
@@ -107,7 +113,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
           await resendSignUpCode({ username: data.email });
           setSignedUp(true);
         } catch (resendError: any) {
-          setError("email", { message: "That email already exists :(" });
+          setError("email", { message: "This email already exists 😔" });
         }
       } else {
         setError("root", { message: error.message });
@@ -143,7 +149,6 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                     message: "You have a long name ^^;",
                   },
                 })}
-                placeholder="Shawn"
                 variant="subtle"
                 backgroundColor="#D9D9D9B2"
               />
@@ -162,7 +167,6 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                     message: "Must be less than 15 chars",
                   },
                 })}
-                placeholder="Zhuang"
                 variant="subtle"
                 backgroundColor="#D9D9D9B2"
               />
@@ -182,7 +186,7 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                   message: "Invalid email address",
                 },
               })}
-              placeholder="graceoncampus@gmail.com"
+              placeholder="This will be your username!"
               variant="subtle"
               backgroundColor="#D9D9D9B2"
             />
@@ -198,7 +202,6 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                 required: "Phone number is required",
               })}
               type="text"
-              placeholder="Enter phone number"
               variant="subtle"
               backgroundColor="#D9D9D9B2"
             />
@@ -218,7 +221,6 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                   message: "Password must be at least 8 characters",
                 },
               })}
-              placeholder="Password"
               variant="subtle"
               backgroundColor="#D9D9D9B2"
             />
@@ -236,7 +238,6 @@ const SignupForm = ({ setSignedUp, setUsername }: SignupFormProps) => {
                 validate: (value) =>
                   value === password || "Passwords do not match",
               })}
-              placeholder="Password again"
               variant="subtle"
               backgroundColor="#D9D9D9B2"
             />
@@ -315,15 +316,16 @@ const ConfirmationForm = ({ username }: ConfirmationFormProps) => {
     formState: { errors },
   } = useForm<{ code: string }>();
 
-  console.log("Username passed to ConfirmationForm:", username);
-
   const onConfirm = async ({ code }: { code: string }) => {
     try {
       const { isSignUpComplete } = await confirmSignUp({
         username: username,
         confirmationCode: code,
       });
-      if (isSignUpComplete) navigate("/");
+      if (isSignUpComplete) {
+        await signOut();
+        navigate("/login");
+      }
     } catch (error: any) {
       console.error("Error confirming sign up", error);
       setError("root", { message: error.message });
@@ -356,9 +358,7 @@ const ConfirmationForm = ({ username }: ConfirmationFormProps) => {
         <VStack gap="1rem">
           <Field label="Confirmation Code" required={true}>
             <Input
-              {...register("code", {
-                required: "Confirmation code is required",
-              })}
+              {...register("code")}
               placeholder="Enter your confirmation code"
               variant="subtle"
               backgroundColor="#D9D9D9B2"
