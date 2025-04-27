@@ -268,7 +268,7 @@ export default function Footer(props) {
         children="Fridays at 7pm&#xA;Broad Art Center 2160E"
         {...getOverrideProps(
           overrides,
-          "Fridays at 7pm Broad Art Center 2160E"
+          "Fridays at 7pm Broad Art Center 2160E",
         )}
       ></Text>
       <Text
@@ -290,7 +290,7 @@ export default function Footer(props) {
         children="We’d love to get in touch with you!"
         {...getOverrideProps(
           overrides,
-          "We\u2019d love to get in touch with you!"
+          "We\u2019d love to get in touch with you!",
         )}
       ></Text>
       <Text
@@ -309,10 +309,10 @@ export default function Footer(props) {
         left="562px"
         top="264px"
         padding="0px 0px 0px 0px"
-        children="Phillip Ko&#xA;(510) 612-7862&#xA;gocateam@gmail.com"
+        children="Isaac Wong&#xA;(510) 480-8831&#xA;gocateam@gmail.com"
         {...getOverrideProps(
           overrides,
-          "Phillip Ko (510) 612-7862 gocateam@gmail.com"
+          "Isaac Wong (510) 480-8831 gocateam@gmail.com",
         )}
       ></Text>
       <Text
