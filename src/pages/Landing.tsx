@@ -259,7 +259,6 @@ const LandingBody = observer(() => {
             as={"h2"}
             size={{ sm: "4xl", xl: "6xl" }}
             marginBottom="2rem"
-            textWrap="pretty"
           >
             Rides to church!
           </Heading>
@@ -268,7 +267,6 @@ const LandingBody = observer(() => {
             as={"h2"}
             size={{ sm: "3xl", xl: "6xl" }}
             marginBottom={isMobile ? "2rem" : "1.2rem"}
-            textWrap="pretty"
           >
             Sign&nbsp;up for a ride&nbsp;to&nbsp;church!
           </Heading>
