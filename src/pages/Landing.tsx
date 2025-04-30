@@ -164,7 +164,7 @@ const LandingBody = observer(() => {
             , we focus on Bible teaching, leadership training, evangelism, and
             discipleship. We also provide{" "}
             <Link href={"/rides"} color="goc.blue" display={"inline"}>
-              rides
+              Rides
             </Link>{" "}
             to church every Sunday! Sign up for a ride to church and join our{" "}
             <Link
@@ -180,9 +180,10 @@ const LandingBody = observer(() => {
         </Stack>
       </Box>
 
+      {/* Divider */}
       <Box
-        width={"65%"}
-        height={"3px"}
+        width={{ base: "65%", xl: "65rem" }}
+        height={"4px"}
         bg="goc.blue"
         marginX="auto"
         marginY="auto"
