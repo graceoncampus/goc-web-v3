@@ -52,7 +52,7 @@ const LaserCat: React.FC = () => {
         title: `Achievement Unlocked! (Easter Egg 🥚)`,
         description: "You reached 100 points! Let Yeadam know for a prize 🎁",
         type: "success",
-        duration: 7000,
+        duration: 144_000,
       });
     }
   }, [score]);
