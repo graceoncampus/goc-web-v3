@@ -9,13 +9,9 @@ const ScrollToBottomButton = () => {
     toaster.create({
       title: "Congrats! (Easter Egg 🥚)",
       description:
-        "You've found the Bongo Cat! Perhaps there is more..? Let Yeadam know for a prize 🎁",
+        "You've found the Bongo Cat! Perhaps there are more..? Let Yeadam know for a prize 🎁",
       type: "success",
       duration: 7000,
-      // action: {
-      //   label: "👀",
-      //   onClick: () => toaster.dismiss(),
-      // },
     });
   };
 
@@ -23,7 +19,7 @@ const ScrollToBottomButton = () => {
     const min = 200;
     const max = 800;
     const start = Math.floor(Math.random() * (max - min)) + min;
-    const end = start + 7;
+    const end = start + 10;
 
     const toggleVisibility = () => {
       if (window.scrollY > start && window.scrollY < end) {
