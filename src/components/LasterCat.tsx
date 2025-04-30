@@ -45,9 +45,9 @@ const LaserCat: React.FC = () => {
         title: `You've reached a score of ${score}`,
         description: "Keep it up!",
         type: "success",
-        duration: 7000,
+        duration: 1500,
       });
-    } else if (score == 1) {
+    } else if (score === 100) {
       toaster.create({
         title: `Achievement Unlocked! (Easter Egg 🥚)`,
         description: "You reached 100 points! Let Yeadam know for a prize 🎁",
