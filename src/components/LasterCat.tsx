@@ -40,11 +40,10 @@ const LaserCat: React.FC = () => {
 
   // Score notification
   useEffect(() => {
-    if (score > 0 && score % 10 === 0 && score < 100) {
+    if (score > 0 && score < 100 && score % 10 === 0) {
       toaster.create({
         title: `You've reached a score of ${score}`,
-        description: "Keep it up!",
-        type: "success",
+        type: "info",
         duration: 1500,
       });
     } else if (score === 100) {
