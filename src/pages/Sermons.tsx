@@ -133,7 +133,6 @@ const SermonsBody = (props: SermonBodyProps) => {
     (currentPage - 1) * PAGE_SIZE,
     currentPage * PAGE_SIZE,
   );
-  const totalPages = Math.ceil(sermons.length / PAGE_SIZE);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -147,13 +146,14 @@ const SermonsBody = (props: SermonBodyProps) => {
 
   const pagination = (
     <PaginationRoot
-      count={totalPages}
+      count={sermons.length}
       page={currentPage}
+      pageSize={PAGE_SIZE}
       onPageChange={(e: any) => setCurrentPage(e.page)}
     >
       <HStack>
         <PaginationPrevTrigger />
-        <PaginationItems />
+        <PaginationItems/>
         <PaginationNextTrigger />
       </HStack>
     </PaginationRoot>
