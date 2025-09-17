@@ -61,7 +61,7 @@ const SmallGroupsBody = () => {
         >
           <GOCButton
             target="_blank"
-            href="https://drive.google.com/file/d/1bJ22fpqKJwOymrnaqCF1k-9GlwrWefCO/view?usp=sharing"
+            href="https://drive.google.com/file/d/19HH4TC00SZXnbohFKGI2SV_7BCs3O_v1/view?usp=sharing"
             buttonProps={{
               width: "18rem",
               paddingY: "1.4rem",
@@ -73,7 +73,7 @@ const SmallGroupsBody = () => {
           </GOCButton>
           <GOCButton
             target="_blank"
-            href="https://drive.google.com/file/d/1cScBhMquQvNaWwT4zaAupWr15FfTP1Et/view?usp=sharing"
+            href="https://drive.google.com/file/d/1Wf8okzOrVPDj2isv_NHtZenQL59R-aRa/view?usp=sharing"
             buttonProps={{
               width: "18rem",
               paddingY: "1.4rem",
