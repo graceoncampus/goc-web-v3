@@ -187,19 +187,20 @@ const RidesLandingBody = ({
     };
   }, []);
 
-  const getRelevantSunday = () => {
+  const getRelevantSunday = (): Date => {
     const today = new Date();
     const day = today.getDay(); // 0 = Sunday, 1 = Monday, …, 6 = Saturday
     const relevantSunday = new Date(today);
-    if (day === 5 || day === 6 || day === 0) {
-      // Friday, Saturday, or Sunday -> use next Sunday
-      const daysToAdd = day === 0 ? 7 : 7 - day;
-      relevantSunday.setDate(today.getDate() + daysToAdd);
+
+    if (day === 0) {
+      // If it's Sunday, keep the same date
+      return relevantSunday;
     } else {
-      // For Monday-Thursday, use the previous Sunday
-      relevantSunday.setDate(today.getDate() - day);
+      // For any other day, get next Sunday
+      const daysUntilNextSunday = 7 - day;
+      relevantSunday.setDate(today.getDate() + daysUntilNextSunday);
+      return relevantSunday;
     }
-    return relevantSunday;
   };
 
   const relevantSunday = getRelevantSunday();
