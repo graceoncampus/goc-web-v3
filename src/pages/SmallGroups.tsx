@@ -31,13 +31,12 @@ const SmallGroupsBody = () => {
             What are Small&nbsp;Groups?
           </Heading>
           <Text textAlign="left">
-            Small groups are the backbone of our discipleship ministry. Each
-            small group focuses on Bible study, prayer, fellowship, and
-            accountability. In these smaller, more intimate groups, we have the
-            opportunity to develop deep relationships so that we can better
-            love, serve, and care for each other. Each small group has a leader
-            who will minister to your spiritual needs, counsel you through
-            life’s tough issues, and spur you on in your walk with the Lord.
+            Small groups are the primary vehicle for discipleship in our
+            ministry. Through small groups, we provide the opportunity to
+            develop deeper friendships with others and grow in our love for
+            Christ together through Bible study, prayer, and accountability in a
+            weekly, more personal and gender-specific setting. Each small group
+            is led by a student leader.
           </Text>
         </Box>
 
@@ -47,10 +46,10 @@ const SmallGroupsBody = () => {
             I want to join a small group!
           </Heading>
           <Text textAlign="left">
-            Awesome! The men's and women's small group leaders are listed in the
-            links below, along with a brief introduction to help you get to know
-            them better. You can connect with them in person, via messenger, or
-            by email as provided in the blurbs.
+            More information about both our men's and women's small group
+            leaders is linked below, along with a brief introduction to help you
+            get to know them better. You can connect with them in person, via
+            Messenger, or by email.
           </Text>
         </Box>
         <Stack
