@@ -7,6 +7,7 @@ interface OutlineButtonProps {
   icon?: ReactNode;
   animateIcon?: boolean;
   onWhite?: boolean;
+  haveMargin?: boolean;
 }
 
 const OutlineButton = ({
@@ -15,11 +16,12 @@ const OutlineButton = ({
   icon,
   animateIcon = false,
   onWhite = false,
+  haveMargin = true,
 }: OutlineButtonProps) => {
   return (
     <Button
       variant="outline"
-      marginTop="1.5rem"
+      marginTop={haveMargin ? "1.5rem" : "0"}
       asChild={true}
       color={onWhite ? "black" : "white"}
       backgroundColor={"transparent"}

@@ -18,6 +18,7 @@ import { ResetPage } from "@/pages/Login/Reset";
 import { SignupPage } from "@/pages/Login/Signup";
 import { ProfilePage } from "@/pages/Profile";
 import { NotFoundPage } from "@/pages/NotFound";
+import { WelcomeWeekPage } from "@/pages/WelcomeWeek";
 import { useEffect } from "react";
 
 // a small component to redirect to an external URL
@@ -37,6 +38,7 @@ const App = () => {
           <Routes>
             <Route path={"*"} element={<NotFoundPage />} /> {/* 404 */}
             <Route path={"/"} element={<LandingPage />} />
+            <Route path={"/welcome-week"} element={<WelcomeWeekPage />} />
             <Route path={"/about"} element={<AboutUsPage />} />
             <Route path={"/sermons"} element={<SermonsPage />} />
             <Route path={"/events"} element={<EventsPage />} />
