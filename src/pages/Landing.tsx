@@ -24,7 +24,7 @@ import { RiArrowRightLine } from "react-icons/ri";
 
 export const LandingPage = () => {
   return (
-    <Template activeKey={NavbarActiveKey.NONE}>
+    <Template activeKey={NavbarActiveKey.NONE} disableTransparentNavbar={true}>
       <LandingBody />
     </Template>
   );
@@ -40,7 +40,7 @@ const LandingBody = observer(() => {
 
   return (
     <Container fluid={true} margin="0" padding="0">
-      {/* //Welcome Week Banner
+      {/* Welcome Week Banner */}
       <Box
         width="100%"
         bg="goc.blue"
@@ -78,7 +78,7 @@ const LandingBody = observer(() => {
             </OutlineButton>
           </Stack>
         </Container>
-      </Box> */}
+      </Box>
 
       {/* Main Hero Banner */}
       <Box
