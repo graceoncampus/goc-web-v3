@@ -24,7 +24,7 @@ import { RiArrowRightLine } from "react-icons/ri";
 
 export const LandingPage = () => {
   return (
-    <Template activeKey={NavbarActiveKey.NONE}>
+    <Template activeKey={NavbarActiveKey.NONE} disableTransparentNavbar={true}>
       <LandingBody />
     </Template>
   );
@@ -40,7 +40,47 @@ const LandingBody = observer(() => {
 
   return (
     <Container fluid={true} margin="0" padding="0">
-      {/* Banner */}
+      {/* Welcome Week Banner */}
+      <Box
+        width="100%"
+        bg="goc.blue"
+        py={{ base: 3, md: 4 }}
+        px={{ base: 4, md: 8 }}
+        position="relative"
+        marginTop="4rem"
+      >
+        <Container maxW="6xl" position="relative" zIndex={1} textAlign="center">
+          <Stack
+            direction={{ base: "column", md: "row" }}
+            align="center"
+            justify="center"
+            gap={{ base: 3, md: 6 }}
+            width="100%"
+          >
+            <Heading
+              as="h2"
+              size={{ base: "lg", md: "xl" }}
+              color="white"
+              textShadow="2px 2px 4px rgba(0,0,0,0.3)"
+              fontWeight="bold"
+              margin={0}
+            >
+              🎉 Welcome Week is Here!
+            </Heading>
+            <OutlineButton
+              href="/welcome-week"
+              onWhite={false}
+              icon={<RiArrowRightLine />}
+              animateIcon={!isMobile}
+              haveMargin={false}
+            >
+              SEE EVENTS
+            </OutlineButton>
+          </Stack>
+        </Container>
+      </Box>
+
+      {/* Main Hero Banner */}
       <Box
         position="relative"
         width="100%"
