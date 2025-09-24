@@ -60,7 +60,7 @@ const WelcomeWeekBody = () => {
       title: "Ice Cream Social",
       date: "Friday, September 26",
       time: "7:00 PM - 9:30 PM",
-      location: "TBD",
+      location: "Rolfe 1200",
       description:
         "Join us for our weekly large group with worship and hearing of God's Word, followed by free ice cream and fellowship!",
       highlight: true,
