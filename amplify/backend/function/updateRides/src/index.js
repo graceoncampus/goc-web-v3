@@ -29,11 +29,16 @@ exports.handler = async (event) => {
   }
 
   const { statusCode, body } = await getCarInputs(url);
+
+  console.log("PARSED EVENT: ", JSON.stringify(body));
+
   if (statusCode === 500) return { statusCode, body, headers: cors };
   let res = await deleteAllRides();
   if (res.statusCode === 500) return { ...res, headers: cors };
   res = await addRides(body, date, emailMsg);
   if (res.statusCode === 500) return { ...res, headers: cors };
+
+  console.log("Sending emails to drivers...", body.filter((car) => car.driver.send_email));
   const emailPromises = body
     .filter((car) => car.driver.send_email)
     .map(async (car) => {
@@ -45,6 +50,8 @@ exports.handler = async (event) => {
   await Promise.all(emailPromises).catch((err) =>
     console.error("Email sending failed:", err),
   );
+
+  console.log("Emails sent to drivers");
 
   const drivers = body.filter((car) => car.driver.send_email).map((car) => { return { name: car.driver_name, email: car.driver.email } });
 
