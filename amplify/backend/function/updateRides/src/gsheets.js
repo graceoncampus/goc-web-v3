@@ -80,7 +80,7 @@ const getCarInputs = async (url) => {
             morning: row.get("driver_morning"),
             staying: row.get("driver_staying"),
             evening: row.get("driver_evening"),
-            send_email: row.get("send_email").toLowerCase() === "yes",
+            send_email: row.get("send_email").toLowerCase().trim() === "yes",
           },
           riders: [riderData],
         });
