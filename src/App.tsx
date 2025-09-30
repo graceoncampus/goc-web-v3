@@ -38,7 +38,7 @@ const App = () => {
           <Routes>
             <Route path={"*"} element={<NotFoundPage />} /> {/* 404 */}
             <Route path={"/"} element={<LandingPage />} />
-            <Route path={"/welcome-week"} element={<WelcomeWeekPage />} />
+            {/* <Route path={"/welcome-week"} element={<WelcomeWeekPage />} /> */}
             <Route path={"/about"} element={<AboutUsPage />} />
             <Route path={"/sermons"} element={<SermonsPage />} />
             <Route path={"/events"} element={<EventsPage />} />
