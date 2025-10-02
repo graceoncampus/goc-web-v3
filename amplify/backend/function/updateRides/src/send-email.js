@@ -18,7 +18,6 @@ async function sendDriverEmail(car, date, emailMessage) {
     dateProvided: !!date,
     emailMessageProvided: !!emailMessage,
   });
-
   if (!car.driver?.email || !car.riders?.length || !date || !emailMessage) {
     console.log("Missing required fields, skipping email.");
     return false;
