@@ -18,7 +18,7 @@ const sendDriverEmail = async (car, date, emailMessage) => {
     car.driver &&
     car.driver.email &&
     car.riders &&
-    car.riders.length > 1 &&
+    car.riders.length > 0 &&
     date &&
     emailMessage
   ) {
@@ -64,13 +64,15 @@ const sendDriverEmail = async (car, date, emailMessage) => {
           emailMessage ? `${emailMessage}\n\n` : ""
         }</p><p style="box-sizing: border-box; color: #3a3f4b; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 18px; line-height: 1.5em; margin-top: 0;" align="left">Thanks! <br/>Rides Team<br/> gocrides@gmail.com | (310) 694-5216 </p></td></tr></table> </td></tr><tr> <td style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; word-break: break-word;"> <table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0" style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0 auto; padding: 0; text-align: center; width: 570px;"> <tr> <td class="content-cell" align="center" style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; padding: 35px 35px 0; word-break: break-word;"> <p class="sub align-center" style="box-sizing: border-box; color: #AEAEAE; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.5em; margin-top: 0;" align="center">© 2017 <a style="text-decoration: none;color:#539ab9" href="https://graceoncampus.org">Grace on Campus</a> <br/>A Ministry of <a style="text-decoration: none;color:#539ab9" href="https://gracechurch.org">Grace Community Church</a> </p></td></tr></table> </td></tr></table> </td></tr></table></body></html>`,
       });
-      console.log("Email sent");
+      console.log("Email sent to " + car.driver?.email);
       return true;
     } catch (e) {
-      console.log("Email failed to send");
+      console.log("Email failed to send " + car.driver?.email);
       console.log(e);
       return false;
     }
+  } else {
+    console.log(`Couldn't email ${JSON.stringify(car)}`);
   }
 };
 
