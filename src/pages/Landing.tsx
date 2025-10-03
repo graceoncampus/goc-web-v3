@@ -24,7 +24,7 @@ import { RiArrowRightLine } from "react-icons/ri";
 
 export const LandingPage = () => {
   return (
-    <Template activeKey={NavbarActiveKey.NONE} disableTransparentNavbar={true}>
+    <Template activeKey={NavbarActiveKey.NONE}>
       <LandingBody />
     </Template>
   );
