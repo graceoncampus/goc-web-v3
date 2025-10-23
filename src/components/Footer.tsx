@@ -232,7 +232,7 @@ export default function Footer() {
               >
                 <FaInstagram />
               </Link>
-              <Link
+              {/* <Link
                 href={SocialMedia.vimeo}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -251,7 +251,7 @@ export default function Footer() {
                 transition="all .2s ease-in-out"
               >
                 <FaWordpress />
-              </Link>
+              </Link> */}
             </Flex>
           </FooterColumn>
         </GridItem>
