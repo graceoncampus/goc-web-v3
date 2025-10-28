@@ -22,8 +22,20 @@ import {
 import GOCSpinner from "@/components/GOCSpinner";
 import { BannerTemplate } from "@/layouts/BannerTemplate";
 import { MdAttachMoney, MdLocationPin } from "react-icons/md";
+import { EventList } from "@/components/EventCardList";
 
 const client = generateClient();
+
+export interface Event {
+  id: string;
+  title: string;
+  startDate: string;
+  endDate: string;
+  price: Number;
+  location: string;
+  description: string;
+  imageLink: string;
+}
 
 export const EventsPage: React.FC = () => {
   return (
@@ -37,17 +49,6 @@ export const EventsPage: React.FC = () => {
     </BannerTemplate>
   );
 };
-
-interface Event {
-  id: string;
-  title: string;
-  startDate: string;
-  endDate: string;
-  price: Number;
-  location: string;
-  description: string;
-  imageLink: string;
-}
 
 const EventsBody: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -85,18 +86,6 @@ const EventsBody: React.FC = () => {
 
   return (
     <Container fluid={true} padding={0}>
-      {/* <Heading
-        as="h2"
-        textAlign={"center"}
-        fontSize={{
-          base: "2xl",
-          md: "3xl",
-          lg: "4xl",
-          xl: "4xl",
-        }}
-      >
-        Upcoming Events
-      </Heading> */}
       <Stack
         width={{ sm: "100%", md: "4/5" }}
         marginX={"auto"}
@@ -130,190 +119,10 @@ const EventsBody: React.FC = () => {
           </AspectRatio>
         </Stack>
       </Stack>
+      <EventList
+        events={events}
+        loading={loading}
+      />
     </Container>
-  );
-};
-
-interface EventListProps {
-  events: Event[];
-  loading: boolean;
-}
-
-const EventList = ({ events, loading }: EventListProps) => {
-  function formatEventDate(startDateString: string, endDateString: string) {
-    const startDate = new Date(startDateString);
-    const endDate = new Date(endDateString);
-    const formattedStartDate = `${startDate.toLocaleString("en-US", {
-      month: "numeric",
-      day: "numeric",
-      year: "2-digit",
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-    })}`;
-    const formattedEndDate = `${endDate.toLocaleString("en-US", {
-      month: "numeric",
-      day: "numeric",
-      year: "2-digit",
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-    })}`;
-
-    return `${formattedStartDate} - ${formattedEndDate}`;
-  }
-
-  function formatEventDateShort(dateString: string) {
-    const date = new Date(dateString);
-    const monthsShort = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    const daysOfWeekShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-    const hour = date.getHours();
-    const minute = date.getMinutes();
-    const ampm = hour >= 12 ? "pm" : "am";
-    const formattedHour = hour % 12 || 12;
-    const formattedMinute = String(minute).padStart(2, "0");
-
-    return `${monthsShort[date.getMonth()]} ${date.getDate()} • ${daysOfWeekShort[date.getDay()]} • ${formattedHour}:${formattedMinute}${ampm}`;
-  }
-
-  if (loading) return <GOCSpinner />;
-
-  if (events.length === 0) {
-    return (
-      <Stack marginY="1rem" align="center">
-        <Text fontSize={{ base: "md", md: "xl" }} color="goc.blue">
-          There are no upcoming events!
-        </Text>
-      </Stack>
-    );
-  }
-
-  return (
-    <AccordionRoot
-      key={events.length}
-      spaceY="1rem"
-      variant="outline"
-      collapsible={true}
-      multiple={true}
-      maxWidth={"60rem"}
-    >
-      {events.map((event, index) => (
-        <AccordionItem key={index} value={event.id}>
-          <AccordionItemTrigger indicatorPlacement="start">
-            <Stack width="100%">
-              <Flex
-                flexDirection={{ base: "column", md: "row" }}
-                justifyContent="space-between"
-                alignItems="center"
-                width="100%"
-                marginLeft="10px"
-              >
-                <Heading
-                  as="h3"
-                  fontSize={{ base: "md", md: "xl", lg: "2xl" }}
-                  margin={0}
-                >
-                  {event.title}
-                </Heading>
-                <Text
-                  fontSize={{ base: "sm", md: "lg" }}
-                  marginRight="10px"
-                  textAlign="right"
-                >
-                  {formatEventDateShort(event.startDate)}
-                </Text>
-              </Flex>
-            </Stack>
-          </AccordionItemTrigger>
-          <AccordionItemContent>
-            <Box marginX="30px">
-              <Flex>
-                <Image
-                  width={{ base: "100px", md: "200px" }}
-                  height={{ base: "150px", md: "200px" }}
-                  borderRadius="20px"
-                  src={event.imageLink}
-                />
-                <Box className="event-description-text" marginLeft="20px">
-                  <Box>
-                    <Heading as="h3" display={{ base: "none", md: "block" }}>
-                      {event.title}
-                    </Heading>
-                    <Box>
-                      <Text fontSize={{ base: "xs", md: "md" }}>
-                        {event.description}
-                      </Text>
-                      {/* <Box className="event-info" marginTop="10px">
-                        <Text fontSize={{ base: "xs", md: "md" }}>
-                          {formatEventDate(event.startDate, event.endDate)}
-                        </Text>
-                      </Box> */}
-                    </Box>
-                  </Box>
-                  {/* Location info for desktop */}
-                  <Flex
-                    className="location-info"
-                    alignItems="center"
-                    marginTop="10px"
-                    display={{ base: "none", md: "flex" }}
-                  >
-                    <Icon fontSize={{ base: "20px", md: "24px" }}>
-                      <MdLocationPin />
-                    </Icon>
-                    <Text
-                      fontSize={{ base: "sm", md: "md" }}
-                      marginRight="10px"
-                    >
-                      {event.location}
-                    </Text>
-                    <Icon fontSize={{ base: "20px", md: "24px" }}>
-                      <MdAttachMoney />
-                    </Icon>
-                    <Text fontSize={{ base: "sm", md: "md" }}>
-                      {event.price === 0 ? "free" : event.price.toString()}
-                    </Text>
-                  </Flex>
-                </Box>
-              </Flex>
-              {/* Location info for mobile */}
-              <Flex
-                className="location-info"
-                alignItems="center"
-                marginTop="10px"
-                justifyContent={"space-evenly"}
-                display={{ base: "flex", md: "none" }}
-              >
-                <Icon fontSize={{ base: "20px", md: "24px" }}>
-                  <MdLocationPin />
-                </Icon>
-                <Text fontSize={{ base: "sm", md: "md" }} marginRight="10px">
-                  {event.location}
-                </Text>
-                <Icon fontSize={{ base: "20px", md: "24px" }}>
-                  <MdAttachMoney />
-                </Icon>
-                <Text fontSize={{ base: "sm", md: "md" }}>
-                  {event.price === 0 ? "free" : event.price.toString()}
-                </Text>
-              </Flex>
-            </Box>
-          </AccordionItemContent>
-        </AccordionItem>
-      ))}
-    </AccordionRoot>
   );
 };
