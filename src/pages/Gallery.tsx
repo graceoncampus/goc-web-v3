@@ -2,6 +2,8 @@ import {
   Container,
   Input,
   HStack,
+  Flex,
+  Box,
   Select,
   Portal,
   createListCollection,
@@ -10,20 +12,15 @@ import { InputGroup } from "@/components/ui/input-group";
 import { NavbarActiveKey } from "@/components/Navbar";
 import { BannerTemplate } from "@/layouts/BannerTemplate";
 import { LuSearch } from "react-icons/lu";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { GalleryCardList } from "@/components/GalleryCardList";
 
 /* TODO: Yeadam suggestions
 - Sort events -- place "coming soon" at the top
 - Parse thumnbail url for gallery link + static image (from backend)
 
-
-
 FIX:
-- Show normal-sized event when searching
-- Move "all years" search to the right of search bar
-- Text wrapping for event type
-
+- Filter dropdown should have equal width as filter
 */
 
 export type GalleryItem = {
@@ -145,25 +142,60 @@ export const GalleryPage = () => {
 // --- Gallery Body Component with Search and Filters ---
 const GalleryBody = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedYear, setSelectedYear] = useState<string>("");
+  const [selectedSchoolYear, setSelectedSchoolYear] = useState<string>("");
+  const [triggerWidth, setTriggerWidth] = useState<string>("12rem");
+  const triggerRef = useRef<HTMLDivElement>(null);
 
-  // Get unique years sorted descending for the dropdown
-  const uniqueYears = Array.from(new Set(items.map((item) => item.year))).sort(
-    (a, b) => b - a,
-  ); // Newest first
+  // Update trigger width when component mounts or resizes
+  useEffect(() => {
+    const updateWidth = () => {
+      if (triggerRef.current) {
+        const width = triggerRef.current.offsetWidth;
+        setTriggerWidth(`${width}px`);
+      }
+    };
+
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
+
+  // Helper function to get school year from a date
+  const getSchoolYear = (dateString: string): string => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // getMonth() returns 0-11, so add 1
+
+    // If date is before July 1st, it belongs to the previous school year
+    if (month < 7) {
+      return `${year - 1}-${year.toString().slice(-2)}`;
+    } else {
+      return `${year}-${(year + 1).toString().slice(-2)}`;
+    }
+  };
+
+  // Get unique school years sorted descending for the dropdown
+  const uniqueSchoolYears = Array.from(
+    new Set(items.map((item) => getSchoolYear(item.date))),
+  ).sort((a, b) => {
+    // Sort by the starting year (first part before the dash)
+    const yearA = parseInt(a.split("-")[0]);
+    const yearB = parseInt(b.split("-")[0]);
+    return yearB - yearA;
+  });
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
-  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedYear(e.target.value);
+  const handleSchoolYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedSchoolYear(e.target.value);
   };
 
   // Combined filtering logic
   const filteredItems = items.filter((item) => {
-    // Year Filter
-    if (selectedYear && item.year.toString() !== selectedYear) {
+    // School Year Filter
+    if (selectedSchoolYear && getSchoolYear(item.date) !== selectedSchoolYear) {
       return false;
     }
 
@@ -189,11 +221,11 @@ const GalleryBody = () => {
   // Optionally add sorting logic here based on another state variable (e.g., sortBy)
   // filteredItems.sort((a, b) => { /* sort logic */ });
 
-  // Create collection for years
-  const yearCollection = createListCollection({
-    items: uniqueYears.map((year) => ({
-      label: year.toString(),
-      value: year.toString(),
+  // Create collection for school years
+  const schoolYearCollection = createListCollection({
+    items: uniqueSchoolYears.map((schoolYear) => ({
+      label: schoolYear,
+      value: schoolYear,
     })),
   });
 
@@ -201,64 +233,67 @@ const GalleryBody = () => {
     // Use container.xl for wider content area, adjust px
     <Container maxW="container.xl" py={8} px={{ base: 4, md: 8 }}>
       {/* Filter Controls Area */}
-      <HStack
+      <Flex
         gap={4}
         marginBottom={{ base: 6, md: 8 }}
-        wrap="wrap"
-        justifyContent="center"
+        justifyContent="space-between"
+        alignItems="center"
+        width="100%"
+        px="4"
       >
-        {/* Text on its own line */}
-        {/* Search Input */}
-        <InputGroup
-          flexGrow={1} // Allow search to take available space
-          maxWidth={{ base: "100%", md: "30rem" }} // Max width on larger screens
-          minWidth={{ base: "100%", sm: "20rem" }} // Min width on small screens+
-          startElement={<LuSearch />}
-        >
+        {/* Search Input - aligned with cards */}
+        <InputGroup width="30rem" startElement={<LuSearch />}>
           <Input
             value={searchQuery}
             onChange={handleSearchChange}
-            placeholder="Search events by title, type, date..." // More specific placeholder
+            placeholder="search" // More specific placeholder
             rounded="2xl" // Match Sermons.tsx rounding
             borderColor="black" // Match Sermons.tsx border color
+            _focus={{
+              borderColor: "goc.blue",
+              boxShadow: "0 0 0 1px {colors.goc.blue}",
+            }}
           />
         </InputGroup>
 
-        {/* Updated Year Filter Dropdown */}
-        <Select.Root
-          value={selectedYear ? [selectedYear] : []}
-          onValueChange={(details) => setSelectedYear(details.value[0] || "")}
-          collection={yearCollection}
-        >
-          <Select.HiddenSelect />
-          <Select.Control
-            maxWidth={{ base: "100%", sm: "auto" }}
-            minWidth={{ base: "100%", sm: "10rem" }}
-            rounded="md"
-            borderColor="gray.300"
+        {/* School Year Filter Dropdown - right aligned with cards */}
+        <Box width={{ base: "10rem", sm: "12rem" }} ref={triggerRef}>
+          <Select.Root
+            value={selectedSchoolYear ? [selectedSchoolYear] : []}
+            onValueChange={(details) =>
+              setSelectedSchoolYear(details.value[0] || "")
+            }
+            collection={schoolYearCollection}
           >
-            <Select.Trigger>
-              <Select.ValueText placeholder="All Years" />
-            </Select.Trigger>
-            <Select.IndicatorGroup>
-              <Select.Indicator />
-            </Select.IndicatorGroup>
-          </Select.Control>
-          <Portal>
-            <Select.Positioner>
-              <Select.Content>
-                {yearCollection.items.map((year) => (
-                  <Select.Item key={year.value} item={year}>
-                    {year.label}
-                    <Select.ItemIndicator />
-                  </Select.Item>
-                ))}
-              </Select.Content>
-            </Select.Positioner>
-          </Portal>
-        </Select.Root>
+            <Select.HiddenSelect />
+            <Select.Control width="100%" rounded="md" borderColor="gray.300">
+              <Select.Trigger>
+                <Select.ValueText placeholder="All School Years" />
+              </Select.Trigger>
+              <Select.IndicatorGroup>
+                <Select.Indicator />
+              </Select.IndicatorGroup>
+            </Select.Control>
+            <Portal>
+              <Select.Positioner>
+                <Select.Content
+                  width={triggerWidth}
+                  minWidth={triggerWidth}
+                  maxWidth={triggerWidth}
+                >
+                  {schoolYearCollection.items.map((schoolYear) => (
+                    <Select.Item key={schoolYear.value} item={schoolYear}>
+                      {schoolYear.label}
+                      <Select.ItemIndicator />
+                    </Select.Item>
+                  ))}
+                </Select.Content>
+              </Select.Positioner>
+            </Portal>
+          </Select.Root>
+        </Box>
         {/* Add More Filters Here (e.g., Event Type) using Select or ButtonGroup */}
-      </HStack>
+      </Flex>
 
       {/* Gallery Grid */}
       <GalleryCardList items={filteredItems} />

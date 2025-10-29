@@ -35,18 +35,23 @@ export const SermonsPage = () => {
     const fetchSermons = async () => {
       setLoading(true);
       try {
-        const result = await (client.graphql({ query: listSermons }) as Promise<any>);
+        const result = await (client.graphql({
+          query: listSermons,
+        }) as Promise<any>);
         const sermonData = result.data.listSermons.items.sort(
           (a: any, b: any) =>
             new Date(b.date).getTime() - new Date(a.date).getTime(),
         );
         setSermons(
           sermonData.map((sermon: any) => {
-            const convertedDate = new Date(sermon.date).toLocaleString("en-US", {
-              month: "short",
-              day: "2-digit",
-              year: "numeric",
-            });
+            const convertedDate = new Date(sermon.date).toLocaleString(
+              "en-US",
+              {
+                month: "short",
+                day: "2-digit",
+                year: "numeric",
+              },
+            );
             const item = {
               title: sermon.title,
               speaker: sermon.speaker,
@@ -55,7 +60,7 @@ export const SermonsPage = () => {
               URI: sermon.URI,
             };
             return item;
-          })
+          }),
         );
       } catch (error) {
         console.error(error);
@@ -63,7 +68,7 @@ export const SermonsPage = () => {
         setLoading(false);
       }
     };
-    
+
     fetchSermons();
   }, []);
 
@@ -176,6 +181,10 @@ const SermonsBody = (props: SermonBodyProps) => {
               placeholder="search by title, speaker, or passage"
               rounded={"2xl"}
               borderColor={"black"}
+              _focus={{
+                borderColor: "goc.blue",
+                boxShadow: "0 0 0 1px {colors.goc.blue}",
+              }}
             />
           </InputGroup>
           {isPaginationVisible && pagination}
