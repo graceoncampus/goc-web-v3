@@ -23,6 +23,8 @@ import GOCSpinner from "@/components/GOCSpinner";
 import { BannerTemplate } from "@/layouts/BannerTemplate";
 import { MdAttachMoney, MdLocationPin } from "react-icons/md";
 import { EventList } from "@/components/EventCardList";
+import { checkInATeam, checkIsLoggedIn } from "@/auth/CheckUser";
+import { fetchAuthSession } from "aws-amplify/auth";
 
 const client = generateClient();
 
@@ -35,6 +37,8 @@ export interface Event {
   location: string;
   description: string;
   imageLink: string;
+  active?: boolean;
+  galleryLink?: string;
 }
 
 export const EventsPage: React.FC = () => {
@@ -53,6 +57,8 @@ export const EventsPage: React.FC = () => {
 const EventsBody: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [inATeam, setInATeam] = useState(false);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -63,16 +69,30 @@ const EventsBody: React.FC = () => {
             (a: any, b: any) =>
               new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
           ) || [];
-        const mappedEvents = eventsData.map((event: any) => ({
-          id: event.id,
-          title: event.title,
-          startDate: event.startDate,
-          endDate: event.endDate,
-          price: event.price,
-          location: event.location,
-          description: event.description,
-          imageLink: event.imageLink,
-        }));
+
+          let authorized = false;
+        try {
+          const session = await fetchAuthSession();
+          const groups = session.tokens?.idToken?.payload["cognito:groups"];
+          authorized = Array.isArray(groups) && groups.includes("ATeam");
+        } catch (error) {
+          authorized = false;
+        }
+
+        const mappedEvents = eventsData
+          .map((event: any) => ({
+            id: event.id,
+            title: event.title,
+            startDate: event.startDate,
+            endDate: event.endDate,
+            price: event.price,
+            location: event.location,
+            description: event.description,
+            imageLink: event.imageLink,
+            active: event.active,
+            galleryLink: event.galleryLink,
+          }))
+          .filter((e) => e.active || authorized);
         setEvents(mappedEvents);
       } catch (reason) {
         console.error(reason);
@@ -82,6 +102,14 @@ const EventsBody: React.FC = () => {
     };
 
     fetchEvents();
+  }, [inATeam, setInATeam]);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      await checkIsLoggedIn(setIsLoggedIn);
+      await checkInATeam(setInATeam);
+    };
+    checkAuth();
   }, []);
 
   return (
@@ -122,6 +150,35 @@ const EventsBody: React.FC = () => {
       <EventList
         events={events}
         loading={loading}
+        inATeam={inATeam}
+        onEventUpdate={() => {
+          // Refresh events after update
+          const fetchEvents = async () => {
+            try {
+              const result = await client.graphql({ query: listGOCEvents });
+              const eventsData =
+                result.data?.listGOCEvents?.items?.sort(
+                  (a: any, b: any) =>
+                    new Date(b.startDate).getTime() -
+                    new Date(a.startDate).getTime(),
+                ) || [];
+              const mappedEvents = eventsData.map((event: any) => ({
+                id: event.id,
+                title: event.title,
+                startDate: event.startDate,
+                endDate: event.endDate,
+                price: event.price,
+                location: event.location,
+                description: event.description,
+                imageLink: event.imageLink,
+              }));
+              setEvents(mappedEvents);
+            } catch (reason) {
+              console.error(reason);
+            }
+          };
+          fetchEvents();
+        }}
       />
     </Container>
   );

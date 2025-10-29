@@ -10,9 +10,11 @@ import GOCSpinner from "./GOCSpinner";
 interface EventListProps {
   events: Event[];
   loading: boolean;
+  inATeam: boolean;
+  onEventUpdate: () => void;
 }
 
-export const EventList = ({ events, loading }: EventListProps) => {
+export const EventList = ({ events, loading, inATeam, onEventUpdate }: EventListProps) => {
   if (loading) return <GOCSpinner />;
 
   if (events.length === 0) {
@@ -35,9 +37,14 @@ export const EventList = ({ events, loading }: EventListProps) => {
       maxW="100%"
       width="100%"
     >
-      {events.map((event) => (
-        <EventCard key={event.id} event={event} />
-      ))}
+       {events.map((event) => (
+         <EventCard 
+           key={event.id} 
+           event={event} 
+           inATeam={inATeam}
+           onEventUpdate={onEventUpdate}
+         />
+       ))}
     </Flex>
   );
 };
