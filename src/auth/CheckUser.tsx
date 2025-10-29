@@ -29,3 +29,17 @@ export const checkInRidesTeam = async (
     setInRidesTeam(false);
   }
 };
+
+export const checkInATeam = async (
+  setInATeam: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
+  try {
+    const session = await fetchAuthSession();
+    const groups = session.tokens?.idToken?.payload["cognito:groups"];
+    setInATeam(Array.isArray(groups) && groups.includes("ATeam"));
+  } catch (error) {
+    // not signed in, probably
+    console.error("Error fetching auth session:", error);
+    setInATeam(false);
+  }
+};
