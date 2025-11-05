@@ -12,6 +12,10 @@ import {
   Text,
   Container,
   AspectRatio,
+  Input,
+  Textarea,
+  Button,
+  HStack,
 } from "@chakra-ui/react";
 import {
   AccordionItem,
@@ -21,10 +25,11 @@ import {
 } from "@/components/ui/accordion";
 import GOCSpinner from "@/components/GOCSpinner";
 import { BannerTemplate } from "@/layouts/BannerTemplate";
-import { MdAttachMoney, MdLocationPin } from "react-icons/md";
+import { MdAttachMoney, MdLocationPin, MdAdd } from "react-icons/md";
 import { EventList } from "@/components/EventCardList";
 import { checkInATeam, checkIsLoggedIn } from "@/auth/CheckUser";
 import { fetchAuthSession } from "aws-amplify/auth";
+import { createGOCEvents } from "@/graphql/mutations";
 
 const client = generateClient();
 
@@ -112,6 +117,104 @@ const EventsBody: React.FC = () => {
     checkAuth();
   }, []);
 
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [newEventForm, setNewEventForm] = useState({
+    title: "",
+    description: "",
+    location: "",
+    imageLink: "",
+    startDate: "",
+    endDate: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleCreateEvent = async () => {
+    setIsSubmitting(true);
+    try {
+      // Generate a unique ID for the event
+      const eventId = `event-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+      
+      // Convert datetime-local values to ISO format
+      const startDateISO = newEventForm.startDate 
+        ? new Date(newEventForm.startDate).toISOString()
+        : "";
+      const endDateISO = newEventForm.endDate 
+        ? new Date(newEventForm.endDate).toISOString()
+        : undefined;
+      
+      await client.graphql({
+        query: createGOCEvents,
+        variables: {
+          input: {
+            id: eventId,
+            title: newEventForm.title,
+            description: newEventForm.description,
+            location: newEventForm.location,
+            imageLink: newEventForm.imageLink,
+            startDate: startDateISO,
+            endDate: endDateISO,
+            price: 0,
+          },
+        },
+      });
+      console.log("Event created successfully");
+      
+      // Reset form
+      setNewEventForm({
+        title: "",
+        description: "",
+        location: "",
+        imageLink: "",
+        startDate: "",
+        endDate: "",
+      });
+      setIsFormOpen(false);
+      
+      // Refresh events
+      const fetchEvents = async () => {
+        try {
+          const result = await client.graphql({ query: listGOCEvents });
+          const eventsData =
+            result.data?.listGOCEvents?.items?.sort(
+              (a: any, b: any) =>
+                new Date(b.startDate).getTime() -
+                new Date(a.startDate).getTime(),
+            ) || [];
+          let authorized = false;
+          try {
+            const session = await fetchAuthSession();
+            const groups = session.tokens?.idToken?.payload["cognito:groups"];
+            authorized = Array.isArray(groups) && groups.includes("ATeam");
+          } catch (error) {
+            authorized = false;
+          }
+          const mappedEvents = eventsData
+            .map((event: any) => ({
+              id: event.id,
+              title: event.title,
+              startDate: event.startDate,
+              endDate: event.endDate,
+              price: event.price,
+              location: event.location,
+              description: event.description,
+              imageLink: event.imageLink,
+              active: event.active,
+              galleryLink: event.galleryLink,
+            }))
+            .filter((e) => e.active || authorized);
+          setEvents(mappedEvents);
+        } catch (reason) {
+          console.error(reason);
+        }
+      };
+      fetchEvents();
+    } catch (error) {
+      console.error("Error creating event:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <Container fluid={true} padding={0}>
       <Stack
@@ -146,6 +249,159 @@ const EventsBody: React.FC = () => {
             />
           </AspectRatio>
         </Stack>
+
+        {/* Create Event Form - Only visible to ATeam */}
+        {inATeam && (
+          <Stack
+            as={"section"}
+            width={"100%"}
+            maxWidth={{ base: "100%", md: "800px" }}
+            align={"center"}
+            gap={"1rem"}
+          >
+            <Box
+              width={"100%"}
+              backgroundColor="white"
+              borderRadius="lg"
+              boxShadow="0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
+              p={6}
+              border="1px solid"
+              borderColor="gray.200"
+            >
+              <Flex justify="space-between" align="center" mb={4}>
+                <Heading size="md" color="goc.dark_blue">
+                  Create New Event
+                </Heading>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setIsFormOpen(!isFormOpen)}
+                >
+                  {isFormOpen ? "Hide" : "Show"} Form
+                </Button>
+              </Flex>
+
+              {isFormOpen && (
+                <Stack gap="4">
+                  <Box>
+                    <Text fontSize="sm" fontWeight="500" mb="2">
+                      Title *
+                    </Text>
+                    <Input
+                      value={newEventForm.title}
+                      onChange={(e) =>
+                        setNewEventForm({ ...newEventForm, title: e.target.value })
+                      }
+                      placeholder="Event title"
+                      required
+                    />
+                  </Box>
+                  <Box>
+                    <Text fontSize="sm" fontWeight="500" mb="2">
+                      Description *
+                    </Text>
+                    <Textarea
+                      value={newEventForm.description}
+                      onChange={(e) =>
+                        setNewEventForm({ ...newEventForm, description: e.target.value })
+                      }
+                      placeholder="Event description"
+                      rows={3}
+                      required
+                    />
+                  </Box>
+                  <Box>
+                    <Text fontSize="sm" fontWeight="500" mb="2">
+                      Location *
+                    </Text>
+                    <Input
+                      value={newEventForm.location}
+                      onChange={(e) =>
+                        setNewEventForm({ ...newEventForm, location: e.target.value })
+                      }
+                      placeholder="Event location"
+                      required
+                    />
+                  </Box>
+                  <Box>
+                    <Text fontSize="sm" fontWeight="500" mb="2">
+                      Image URL *
+                    </Text>
+                    <Input
+                      value={newEventForm.imageLink}
+                      onChange={(e) =>
+                        setNewEventForm({ ...newEventForm, imageLink: e.target.value })
+                      }
+                      placeholder="Image URL"
+                      required
+                    />
+                  </Box>
+                  <HStack gap="4">
+                    <Box flex="1">
+                      <Text fontSize="sm" fontWeight="500" mb="2">
+                        Start Date *
+                      </Text>
+                      <Input
+                        type="datetime-local"
+                        value={newEventForm.startDate}
+                        onChange={(e) =>
+                          setNewEventForm({ ...newEventForm, startDate: e.target.value })
+                        }
+                        required
+                      />
+                    </Box>
+                    <Box flex="1">
+                      <Text fontSize="sm" fontWeight="500" mb="2">
+                        End Date
+                      </Text>
+                      <Input
+                        type="datetime-local"
+                        value={newEventForm.endDate}
+                        onChange={(e) =>
+                          setNewEventForm({ ...newEventForm, endDate: e.target.value })
+                        }
+                      />
+                    </Box>
+                  </HStack>
+                  <Flex gap="3" mt="2" justify="flex-end">
+                    <Button
+                      variant="ghost"
+                      onClick={() => {
+                        setIsFormOpen(false);
+                        setNewEventForm({
+                          title: "",
+                          description: "",
+                          location: "",
+                          imageLink: "",
+                          startDate: "",
+                          endDate: "",
+                        });
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      backgroundColor="goc.blue"
+                      color="white"
+                      onClick={handleCreateEvent}
+                      disabled={
+                        isSubmitting ||
+                        !newEventForm.title ||
+                        !newEventForm.description ||
+                        !newEventForm.location ||
+                        !newEventForm.imageLink ||
+                        !newEventForm.startDate
+                      }
+                    >
+                      <Icon as={MdAdd} boxSize="4" mr="2" />
+                      {isSubmitting ? "Creating..." : "Create Event"}
+                    </Button>
+                  </Flex>
+                </Stack>
+              )}
+            </Box>
+          </Stack>
+        )}
       </Stack>
       <EventList
         events={events}
@@ -162,16 +418,28 @@ const EventsBody: React.FC = () => {
                     new Date(b.startDate).getTime() -
                     new Date(a.startDate).getTime(),
                 ) || [];
-              const mappedEvents = eventsData.map((event: any) => ({
-                id: event.id,
-                title: event.title,
-                startDate: event.startDate,
-                endDate: event.endDate,
-                price: event.price,
-                location: event.location,
-                description: event.description,
-                imageLink: event.imageLink,
-              }));
+              let authorized = false;
+              try {
+                const session = await fetchAuthSession();
+                const groups = session.tokens?.idToken?.payload["cognito:groups"];
+                authorized = Array.isArray(groups) && groups.includes("ATeam");
+              } catch (error) {
+                authorized = false;
+              }
+              const mappedEvents = eventsData
+                .map((event: any) => ({
+                  id: event.id,
+                  title: event.title,
+                  startDate: event.startDate,
+                  endDate: event.endDate,
+                  price: event.price,
+                  location: event.location,
+                  description: event.description,
+                  imageLink: event.imageLink,
+                  active: event.active,
+                  galleryLink: event.galleryLink,
+                }))
+                .filter((e) => e.active || authorized);
               setEvents(mappedEvents);
             } catch (reason) {
               console.error(reason);
