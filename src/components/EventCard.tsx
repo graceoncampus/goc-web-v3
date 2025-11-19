@@ -30,7 +30,7 @@ import {
   MdDelete,
   MdAttachMoney,
 } from "react-icons/md";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { generateClient } from "aws-amplify/api";
 import { updateGOCEvents, deleteGOCEvents } from "@/graphql/mutations";
 import {
@@ -81,6 +81,16 @@ export const EventCard = ({
     active: event.active,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
 
   const formatDate = (dateString: string) => {
     if (!dateString) return "";
@@ -141,10 +151,25 @@ export const EventCard = ({
     });
   };
 
-  const formatDateRange = (startDate: string, endDate: string) => {
+  const formatDateRange = (startDate: string, endDate: string, compact: boolean = false) => {
     if (!startDate || !endDate) return "";
     const start = new Date(startDate);
     const end = new Date(endDate);
+
+    if (compact) {
+      // More compact format for large screens
+      const startDateStr = start.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      });
+      const endDateStr = end.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      });
+      const startTime = formatTimeOnly(startDate);
+      const endTime = formatTimeOnly(endDate);
+      return `${startDateStr}-${endDateStr} ${startTime}-${endTime}`;
+    }
 
     const startDateStr = start.toLocaleDateString("en-US", {
       month: "short",
@@ -306,14 +331,24 @@ export const EventCard = ({
             {/* Date and Time */}
             <VStack align="start" gap="2" mb="4">
               {event.startDate && (
-                <HStack gap="2" color="gray.600">
-                  <Icon as={MdCalendarToday} color="goc.blue" boxSize="4" />
-                  <Text fontSize="sm" fontWeight="500">
+                <HStack gap="2" color="gray.600" align="start">
+                  <Icon as={MdCalendarToday} color="goc.blue" boxSize="4" flexShrink={0} mt="0.5" />
+                  <Text
+                    fontSize="sm"
+                    fontWeight="500"
+                    wordBreak="break-word"
+                    overflow="hidden"
+                    style={{
+                      display: "-webkit-box",
+                      WebkitLineClamp: isLargeScreen ? 1 : 2,
+                      WebkitBoxOrient: "vertical",
+                    } as React.CSSProperties}
+                  >
                     {event.endDate && isSameDay(event.startDate, event.endDate)
                       ? formatDateTime(event.startDate)
                       : event.endDate
-                        ? formatDateRange(event.startDate, event.endDate)
-                        : formatDateTime(event.startDate)}
+                      ? formatDateRange(event.startDate, event.endDate, isLargeScreen)
+                      : formatDateTime(event.startDate)}
                   </Text>
                 </HStack>
               )}
@@ -338,12 +373,20 @@ export const EventCard = ({
 
             {/* Location */}
             {event.location && (
-              <HStack gap="2" mb="4" color="gray.600">
-                <Icon as={MdLocationPin} color="goc.blue" boxSize="4" />
-                <Text fontSize="sm" fontWeight="500">
-                  {event.location.length > 30
-                    ? `${event.location.substring(0, 30)}...`
-                    : event.location}
+              <HStack gap="2" mb="4" color="gray.600" align="start">
+                <Icon as={MdLocationPin} color="goc.blue" boxSize="4" flexShrink={0} mt="0.5" />
+                <Text
+                  fontSize="sm"
+                  fontWeight="500"
+                  wordBreak="break-word"
+                  overflow="hidden"
+                  style={{
+                    display: "-webkit-box",
+                    WebkitLineClamp: isLargeScreen ? 1 : 2,
+                    WebkitBoxOrient: "vertical",
+                  } as React.CSSProperties}
+                >
+                  {event.location}
                 </Text>
               </HStack>
             )}

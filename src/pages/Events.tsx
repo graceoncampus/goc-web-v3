@@ -302,7 +302,7 @@ const EventsBody: React.FC = () => {
         gap={"3rem"}
       >
         {/* <EventList events={events} loading={loading} /> */}
-        <Stack id={"calendar"} as={"section"} width={"100%"} maxWidth={{ base: "100%", md: "800px" }} align={"center"}>
+        <Stack id={"calendar"} as={"section"} width={"100%"} maxWidth={{ base: "100%", md: "1200px" }} align={"center"}>
           <Heading
             as="h2"
             textAlign={"center"}
@@ -332,7 +332,7 @@ const EventsBody: React.FC = () => {
           <Stack
             as={"section"}
             width={"100%"}
-            maxWidth={{ base: "100%", md: "800px" }}
+            maxWidth={{ base: "100%", md: "1200px" }}
             align={"center"}
             gap={"1rem"}
           >
@@ -541,7 +541,7 @@ const EventsBody: React.FC = () => {
         <Stack
           as={"section"}
           width={"100%"}
-          maxWidth={{ base: "100%", md: "800px" }}
+          maxWidth={{ base: "100%", md: "1200px" }}
           align={"center"}
         >
           <EventList
