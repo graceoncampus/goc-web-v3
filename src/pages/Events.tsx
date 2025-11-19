@@ -16,6 +16,7 @@ import {
   Textarea,
   Button,
   HStack,
+  Checkbox,
 } from "@chakra-ui/react";
 import {
   AccordionItem,
@@ -75,7 +76,7 @@ const EventsBody: React.FC = () => {
               new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
           ) || [];
 
-          let authorized = false;
+        let authorized = false;
         try {
           const session = await fetchAuthSession();
           const groups = session.tokens?.idToken?.payload["cognito:groups"];
@@ -125,6 +126,7 @@ const EventsBody: React.FC = () => {
     imageLink: "",
     startDate: "",
     endDate: "",
+    addToCalendar: false,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -133,15 +135,15 @@ const EventsBody: React.FC = () => {
     try {
       // Generate a unique ID for the event
       const eventId = `event-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
-      
+
       // Convert datetime-local values to ISO format
-      const startDateISO = newEventForm.startDate 
+      const startDateISO = newEventForm.startDate
         ? new Date(newEventForm.startDate).toISOString()
         : "";
-      const endDateISO = newEventForm.endDate 
+      const endDateISO = newEventForm.endDate
         ? new Date(newEventForm.endDate).toISOString()
         : undefined;
-      
+
       await client.graphql({
         query: createGOCEvents,
         variables: {
@@ -158,7 +160,12 @@ const EventsBody: React.FC = () => {
         },
       });
       console.log("Event created successfully");
-      
+
+      if (newEventForm.addToCalendar) {
+        console.log("Adding to Google Calendar...")
+        // TODO: Add Google Calendar API call here
+      }
+
       // Reset form
       setNewEventForm({
         title: "",
@@ -167,9 +174,10 @@ const EventsBody: React.FC = () => {
         imageLink: "",
         startDate: "",
         endDate: "",
+        addToCalendar: false,
       });
       setIsFormOpen(false);
-      
+
       // Refresh events
       const fetchEvents = async () => {
         try {
@@ -290,7 +298,10 @@ const EventsBody: React.FC = () => {
                     <Input
                       value={newEventForm.title}
                       onChange={(e) =>
-                        setNewEventForm({ ...newEventForm, title: e.target.value })
+                        setNewEventForm({
+                          ...newEventForm,
+                          title: e.target.value,
+                        })
                       }
                       placeholder="Event title"
                       required
@@ -303,7 +314,10 @@ const EventsBody: React.FC = () => {
                     <Textarea
                       value={newEventForm.description}
                       onChange={(e) =>
-                        setNewEventForm({ ...newEventForm, description: e.target.value })
+                        setNewEventForm({
+                          ...newEventForm,
+                          description: e.target.value,
+                        })
                       }
                       placeholder="Event description"
                       rows={3}
@@ -317,7 +331,10 @@ const EventsBody: React.FC = () => {
                     <Input
                       value={newEventForm.location}
                       onChange={(e) =>
-                        setNewEventForm({ ...newEventForm, location: e.target.value })
+                        setNewEventForm({
+                          ...newEventForm,
+                          location: e.target.value,
+                        })
                       }
                       placeholder="Event location"
                       required
@@ -330,7 +347,10 @@ const EventsBody: React.FC = () => {
                     <Input
                       value={newEventForm.imageLink}
                       onChange={(e) =>
-                        setNewEventForm({ ...newEventForm, imageLink: e.target.value })
+                        setNewEventForm({
+                          ...newEventForm,
+                          imageLink: e.target.value,
+                        })
                       }
                       placeholder="Image URL"
                       required
@@ -345,7 +365,10 @@ const EventsBody: React.FC = () => {
                         type="datetime-local"
                         value={newEventForm.startDate}
                         onChange={(e) =>
-                          setNewEventForm({ ...newEventForm, startDate: e.target.value })
+                          setNewEventForm({
+                            ...newEventForm,
+                            startDate: e.target.value,
+                          })
                         }
                         required
                       />
@@ -358,11 +381,29 @@ const EventsBody: React.FC = () => {
                         type="datetime-local"
                         value={newEventForm.endDate}
                         onChange={(e) =>
-                          setNewEventForm({ ...newEventForm, endDate: e.target.value })
+                          setNewEventForm({
+                            ...newEventForm,
+                            endDate: e.target.value,
+                          })
                         }
                       />
                     </Box>
                   </HStack>
+                  <Box>
+                    <Checkbox.Root
+                      checked={newEventForm.addToCalendar}
+                      onCheckedChange={(details) =>
+                        setNewEventForm({
+                          ...newEventForm,
+                          addToCalendar: details.checked === true,
+                        })
+                      }
+                    >
+                      <Checkbox.HiddenInput />
+                      <Checkbox.Control />
+                      <Checkbox.Label>Add To Google Calendar</Checkbox.Label>
+                    </Checkbox.Root>
+                  </Box>
                   <Flex gap="3" mt="2" justify="flex-end">
                     <Button
                       variant="ghost"
@@ -375,6 +416,7 @@ const EventsBody: React.FC = () => {
                           imageLink: "",
                           startDate: "",
                           endDate: "",
+                          addToCalendar: false,
                         });
                       }}
                     >
@@ -421,7 +463,8 @@ const EventsBody: React.FC = () => {
               let authorized = false;
               try {
                 const session = await fetchAuthSession();
-                const groups = session.tokens?.idToken?.payload["cognito:groups"];
+                const groups =
+                  session.tokens?.idToken?.payload["cognito:groups"];
                 authorized = Array.isArray(groups) && groups.includes("ATeam");
               } catch (error) {
                 authorized = false;
