@@ -7,6 +7,7 @@ import {
   Select,
   Portal,
   createListCollection,
+  Stack,
 } from "@chakra-ui/react";
 import { InputGroup } from "@/components/ui/input-group";
 import { NavbarActiveKey } from "@/components/Navbar";
@@ -31,6 +32,10 @@ export type GalleryItem = {
   eventType: string;
   title: string;
   date: string;
+  startDate?: string;
+  endDate?: string;
+  location?: string;
+  description?: string;
   link: string;
   thumbnailUrl?: string;
 };
@@ -239,6 +244,10 @@ const GalleryBody = () => {
               eventType: "Event", // Default eventType since it's not in the schema
               title: event.title,
               date: formattedDate,
+              startDate: event.startDate,
+              endDate: event.endDate,
+              location: event.location,
+              description: event.description,
               link: event.galleryLink || "WIP", // Use "WIP" if no galleryLink
               thumbnailUrl: event.imageLink || undefined,
             } as GalleryItem;
@@ -327,78 +336,81 @@ const GalleryBody = () => {
     })),
   });
 
-  if (loading) {
-    return <GOCSpinner text="Loading gallery..." />;
-  }
-
   return (
-    // Use container.xl for wider content area, adjust px
-    <Container maxW="container.xl" py={8} px={{ base: 4, md: 8 }}>
-      {/* Filter Controls Area */}
-      <Flex
-        gap={4}
-        marginBottom={{ base: 6, md: 8 }}
-        justifyContent="space-between"
-        alignItems="center"
-        width="100%"
-        px="4"
+    <Container fluid={true} padding={0}>
+      <Stack
+        width={{ sm: "100%", md: "4/5" }}
+        marginX={"auto"}
+        marginY={"1.8rem"}
+        align={"center"}
+        gap={"3rem"}
       >
-        {/* Search Input - aligned with cards */}
-        <InputGroup width="30rem" startElement={<LuSearch />}>
-          <Input
-            value={searchQuery}
-            onChange={handleSearchChange}
-            placeholder="search" // More specific placeholder
-            rounded="2xl" // Match Sermons.tsx rounding
-            borderColor="black" // Match Sermons.tsx border color
-            _focus={{
-              borderColor: "goc.blue",
-              boxShadow: "0 0 0 1px {colors.goc.blue}",
-            }}
-          />
-        </InputGroup>
+        {/* Filter Controls Area */}
+        <Flex
+          gap={4}
+          marginBottom={{ base: 6, md: 8 }}
+          justifyContent="space-between"
+          alignItems="center"
+          width="100%"
+          px="4"
+        >
+          {/* Search Input - aligned with cards */}
+          <InputGroup width="30rem" startElement={<LuSearch />}>
+            <Input
+              value={searchQuery}
+              onChange={handleSearchChange}
+              placeholder="search" // More specific placeholder
+              rounded="2xl" // Match Sermons.tsx rounding
+              borderColor="black" // Match Sermons.tsx border color
+              _focus={{
+                borderColor: "goc.blue",
+                boxShadow: "0 0 0 1px {colors.goc.blue}",
+              }}
+            />
+          </InputGroup>
 
-        {/* School Year Filter Dropdown - right aligned with cards */}
-        <Box width={{ base: "10rem", sm: "12rem" }} ref={triggerRef}>
-          <Select.Root
-            value={selectedSchoolYear ? [selectedSchoolYear] : []}
-            onValueChange={(details) =>
-              setSelectedSchoolYear(details.value[0] || "")
-            }
-            collection={schoolYearCollection}
-          >
-            <Select.HiddenSelect />
-            <Select.Control width="100%" rounded="md" borderColor="gray.300">
-              <Select.Trigger>
-                <Select.ValueText placeholder="All School Years" />
-              </Select.Trigger>
-              <Select.IndicatorGroup>
-                <Select.Indicator />
-              </Select.IndicatorGroup>
-            </Select.Control>
-            <Portal>
-              <Select.Positioner>
-                <Select.Content
-                  width={triggerWidth}
-                  minWidth={triggerWidth}
-                  maxWidth={triggerWidth}
-                >
-                  {schoolYearCollection.items.map((schoolYear) => (
-                    <Select.Item key={schoolYear.value} item={schoolYear}>
-                      {schoolYear.label}
-                      <Select.ItemIndicator />
-                    </Select.Item>
-                  ))}
-                </Select.Content>
-              </Select.Positioner>
-            </Portal>
-          </Select.Root>
-        </Box>
-        {/* Add More Filters Here (e.g., Event Type) using Select or ButtonGroup */}
-      </Flex>
+          {/* School Year Filter Dropdown - right aligned with cards */}
+          <Box width={{ base: "10rem", sm: "12rem" }} ref={triggerRef}>
+            <Select.Root
+              value={selectedSchoolYear ? [selectedSchoolYear] : []}
+              onValueChange={(details) =>
+                setSelectedSchoolYear(details.value[0] || "")
+              }
+              collection={schoolYearCollection}
+            >
+              <Select.HiddenSelect />
+              <Select.Control width="100%" rounded="md" borderColor="gray.300">
+                <Select.Trigger>
+                  <Select.ValueText placeholder="All School Years" />
+                </Select.Trigger>
+                <Select.IndicatorGroup>
+                  <Select.Indicator />
+                </Select.IndicatorGroup>
+              </Select.Control>
+              <Portal>
+                <Select.Positioner>
+                  <Select.Content
+                    width={triggerWidth}
+                    minWidth={triggerWidth}
+                    maxWidth={triggerWidth}
+                  >
+                    {schoolYearCollection.items.map((schoolYear) => (
+                      <Select.Item key={schoolYear.value} item={schoolYear}>
+                        {schoolYear.label}
+                        <Select.ItemIndicator />
+                      </Select.Item>
+                    ))}
+                  </Select.Content>
+                </Select.Positioner>
+              </Portal>
+            </Select.Root>
+          </Box>
+          {/* Add More Filters Here (e.g., Event Type) using Select or ButtonGroup */}
+        </Flex>
 
-      {/* Gallery Grid */}
-      <GalleryCardList items={filteredItems} />
+        {/* Gallery Grid */}
+        <GalleryCardList items={filteredItems} loading={loading} />
+      </Stack>
     </Container>
   );
 };

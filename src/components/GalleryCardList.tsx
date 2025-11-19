@@ -4,7 +4,8 @@
 
 import { GalleryCard } from "@/components/GalleryCard";
 import { GalleryItem } from "@/pages/Gallery";
-import { Flex, Text, Stack } from "@chakra-ui/react";
+import { Flex, Heading, Stack, Text } from "@chakra-ui/react";
+import GOCSpinner from "./GOCSpinner";
 
 interface GalleryCardListProps {
   items: GalleryItem[];
@@ -15,21 +16,13 @@ export const GalleryCardList = ({
   items,
   loading = false,
 }: GalleryCardListProps) => {
-  if (loading) {
-    return (
-      <Stack marginY="1rem" align="center">
-        <Text fontSize={{ base: "md", md: "xl" }} color="goc.blue">
-          Loading galleries...
-        </Text>
-      </Stack>
-    );
-  }
+  if (loading) return <GOCSpinner />;
 
   if (items.length === 0) {
     return (
       <Stack marginY="1rem" align="center">
-        <Text fontSize={{ base: "md", md: "xl" }} color="gray.500">
-          No galleries found matching your criteria.
+        <Text fontSize={{ base: "md", md: "xl" }} color="goc.blue">
+          There are no galleries available!
         </Text>
       </Stack>
     );
