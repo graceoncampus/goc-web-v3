@@ -215,12 +215,7 @@ export const EventCard = ({
   return (
     <>
       <Box
-        width={{
-          base: "100%",
-          md: "calc(50% - 12px)",
-          lg: "calc(33.333% - 16px)",
-        }}
-        minWidth="300px"
+        width="100%"
         height="550px"
         display="flex"
         flexDirection="column"

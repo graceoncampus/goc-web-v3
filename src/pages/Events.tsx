@@ -302,7 +302,7 @@ const EventsBody: React.FC = () => {
         gap={"3rem"}
       >
         {/* <EventList events={events} loading={loading} /> */}
-        <Stack id={"calendar"} as={"section"} width={"100%"} align={"center"}>
+        <Stack id={"calendar"} as={"section"} width={"100%"} maxWidth={{ base: "100%", md: "800px" }} align={"center"}>
           <Heading
             as="h2"
             textAlign={"center"}
@@ -318,7 +318,7 @@ const EventsBody: React.FC = () => {
           </Heading>
           <AspectRatio
             ratio={{ base: 1, md: 4 / 3 }}
-            width={{ base: "100%", lg: "800px" }}
+            width="100%"
           >
             <iframe
               src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FLos_Angeles&showPrint=0&title&showCalendars=0&mode=MONTH&showTz=0&src=Z29jYXRlYW1AZ21haWwuY29t&color=%23C0CA33"
@@ -537,12 +537,18 @@ const EventsBody: React.FC = () => {
             </Box>
           </Stack>
         )}
-      </Stack>
-      <EventList
-        events={events}
-        loading={loading}
-        inATeam={inATeam}
-        onEventUpdate={() => {
+
+        <Stack
+          as={"section"}
+          width={"100%"}
+          maxWidth={{ base: "100%", md: "800px" }}
+          align={"center"}
+        >
+          <EventList
+            events={events}
+            loading={loading}
+            inATeam={inATeam}
+            onEventUpdate={() => {
           // Refresh events after update
           const fetchEvents = async () => {
             try {
@@ -584,6 +590,8 @@ const EventsBody: React.FC = () => {
           fetchEvents();
         }}
       />
+        </Stack>
+      </Stack>
     </Container>
   );
 };
