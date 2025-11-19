@@ -28,10 +28,19 @@ import {
   MdArrowForward,
   MdEdit,
   MdDelete,
+  MdAttachMoney,
 } from "react-icons/md";
 import { useState } from "react";
 import { generateClient } from "aws-amplify/api";
 import { updateGOCEvents, deleteGOCEvents } from "@/graphql/mutations";
+import {
+  DialogRoot,
+  DialogContent,
+  DialogHeader,
+  DialogBody,
+  DialogTitle,
+  DialogCloseTrigger,
+} from "@/components/ui/dialog";
 
 interface EventCardProps {
   event: Event;
@@ -55,6 +64,11 @@ export const EventCard = ({
     open: isDeleteOpen,
     onOpen: onDeleteOpen,
     onClose: onDeleteClose,
+  } = useDisclosure();
+  const {
+    open: isDetailsOpen,
+    onOpen: onDetailsOpen,
+    onClose: onDetailsClose,
   } = useDisclosure();
 
   const [editForm, setEditForm] = useState({
@@ -152,9 +166,7 @@ export const EventCard = ({
   };
 
   const handleEventClick = () => {
-    // For now, we'll navigate to events page, but this could be enhanced
-    // to navigate to a specific event detail page
-    navigate("/events");
+    onDetailsOpen();
   };
 
   const handleEdit = async () => {
@@ -622,6 +634,85 @@ export const EventCard = ({
           </Box>
         </Box>
       )}
+
+      {/* Event Details Modal */}
+      <DialogRoot open={isDetailsOpen} onOpenChange={(e) => {
+        if (!e.open) onDetailsClose();
+      }}>
+        <DialogContent maxW="800px" width="90%">
+          <DialogHeader>
+            <DialogTitle fontSize="2xl" color="goc.dark_blue">
+              {event.title}
+            </DialogTitle>
+            <DialogCloseTrigger />
+          </DialogHeader>
+          <DialogBody>
+            <Stack gap="6">
+              {/* Event Image */}
+              {event.imageLink && (
+                <Box borderRadius="lg" overflow="hidden" maxH="400px">
+                  <Image
+                    src={event.imageLink}
+                    alt={event.title}
+                    objectFit="cover"
+                    width="100%"
+                  />
+                </Box>
+              )}
+
+              {/* Date and Time */}
+              {event.startDate && (
+                <VStack align="start" gap="2">
+                  <HStack gap="2" color="gray.700">
+                    <Icon as={MdCalendarToday} color="goc.blue" boxSize="5" />
+                    <Text fontSize="md" fontWeight="600">
+                      {event.endDate && isSameDay(event.startDate, event.endDate)
+                        ? formatDateTime(event.startDate)
+                        : event.endDate
+                        ? formatDateRange(event.startDate, event.endDate)
+                        : formatDateTime(event.startDate)}
+                    </Text>
+                  </HStack>
+                </VStack>
+              )}
+
+              {/* Description */}
+              {event.description && (
+                <Box>
+                  <Heading size="sm" mb="2" color="goc.dark_blue">
+                    Description
+                  </Heading>
+                  <Text fontSize="md" color="gray.700" lineHeight="1.6" whiteSpace="pre-wrap">
+                    {event.description}
+                  </Text>
+                </Box>
+              )}
+
+              {/* Location */}
+              {event.location && (
+                <Box>
+                  <HStack gap="2" color="gray.700" mb="2">
+                    <Icon as={MdLocationPin} color="goc.blue" boxSize="5" />
+                    <Heading size="sm" color="goc.dark_blue">
+                      Location
+                    </Heading>
+                  </HStack>
+                  <Text fontSize="md" color="gray.700" ml="7">
+                    {event.location}
+                  </Text>
+                </Box>
+              )}
+
+              {/* Status Badge */}
+              {event.active !== true && (
+                <Badge colorScheme="red" variant="solid" fontSize="sm" px="3" py="1" borderRadius="md" width="fit-content">
+                  Inactive Event
+                </Badge>
+              )}
+            </Stack>
+          </DialogBody>
+        </DialogContent>
+      </DialogRoot>
     </>
   );
 };
