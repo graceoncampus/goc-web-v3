@@ -356,8 +356,8 @@ const EventsBody: React.FC = () => {
                       required
                     />
                   </Box>
-                  <HStack gap="4">
-                    <Box flex="1">
+                  <Flex gap="4" wrap="wrap">
+                    <Box flex="1" minWidth="250px">
                       <Text fontSize="sm" fontWeight="500" mb="2">
                         Start Date *
                       </Text>
@@ -373,7 +373,7 @@ const EventsBody: React.FC = () => {
                         required
                       />
                     </Box>
-                    <Box flex="1">
+                    <Box flex="1" minWidth="250px">
                       <Text fontSize="sm" fontWeight="500" mb="2">
                         End Date
                       </Text>
@@ -388,7 +388,7 @@ const EventsBody: React.FC = () => {
                         }
                       />
                     </Box>
-                  </HStack>
+                  </Flex>
                   <Box>
                     <Checkbox.Root
                       checked={newEventForm.addToCalendar}
