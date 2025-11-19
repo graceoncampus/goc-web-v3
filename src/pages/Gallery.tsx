@@ -29,7 +29,6 @@ FIX:
 
 export type GalleryItem = {
   year: number;
-  eventType: string;
   title: string;
   date: string;
   startDate?: string;
@@ -241,7 +240,6 @@ const GalleryBody = () => {
 
             return {
               year: year,
-              eventType: "Event", // Default eventType since it's not in the schema
               title: event.title,
               date: formattedDate,
               startDate: event.startDate,
@@ -306,14 +304,13 @@ const GalleryBody = () => {
       return false;
     }
 
-    // Text Search Filter (across title, year, event type, date)
+    // Text Search Filter (across title, year, date)
     if (searchQuery) {
       const lowerCaseQuery = searchQuery.toLowerCase().replace(/\s+/g, "");
       // Construct a searchable string from relevant fields
       const searchableText = `
           ${item.title.toLowerCase().replace(/\s+/g, "")}
           ${item.year.toString()}
-          ${item.eventType.toLowerCase().replace(/\s+/g, "")}
           ${item.date.toLowerCase().replace(/\s+/g, "")}
         `;
       if (!searchableText.includes(lowerCaseQuery)) {

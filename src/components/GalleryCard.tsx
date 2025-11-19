@@ -14,7 +14,7 @@ import {
   Icon,
   Flex,
 } from "@chakra-ui/react";
-import { MdCalendarToday, MdArrowForward, MdLocationPin } from "react-icons/md";
+import { MdCalendarToday, MdLocationPin } from "react-icons/md";
 import { LuExternalLink } from "react-icons/lu";
 
 interface GalleryCardProps {
@@ -24,11 +24,9 @@ interface GalleryCardProps {
 export const GalleryCard = ({ item }: GalleryCardProps) => {
   const {
     title,
-    date,
     link,
     thumbnailUrl,
     year,
-    eventType,
     startDate,
     endDate,
     location,
