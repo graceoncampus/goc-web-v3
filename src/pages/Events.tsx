@@ -398,9 +398,19 @@ const EventsBody: React.FC = () => {
                           addToCalendar: details.checked === true,
                         })
                       }
+                      colorPalette="blue"
                     >
                       <Checkbox.HiddenInput />
-                      <Checkbox.Control />
+                      <Checkbox.Control
+                        borderColor="goc.blue"
+                        _checked={{
+                          backgroundColor: "goc.blue",
+                          borderColor: "goc.blue",
+                        }}
+                        _hover={{
+                          borderColor: "goc.dark_blue",
+                        }}
+                      />
                       <Checkbox.Label>Add To Google Calendar</Checkbox.Label>
                     </Checkbox.Root>
                   </Box>
