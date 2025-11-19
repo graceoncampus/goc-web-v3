@@ -89,6 +89,68 @@ export const EventCard = ({
     });
   };
 
+  const formatDateTime = (dateString: string) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const dateStr = date.toLocaleDateString("en-US", {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+    const timeStr = date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+    return `${dateStr} at ${timeStr}`;
+  };
+
+  const isSameDay = (date1: string, date2: string) => {
+    if (!date1 || !date2) return false;
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    return (
+      d1.getFullYear() === d2.getFullYear() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getDate() === d2.getDate()
+    );
+  };
+
+  const formatTimeOnly = (dateString: string) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
+  const formatDateRange = (startDate: string, endDate: string) => {
+    if (!startDate || !endDate) return "";
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    const startDateStr = start.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+    const endDateOptions: Intl.DateTimeFormatOptions = {
+      month: "short",
+      day: "numeric",
+    };
+    if (start.getFullYear() !== end.getFullYear()) {
+      endDateOptions.year = "numeric";
+    }
+    const endDateStr = end.toLocaleDateString("en-US", endDateOptions);
+
+    const startTime = formatTimeOnly(startDate);
+    const endTime = formatTimeOnly(endDate);
+
+    return `${startDateStr} - ${endDateStr} (${startTime} - ${endTime})`;
+  };
+
   const handleEventClick = () => {
     // For now, we'll navigate to events page, but this could be enhanced
     // to navigate to a specific event detail page
@@ -147,6 +209,9 @@ export const EventCard = ({
           lg: "calc(33.333% - 16px)",
         }}
         minWidth="300px"
+        height="550px"
+        display="flex"
+        flexDirection="column"
         borderRadius="xl"
         boxShadow="0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
         transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
@@ -188,58 +253,94 @@ export const EventCard = ({
         )}
 
         {/* Content Section */}
-        <Box p={{ base: "4", md: "6" }}>
-          {/* Title */}
-          <Heading
-            size={{ base: "md", md: "lg" }}
-            color="goc.dark_blue"
-            fontFamily="Poppins"
-            fontWeight="600"
-            mb="3"
-            lineHeight="1.3"
+        <Box
+          p={{ base: "4", md: "6" }}
+          flex="1"
+          display="flex"
+          flexDirection="column"
+        >
+          {/* Title and Status Badge */}
+          <Flex justify="space-between" align="start" mb="3" gap="2">
+            <Box flex="1" minWidth="0">
+              <Heading
+                size={{ base: "md", md: "lg" }}
+                color="goc.dark_blue"
+                fontFamily="Poppins"
+                fontWeight="600"
+                lineHeight="1.3"
+                overflow="hidden"
+                textOverflow="ellipsis"
+                whiteSpace="nowrap"
+              >
+                {event.title}
+              </Heading>
+            </Box>
+            {event.active !== true && (
+              <Badge
+                colorScheme="red"
+                variant="solid"
+                fontSize="xs"
+                px="2"
+                py="1"
+                borderRadius="md"
+              >
+                Inactive
+              </Badge>
+            )}
+          </Flex>
+
+          {/* Middle Content Section */}
+          <Box
+            height="180px"
+            display="flex"
+            flexDirection="column"
+            overflow="hidden"
           >
-            {event.title}
-          </Heading>
+            {/* Date and Time */}
+            <VStack align="start" gap="2" mb="4">
+              {event.startDate && (
+                <HStack gap="2" color="gray.600">
+                  <Icon as={MdCalendarToday} color="goc.blue" boxSize="4" />
+                  <Text fontSize="sm" fontWeight="500">
+                    {event.endDate && isSameDay(event.startDate, event.endDate)
+                      ? formatDateTime(event.startDate)
+                      : event.endDate
+                        ? formatDateRange(event.startDate, event.endDate)
+                        : formatDateTime(event.startDate)}
+                  </Text>
+                </HStack>
+              )}
+            </VStack>
 
-          {/* Date and Time */}
-          <VStack align="start" gap="2" mb="4">
-            <HStack gap="2" color="gray.600">
-              <Icon as={MdCalendarToday} color="goc.blue" boxSize="4" />
-              <Text fontSize="sm" fontWeight="500">
-                {formatDate(event.startDate)}
+            {/* Description */}
+            {event.description && (
+              <Text
+                fontSize="sm"
+                color="gray.700"
+                lineHeight="1.5"
+                mb="4"
+                height="60px"
+                maxHeight="60px"
+                overflow="hidden"
+              >
+                {event.description.length > 120
+                  ? `${event.description.substring(0, 120)}...`
+                  : event.description}
               </Text>
-            </HStack>
+            )}
 
-            {event.startDate && (
-              <HStack gap="2" color="gray.600">
-                <Icon as={MdAccessTime} color="goc.blue" boxSize="4" />
+            {/* Location */}
+            {event.location && (
+              <HStack gap="2" mb="4" color="gray.600">
+                <Icon as={MdLocationPin} color="goc.blue" boxSize="4" />
                 <Text fontSize="sm" fontWeight="500">
-                  {formatTime(event.startDate)}
+                  {event.location.length > 30
+                    ? `${event.location.substring(0, 30)}...`
+                    : event.location}
                 </Text>
               </HStack>
             )}
-          </VStack>
-
-          {/* Description */}
-          {event.description && (
-            <Text fontSize="sm" color="gray.700" lineHeight="1.5" mb="4">
-              {event.description.length > 120
-                ? `${event.description.substring(0, 120)}...`
-                : event.description}
-            </Text>
-          )}
-
-          {/* Location */}
-          {event.location && (
-            <HStack gap="2" mb="4" color="gray.600">
-              <Icon as={MdLocationPin} color="goc.blue" boxSize="4" />
-              <Text fontSize="sm" fontWeight="500">
-                {event.location.length > 30
-                  ? `${event.location.substring(0, 30)}...`
-                  : event.location}
-              </Text>
-            </HStack>
-          )}
+          </Box>
 
           {/* Divider */}
           <Box height="1px" backgroundColor="gray.200" mb="4" />
@@ -414,24 +515,29 @@ export const EventCard = ({
                   />
                 </Box>
               </HStack>
-               <Box>
-                 <Text fontSize="sm" fontWeight="500" mb="2">
-                   Event Status
-                 </Text>
-                 <HStack>
-                   <Button
-                     size="sm"
-                     variant={editForm.active ? "solid" : "outline"}
-                     colorScheme={editForm.active ? "green" : "red"}
-                     onClick={() => setEditForm({ ...editForm, active: !editForm.active })}
-                   >
-                     {editForm.active ? "Active" : "Inactive"}
-                   </Button>
-                   <Text fontSize="sm" color={editForm.active ? "green.600" : "red.600"}>
-                     {editForm.active ? "Visible to users" : "Hidden from users"}
-                   </Text>
-                 </HStack>
-               </Box>
+              <Box>
+                <Text fontSize="sm" fontWeight="500" mb="2">
+                  Event Status
+                </Text>
+                <HStack>
+                  <Button
+                    size="sm"
+                    variant={editForm.active ? "solid" : "outline"}
+                    colorScheme={editForm.active ? "green" : "red"}
+                    onClick={() =>
+                      setEditForm({ ...editForm, active: !editForm.active })
+                    }
+                  >
+                    {editForm.active ? "Active" : "Inactive"}
+                  </Button>
+                  <Text
+                    fontSize="sm"
+                    color={editForm.active ? "green.600" : "red.600"}
+                  >
+                    {editForm.active ? "Visible to users" : "Hidden from users"}
+                  </Text>
+                </HStack>
+              </Box>
             </Stack>
 
             <Flex gap="3" mt="6" justify="flex-end">
