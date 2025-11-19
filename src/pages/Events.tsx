@@ -31,6 +31,12 @@ import { EventList } from "@/components/EventCardList";
 import { checkInATeam, checkIsLoggedIn } from "@/auth/CheckUser";
 import { fetchAuthSession } from "aws-amplify/auth";
 import { createGOCEvents } from "@/graphql/mutations";
+import {
+  createGoogleCalendarEvent,
+  generateGoogleCalendarUrl,
+  getGoogleCalendarAccessToken,
+  loadGoogleAPI,
+} from "@/utils/googleCalendar";
 
 const client = generateClient();
 
@@ -118,6 +124,20 @@ const EventsBody: React.FC = () => {
     checkAuth();
   }, []);
 
+  useEffect(() => {
+    // Load Google API when component mounts
+    const initGoogleAPI = async () => {
+      try {
+        await loadGoogleAPI();
+        setIsGoogleAPILoaded(true);
+      } catch (error) {
+        console.error("Failed to load Google API:", error);
+        setCalendarStatus("Failed to load Google Calendar API");
+      }
+    };
+    initGoogleAPI();
+  }, []);
+
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [newEventForm, setNewEventForm] = useState({
     title: "",
@@ -129,6 +149,8 @@ const EventsBody: React.FC = () => {
     addToCalendar: false,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [calendarStatus, setCalendarStatus] = useState<string>("");
+  const [isGoogleAPILoaded, setIsGoogleAPILoaded] = useState(false);
 
   const handleCreateEvent = async () => {
     setIsSubmitting(true);
@@ -162,8 +184,50 @@ const EventsBody: React.FC = () => {
       console.log("Event created successfully");
 
       if (newEventForm.addToCalendar) {
-        console.log("Adding to Google Calendar...")
-        // TODO: Add Google Calendar API call here
+        setCalendarStatus("Adding to Google Calendar...");
+        try {
+          if (!isGoogleAPILoaded) {
+            throw new Error("Google API not loaded");
+          }
+
+          // Create the event object for Google Calendar
+          const eventForCalendar: Event = {
+            id: eventId,
+            title: newEventForm.title,
+            description: newEventForm.description,
+            location: newEventForm.location,
+            startDate: startDateISO,
+            endDate: endDateISO || startDateISO,
+            price: 0,
+            imageLink: newEventForm.imageLink,
+          };
+
+          try {
+            // Try to use the API method first
+            const accessToken = await getGoogleCalendarAccessToken();
+            const calendarEventId = await createGoogleCalendarEvent(
+              eventForCalendar,
+              accessToken,
+            );
+            setCalendarStatus(
+              `✅ Event added to Google Calendar (ID: ${calendarEventId})`,
+            );
+          } catch (apiError) {
+            console.warn(
+              "API method failed, falling back to URL method:",
+              apiError,
+            );
+            // Fallback to URL method
+            const calendarUrl = generateGoogleCalendarUrl(eventForCalendar);
+            window.open(calendarUrl, "_blank");
+            setCalendarStatus("✅ Google Calendar opened in new tab");
+          }
+        } catch (error) {
+          console.error("Failed to add to Google Calendar:", error);
+          setCalendarStatus(
+            `❌ Failed to add to Google Calendar: ${error instanceof Error ? error.message : "Unknown error"}`,
+          );
+        }
       }
 
       // Reset form
@@ -177,6 +241,11 @@ const EventsBody: React.FC = () => {
         addToCalendar: false,
       });
       setIsFormOpen(false);
+
+      // Clear calendar status after a delay
+      setTimeout(() => {
+        setCalendarStatus("");
+      }, 5000);
 
       // Refresh events
       const fetchEvents = async () => {
@@ -413,12 +482,26 @@ const EventsBody: React.FC = () => {
                       />
                       <Checkbox.Label>Add To Google Calendar</Checkbox.Label>
                     </Checkbox.Root>
+                    {calendarStatus && (
+                      <Text
+                        fontSize="sm"
+                        mt="2"
+                        color={
+                          calendarStatus.includes("❌")
+                            ? "red.500"
+                            : "green.500"
+                        }
+                      >
+                        {calendarStatus}
+                      </Text>
+                    )}
                   </Box>
                   <Flex gap="3" mt="2" justify="flex-end">
                     <Button
                       variant="ghost"
                       onClick={() => {
                         setIsFormOpen(false);
+                        setCalendarStatus("");
                         setNewEventForm({
                           title: "",
                           description: "",
