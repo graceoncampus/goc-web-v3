@@ -354,23 +354,6 @@ export const EventCard = ({
               )}
             </VStack>
 
-            {/* Description */}
-            {event.description && (
-              <Text
-                fontSize="sm"
-                color="gray.700"
-                lineHeight="1.5"
-                mb="4"
-                height="60px"
-                maxHeight="60px"
-                overflow="hidden"
-              >
-                {event.description.length > 120
-                  ? `${event.description.substring(0, 120)}...`
-                  : event.description}
-              </Text>
-            )}
-
             {/* Location */}
             {event.location && (
               <HStack gap="2" mb="4" color="gray.600" align="start">
@@ -389,6 +372,23 @@ export const EventCard = ({
                   {event.location}
                 </Text>
               </HStack>
+            )}
+
+            {/* Description */}
+            {event.description && (
+              <Text
+                fontSize="sm"
+                color="gray.700"
+                lineHeight="1.5"
+                mb="4"
+                height="60px"
+                maxHeight="60px"
+                overflow="hidden"
+              >
+                {event.description.length > 120
+                  ? `${event.description.substring(0, 120)}...`
+                  : event.description}
+              </Text>
             )}
           </Box>
 
@@ -714,6 +714,18 @@ export const EventCard = ({
                 </VStack>
               )}
 
+              {/* Location */}
+              {event.location && (
+                <VStack align="start" gap="2">
+                  <HStack gap="2" color="gray.700">
+                    <Icon as={MdLocationPin} color="goc.blue" boxSize="5" />
+                    <Text fontSize="md" fontWeight="600">
+                      {event.location}
+                    </Text>
+                  </HStack>
+                </VStack>
+              )}
+
               {/* Description */}
               {event.description && (
                 <Box>
@@ -722,21 +734,6 @@ export const EventCard = ({
                   </Heading>
                   <Text fontSize="md" color="gray.700" lineHeight="1.6" whiteSpace="pre-wrap">
                     {event.description}
-                  </Text>
-                </Box>
-              )}
-
-              {/* Location */}
-              {event.location && (
-                <Box>
-                  <HStack gap="2" color="gray.700" mb="2">
-                    <Icon as={MdLocationPin} color="goc.blue" boxSize="5" />
-                    <Heading size="sm" color="goc.dark_blue">
-                      Location
-                    </Heading>
-                  </HStack>
-                  <Text fontSize="md" color="gray.700" ml="7">
-                    {event.location}
                   </Text>
                 </Box>
               )}
