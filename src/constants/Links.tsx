@@ -18,10 +18,8 @@ export const SocialMedia: SocialMediaProps = {
   linktree: "https://linktr.ee/goc_ucla",
 };
 
-// export const RIDES_GOOGLE_FORM_LINK: string =
-//   "https://forms.gle/pjeVJnwzHXgNyJ5L8";
 export const RIDES_GOOGLE_FORM_LINK: string =
-  "https://docs.google.com/spreadsheets/d/1Pq8RfmSOVA68fa1ytF4RwPHCHxvM_d_NQ-owQjmM98I/edit?gid=167253047#gid=167253047";
+  "https://docs.google.com/forms/d/1wNbm8h3jFj5wS6RlSn52OCdl8kvof9I_nULmv0dnNSo/viewform?edit_requested=true";
 
 export const PRAYER_GOOGLE_FORM_LINK: string =
   "https://docs.google.com/forms/d/e/1FAIpQLSc0PR3d6NL1YqWMoYZ9X1Y9aBN4y91FfXz152I2_h7HQaHAwA/viewform?usp=dialog";
