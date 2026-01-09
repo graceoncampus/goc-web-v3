@@ -4,7 +4,7 @@
 
 import { GalleryCard } from "@/components/GalleryCard";
 import { GalleryItem } from "@/pages/Gallery";
-import { Flex, Heading, Stack, Text } from "@chakra-ui/react";
+import { Grid, Stack, Text } from "@chakra-ui/react";
 import GOCSpinner from "./GOCSpinner";
 
 interface GalleryCardListProps {
@@ -29,13 +29,13 @@ export const GalleryCardList = ({
   }
 
   return (
-    <Flex
-      wrap="wrap"
+    <Grid
+      templateColumns={{
+        base: "1fr",
+        md: "repeat(2, 1fr)",
+        lg: "repeat(3, 1fr)",
+      }}
       gap="6"
-      justify="flex-start"
-      align="start"
-      px="4"
-      maxW="100%"
       width="100%"
     >
       {items.map((item) => (
@@ -44,6 +44,6 @@ export const GalleryCardList = ({
           item={item}
         />
       ))}
-    </Flex>
+    </Grid>
   );
 };
