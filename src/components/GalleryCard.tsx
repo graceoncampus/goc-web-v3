@@ -85,7 +85,11 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
     );
   };
 
-  const formatDateRange = (startDate: string, endDate: string, compact: boolean = false) => {
+  const formatDateRange = (
+    startDate: string,
+    endDate: string,
+    compact: boolean = false,
+  ) => {
     if (!startDate || !endDate) return "";
     const start = new Date(startDate);
     const end = new Date(endDate);
@@ -213,17 +217,25 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
           <VStack align="start" gap="2" mb="4">
             {startDate && (
               <HStack gap="2" color="gray.600" align="start">
-                <Icon as={MdCalendarToday} color="goc.blue" boxSize="4" flexShrink={0} mt="0.5" />
+                <Icon
+                  as={MdCalendarToday}
+                  color="goc.blue"
+                  boxSize="4"
+                  flexShrink={0}
+                  mt="0.5"
+                />
                 <Text
                   fontSize="sm"
                   fontWeight="500"
                   wordBreak="break-word"
                   overflow="hidden"
-                  style={{
-                    display: "-webkit-box",
-                    WebkitLineClamp: isLargeScreen ? 1 : 2,
-                    WebkitBoxOrient: "vertical",
-                  } as React.CSSProperties}
+                  style={
+                    {
+                      display: "-webkit-box",
+                      WebkitLineClamp: isLargeScreen ? 1 : 2,
+                      WebkitBoxOrient: "vertical",
+                    } as React.CSSProperties
+                  }
                 >
                   {endDate && isSameDay(startDate, endDate)
                     ? formatDateTime(startDate)
@@ -238,17 +250,25 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
           {/* Location */}
           {location && (
             <HStack gap="2" mb="4" color="gray.600" align="start">
-              <Icon as={MdLocationPin} color="goc.blue" boxSize="4" flexShrink={0} mt="0.5" />
+              <Icon
+                as={MdLocationPin}
+                color="goc.blue"
+                boxSize="4"
+                flexShrink={0}
+                mt="0.5"
+              />
               <Text
                 fontSize="sm"
                 fontWeight="500"
                 wordBreak="break-word"
                 overflow="hidden"
-                style={{
-                  display: "-webkit-box",
-                  WebkitLineClamp: isLargeScreen ? 1 : 2,
-                  WebkitBoxOrient: "vertical",
-                } as React.CSSProperties}
+                style={
+                  {
+                    display: "-webkit-box",
+                    WebkitLineClamp: isLargeScreen ? 1 : 2,
+                    WebkitBoxOrient: "vertical",
+                  } as React.CSSProperties
+                }
               >
                 {location}
               </Text>
