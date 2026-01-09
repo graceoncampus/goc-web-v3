@@ -41,6 +41,14 @@ import {
   DialogTitle,
   DialogCloseTrigger,
 } from "@/components/ui/dialog";
+import {
+  formatDateInPST,
+  formatTimeInPST,
+  formatDateTimeInPST,
+  isSameDayInPST,
+  utcToPST,
+  pstToUTC,
+} from "@/utils/timezone";
 
 interface EventCardProps {
   event: Event;
@@ -93,9 +101,7 @@ export const EventCard = ({
   }, []);
 
   const formatDate = (dateString: string) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
+    return formatDateInPST(dateString, {
       weekday: "short",
       year: "numeric",
       month: "short",
@@ -104,65 +110,31 @@ export const EventCard = ({
   };
 
   const formatTime = (dateString: string) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
+    return formatTimeInPST(dateString);
   };
 
   const formatDateTime = (dateString: string) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    const dateStr = date.toLocaleDateString("en-US", {
-      weekday: "short",
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-    const timeStr = date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-    return `${dateStr} at ${timeStr}`;
+    return formatDateTimeInPST(dateString);
   };
 
   const isSameDay = (date1: string, date2: string) => {
-    if (!date1 || !date2) return false;
-    const d1 = new Date(date1);
-    const d2 = new Date(date2);
-    return (
-      d1.getFullYear() === d2.getFullYear() &&
-      d1.getMonth() === d2.getMonth() &&
-      d1.getDate() === d2.getDate()
-    );
+    return isSameDayInPST(date1, date2);
   };
 
   const formatTimeOnly = (dateString: string) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
+    return formatTimeInPST(dateString);
   };
 
   const formatDateRange = (startDate: string, endDate: string, compact: boolean = false) => {
     if (!startDate || !endDate) return "";
-    const start = new Date(startDate);
-    const end = new Date(endDate);
 
     if (compact) {
       // More compact format for large screens
-      const startDateStr = start.toLocaleDateString("en-US", {
+      const startDateStr = formatDateInPST(startDate, {
         month: "short",
         day: "numeric",
       });
-      const endDateStr = end.toLocaleDateString("en-US", {
+      const endDateStr = formatDateInPST(endDate, {
         month: "short",
         day: "numeric",
       });
@@ -171,18 +143,23 @@ export const EventCard = ({
       return `${startDateStr}-${endDateStr} ${startTime}-${endTime}`;
     }
 
-    const startDateStr = start.toLocaleDateString("en-US", {
+    const startDateStr = formatDateInPST(startDate, {
       month: "short",
       day: "numeric",
     });
+    
+    // Check if years are different in PST timezone
+    const startYear = new Date(new Date(startDate).toLocaleString("en-US", { timeZone: "America/Los_Angeles" })).getFullYear();
+    const endYear = new Date(new Date(endDate).toLocaleString("en-US", { timeZone: "America/Los_Angeles" })).getFullYear();
+    
     const endDateOptions: Intl.DateTimeFormatOptions = {
       month: "short",
       day: "numeric",
     };
-    if (start.getFullYear() !== end.getFullYear()) {
+    if (startYear !== endYear) {
       endDateOptions.year = "numeric";
     }
-    const endDateStr = end.toLocaleDateString("en-US", endDateOptions);
+    const endDateStr = formatDateInPST(endDate, endDateOptions);
 
     const startTime = formatTimeOnly(startDate);
     const endTime = formatTimeOnly(endDate);
@@ -197,13 +174,31 @@ export const EventCard = ({
   const handleEdit = async () => {
     setIsSubmitting(true);
     try {
+      // Convert PST datetime-local values to UTC ISO format for database storage
+      const updateData = {
+        id: event.id,
+        title: editForm.title,
+        description: editForm.description,
+        location: editForm.location,
+        imageLink: editForm.imageLink,
+        active: editForm.active,
+        startDate: editForm.startDate,
+        endDate: editForm.endDate,
+      };
+
+      // If the dates are in datetime-local format (from the input), convert them to UTC
+      // Check if they look like datetime-local format (YYYY-MM-DDTHH:mm)
+      if (editForm.startDate && editForm.startDate.length === 16 && !editForm.startDate.endsWith('Z')) {
+        updateData.startDate = pstToUTC(editForm.startDate);
+      }
+      if (editForm.endDate && editForm.endDate.length === 16 && !editForm.endDate.endsWith('Z')) {
+        updateData.endDate = pstToUTC(editForm.endDate);
+      }
+
       await client.graphql({
         query: updateGOCEvents,
         variables: {
-          input: {
-            id: event.id,
-            ...editForm,
-          },
+          input: updateData,
         },
       });
       console.log("Event updated successfully");
@@ -532,15 +527,13 @@ export const EventCard = ({
               <HStack gap="4">
                 <Box flex="1">
                   <Text fontSize="sm" fontWeight="500" mb="2">
-                    Start Date
+                    Start Date (PST)
                   </Text>
                   <Input
                     type="datetime-local"
                     value={
                       editForm.startDate
-                        ? new Date(editForm.startDate)
-                            .toISOString()
-                            .slice(0, 16)
+                        ? utcToPST(editForm.startDate)
                         : ""
                     }
                     onChange={(e) =>
@@ -550,13 +543,13 @@ export const EventCard = ({
                 </Box>
                 <Box flex="1">
                   <Text fontSize="sm" fontWeight="500" mb="2">
-                    End Date
+                    End Date (PST)
                   </Text>
                   <Input
                     type="datetime-local"
                     value={
                       editForm.endDate
-                        ? new Date(editForm.endDate).toISOString().slice(0, 16)
+                        ? utcToPST(editForm.endDate)
                         : ""
                     }
                     onChange={(e) =>

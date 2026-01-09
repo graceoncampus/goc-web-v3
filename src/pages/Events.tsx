@@ -37,6 +37,7 @@ import {
   getGoogleCalendarAccessToken,
   loadGoogleAPI,
 } from "@/utils/googleCalendar";
+import { pstToUTC } from "@/utils/timezone";
 
 const client = generateClient();
 
@@ -158,12 +159,12 @@ const EventsBody: React.FC = () => {
       // Generate a unique ID for the event
       const eventId = `event-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
 
-      // Convert datetime-local values to ISO format
+      // Convert PST datetime-local values to UTC ISO format for database storage
       const startDateISO = newEventForm.startDate
-        ? new Date(newEventForm.startDate).toISOString()
+        ? pstToUTC(newEventForm.startDate)
         : "";
       const endDateISO = newEventForm.endDate
-        ? new Date(newEventForm.endDate).toISOString()
+        ? pstToUTC(newEventForm.endDate)
         : undefined;
 
       await client.graphql({
@@ -428,7 +429,7 @@ const EventsBody: React.FC = () => {
                   <Flex gap="4" wrap="wrap">
                     <Box flex="1" minWidth="250px">
                       <Text fontSize="sm" fontWeight="500" mb="2">
-                        Start Date *
+                        Start Date (PST) *
                       </Text>
                       <Input
                         type="datetime-local"
@@ -444,7 +445,7 @@ const EventsBody: React.FC = () => {
                     </Box>
                     <Box flex="1" minWidth="250px">
                       <Text fontSize="sm" fontWeight="500" mb="2">
-                        End Date
+                        End Date (PST)
                       </Text>
                       <Input
                         type="datetime-local"
