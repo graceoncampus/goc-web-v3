@@ -260,17 +260,10 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
               <Text
                 fontSize="sm"
                 fontWeight="500"
-                wordBreak="break-word"
-                overflow="hidden"
-                style={
-                  {
-                    display: "-webkit-box",
-                    WebkitLineClamp: isLargeScreen ? 1 : 2,
-                    WebkitBoxOrient: "vertical",
-                  } as React.CSSProperties
-                }
               >
-                {location}
+                {location.length > 35
+                  ? `${location.substring(0, 35)}...`
+                  : location}
               </Text>
             </HStack>
           )}
