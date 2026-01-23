@@ -1,5 +1,19 @@
 {
   "api": {
+    "adminUserManagement": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "adminUserManagement"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
     "gocbackendv3": {
       "output": {
         "authConfig": {
@@ -74,6 +88,11 @@
     }
   },
   "function": {
+    "adminUserManagement": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "updateRides": {
       "build": true,
       "dependsOn": [
