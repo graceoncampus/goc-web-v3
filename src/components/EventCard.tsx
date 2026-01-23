@@ -30,7 +30,7 @@ import {
   MdDelete,
   MdAttachMoney,
 } from "react-icons/md";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { generateClient } from "aws-amplify/api";
 import { updateGOCEvents, deleteGOCEvents } from "@/graphql/mutations";
 import {
@@ -41,6 +41,14 @@ import {
   DialogTitle,
   DialogCloseTrigger,
 } from "@/components/ui/dialog";
+import {
+  formatDateInPST,
+  formatTimeInPST,
+  formatDateTimeInPST,
+  isSameDayInPST,
+  utcToPST,
+  pstToUTC,
+} from "@/utils/timezone";
 
 interface EventCardProps {
   event: Event;
@@ -79,13 +87,22 @@ export const EventCard = ({
     startDate: event.startDate,
     endDate: event.endDate,
     active: event.active,
+    galleryLink: event.galleryLink,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
 
   const formatDate = (dateString: string) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
+    return formatDateInPST(dateString, {
       weekday: "short",
       year: "numeric",
       month: "short",
@@ -94,70 +111,68 @@ export const EventCard = ({
   };
 
   const formatTime = (dateString: string) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
+    return formatTimeInPST(dateString);
   };
 
   const formatDateTime = (dateString: string) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    const dateStr = date.toLocaleDateString("en-US", {
-      weekday: "short",
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-    const timeStr = date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-    return `${dateStr} at ${timeStr}`;
+    return formatDateTimeInPST(dateString);
   };
 
   const isSameDay = (date1: string, date2: string) => {
-    if (!date1 || !date2) return false;
-    const d1 = new Date(date1);
-    const d2 = new Date(date2);
-    return (
-      d1.getFullYear() === d2.getFullYear() &&
-      d1.getMonth() === d2.getMonth() &&
-      d1.getDate() === d2.getDate()
-    );
+    return isSameDayInPST(date1, date2);
   };
 
   const formatTimeOnly = (dateString: string) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
+    return formatTimeInPST(dateString);
   };
 
-  const formatDateRange = (startDate: string, endDate: string) => {
+  const formatDateRange = (
+    startDate: string,
+    endDate: string,
+    compact: boolean = false,
+  ) => {
     if (!startDate || !endDate) return "";
-    const start = new Date(startDate);
-    const end = new Date(endDate);
 
-    const startDateStr = start.toLocaleDateString("en-US", {
+    if (compact) {
+      // More compact format for large screens
+      const startDateStr = formatDateInPST(startDate, {
+        month: "short",
+        day: "numeric",
+      });
+      const endDateStr = formatDateInPST(endDate, {
+        month: "short",
+        day: "numeric",
+      });
+      const startTime = formatTimeOnly(startDate);
+      const endTime = formatTimeOnly(endDate);
+      return `${startDateStr}-${endDateStr} ${startTime}-${endTime}`;
+    }
+
+    const startDateStr = formatDateInPST(startDate, {
       month: "short",
       day: "numeric",
     });
+
+    // Check if years are different in PST timezone
+    const startYear = new Date(
+      new Date(startDate).toLocaleString("en-US", {
+        timeZone: "America/Los_Angeles",
+      }),
+    ).getFullYear();
+    const endYear = new Date(
+      new Date(endDate).toLocaleString("en-US", {
+        timeZone: "America/Los_Angeles",
+      }),
+    ).getFullYear();
+
     const endDateOptions: Intl.DateTimeFormatOptions = {
       month: "short",
       day: "numeric",
     };
-    if (start.getFullYear() !== end.getFullYear()) {
+    if (startYear !== endYear) {
       endDateOptions.year = "numeric";
     }
-    const endDateStr = end.toLocaleDateString("en-US", endDateOptions);
+    const endDateStr = formatDateInPST(endDate, endDateOptions);
 
     const startTime = formatTimeOnly(startDate);
     const endTime = formatTimeOnly(endDate);
@@ -172,13 +187,40 @@ export const EventCard = ({
   const handleEdit = async () => {
     setIsSubmitting(true);
     try {
+      // Convert PST datetime-local values to UTC ISO format for database storage
+      const updateData = {
+        id: event.id,
+        title: editForm.title,
+        description: editForm.description,
+        location: editForm.location,
+        imageLink: editForm.imageLink,
+        active: editForm.active,
+        startDate: editForm.startDate,
+        endDate: editForm.endDate,
+        galleryLink: editForm.galleryLink,
+      };
+
+      // If the dates are in datetime-local format (from the input), convert them to UTC
+      // Check if they look like datetime-local format (YYYY-MM-DDTHH:mm)
+      if (
+        editForm.startDate &&
+        editForm.startDate.length === 16 &&
+        !editForm.startDate.endsWith("Z")
+      ) {
+        updateData.startDate = pstToUTC(editForm.startDate);
+      }
+      if (
+        editForm.endDate &&
+        editForm.endDate.length === 16 &&
+        !editForm.endDate.endsWith("Z")
+      ) {
+        updateData.endDate = pstToUTC(editForm.endDate);
+      }
+
       await client.graphql({
         query: updateGOCEvents,
         variables: {
-          input: {
-            id: event.id,
-            ...editForm,
-          },
+          input: updateData,
         },
       });
       console.log("Event updated successfully");
@@ -215,12 +257,7 @@ export const EventCard = ({
   return (
     <>
       <Box
-        width={{
-          base: "100%",
-          md: "calc(50% - 12px)",
-          lg: "calc(33.333% - 16px)",
-        }}
-        minWidth="300px"
+        width="100%"
         height="550px"
         display="flex"
         flexDirection="column"
@@ -311,18 +348,68 @@ export const EventCard = ({
             {/* Date and Time */}
             <VStack align="start" gap="2" mb="4">
               {event.startDate && (
-                <HStack gap="2" color="gray.600">
-                  <Icon as={MdCalendarToday} color="goc.blue" boxSize="4" />
-                  <Text fontSize="sm" fontWeight="500">
+                <HStack gap="2" color="gray.600" align="start">
+                  <Icon
+                    as={MdCalendarToday}
+                    color="goc.blue"
+                    boxSize="4"
+                    flexShrink={0}
+                    mt="0.5"
+                  />
+                  <Text
+                    fontSize="sm"
+                    fontWeight="500"
+                    wordBreak="break-word"
+                    overflow="hidden"
+                    style={
+                      {
+                        display: "-webkit-box",
+                        WebkitLineClamp: isLargeScreen ? 1 : 2,
+                        WebkitBoxOrient: "vertical",
+                      } as React.CSSProperties
+                    }
+                  >
                     {event.endDate && isSameDay(event.startDate, event.endDate)
                       ? formatDateTime(event.startDate)
                       : event.endDate
-                        ? formatDateRange(event.startDate, event.endDate)
+                        ? formatDateRange(
+                            event.startDate,
+                            event.endDate,
+                            isLargeScreen,
+                          )
                         : formatDateTime(event.startDate)}
                   </Text>
                 </HStack>
               )}
             </VStack>
+
+            {/* Location */}
+            {event.location && (
+              <HStack gap="2" mb="4" color="gray.600" align="start">
+                <Icon
+                  as={MdLocationPin}
+                  color="goc.blue"
+                  boxSize="4"
+                  flexShrink={0}
+                  mt="0.5"
+                />
+                <Text
+                  fontSize="sm"
+                  fontWeight="500"
+                  wordBreak="break-word"
+                  overflow="hidden"
+                  style={
+                    {
+                      display: "-webkit-box",
+                      WebkitLineClamp: isLargeScreen ? 1 : 2,
+                      WebkitBoxOrient: "vertical",
+                    } as React.CSSProperties
+                  }
+                >
+                  {event.location}
+                </Text>
+              </HStack>
+            )}
 
             {/* Description */}
             {event.description && (
@@ -339,18 +426,6 @@ export const EventCard = ({
                   ? `${event.description.substring(0, 120)}...`
                   : event.description}
               </Text>
-            )}
-
-            {/* Location */}
-            {event.location && (
-              <HStack gap="2" mb="4" color="gray.600">
-                <Icon as={MdLocationPin} color="goc.blue" boxSize="4" />
-                <Text fontSize="sm" fontWeight="500">
-                  {event.location.length > 30
-                    ? `${event.location.substring(0, 30)}...`
-                    : event.location}
-                </Text>
-              </HStack>
             )}
           </Box>
 
@@ -494,16 +569,12 @@ export const EventCard = ({
               <HStack gap="4">
                 <Box flex="1">
                   <Text fontSize="sm" fontWeight="500" mb="2">
-                    Start Date
+                    Start Date (PST)
                   </Text>
                   <Input
                     type="datetime-local"
                     value={
-                      editForm.startDate
-                        ? new Date(editForm.startDate)
-                            .toISOString()
-                            .slice(0, 16)
-                        : ""
+                      editForm.startDate ? utcToPST(editForm.startDate) : ""
                     }
                     onChange={(e) =>
                       setEditForm({ ...editForm, startDate: e.target.value })
@@ -512,21 +583,29 @@ export const EventCard = ({
                 </Box>
                 <Box flex="1">
                   <Text fontSize="sm" fontWeight="500" mb="2">
-                    End Date
+                    End Date (PST)
                   </Text>
                   <Input
                     type="datetime-local"
-                    value={
-                      editForm.endDate
-                        ? new Date(editForm.endDate).toISOString().slice(0, 16)
-                        : ""
-                    }
+                    value={editForm.endDate ? utcToPST(editForm.endDate) : ""}
                     onChange={(e) =>
                       setEditForm({ ...editForm, endDate: e.target.value })
                     }
                   />
                 </Box>
               </HStack>
+              <Box>
+                <Text fontSize="sm" fontWeight="500" mb="2">
+                  Gallery URL (optional)
+                </Text>
+                <Input
+                  value={editForm.galleryLink}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, galleryLink: e.target.value })
+                  }
+                  placeholder="Gallery URL"
+                />
+              </Box>
               <Box>
                 <Text fontSize="sm" fontWeight="500" mb="2">
                   Event Status
@@ -546,7 +625,9 @@ export const EventCard = ({
                     fontSize="sm"
                     color={editForm.active ? "green.600" : "red.600"}
                   >
-                    {editForm.active ? "Visible to users" : "Hidden from users"}
+                    {editForm.active
+                      ? "Visible to users"
+                      : "Hidden from events (can be found on gallery page)"}
                   </Text>
                 </HStack>
               </Box>
@@ -636,9 +717,12 @@ export const EventCard = ({
       )}
 
       {/* Event Details Modal */}
-      <DialogRoot open={isDetailsOpen} onOpenChange={(e) => {
-        if (!e.open) onDetailsClose();
-      }}>
+      <DialogRoot
+        open={isDetailsOpen}
+        onOpenChange={(e) => {
+          if (!e.open) onDetailsClose();
+        }}
+      >
         <DialogContent maxW="800px" width="90%">
           <DialogHeader>
             <DialogTitle fontSize="2xl" color="goc.dark_blue">
@@ -666,11 +750,24 @@ export const EventCard = ({
                   <HStack gap="2" color="gray.700">
                     <Icon as={MdCalendarToday} color="goc.blue" boxSize="5" />
                     <Text fontSize="md" fontWeight="600">
-                      {event.endDate && isSameDay(event.startDate, event.endDate)
+                      {event.endDate &&
+                      isSameDay(event.startDate, event.endDate)
                         ? formatDateTime(event.startDate)
                         : event.endDate
-                        ? formatDateRange(event.startDate, event.endDate)
-                        : formatDateTime(event.startDate)}
+                          ? formatDateRange(event.startDate, event.endDate)
+                          : formatDateTime(event.startDate)}
+                    </Text>
+                  </HStack>
+                </VStack>
+              )}
+
+              {/* Location */}
+              {event.location && (
+                <VStack align="start" gap="2">
+                  <HStack gap="2" color="gray.700">
+                    <Icon as={MdLocationPin} color="goc.blue" boxSize="5" />
+                    <Text fontSize="md" fontWeight="600">
+                      {event.location}
                     </Text>
                   </HStack>
                 </VStack>
@@ -682,30 +779,28 @@ export const EventCard = ({
                   <Heading size="sm" mb="2" color="goc.dark_blue">
                     Description
                   </Heading>
-                  <Text fontSize="md" color="gray.700" lineHeight="1.6" whiteSpace="pre-wrap">
+                  <Text
+                    fontSize="md"
+                    color="gray.700"
+                    lineHeight="1.6"
+                    whiteSpace="pre-wrap"
+                  >
                     {event.description}
-                  </Text>
-                </Box>
-              )}
-
-              {/* Location */}
-              {event.location && (
-                <Box>
-                  <HStack gap="2" color="gray.700" mb="2">
-                    <Icon as={MdLocationPin} color="goc.blue" boxSize="5" />
-                    <Heading size="sm" color="goc.dark_blue">
-                      Location
-                    </Heading>
-                  </HStack>
-                  <Text fontSize="md" color="gray.700" ml="7">
-                    {event.location}
                   </Text>
                 </Box>
               )}
 
               {/* Status Badge */}
               {event.active !== true && (
-                <Badge colorScheme="red" variant="solid" fontSize="sm" px="3" py="1" borderRadius="md" width="fit-content">
+                <Badge
+                  colorScheme="red"
+                  variant="solid"
+                  fontSize="sm"
+                  px="3"
+                  py="1"
+                  borderRadius="md"
+                  width="fit-content"
+                >
                   Inactive Event
                 </Badge>
               )}

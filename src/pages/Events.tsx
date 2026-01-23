@@ -31,6 +31,13 @@ import { EventList } from "@/components/EventCardList";
 import { checkInATeam, checkIsLoggedIn } from "@/auth/CheckUser";
 import { fetchAuthSession } from "aws-amplify/auth";
 import { createGOCEvents } from "@/graphql/mutations";
+import {
+  createGoogleCalendarEvent,
+  generateGoogleCalendarUrl,
+  getGoogleCalendarAccessToken,
+  loadGoogleAPI,
+} from "@/utils/googleCalendar";
+import { pstToUTC } from "@/utils/timezone";
 
 const client = generateClient();
 
@@ -118,6 +125,20 @@ const EventsBody: React.FC = () => {
     checkAuth();
   }, []);
 
+  useEffect(() => {
+    // Load Google API when component mounts
+    const initGoogleAPI = async () => {
+      try {
+        await loadGoogleAPI();
+        setIsGoogleAPILoaded(true);
+      } catch (error) {
+        console.error("Failed to load Google API:", error);
+        setCalendarStatus("Failed to load Google Calendar API");
+      }
+    };
+    initGoogleAPI();
+  }, []);
+
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [newEventForm, setNewEventForm] = useState({
     title: "",
@@ -129,6 +150,8 @@ const EventsBody: React.FC = () => {
     addToCalendar: false,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [calendarStatus, setCalendarStatus] = useState<string>("");
+  const [isGoogleAPILoaded, setIsGoogleAPILoaded] = useState(false);
 
   const handleCreateEvent = async () => {
     setIsSubmitting(true);
@@ -136,12 +159,12 @@ const EventsBody: React.FC = () => {
       // Generate a unique ID for the event
       const eventId = `event-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
 
-      // Convert datetime-local values to ISO format
+      // Convert PST datetime-local values to UTC ISO format for database storage
       const startDateISO = newEventForm.startDate
-        ? new Date(newEventForm.startDate).toISOString()
+        ? pstToUTC(newEventForm.startDate)
         : "";
       const endDateISO = newEventForm.endDate
-        ? new Date(newEventForm.endDate).toISOString()
+        ? pstToUTC(newEventForm.endDate)
         : undefined;
 
       await client.graphql({
@@ -162,8 +185,50 @@ const EventsBody: React.FC = () => {
       console.log("Event created successfully");
 
       if (newEventForm.addToCalendar) {
-        console.log("Adding to Google Calendar...")
-        // TODO: Add Google Calendar API call here
+        setCalendarStatus("Adding to Google Calendar...");
+        try {
+          if (!isGoogleAPILoaded) {
+            throw new Error("Google API not loaded");
+          }
+
+          // Create the event object for Google Calendar
+          const eventForCalendar: Event = {
+            id: eventId,
+            title: newEventForm.title,
+            description: newEventForm.description,
+            location: newEventForm.location,
+            startDate: startDateISO,
+            endDate: endDateISO || startDateISO,
+            price: 0,
+            imageLink: newEventForm.imageLink,
+          };
+
+          try {
+            // Try to use the API method first
+            const accessToken = await getGoogleCalendarAccessToken();
+            const calendarEventId = await createGoogleCalendarEvent(
+              eventForCalendar,
+              accessToken,
+            );
+            setCalendarStatus(
+              `✅ Event added to Google Calendar (ID: ${calendarEventId})`,
+            );
+          } catch (apiError) {
+            console.warn(
+              "API method failed, falling back to URL method:",
+              apiError,
+            );
+            // Fallback to URL method
+            const calendarUrl = generateGoogleCalendarUrl(eventForCalendar);
+            window.open(calendarUrl, "_blank");
+            setCalendarStatus("✅ Google Calendar opened in new tab");
+          }
+        } catch (error) {
+          console.error("Failed to add to Google Calendar:", error);
+          setCalendarStatus(
+            `❌ Failed to add to Google Calendar: ${error instanceof Error ? error.message : "Unknown error"}`,
+          );
+        }
       }
 
       // Reset form
@@ -177,6 +242,11 @@ const EventsBody: React.FC = () => {
         addToCalendar: false,
       });
       setIsFormOpen(false);
+
+      // Clear calendar status after a delay
+      setTimeout(() => {
+        setCalendarStatus("");
+      }, 5000);
 
       // Refresh events
       const fetchEvents = async () => {
@@ -233,7 +303,13 @@ const EventsBody: React.FC = () => {
         gap={"3rem"}
       >
         {/* <EventList events={events} loading={loading} /> */}
-        <Stack id={"calendar"} as={"section"} width={"100%"} align={"center"}>
+        <Stack
+          id={"calendar"}
+          as={"section"}
+          width={"100%"}
+          maxWidth={{ base: "100%", md: "1200px" }}
+          align={"center"}
+        >
           <Heading
             as="h2"
             textAlign={"center"}
@@ -247,10 +323,7 @@ const EventsBody: React.FC = () => {
           >
             Calendar
           </Heading>
-          <AspectRatio
-            ratio={{ base: 1, md: 4 / 3 }}
-            width={{ base: "100%", lg: "800px" }}
-          >
+          <AspectRatio ratio={{ base: 1, md: 4 / 3 }} width="100%">
             <iframe
               src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FLos_Angeles&showPrint=0&title&showCalendars=0&mode=MONTH&showTz=0&src=Z29jYXRlYW1AZ21haWwuY29t&color=%23C0CA33"
               title="Google Calendar"
@@ -263,7 +336,7 @@ const EventsBody: React.FC = () => {
           <Stack
             as={"section"}
             width={"100%"}
-            maxWidth={{ base: "100%", md: "800px" }}
+            maxWidth={{ base: "100%", md: "1200px" }}
             align={"center"}
             gap={"1rem"}
           >
@@ -359,7 +432,7 @@ const EventsBody: React.FC = () => {
                   <Flex gap="4" wrap="wrap">
                     <Box flex="1" minWidth="250px">
                       <Text fontSize="sm" fontWeight="500" mb="2">
-                        Start Date *
+                        Start Date (PST) *
                       </Text>
                       <Input
                         type="datetime-local"
@@ -375,7 +448,7 @@ const EventsBody: React.FC = () => {
                     </Box>
                     <Box flex="1" minWidth="250px">
                       <Text fontSize="sm" fontWeight="500" mb="2">
-                        End Date
+                        End Date (PST)
                       </Text>
                       <Input
                         type="datetime-local"
@@ -413,12 +486,26 @@ const EventsBody: React.FC = () => {
                       />
                       <Checkbox.Label>Add To Google Calendar</Checkbox.Label>
                     </Checkbox.Root>
+                    {calendarStatus && (
+                      <Text
+                        fontSize="sm"
+                        mt="2"
+                        color={
+                          calendarStatus.includes("❌")
+                            ? "red.500"
+                            : "green.500"
+                        }
+                      >
+                        {calendarStatus}
+                      </Text>
+                    )}
                   </Box>
                   <Flex gap="3" mt="2" justify="flex-end">
                     <Button
                       variant="ghost"
                       onClick={() => {
                         setIsFormOpen(false);
+                        setCalendarStatus("");
                         setNewEventForm({
                           title: "",
                           description: "",
@@ -454,53 +541,62 @@ const EventsBody: React.FC = () => {
             </Box>
           </Stack>
         )}
+
+        <Stack
+          as={"section"}
+          width={"100%"}
+          maxWidth={{ base: "100%", md: "1200px" }}
+          align={"center"}
+        >
+          <EventList
+            events={events}
+            loading={loading}
+            inATeam={inATeam}
+            onEventUpdate={() => {
+              // Refresh events after update
+              const fetchEvents = async () => {
+                try {
+                  const result = await client.graphql({ query: listGOCEvents });
+                  const eventsData =
+                    result.data?.listGOCEvents?.items?.sort(
+                      (a: any, b: any) =>
+                        new Date(b.startDate).getTime() -
+                        new Date(a.startDate).getTime(),
+                    ) || [];
+                  let authorized = false;
+                  try {
+                    const session = await fetchAuthSession();
+                    const groups =
+                      session.tokens?.idToken?.payload["cognito:groups"];
+                    authorized =
+                      Array.isArray(groups) && groups.includes("ATeam");
+                  } catch (error) {
+                    authorized = false;
+                  }
+                  const mappedEvents = eventsData
+                    .map((event: any) => ({
+                      id: event.id,
+                      title: event.title,
+                      startDate: event.startDate,
+                      endDate: event.endDate,
+                      price: event.price,
+                      location: event.location,
+                      description: event.description,
+                      imageLink: event.imageLink,
+                      active: event.active,
+                      galleryLink: event.galleryLink,
+                    }))
+                    .filter((e) => e.active || authorized);
+                  setEvents(mappedEvents);
+                } catch (reason) {
+                  console.error(reason);
+                }
+              };
+              fetchEvents();
+            }}
+          />
+        </Stack>
       </Stack>
-      <EventList
-        events={events}
-        loading={loading}
-        inATeam={inATeam}
-        onEventUpdate={() => {
-          // Refresh events after update
-          const fetchEvents = async () => {
-            try {
-              const result = await client.graphql({ query: listGOCEvents });
-              const eventsData =
-                result.data?.listGOCEvents?.items?.sort(
-                  (a: any, b: any) =>
-                    new Date(b.startDate).getTime() -
-                    new Date(a.startDate).getTime(),
-                ) || [];
-              let authorized = false;
-              try {
-                const session = await fetchAuthSession();
-                const groups =
-                  session.tokens?.idToken?.payload["cognito:groups"];
-                authorized = Array.isArray(groups) && groups.includes("ATeam");
-              } catch (error) {
-                authorized = false;
-              }
-              const mappedEvents = eventsData
-                .map((event: any) => ({
-                  id: event.id,
-                  title: event.title,
-                  startDate: event.startDate,
-                  endDate: event.endDate,
-                  price: event.price,
-                  location: event.location,
-                  description: event.description,
-                  imageLink: event.imageLink,
-                  active: event.active,
-                  galleryLink: event.galleryLink,
-                }))
-                .filter((e) => e.active || authorized);
-              setEvents(mappedEvents);
-            } catch (reason) {
-              console.error(reason);
-            }
-          };
-          fetchEvents();
-        }}
-      />
     </Container>
   );
 };

@@ -4,7 +4,7 @@
 
 import { EventCard } from "@/components/EventCard";
 import { Event } from "@/pages/Events";
-import { Flex, Heading, Stack, Text } from "@chakra-ui/react";
+import { Grid, Heading, Stack, Text } from "@chakra-ui/react";
 import GOCSpinner from "./GOCSpinner";
 
 interface EventListProps {
@@ -14,7 +14,12 @@ interface EventListProps {
   onEventUpdate: () => void;
 }
 
-export const EventList = ({ events, loading, inATeam, onEventUpdate }: EventListProps) => {
+export const EventList = ({
+  events,
+  loading,
+  inATeam,
+  onEventUpdate,
+}: EventListProps) => {
   if (loading) return <GOCSpinner />;
 
   if (events.length === 0) {
@@ -28,23 +33,23 @@ export const EventList = ({ events, loading, inATeam, onEventUpdate }: EventList
   }
 
   return (
-    <Flex
-      wrap="wrap"
+    <Grid
+      templateColumns={{
+        base: "1fr",
+        md: "repeat(2, 1fr)",
+        lg: "repeat(3, 1fr)",
+      }}
       gap="6"
-      justify="flex-start"
-      align="start"
-      px="4"
-      maxW="100%"
       width="100%"
     >
-       {events.map((event) => (
-         <EventCard 
-           key={event.id} 
-           event={event} 
-           inATeam={inATeam}
-           onEventUpdate={onEventUpdate}
-         />
-       ))}
-    </Flex>
+      {events.map((event) => (
+        <EventCard
+          key={event.id}
+          event={event}
+          inATeam={inATeam}
+          onEventUpdate={onEventUpdate}
+        />
+      ))}
+    </Grid>
   );
 };
