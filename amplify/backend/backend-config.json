@@ -116,6 +116,22 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_adminUserManagement_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "adminUserManagement"
+        }
+      ]
+    },
+    "AMPLIFY_function_adminUserManagement_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "adminUserManagement"
+        }
+      ]
+    },
     "AMPLIFY_function_updateRides_deploymentBucketName": {
       "usedBy": [
         {
