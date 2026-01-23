@@ -5,10 +5,11 @@ import {
   MenuRoot,
   MenuTrigger,
 } from "@/components/ui/menu";
-import { signOut } from "aws-amplify/auth";
+import { signOut, fetchAuthSession } from "aws-amplify/auth";
 import { FaUser } from "react-icons/fa6";
-import { MdLogout } from "react-icons/md";
+import { MdLogout, MdAdminPanelSettings } from "react-icons/md";
 import { RiArrowDropDownLine } from "react-icons/ri";
+import { useEffect, useState } from "react";
 
 interface LoginButtonProps {
   username: string | null | undefined;
@@ -20,6 +21,23 @@ const LoginButton = ({ username, drawerOpen = false }: LoginButtonProps) => {
   const isMobile = window.matchMedia(
     "(hover: none) and (pointer: coarse)",
   ).matches;
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const checkAdminRole = async () => {
+      try {
+        const session = await fetchAuthSession();
+        const groups = session.tokens?.idToken?.payload["cognito:groups"];
+        setIsAdmin(Array.isArray(groups) && groups.includes("Admin"));
+      } catch (error) {
+        setIsAdmin(false);
+      }
+    };
+
+    if (username) {
+      checkAdminRole();
+    }
+  }, [username]);
 
   return (
     <>
@@ -80,6 +98,14 @@ const LoginButton = ({ username, drawerOpen = false }: LoginButtonProps) => {
                 Profile
               </Link>
             </MenuItem>
+            {isAdmin && (
+              <MenuItem asChild value="Admin">
+                <Link href="/admin" color={"white"} cursor={"pointer"}>
+                  <MdAdminPanelSettings />
+                  Admin
+                </Link>
+              </MenuItem>
+            )}
             <MenuItem asChild value="Log out" color={"white"}>
               <Link
                 cursor={"pointer"}

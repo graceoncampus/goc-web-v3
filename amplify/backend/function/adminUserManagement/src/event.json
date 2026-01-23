@@ -1,0 +1,9 @@
+{
+  "httpMethod": "GET",
+  "path": "/users",
+  "queryStringParameters": {},
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": null
+}

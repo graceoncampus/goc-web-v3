@@ -43,3 +43,17 @@ export const checkInATeam = async (
     setInATeam(false);
   }
 };
+
+export const checkIsAdmin = async (
+  setIsAdmin: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
+  try {
+    const session = await fetchAuthSession();
+    const groups = session.tokens?.idToken?.payload["cognito:groups"];
+    setIsAdmin(Array.isArray(groups) && groups.includes("Admin"));
+  } catch (error) {
+    // not signed in, probably
+    console.error("Error fetching auth session:", error);
+    setIsAdmin(false);
+  }
+};

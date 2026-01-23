@@ -18,6 +18,7 @@ import { LoginPage } from "@/pages/Login/Login";
 import { ResetPage } from "@/pages/Login/Reset";
 import { SignupPage } from "@/pages/Login/Signup";
 import { ProfilePage } from "@/pages/Profile";
+// import { AdminPage } from "@/pages/Admin";
 import { NotFoundPage } from "@/pages/NotFound";
 import { WelcomeWeekPage } from "@/pages/WelcomeWeek";
 import { useEffect } from "react";
@@ -49,12 +50,16 @@ const App = () => {
             <Route path={"/ministryteams"} element={<MinistryTeamsPage />} />
             <Route path="/prayer-request" element={<PrayerFormPage />} />
             <Route path={"/smallgroups"} element={<SmallGroupsPage />} />
-            <Route path={"/john-study-guide"} element={<JohnStudyGuidePage />} />
+            <Route
+              path={"/john-study-guide"}
+              element={<JohnStudyGuidePage />}
+            />
             <Route path={"/gallery"} element={<GalleryPage />} />
             <Route path={"/login"} element={<LoginPage />} />
             <Route path={"/reset"} element={<ResetPage />} />
             <Route path={"/signup"} element={<SignupPage />} />
             <Route path={"/profile"} element={<ProfilePage />} />
+            {/* <Route path={"/admin"} element={<AdminPage />} /> */}
             <Route
               path="/links"
               element={<ExternalRedirect to="https://linktr.ee/goc_ucla" />}
