@@ -33,7 +33,6 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
     location,
     description,
   } = item;
-  const isWip = link === "WIP";
   const displayTitle = `${year} ${title}`;
 
   const [isLargeScreen, setIsLargeScreen] = useState(false);
@@ -129,9 +128,7 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
   };
 
   const handleGalleryClick = () => {
-    if (!isWip && link) {
-      window.open(link, "_blank", "noopener,noreferrer");
-    }
+    window.open(link, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -148,14 +145,13 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
           "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
         transform: "translateY(-4px)",
       }}
-      cursor={isWip ? "default" : "pointer"}
+      cursor="pointer"
       onClick={handleGalleryClick}
       backgroundColor="white"
       border="1px solid"
       borderColor="gray.100"
       overflow="hidden"
       position="relative"
-      opacity={isWip ? 0.75 : 1}
     >
       {/* Image Section */}
       {thumbnailUrl && (
@@ -257,10 +253,7 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
                 flexShrink={0}
                 mt="0.5"
               />
-              <Text
-                fontSize="sm"
-                fontWeight="500"
-              >
+              <Text fontSize="sm" fontWeight="500">
                 {location.length > 35
                   ? `${location.substring(0, 35)}...`
                   : location}
@@ -293,37 +286,28 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
         <Button
           size="md"
           width="100%"
-          backgroundColor={isWip ? "gray.400" : "goc.blue"}
+          backgroundColor="goc.blue"
           color="white"
           borderRadius="lg"
           fontWeight="600"
           fontSize="sm"
           py="6"
           transition="all 0.2s ease"
-          _hover={
-            isWip
-              ? {}
-              : {
-                  backgroundColor: "goc.dark_blue",
-                  transform: "translateY(-1px)",
-                  boxShadow: "0 4px 12px rgba(51, 102, 204, 0.3)",
-                }
-          }
-          _active={
-            isWip
-              ? {}
-              : {
-                  transform: "translateY(0)",
-                }
-          }
+          _hover={{
+            backgroundColor: "goc.dark_blue",
+            transform: "translateY(-1px)",
+            boxShadow: "0 4px 12px rgba(51, 102, 204, 0.3)",
+          }}
+          _active={{
+            transform: "translateY(0)",
+          }}
           onClick={(e) => {
             e.stopPropagation();
             handleGalleryClick();
           }}
-          disabled={isWip}
         >
-          {isWip ? "Coming Soon" : "View Gallery"}
-          {!isWip && <Icon as={LuExternalLink} boxSize="4" ml="2" />}
+          View Gallery
+          <Icon as={LuExternalLink} boxSize="4" ml="2" />
         </Button>
       </Box>
     </Box>

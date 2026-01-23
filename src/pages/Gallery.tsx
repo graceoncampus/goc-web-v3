@@ -180,13 +180,12 @@ const GalleryBody = () => {
         const result = await client.graphql({ query: listGOCEvents });
         const eventsData = result.data?.listGOCEvents?.items || [];
 
-        // TEMPORARY: Show all events regardless of galleryLink (for debugging)
         // Filter events that have a galleryLink and map to GalleryItem format
         const eventsWithGallery = eventsData
-          // .filter(
-          //   (event: any) =>
-          //     event.galleryLink && event.galleryLink.trim() !== "",
-          // )
+          .filter(
+            (event: any) =>
+              event.galleryLink && event.galleryLink.trim() !== "",
+          )
           .map((event: any) => {
             const startDate = new Date(event.startDate);
             const isStartDateValid = !isNaN(startDate.getTime());
@@ -246,7 +245,7 @@ const GalleryBody = () => {
               endDate: event.endDate,
               location: event.location,
               description: event.description,
-              link: event.galleryLink || "WIP", // Use "WIP" if no galleryLink
+              link: event.galleryLink,
               thumbnailUrl: event.imageLink || undefined,
             } as GalleryItem;
           });
