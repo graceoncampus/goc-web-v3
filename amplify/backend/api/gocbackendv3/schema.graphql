@@ -36,6 +36,19 @@ input CreateGOCEventsInput {
   title: String!
 }
 
+input CreateRecurringEventInput {
+  id: ID!
+  name: String!
+  signupLink: String
+  signupDeadline: String
+  description: String!
+  time: String!
+  location: String!
+  imageLink: String!
+  galleryLink: String
+  addToGoogleCalendar: Boolean!
+}
+
 input CreateMinistryTeamInput {
   name: String!
   description: String!
@@ -80,6 +93,10 @@ input CreateSermonInput {
 
 input DeleteGOCEventsInput {
   id: String!
+}
+
+input DeleteRecurringEventInput {
+  id: ID!
 }
 
 input DeleteMinistryTeamInput {
@@ -130,6 +147,24 @@ type GOCEvents {
 
 type GOCEventsConnection {
   items: [GOCEvents]
+  nextToken: String
+}
+
+type RecurringEvent {
+  id: ID!
+  name: String!
+  signupLink: String
+  signupDeadline: String
+  description: String!
+  time: String!
+  location: String!
+  imageLink: String!
+  galleryLink: String
+  addToGoogleCalendar: Boolean!
+}
+
+type RecurringEventConnection {
+  items: [RecurringEvent]
   nextToken: String
 }
 
@@ -411,6 +446,19 @@ input TableGOCEventsFilterInput {
   title: TableStringFilterInput
 }
 
+input TableRecurringEventFilterInput {
+  id: TableIDFilterInput
+  name: TableStringFilterInput
+  signupLink: TableStringFilterInput
+  signupDeadline: TableStringFilterInput
+  description: TableStringFilterInput
+  time: TableStringFilterInput
+  location: TableStringFilterInput
+  imageLink: TableStringFilterInput
+  galleryLink: TableStringFilterInput
+  addToGoogleCalendar: TableBooleanFilterInput
+}
+
 input TableIDFilterInput {
   beginsWith: ID
   between: [ID]
@@ -505,6 +553,19 @@ input UpdateGOCEventsInput {
   title: String
 }
 
+input UpdateRecurringEventInput {
+  id: ID!
+  name: String
+  signupLink: String
+  signupDeadline: String
+  description: String
+  time: String
+  location: String
+  imageLink: String
+  galleryLink: String
+  addToGoogleCalendar: Boolean
+}
+
 input UpdateMinistryTeamInput {
   id: ID!
   name: String
@@ -554,6 +615,9 @@ type Mutation {
   createMinistryTeam(input: CreateMinistryTeamInput!): MinistryTeam
   updateMinistryTeam(input: UpdateMinistryTeamInput!): MinistryTeam
   deleteMinistryTeam(input: DeleteMinistryTeamInput!): MinistryTeam
+  createRecurringEvent(input: CreateRecurringEventInput!): RecurringEvent
+  updateRecurringEvent(input: UpdateRecurringEventInput!): RecurringEvent
+  deleteRecurringEvent(input: DeleteRecurringEventInput!): RecurringEvent
 }
 
 type Query {
@@ -589,6 +653,12 @@ type Query {
     limit: Int
     nextToken: String
   ): MinistryTeamConnection
+  getRecurringEvent(id: ID!): RecurringEvent
+  listRecurringEvents(
+    filter: TableRecurringEventFilterInput
+    limit: Int
+    nextToken: String
+  ): RecurringEventConnection
 }
 
 type Subscription {
@@ -683,4 +753,25 @@ type Subscription {
     leaders: String
     contact: String
   ): MinistryTeam @aws_subscribe(mutations: ["deleteMinistryTeam"])
+  onCreateRecurringEvent(
+    id: ID
+    name: String
+    description: String
+    time: String
+    location: String
+  ): RecurringEvent @aws_subscribe(mutations: ["createRecurringEvent"])
+  onUpdateRecurringEvent(
+    id: ID
+    name: String
+    description: String
+    time: String
+    location: String
+  ): RecurringEvent @aws_subscribe(mutations: ["updateRecurringEvent"])
+  onDeleteRecurringEvent(
+    id: ID
+    name: String
+    description: String
+    time: String
+    location: String
+  ): RecurringEvent @aws_subscribe(mutations: ["deleteRecurringEvent"])
 }
