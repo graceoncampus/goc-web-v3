@@ -87,6 +87,7 @@ export const EventCard = ({
     startDate: event.startDate,
     endDate: event.endDate,
     active: event.active,
+    galleryLink: event.galleryLink
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLargeScreen, setIsLargeScreen] = useState(false);
@@ -184,6 +185,7 @@ export const EventCard = ({
         active: editForm.active,
         startDate: editForm.startDate,
         endDate: editForm.endDate,
+        galleryLink: editForm.galleryLink
       };
 
       // If the dates are in datetime-local format (from the input), convert them to UTC
@@ -560,6 +562,18 @@ export const EventCard = ({
               </HStack>
               <Box>
                 <Text fontSize="sm" fontWeight="500" mb="2">
+                  Gallery URL (optional)
+                </Text>
+                <Input
+                  value={editForm.galleryLink}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, galleryLink: e.target.value })
+                  }
+                  placeholder="Gallery URL"
+                />
+              </Box>
+              <Box>
+                <Text fontSize="sm" fontWeight="500" mb="2">
                   Event Status
                 </Text>
                 <HStack>
@@ -577,7 +591,7 @@ export const EventCard = ({
                     fontSize="sm"
                     color={editForm.active ? "green.600" : "red.600"}
                   >
-                    {editForm.active ? "Visible to users" : "Hidden from users"}
+                    {editForm.active ? "Visible to users" : "Hidden from events (can be found on gallery page)"}
                   </Text>
                 </HStack>
               </Box>
