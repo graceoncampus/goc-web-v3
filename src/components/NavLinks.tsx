@@ -61,7 +61,16 @@ const NavLinks = [
   },
   {
     name: "Events",
-    link: "/events",
+    sublinks: [
+      {
+        name: "Events",
+        link: "/events",
+      },
+      {
+        name: "Recurring Events",
+        link: "/recurring-events",
+      },
+    ],
   },
   {
     name: "Rides",
