@@ -42,6 +42,7 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
 
   return (
     <Box
+      role="group"
       width="100%"
       /* 3:2 aspect ratio to show full image (2048x1365) */
       paddingBottom="66.67%"
@@ -56,6 +57,9 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
         boxShadow:
           "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
         transform: "translateY(-4px)",
+        "& .gallery-hover-overlay": {
+          opacity: 1,
+        },
       }}
     >
       {/* Background Image */}
@@ -78,11 +82,18 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
         right="0"
         bottom="0"
         background="linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.6) 100%)"
-        transition="background 0.3s ease"
-        _groupHover={{
-          background:
-            "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.55) 100%)",
-        }}
+      />
+      {/* Hover overlay - darkens bottom on hover */}
+      <Box
+        position="absolute"
+        top="0"
+        left="0"
+        right="0"
+        bottom="0"
+        background="linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.35) 100%)"
+        opacity={0}
+        transition="opacity 0.3s ease"
+        className="gallery-hover-overlay"
       />
 
       {/* External link icon - top right */}
