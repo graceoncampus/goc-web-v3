@@ -36,6 +36,10 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
 
   const hasDetails = !!(location || description);
 
+  // If location is short enough to be one line (~40 chars), allow 5 lines for description
+  const isLocationOneLine = !location || location.length <= 40;
+  const descriptionLines = isLocationOneLine ? 5 : 4;
+
   const formatDate = (dateString?: string) => {
     if (!dateString) return "";
     const date = new Date(dateString);
@@ -191,20 +195,23 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
             maxHeight={expanded ? "300px" : "0px"}
             opacity={expanded ? 1 : 0}
             transition="all 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
+            pb={expanded ? "7" : "0"}
           >
             {location && (
-              <HStack gap="1.5" mb="2">
+              <HStack gap="1.5" mb="2" alignItems="flex-start">
                 <Icon
                   as={MdLocationPin}
                   color="whiteAlpha.900"
                   boxSize="3.5"
                   flexShrink={0}
+                  mt="0.5"
                 />
                 <Text
                   fontSize="sm"
                   color="whiteAlpha.900"
                   fontWeight="500"
                   textShadow="0 1px 2px rgba(0,0,0,0.4)"
+                  lineHeight="1.3"
                 >
                   {location}
                 </Text>
@@ -218,9 +225,10 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
                 lineHeight="1.5"
                 mt="2"
                 textShadow="0 1px 2px rgba(0,0,0,0.3)"
+                lineClamp={descriptionLines}
               >
-                {description.length > 200
-                  ? `${description.substring(0, 200)}...`
+                {description.length > 180
+                  ? `${description.substring(0, 175)}...`
                   : description}
               </Text>
             )}
