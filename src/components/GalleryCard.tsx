@@ -1,130 +1,39 @@
 /**
- * GalleryCard - Displays gallery information in a card format
+ * GalleryCard - Displays gallery information as an image card with overlay text
  */
 
 import { GalleryItem } from "@/pages/Gallery";
-import {
-  Box,
-  Heading,
-  Text,
-  HStack,
-  VStack,
-  Image,
-  Button,
-  Icon,
-  Flex,
-} from "@chakra-ui/react";
-import { MdCalendarToday, MdLocationPin } from "react-icons/md";
+import { Box, Heading, Text, Image, Icon, HStack } from "@chakra-ui/react";
+import { MdCalendarToday } from "react-icons/md";
 import { LuExternalLink } from "react-icons/lu";
-import { useState, useEffect } from "react";
 
 interface GalleryCardProps {
   item: GalleryItem;
 }
 
 export const GalleryCard = ({ item }: GalleryCardProps) => {
-  const {
-    title,
-    link,
-    thumbnailUrl,
-    year,
-    startDate,
-    endDate,
-    location,
-    description,
-  } = item;
+  const { title, link, thumbnailUrl, year, startDate, endDate } = item;
   const displayTitle = `${year} ${title}`;
 
-  const [isLargeScreen, setIsLargeScreen] = useState(false);
-
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsLargeScreen(window.innerWidth >= 1024);
-    };
-    checkScreenSize();
-    window.addEventListener("resize", checkScreenSize);
-    return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
-
-  const formatDateTime = (dateString: string) => {
+  const formatDate = (dateString?: string) => {
     if (!dateString) return "";
     const date = new Date(dateString);
-    const dateStr = date.toLocaleDateString("en-US", {
-      weekday: "short",
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
       year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-    const timeStr = date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-    return `${dateStr} at ${timeStr}`;
-  };
-
-  const formatTimeOnly = (dateString: string) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
     });
   };
 
-  const isSameDay = (date1: string, date2: string) => {
-    if (!date1 || !date2) return false;
-    const d1 = new Date(date1);
-    const d2 = new Date(date2);
-    return (
-      d1.getFullYear() === d2.getFullYear() &&
-      d1.getMonth() === d2.getMonth() &&
-      d1.getDate() === d2.getDate()
-    );
-  };
-
-  const formatDateRange = (
-    startDate: string,
-    endDate: string,
-    compact: boolean = false,
-  ) => {
-    if (!startDate || !endDate) return "";
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-
-    if (compact) {
-      // More compact format for large screens
-      const startDateStr = start.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      });
-      const endDateStr = end.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      });
-      const startTime = formatTimeOnly(startDate);
-      const endTime = formatTimeOnly(endDate);
-      return `${startDateStr}-${endDateStr} ${startTime}-${endTime}`;
+  const formatDateDisplay = () => {
+    if (!startDate) return "";
+    const start = formatDate(startDate);
+    if (endDate) {
+      const end = formatDate(endDate);
+      if (start === end) return start;
+      return `${start} - ${end}`;
     }
-
-    const startDateStr = start.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-    });
-    const endDateOptions: Intl.DateTimeFormatOptions = {
-      month: "short",
-      day: "numeric",
-    };
-    if (start.getFullYear() !== end.getFullYear()) {
-      endDateOptions.year = "numeric";
-    }
-    const endDateStr = end.toLocaleDateString("en-US", endDateOptions);
-
-    const startTime = formatTimeOnly(startDate);
-    const endTime = formatTimeOnly(endDate);
-
-    return `${startDateStr} - ${endDateStr} (${startTime} - ${endTime})`;
+    return start;
   };
 
   const handleGalleryClick = () => {
@@ -134,10 +43,13 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
   return (
     <Box
       width="100%"
-      height="550px"
-      display="flex"
-      flexDirection="column"
+      /* 3:2 aspect ratio to show full image (2048x1365) */
+      paddingBottom="66.67%"
+      position="relative"
       borderRadius="xl"
+      overflow="hidden"
+      cursor="pointer"
+      onClick={handleGalleryClick}
       boxShadow="0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
       transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
       _hover={{
@@ -145,170 +57,80 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
           "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
         transform: "translateY(-4px)",
       }}
-      cursor="pointer"
-      onClick={handleGalleryClick}
-      backgroundColor="white"
-      border="1px solid"
-      borderColor="gray.100"
-      overflow="hidden"
-      position="relative"
     >
-      {/* Image Section */}
-      {thumbnailUrl && (
-        <Box position="relative" height="200px" overflow="hidden">
-          <Image
-            src={thumbnailUrl}
-            alt={`${displayTitle} gallery thumbnail`}
-            objectFit="cover"
-            width="100%"
-            height="100%"
-            transition="transform 0.3s ease"
-            _groupHover={{ transform: "scale(1.05)" }}
-          />
-          {/* Gradient overlay for better text readability */}
-          <Box
-            position="absolute"
-            top="0"
-            left="0"
-            right="0"
-            bottom="0"
-            background="linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 100%)"
-          />
-        </Box>
-      )}
+      {/* Background Image */}
+      <Image
+        src={thumbnailUrl}
+        alt={`${displayTitle} gallery`}
+        position="absolute"
+        top="0"
+        left="0"
+        width="100%"
+        height="100%"
+        objectFit="cover"
+      />
 
-      {/* Content Section */}
+      {/* Dark gradient overlay - heavier at bottom for text readability */}
       <Box
-        p={{ base: "4", md: "6" }}
-        flex="1"
-        display="flex"
-        flexDirection="column"
+        position="absolute"
+        top="0"
+        left="0"
+        right="0"
+        bottom="0"
+        background="linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.6) 100%)"
+        transition="background 0.3s ease"
+        _groupHover={{
+          background:
+            "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.55) 100%)",
+        }}
+      />
+
+      {/* External link icon - top right */}
+      <Box position="absolute" top="3" right="3">
+        <Icon as={LuExternalLink} color="white" boxSize="5" opacity={0.8} />
+      </Box>
+
+      {/* Text content - bottom */}
+      <Box
+        position="absolute"
+        bottom="0"
+        left="0"
+        right="0"
+        p={{ base: "4", md: "5" }}
       >
-        {/* Title */}
-        <Flex justify="space-between" align="start" mb="3" gap="2">
-          <Box flex="1" minWidth="0">
-            <Heading
-              size={{ base: "md", md: "lg" }}
-              color="goc.dark_blue"
-              fontFamily="Poppins"
-              fontWeight="600"
-              lineHeight="1.3"
-              overflow="hidden"
-              textOverflow="ellipsis"
-              whiteSpace="nowrap"
-            >
-              {displayTitle}
-            </Heading>
-          </Box>
-        </Flex>
-
-        {/* Middle Content Section */}
-        <Box
-          height="180px"
-          display="flex"
-          flexDirection="column"
+        <Heading
+          size={{ base: "md", md: "lg" }}
+          color="white"
+          fontFamily="Poppins"
+          fontWeight="600"
+          lineHeight="1.3"
+          mb="1"
+          textShadow="0 1px 3px rgba(0,0,0,0.4)"
           overflow="hidden"
+          textOverflow="ellipsis"
+          whiteSpace="nowrap"
         >
-          {/* Date and Time */}
-          <VStack align="start" gap="2" mb="4">
-            {startDate && (
-              <HStack gap="2" color="gray.600" align="start">
-                <Icon
-                  as={MdCalendarToday}
-                  color="goc.blue"
-                  boxSize="4"
-                  flexShrink={0}
-                  mt="0.5"
-                />
-                <Text
-                  fontSize="sm"
-                  fontWeight="500"
-                  wordBreak="break-word"
-                  overflow="hidden"
-                  style={
-                    {
-                      display: "-webkit-box",
-                      WebkitLineClamp: isLargeScreen ? 1 : 2,
-                      WebkitBoxOrient: "vertical",
-                    } as React.CSSProperties
-                  }
-                >
-                  {endDate && isSameDay(startDate, endDate)
-                    ? formatDateTime(startDate)
-                    : endDate
-                      ? formatDateRange(startDate, endDate, isLargeScreen)
-                      : formatDateTime(startDate)}
-                </Text>
-              </HStack>
-            )}
-          </VStack>
+          {displayTitle}
+        </Heading>
 
-          {/* Location */}
-          {location && (
-            <HStack gap="2" mb="4" color="gray.600" align="start">
-              <Icon
-                as={MdLocationPin}
-                color="goc.blue"
-                boxSize="4"
-                flexShrink={0}
-                mt="0.5"
-              />
-              <Text fontSize="sm" fontWeight="500">
-                {location.length > 35
-                  ? `${location.substring(0, 35)}...`
-                  : location}
-              </Text>
-            </HStack>
-          )}
-
-          {/* Description */}
-          {description && (
+        {startDate && (
+          <HStack gap="1.5">
+            <Icon
+              as={MdCalendarToday}
+              color="whiteAlpha.900"
+              boxSize="3.5"
+              flexShrink={0}
+            />
             <Text
               fontSize="sm"
-              color="gray.700"
-              lineHeight="1.5"
-              mb="4"
-              height="60px"
-              maxHeight="60px"
-              overflow="hidden"
+              color="whiteAlpha.900"
+              fontWeight="500"
+              textShadow="0 1px 2px rgba(0,0,0,0.4)"
             >
-              {description.length > 120
-                ? `${description.substring(0, 120)}...`
-                : description}
+              {formatDateDisplay()}
             </Text>
-          )}
-        </Box>
-
-        {/* Divider */}
-        <Box height="1px" backgroundColor="gray.200" mb="4" />
-
-        {/* Action Button */}
-        <Button
-          size="md"
-          width="100%"
-          backgroundColor="goc.blue"
-          color="white"
-          borderRadius="lg"
-          fontWeight="600"
-          fontSize="sm"
-          py="6"
-          transition="all 0.2s ease"
-          _hover={{
-            backgroundColor: "goc.dark_blue",
-            transform: "translateY(-1px)",
-            boxShadow: "0 4px 12px rgba(51, 102, 204, 0.3)",
-          }}
-          _active={{
-            transform: "translateY(0)",
-          }}
-          onClick={(e) => {
-            e.stopPropagation();
-            handleGalleryClick();
-          }}
-        >
-          View Gallery
-          <Icon as={LuExternalLink} boxSize="4" ml="2" />
-        </Button>
+          </HStack>
+        )}
       </Box>
     </Box>
   );
