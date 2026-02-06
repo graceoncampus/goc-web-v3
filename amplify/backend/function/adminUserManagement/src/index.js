@@ -42,8 +42,20 @@ exports.handler = async (event) => {
     };
   }
 
-  const path = event.path || event.rawPath || "";
-  const method = event.httpMethod || event.requestContext?.http?.method;
+  // Get path from various possible locations in the event
+  const path =
+    event.path ||
+    event.rawPath ||
+    event.resource ||
+    event.requestContext?.resourcePath ||
+    "";
+  const method =
+    event.httpMethod ||
+    event.requestContext?.http?.method ||
+    event.requestContext?.httpMethod ||
+    "GET";
+
+  console.log(`Resolved path: ${path}, method: ${method}`);
 
   try {
     // Parse body if present

@@ -551,22 +551,6 @@ input UpdateGOCEventsInput {
   price: Float
   startDate: String
   title: String
-<<<<<<< HEAD
-}
-
-input UpdateRecurringEventInput {
-  id: ID!
-  name: String
-  signupLink: String
-  signupDeadline: String
-  description: String
-  time: String
-  location: String
-  imageLink: String
-  galleryLink: String
-  addToGoogleCalendar: Boolean
-=======
->>>>>>> @{-1}
 }
 
 input UpdateMinistryTeamInput {
