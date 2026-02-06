@@ -127,7 +127,7 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
         left="0"
         right="0"
         bottom="0"
-        background="linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.6) 100%)"
+        background="linear-gradient(to bottom, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.75) 100%)"
         pointerEvents="none"
       />
 
@@ -151,8 +151,8 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
         left="0"
         right="0"
         bottom="0"
-        background="linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.35) 100%)"
-        opacity={expanded ? 0 : undefined}
+        background="linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.25) 100%)"
+        opacity={0}
         transition="opacity 0.3s ease"
         className="gallery-hover-overlay"
         style={{ opacity: expanded ? 0 : undefined }}
