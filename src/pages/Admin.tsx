@@ -9,7 +9,10 @@ import {
   Badge,
   Flex,
   Spinner,
+  Input,
 } from "@chakra-ui/react";
+import { InputGroup } from "@/components/ui/input-group";
+import { LuSearch } from "react-icons/lu";
 import { NavbarActiveKey } from "@/components/Navbar";
 import { LoginTemplate } from "@/layouts/LoginTemplate";
 import { fetchAuthSession } from "aws-amplify/auth";
@@ -40,6 +43,19 @@ const AdminBody = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [usersLoading, setUsersLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter users based on search query
+  const filteredUsers = users.filter((user) => {
+    const query = searchQuery.toLowerCase();
+    return (
+      user.email.toLowerCase().includes(query) ||
+      user.name.toLowerCase().includes(query) ||
+      user.familyName.toLowerCase().includes(query) ||
+      user.username.toLowerCase().includes(query) ||
+      user.groups.some((group) => group.toLowerCase().includes(query))
+    );
+  });
 
   // Check if user is admin
   useEffect(() => {
@@ -140,11 +156,22 @@ const AdminBody = () => {
   }
 
   return (
-    <Box width="750px" height="400px">
+    <Box width="750px" height="450px">
       <VStack gap="1rem" align="center" height="100%">
         <Heading as="h2" fontSize="2xl">
           ADMIN - USER MANAGEMENT
         </Heading>
+
+        {/* Search Bar */}
+        <InputGroup width="100%" startElement={<LuSearch />}>
+          <Input
+            placeholder="Search by name, email, or group..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            bg="white"
+            borderColor="gray.300"
+          />
+        </InputGroup>
 
         <Box
           width="100%"
@@ -164,9 +191,9 @@ const AdminBody = () => {
             <Text color="red.500" textAlign="center">
               Error: {error}
             </Text>
-          ) : users.length === 0 ? (
+          ) : filteredUsers.length === 0 ? (
             <Text textAlign="center" color="gray.500">
-              No users found
+              {users.length === 0 ? "No users found" : "No matching users"}
             </Text>
           ) : (
             <Table.Root size="sm">
@@ -179,7 +206,7 @@ const AdminBody = () => {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {users.map((user) => (
+                {filteredUsers.map((user) => (
                   <Table.Row key={user.username}>
                     <Table.Cell whiteSpace="nowrap">
                       {user.name} {user.familyName}
@@ -220,7 +247,9 @@ const AdminBody = () => {
         </Box>
 
         <Text fontSize="sm" color="gray.500">
-          Total users: {users.length}
+          {searchQuery
+            ? `Showing ${filteredUsers.length} of ${users.length} users`
+            : `Total users: ${users.length}`}
         </Text>
       </VStack>
     </Box>
