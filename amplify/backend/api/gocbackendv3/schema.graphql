@@ -143,6 +143,8 @@ type GOCEvents {
   price: Float!
   startDate: String!
   title: String!
+  active: Boolean
+  galleryLink: String
 }
 
 type GOCEventsConnection {
@@ -551,7 +553,8 @@ input UpdateGOCEventsInput {
   price: Float
   startDate: String
   title: String
-<<<<<<< HEAD
+  active: Boolean
+  galleryLink: String
 }
 
 input UpdateRecurringEventInput {
@@ -565,8 +568,6 @@ input UpdateRecurringEventInput {
   imageLink: String
   galleryLink: String
   addToGoogleCalendar: Boolean
-=======
->>>>>>> @{-1}
 }
 
 input UpdateMinistryTeamInput {
