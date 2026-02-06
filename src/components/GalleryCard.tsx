@@ -241,7 +241,8 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
           fontSize="xs"
           fontWeight="500"
           opacity={0.9}
-          _hover={{ opacity: 1, backgroundColor: "whiteAlpha.200" }}
+          backgroundColor={{ base: "whiteAlpha.300", md: "transparent" }}
+          _hover={{ opacity: 1, backgroundColor: "whiteAlpha.300" }}
           onClick={handleMoreInfo}
           transition="all 0.2s ease"
           borderRadius="full"
