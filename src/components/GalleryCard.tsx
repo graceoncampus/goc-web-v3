@@ -3,17 +3,38 @@
  */
 
 import { GalleryItem } from "@/pages/Gallery";
-import { Box, Heading, Text, Image, Icon, HStack } from "@chakra-ui/react";
-import { MdCalendarToday } from "react-icons/md";
+import {
+  Box,
+  Heading,
+  Text,
+  Image,
+  Icon,
+  HStack,
+  Button,
+} from "@chakra-ui/react";
+import { MdCalendarToday, MdLocationPin, MdInfoOutline } from "react-icons/md";
 import { LuExternalLink } from "react-icons/lu";
+import { useState } from "react";
 
 interface GalleryCardProps {
   item: GalleryItem;
 }
 
 export const GalleryCard = ({ item }: GalleryCardProps) => {
-  const { title, link, thumbnailUrl, year, startDate, endDate } = item;
+  const {
+    title,
+    link,
+    thumbnailUrl,
+    year,
+    startDate,
+    endDate,
+    location,
+    description,
+  } = item;
   const displayTitle = `${year} ${title}`;
+  const [expanded, setExpanded] = useState(false);
+
+  const hasDetails = !!(location || description);
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return "";
@@ -38,6 +59,11 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
 
   const handleGalleryClick = () => {
     window.open(link, "_blank", "noopener,noreferrer");
+  };
+
+  const handleMoreInfo = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setExpanded((prev) => !prev);
   };
 
   return (
@@ -74,14 +100,19 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
         objectFit="cover"
       />
 
-      {/* Dark gradient overlay - heavier at bottom for text readability */}
+      {/* Dark gradient overlay - extends when expanded */}
       <Box
         position="absolute"
         top="0"
         left="0"
         right="0"
         bottom="0"
-        background="linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.6) 100%)"
+        background={
+          expanded
+            ? "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0.75) 100%)"
+            : "linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.6) 100%)"
+        }
+        transition="background 0.4s ease"
       />
       {/* Hover overlay - darkens bottom on hover */}
       <Box
@@ -91,9 +122,10 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
         right="0"
         bottom="0"
         background="linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.35) 100%)"
-        opacity={0}
+        opacity={expanded ? 0 : undefined}
         transition="opacity 0.3s ease"
         className="gallery-hover-overlay"
+        style={{ opacity: expanded ? 0 : undefined }}
       />
 
       {/* External link icon - top right */}
@@ -101,48 +133,124 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
         <Icon as={LuExternalLink} color="white" boxSize="5" opacity={0.8} />
       </Box>
 
-      {/* Text content - bottom */}
+      {/* Text content container - fills card */}
       <Box
         position="absolute"
-        bottom="0"
+        top="0"
         left="0"
         right="0"
+        bottom="0"
+        display="flex"
+        flexDirection="column"
         p={{ base: "4", md: "5" }}
+        pointerEvents="none"
       >
-        <Heading
-          size={{ base: "md", md: "lg" }}
-          color="white"
-          fontFamily="Poppins"
-          fontWeight="600"
-          lineHeight="1.3"
-          mb="1"
-          textShadow="0 1px 3px rgba(0,0,0,0.4)"
-          overflow="hidden"
-          textOverflow="ellipsis"
-          whiteSpace="nowrap"
+        {/* Inner content - slides from bottom to top */}
+        <Box
+          marginTop={expanded ? "0" : "auto"}
+          transition="margin 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
+          pointerEvents="auto"
         >
-          {displayTitle}
-        </Heading>
+          <Heading
+            size={{ base: "md", md: "lg" }}
+            color="white"
+            fontFamily="Poppins"
+            fontWeight="600"
+            lineHeight="1.3"
+            mb="1"
+            textShadow="0 1px 3px rgba(0,0,0,0.4)"
+            overflow="hidden"
+            textOverflow="ellipsis"
+            whiteSpace="nowrap"
+          >
+            {displayTitle}
+          </Heading>
 
-        {startDate && (
-          <HStack gap="1.5">
-            <Icon
-              as={MdCalendarToday}
-              color="whiteAlpha.900"
-              boxSize="3.5"
-              flexShrink={0}
-            />
-            <Text
-              fontSize="sm"
-              color="whiteAlpha.900"
-              fontWeight="500"
-              textShadow="0 1px 2px rgba(0,0,0,0.4)"
-            >
-              {formatDateDisplay()}
-            </Text>
-          </HStack>
-        )}
+          {startDate && (
+            <HStack gap="1.5" mb={expanded ? "3" : "0"}>
+              <Icon
+                as={MdCalendarToday}
+                color="whiteAlpha.900"
+                boxSize="3.5"
+                flexShrink={0}
+              />
+              <Text
+                fontSize="sm"
+                color="whiteAlpha.900"
+                fontWeight="500"
+                textShadow="0 1px 2px rgba(0,0,0,0.4)"
+              >
+                {formatDateDisplay()}
+              </Text>
+            </HStack>
+          )}
+
+          {/* Expanded details */}
+          <Box
+            overflow="hidden"
+            maxHeight={expanded ? "300px" : "0px"}
+            opacity={expanded ? 1 : 0}
+            transition="all 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
+          >
+            {location && (
+              <HStack gap="1.5" mb="2">
+                <Icon
+                  as={MdLocationPin}
+                  color="whiteAlpha.900"
+                  boxSize="3.5"
+                  flexShrink={0}
+                />
+                <Text
+                  fontSize="sm"
+                  color="whiteAlpha.900"
+                  fontWeight="500"
+                  textShadow="0 1px 2px rgba(0,0,0,0.4)"
+                >
+                  {location}
+                </Text>
+              </HStack>
+            )}
+
+            {description && (
+              <Text
+                fontSize="sm"
+                color="whiteAlpha.800"
+                lineHeight="1.5"
+                mt="2"
+                textShadow="0 1px 2px rgba(0,0,0,0.3)"
+              >
+                {description.length > 200
+                  ? `${description.substring(0, 200)}...`
+                  : description}
+              </Text>
+            )}
+          </Box>
+          {/* Close inner content wrapper */}
+        </Box>
       </Box>
+
+      {/* More Info button - bottom right */}
+      {hasDetails && (
+        <Button
+          position="absolute"
+          bottom="3"
+          right="3"
+          size="xs"
+          variant="ghost"
+          color="white"
+          fontSize="xs"
+          fontWeight="500"
+          opacity={0.9}
+          _hover={{ opacity: 1, backgroundColor: "whiteAlpha.200" }}
+          onClick={handleMoreInfo}
+          transition="all 0.2s ease"
+          borderRadius="full"
+          px="3"
+        >
+          <Icon as={MdInfoOutline} boxSize="3.5" mr="1" />
+          {expanded ? "Less" : "More Info"}
+        </Button>
+      )}
     </Box>
   );
 };
