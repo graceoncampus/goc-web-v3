@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { MdCalendarToday, MdLocationPin, MdInfoOutline } from "react-icons/md";
 import { LuExternalLink } from "react-icons/lu";
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 
 interface GalleryCardProps {
   item: GalleryItem;
@@ -33,6 +33,9 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
   } = item;
   const displayTitle = `${year} ${title}`;
   const [expanded, setExpanded] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
+  const collapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const expandTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const hasDetails = !!(location || description);
 
@@ -65,10 +68,23 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
     window.open(link, "_blank", "noopener,noreferrer");
   };
 
-  const handleMoreInfo = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setExpanded((prev) => !prev);
-  };
+  const handleMoreInfo = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (!expanded) {
+        // Expanding: slide up first, then fade in details after slide starts
+        if (collapseTimerRef.current) clearTimeout(collapseTimerRef.current);
+        setExpanded(true);
+        expandTimerRef.current = setTimeout(() => setShowDetails(true), 100);
+      } else {
+        // Collapsing: hide details instantly, then slide down
+        if (expandTimerRef.current) clearTimeout(expandTimerRef.current);
+        setShowDetails(false);
+        collapseTimerRef.current = setTimeout(() => setExpanded(false), 10);
+      }
+    },
+    [expanded],
+  );
 
   return (
     <Box
@@ -104,21 +120,31 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
         objectFit="cover"
       />
 
-      {/* Dark gradient overlay - extends when expanded */}
+      {/* Default bottom gradient - always present, matches original */}
       <Box
         position="absolute"
         top="0"
         left="0"
         right="0"
         bottom="0"
-        background={
-          expanded
-            ? "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0.75) 100%)"
-            : "linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.6) 100%)"
-        }
-        transition="background 0.4s ease"
+        background="linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.6) 100%)"
+        pointerEvents="none"
       />
-      {/* Hover overlay - darkens bottom on hover */}
+
+      {/* Expanded gradient - fades in when details are shown */}
+      <Box
+        position="absolute"
+        top="0"
+        left="0"
+        right="0"
+        bottom="0"
+        background="linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.45) 30%, rgba(0,0,0,0.7) 100%)"
+        opacity={expanded ? 1 : 0}
+        transition="opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)"
+        pointerEvents="none"
+      />
+
+      {/* Hover overlay - darkens bottom on hover (non-expanded only) */}
       <Box
         position="absolute"
         top="0"
@@ -137,23 +163,25 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
         <Icon as={LuExternalLink} color="white" boxSize="5" opacity={0.8} />
       </Box>
 
-      {/* Text content container - fills card */}
+      {/* Text content container - fills card, content anchored to bottom */}
       <Box
         position="absolute"
-        top="0"
         left="0"
         right="0"
         bottom="0"
+        top="0"
+        pointerEvents="none"
         display="flex"
         flexDirection="column"
-        p={{ base: "4", md: "5" }}
-        pointerEvents="none"
+        justifyContent="flex-end"
       >
-        {/* Inner content - slides from bottom to top */}
+        {/* Inner content wrapper - capped to card height */}
         <Box
-          marginTop={expanded ? "0" : "auto"}
-          transition="margin 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
+          position="relative"
+          p={{ base: "4", md: "5" }}
           pointerEvents="auto"
+          maxHeight="100%"
+          overflow="hidden"
         >
           <Heading
             size={{ base: "md", md: "lg" }}
@@ -171,7 +199,7 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
           </Heading>
 
           {startDate && (
-            <HStack gap="1.5" mb={expanded ? "3" : "0"}>
+            <HStack gap="1.5">
               <Icon
                 as={MdCalendarToday}
                 color="whiteAlpha.900"
@@ -189,51 +217,60 @@ export const GalleryCard = ({ item }: GalleryCardProps) => {
             </HStack>
           )}
 
-          {/* Expanded details */}
+          {/* Expanded details - grid trick for smooth height animation */}
           <Box
-            overflow="hidden"
-            maxHeight={expanded ? "300px" : "0px"}
-            opacity={expanded ? 1 : 0}
-            transition="all 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
-            pb={expanded ? "7" : "0"}
+            display="grid"
+            gridTemplateRows={expanded ? "1fr" : "0fr"}
+            transition="grid-template-rows 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)"
           >
-            {location && (
-              <HStack gap="1.5" mb="2" alignItems="flex-start">
-                <Icon
-                  as={MdLocationPin}
-                  color="whiteAlpha.900"
-                  boxSize="3.5"
-                  flexShrink={0}
-                  mt="0.5"
-                />
-                <Text
-                  fontSize="sm"
-                  color="whiteAlpha.900"
-                  fontWeight="500"
-                  textShadow="0 1px 2px rgba(0,0,0,0.4)"
-                  lineHeight="1.3"
-                >
-                  {location}
-                </Text>
-              </HStack>
-            )}
-
-            {description && (
-              <Text
-                fontSize="sm"
-                color="whiteAlpha.800"
-                lineHeight="1.5"
-                mt="2"
-                textShadow="0 1px 2px rgba(0,0,0,0.3)"
-                lineClamp={descriptionLines}
+            <Box overflow="hidden">
+              <Box
+                pt="3"
+                pb="7"
+                opacity={showDetails ? 1 : 0}
+                transition={
+                  showDetails ? "opacity 0.25s ease 0.05s" : "opacity 0s ease"
+                }
               >
-                {description.length > 180
-                  ? `${description.substring(0, 175)}...`
-                  : description}
-              </Text>
-            )}
+                {location && (
+                  <HStack gap="1.5" mb="2" alignItems="flex-start">
+                    <Icon
+                      as={MdLocationPin}
+                      color="whiteAlpha.900"
+                      boxSize="3.5"
+                      flexShrink={0}
+                      mt="0.5"
+                    />
+                    <Text
+                      fontSize="sm"
+                      color="whiteAlpha.900"
+                      fontWeight="500"
+                      textShadow="0 1px 2px rgba(0,0,0,0.4)"
+                      lineHeight="1.3"
+                    >
+                      {location}
+                    </Text>
+                  </HStack>
+                )}
+
+                {description && (
+                  <Text
+                    fontSize="sm"
+                    color="whiteAlpha.800"
+                    lineHeight="1.5"
+                    mt="2"
+                    textShadow="0 1px 2px rgba(0,0,0,0.3)"
+                    lineClamp={descriptionLines}
+                  >
+                    {description.length > 180
+                      ? `${description.substring(0, 175)}...`
+                      : description}
+                  </Text>
+                )}
+              </Box>
+              {/* Close expanded details */}
+            </Box>
           </Box>
-          {/* Close inner content wrapper */}
         </Box>
       </Box>
 
