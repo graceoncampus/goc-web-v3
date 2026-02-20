@@ -201,7 +201,6 @@ export const RecurringEventCard = ({
               fontFamily="Poppins"
               fontWeight="600"
               mb="2"
-              overflow="hidden"
               textOverflow="ellipsis"
               whiteSpace="nowrap"
             >
