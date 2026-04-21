@@ -15,6 +15,7 @@ import {
   useDisclosure,
   CloseButton,
   Checkbox,
+  Group,
 } from "@chakra-ui/react";
 import {
   MdLocationPin,
@@ -299,37 +300,38 @@ export const EventCard = ({
           <Box flex="1" minHeight={0} overflow="hidden">
             {/* Title + badge */}
             <Flex justify="space-between" align="start" mb="2" gap="2">
-              <Heading
-                size={{ base: "md", md: "lg" }}
-                color="goc.dark_blue"
-                fontFamily="Poppins"
-                fontWeight="600"
-                textOverflow="ellipsis"
-                whiteSpace="nowrap"
-                overflow="hidden"
-                flex="1"
-                minWidth={0}
-              >
-                {event.title}
-              </Heading>
-              {inATeam && (
-                <HStack gap="2">
-                  <Button
-                    size="sm"
-                    variant="outline"
+              <Flex mb="2" gap="4">
+                <Heading
+                  marginY="auto"
+                  size={{ base: "md", md: "lg" }}
+                  color="goc.dark_blue"
+                  fontFamily="Poppins"
+                  fontWeight="600"
+                  textOverflow="ellipsis"
+                  whiteSpace="nowrap"
+                  overflow="hidden"
+                  flex="1"
+                  minWidth={0}
+                >
+                  {event.title}
+                </Heading>
+                {inATeam && (
+                  <Icon
+                    marginY="auto"
                     color="goc.blue"
-                    borderColor="goc.blue"
+                    _hover={{ color: "goc.dark_blue" }}
+                    as={MdEdit}
                     onClick={(e) => {
                       e.stopPropagation();
                       onEditOpen();
                     }}
-                  >
-                    <Icon as={MdEdit} boxSize="3.5" />
-                  </Button>
-                </HStack>
-              )}
+                  />
+                )}
+              </Flex>
+
               {event.kind === "event" && event.active !== true && (
                 <Badge
+                  marginY="auto"
                   bgColor="red.500"
                   variant="solid"
                   fontSize="xs"
