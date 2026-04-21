@@ -1,10 +1,6 @@
-/**
- * EventCardList - Renders a list of EventCard components
- */
-
 import { EventCard } from "@/components/EventCard";
 import { Event } from "@/pages/Events";
-import { Grid, Heading, Stack, Text } from "@chakra-ui/react";
+import { Stack, Text } from "@chakra-ui/react";
 import GOCSpinner from "./GOCSpinner";
 
 interface EventListProps {
@@ -28,23 +24,15 @@ export const EventList = ({ events, loading, inATeam, onEventUpdate }: EventList
   }
 
   return (
-    <Grid
-      templateColumns={{
-        base: "1fr",
-        md: "repeat(2, 1fr)",
-        lg: "repeat(3, 1fr)",
-      }}
-      gap="6"
-      width="100%"
-    >
-       {events.map((event) => (
-         <EventCard 
-           key={event.id} 
-           event={event} 
-           inATeam={inATeam}
-           onEventUpdate={onEventUpdate}
-         />
-       ))}
-    </Grid>
+    <Stack gap="1.5rem" width="100%">
+      {events.map((event) => (
+        <EventCard
+          key={event.id}
+          event={{ kind: "event", ...event, price: Number(event.price) }}
+          inATeam={inATeam}
+          onEventUpdate={onEventUpdate}
+        />
+      ))}
+    </Stack>
   );
 };

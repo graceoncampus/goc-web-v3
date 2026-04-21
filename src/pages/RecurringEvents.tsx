@@ -20,7 +20,20 @@ import { BannerTemplate } from "@/layouts/BannerTemplate";
 import { MdAdd } from "react-icons/md";
 import { checkInATeam } from "@/auth/CheckUser";
 import { createRecurringEvent } from "@/graphql/mutations";
-import { RecurringEventCard, RecurringEvent } from "@/components/RecurringEventCard";
+import { EventCard } from "@/components/EventCard";
+
+interface RecurringEvent {
+  id: string;
+  name: string;
+  signupLink?: string;
+  signupDeadline?: string;
+  description: string;
+  time: string;
+  location: string;
+  imageLink: string;
+  galleryLink?: string;
+  addToGoogleCalendar: boolean;
+}
 
 const client = generateClient();
 
@@ -410,9 +423,9 @@ const EventsBody: React.FC = () => {
             </Box>
           ) : (
             events.map((event) => (
-              <RecurringEventCard
+              <EventCard
                 key={event.id}
-                event={event}
+                event={{ kind: "recurring", ...event, title: event.name }}
                 inATeam={inATeam}
                 onEventUpdate={fetchEvents}
               />

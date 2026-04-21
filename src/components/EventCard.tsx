@@ -1,9 +1,3 @@
-/**
- * EventCard - Displays event information in a card format
- */
-
-import { Event } from "@/pages/Events";
-import { useNavigate } from "react-router-dom";
 import {
   Box,
   Heading,
@@ -20,6 +14,7 @@ import {
   Textarea,
   useDisclosure,
   CloseButton,
+  Checkbox,
 } from "@chakra-ui/react";
 import {
   MdLocationPin,
@@ -28,11 +23,16 @@ import {
   MdArrowForward,
   MdEdit,
   MdDelete,
-  MdAttachMoney,
+  MdLink,
 } from "react-icons/md";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { generateClient } from "aws-amplify/api";
-import { updateGOCEvents, deleteGOCEvents } from "@/graphql/mutations";
+import {
+  updateGOCEvents,
+  deleteGOCEvents,
+  updateRecurringEvent,
+  deleteRecurringEvent,
+} from "@/graphql/mutations";
 import {
   DialogRoot,
   DialogContent,
@@ -50,8 +50,38 @@ import {
   pstToUTC,
 } from "@/utils/timezone";
 
+export interface RegularCardEvent {
+  kind: "event";
+  id: string;
+  title: string;
+  startDate: string;
+  endDate?: string;
+  price?: number;
+  location: string;
+  description: string;
+  imageLink: string;
+  active?: boolean;
+  galleryLink?: string;
+}
+
+export interface RecurringCardEvent {
+  kind: "recurring";
+  id: string;
+  title: string;
+  time: string;
+  location: string;
+  description: string;
+  imageLink: string;
+  galleryLink?: string;
+  signupLink?: string;
+  signupDeadline?: string;
+  addToGoogleCalendar: boolean;
+}
+
+export type CardEvent = RegularCardEvent | RecurringCardEvent;
+
 interface EventCardProps {
-  event: Event;
+  event: CardEvent;
   inATeam: boolean;
   onEventUpdate: () => void;
 }
@@ -61,7 +91,6 @@ export const EventCard = ({
   inATeam,
   onEventUpdate,
 }: EventCardProps) => {
-  const navigate = useNavigate();
   const client = generateClient();
   const {
     open: isEditOpen,
@@ -84,126 +113,110 @@ export const EventCard = ({
     description: event.description,
     location: event.location,
     imageLink: event.imageLink,
-    startDate: event.startDate,
-    endDate: event.endDate,
-    active: event.active,
-    galleryLink: event.galleryLink
+    galleryLink: event.galleryLink ?? "",
+    // event-specific
+    startDate: event.kind === "event" ? event.startDate : "",
+    endDate: event.kind === "event" ? (event.endDate ?? "") : "",
+    active: event.kind === "event" ? (event.active ?? true) : true,
+    // recurring-specific
+    time: event.kind === "recurring" ? event.time : "",
+    signupLink: event.kind === "recurring" ? (event.signupLink ?? "") : "",
+    signupDeadline:
+      event.kind === "recurring" ? (event.signupDeadline ?? "") : "",
+    addToGoogleCalendar:
+      event.kind === "recurring" ? event.addToGoogleCalendar : false,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLargeScreen, setIsLargeScreen] = useState(false);
 
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsLargeScreen(window.innerWidth >= 1024);
-    };
-    checkScreenSize();
-    window.addEventListener("resize", checkScreenSize);
-    return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
+  const formatDateTime = (dateString: string) =>
+    formatDateTimeInPST(dateString);
+  const isSameDay = (d1: string, d2: string) => isSameDayInPST(d1, d2);
 
-  const formatDate = (dateString: string) => {
-    return formatDateInPST(dateString, {
-      weekday: "short",
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
-  const formatTime = (dateString: string) => {
-    return formatTimeInPST(dateString);
-  };
-
-  const formatDateTime = (dateString: string) => {
-    return formatDateTimeInPST(dateString);
-  };
-
-  const isSameDay = (date1: string, date2: string) => {
-    return isSameDayInPST(date1, date2);
-  };
-
-  const formatTimeOnly = (dateString: string) => {
-    return formatTimeInPST(dateString);
-  };
-
-  const formatDateRange = (startDate: string, endDate: string, compact: boolean = false) => {
+  const formatDateRange = (
+    startDate: string,
+    endDate: string,
+    compact = false,
+  ) => {
     if (!startDate || !endDate) return "";
-
     if (compact) {
-      // More compact format for large screens
-      const startDateStr = formatDateInPST(startDate, {
-        month: "short",
-        day: "numeric",
-      });
-      const endDateStr = formatDateInPST(endDate, {
-        month: "short",
-        day: "numeric",
-      });
-      const startTime = formatTimeOnly(startDate);
-      const endTime = formatTimeOnly(endDate);
-      return `${startDateStr}-${endDateStr} ${startTime}-${endTime}`;
+      const s = formatDateInPST(startDate, { month: "short", day: "numeric" });
+      const e = formatDateInPST(endDate, { month: "short", day: "numeric" });
+      return `${s}-${e} ${formatTimeInPST(startDate)}-${formatTimeInPST(endDate)}`;
     }
-
-    const startDateStr = formatDateInPST(startDate, {
-      month: "short",
-      day: "numeric",
-    });
-    
-    // Check if years are different in PST timezone
-    const startYear = new Date(new Date(startDate).toLocaleString("en-US", { timeZone: "America/Los_Angeles" })).getFullYear();
-    const endYear = new Date(new Date(endDate).toLocaleString("en-US", { timeZone: "America/Los_Angeles" })).getFullYear();
-    
-    const endDateOptions: Intl.DateTimeFormatOptions = {
+    const startYear = new Date(
+      new Date(startDate).toLocaleString("en-US", {
+        timeZone: "America/Los_Angeles",
+      }),
+    ).getFullYear();
+    const endYear = new Date(
+      new Date(endDate).toLocaleString("en-US", {
+        timeZone: "America/Los_Angeles",
+      }),
+    ).getFullYear();
+    const endOptions: Intl.DateTimeFormatOptions = {
       month: "short",
       day: "numeric",
     };
-    if (startYear !== endYear) {
-      endDateOptions.year = "numeric";
-    }
-    const endDateStr = formatDateInPST(endDate, endDateOptions);
-
-    const startTime = formatTimeOnly(startDate);
-    const endTime = formatTimeOnly(endDate);
-
-    return `${startDateStr} - ${endDateStr} (${startTime} - ${endTime})`;
+    if (startYear !== endYear) endOptions.year = "numeric";
+    return `${formatDateInPST(startDate, { month: "short", day: "numeric" })} - ${formatDateInPST(endDate, endOptions)} (${formatTimeInPST(startDate)} - ${formatTimeInPST(endDate)})`;
   };
 
-  const handleEventClick = () => {
-    onDetailsOpen();
-  };
+  const timeDisplay =
+    event.kind === "event"
+      ? event.endDate && isSameDay(event.startDate, event.endDate)
+        ? formatDateTime(event.startDate)
+        : event.endDate
+          ? formatDateRange(event.startDate, event.endDate, true)
+          : formatDateTime(event.startDate)
+      : event.time;
+
+  const timeIcon = event.kind === "event" ? MdCalendarToday : MdAccessTime;
 
   const handleEdit = async () => {
     setIsSubmitting(true);
     try {
-      // Convert PST datetime-local values to UTC ISO format for database storage
-      const updateData = {
-        id: event.id,
-        title: editForm.title,
-        description: editForm.description,
-        location: editForm.location,
-        imageLink: editForm.imageLink,
-        active: editForm.active,
-        startDate: editForm.startDate,
-        endDate: editForm.endDate,
-        galleryLink: editForm.galleryLink
-      };
-
-      // If the dates are in datetime-local format (from the input), convert them to UTC
-      // Check if they look like datetime-local format (YYYY-MM-DDTHH:mm)
-      if (editForm.startDate && editForm.startDate.length === 16 && !editForm.startDate.endsWith('Z')) {
-        updateData.startDate = pstToUTC(editForm.startDate);
+      if (event.kind === "event") {
+        const updateData: any = {
+          id: event.id,
+          title: editForm.title,
+          description: editForm.description,
+          location: editForm.location,
+          imageLink: editForm.imageLink,
+          active: editForm.active,
+          startDate: editForm.startDate,
+          endDate: editForm.endDate || undefined,
+          galleryLink: editForm.galleryLink || undefined,
+        };
+        if (
+          editForm.startDate?.length === 16 &&
+          !editForm.startDate.endsWith("Z")
+        )
+          updateData.startDate = pstToUTC(editForm.startDate);
+        if (editForm.endDate?.length === 16 && !editForm.endDate.endsWith("Z"))
+          updateData.endDate = pstToUTC(editForm.endDate);
+        await client.graphql({
+          query: updateGOCEvents,
+          variables: { input: updateData },
+        });
+      } else {
+        await client.graphql({
+          query: updateRecurringEvent,
+          variables: {
+            input: {
+              id: event.id,
+              name: editForm.title,
+              description: editForm.description,
+              location: editForm.location,
+              imageLink: editForm.imageLink,
+              time: editForm.time,
+              signupLink: editForm.signupLink || undefined,
+              signupDeadline: editForm.signupDeadline || undefined,
+              galleryLink: editForm.galleryLink || undefined,
+              addToGoogleCalendar: editForm.addToGoogleCalendar,
+            },
+          },
+        });
       }
-      if (editForm.endDate && editForm.endDate.length === 16 && !editForm.endDate.endsWith('Z')) {
-        updateData.endDate = pstToUTC(editForm.endDate);
-      }
-
-      await client.graphql({
-        query: updateGOCEvents,
-        variables: {
-          input: updateData,
-        },
-      });
-      console.log("Event updated successfully");
       onEditClose();
       onEventUpdate();
     } catch (error) {
@@ -216,15 +229,17 @@ export const EventCard = ({
   const handleDelete = async () => {
     setIsSubmitting(true);
     try {
-      await client.graphql({
-        query: deleteGOCEvents,
-        variables: {
-          input: {
-            id: event.id,
-          },
-        },
-      });
-      console.log("Event deleted successfully");
+      if (event.kind === "event") {
+        await client.graphql({
+          query: deleteGOCEvents,
+          variables: { input: { id: event.id } },
+        });
+      } else {
+        await client.graphql({
+          query: deleteRecurringEvent,
+          variables: { input: { id: event.id } },
+        });
+      }
       onDeleteClose();
       onEventUpdate();
     } catch (error) {
@@ -236,30 +251,33 @@ export const EventCard = ({
 
   return (
     <>
+      {/* Horizontal Card */}
       <Box
         width="100%"
-        height="550px"
         display="flex"
-        flexDirection="column"
+        flexDirection={{ base: "column", md: "row" }}
         borderRadius="xl"
-        boxShadow="0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
+        boxShadow="0 2px 4px rgba(0, 0, 0, 0.1)"
         transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
         _hover={{
-          boxShadow:
-            "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-          transform: "translateY(-4px)",
+          boxShadow: "0 8px 16px rgba(0, 0, 0, 0.15)",
+          transform: "translateY(-2px)",
         }}
         cursor="pointer"
-        onClick={handleEventClick}
+        onClick={onDetailsOpen}
         backgroundColor="white"
         border="1px solid"
         borderColor="gray.100"
         overflow="hidden"
-        position="relative"
+        height={{ base: "auto", md: "180px" }}
       >
-        {/* Image Section */}
         {event.imageLink && (
-          <Box position="relative" height="200px" overflow="hidden">
+          <Box
+            width={{ base: "100%", md: "280px" }}
+            height={{ base: "180px", md: "100%" }}
+            flexShrink={0}
+            overflow="hidden"
+          >
             <Image
               src={event.imageLink}
               alt={event.title}
@@ -267,109 +285,114 @@ export const EventCard = ({
               width="100%"
               height="100%"
               transition="transform 0.3s ease"
-              _groupHover={{ transform: "scale(1.05)" }}
-            />
-            {/* Gradient overlay for better text readability */}
-            <Box
-              position="absolute"
-              top="0"
-              left="0"
-              right="0"
-              bottom="0"
-              background="linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 100%)"
             />
           </Box>
         )}
 
-        {/* Content Section */}
-        <Box
-          p={{ base: "4", md: "6" }}
+        <Flex
           flex="1"
-          display="flex"
+          p={{ base: "4", md: "5" }}
           flexDirection="column"
+          justify="space-between"
+          minWidth={0}
         >
-          {/* Title and Status Badge */}
-          <Flex justify="space-between" align="start" mb="3" gap="2">
-            <Box flex="1" minWidth="0">
+          <Box flex="1" minHeight={0} overflow="hidden">
+            {/* Title + badge */}
+            <Flex justify="space-between" align="start" mb="2" gap="2">
               <Heading
                 size={{ base: "md", md: "lg" }}
                 color="goc.dark_blue"
                 fontFamily="Poppins"
                 fontWeight="600"
-                lineHeight="1.3"
-                overflow="hidden"
                 textOverflow="ellipsis"
                 whiteSpace="nowrap"
+                overflow="hidden"
+                flex="1"
+                minWidth={0}
               >
                 {event.title}
               </Heading>
-            </Box>
-            {event.active !== true && (
-              <Badge
-                colorScheme="red"
-                variant="solid"
-                fontSize="xs"
-                px="2"
-                py="1"
-                borderRadius="md"
-              >
-                Inactive
-              </Badge>
-            )}
-          </Flex>
-
-          {/* Middle Content Section */}
-          <Box
-            height="180px"
-            display="flex"
-            flexDirection="column"
-            overflow="hidden"
-          >
-            {/* Date and Time */}
-            <VStack align="start" gap="2" mb="4">
-              {event.startDate && (
-                <HStack gap="2" color="gray.600" align="start">
-                  <Icon as={MdCalendarToday} color="goc.blue" boxSize="4" flexShrink={0} mt="0.5" />
-                  <Text
-                    fontSize="sm"
-                    fontWeight="500"
-                    wordBreak="break-word"
-                    overflow="hidden"
-                    style={{
-                      display: "-webkit-box",
-                      WebkitLineClamp: isLargeScreen ? 1 : 2,
-                      WebkitBoxOrient: "vertical",
-                    } as React.CSSProperties}
+              {inATeam && (
+                <HStack gap="2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    color="goc.blue"
+                    borderColor="goc.blue"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onEditOpen();
+                    }}
                   >
-                    {event.endDate && isSameDay(event.startDate, event.endDate)
-                      ? formatDateTime(event.startDate)
-                      : event.endDate
-                      ? formatDateRange(event.startDate, event.endDate, isLargeScreen)
-                      : formatDateTime(event.startDate)}
-                  </Text>
+                    <Icon as={MdEdit} boxSize="3.5" />
+                  </Button>
                 </HStack>
               )}
-            </VStack>
+              {event.kind === "event" && event.active !== true && (
+                <Badge
+                  bgColor="red.500"
+                  variant="solid"
+                  fontSize="xs"
+                  px="2"
+                  py="1"
+                  borderRadius="md"
+                  flexShrink={0}
+                >
+                  Inactive
+                </Badge>
+              )}
+            </Flex>
 
-            {/* Location */}
-            {event.location && (
-              <HStack gap="2" mb="4" color="gray.600" align="start">
-                <Icon as={MdLocationPin} color="goc.blue" boxSize="4" flexShrink={0} mt="0.5" />
+            {/* Time + Location */}
+            <HStack gap="4" mb="2" overflow="hidden">
+              <HStack
+                gap="1.5"
+                color="gray.600"
+                flexShrink={0}
+                minWidth={0}
+                overflow="hidden"
+              >
+                <Icon
+                  as={timeIcon}
+                  color="goc.blue"
+                  boxSize="4"
+                  flexShrink={0}
+                />
                 <Text
                   fontSize="sm"
                   fontWeight="500"
-                  wordBreak="break-word"
+                  whiteSpace="nowrap"
                   overflow="hidden"
-                  style={{
-                    display: "-webkit-box",
-                    WebkitLineClamp: isLargeScreen ? 1 : 2,
-                    WebkitBoxOrient: "vertical",
-                  } as React.CSSProperties}
+                  textOverflow="ellipsis"
                 >
-                  {event.location}
+                  {timeDisplay}
                 </Text>
               </HStack>
-            )}
+              {event.location && (
+                <HStack
+                  gap="1.5"
+                  color="gray.600"
+                  minWidth={0}
+                  overflow="hidden"
+                >
+                  <Icon
+                    as={MdLocationPin}
+                    color="goc.blue"
+                    boxSize="4"
+                    flexShrink={0}
+                  />
+                  <Text
+                    fontSize="sm"
+                    fontWeight="500"
+                    whiteSpace="nowrap"
+                    overflow="hidden"
+                    textOverflow="ellipsis"
+                  >
+                    {event.location}
+                  </Text>
+                </HStack>
+              )}
+            </HStack>
 
             {/* Description */}
             {event.description && (
@@ -377,69 +400,20 @@ export const EventCard = ({
                 fontSize="sm"
                 color="gray.700"
                 lineHeight="1.5"
-                mb="4"
-                height="60px"
-                maxHeight="60px"
                 overflow="hidden"
+                style={
+                  {
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                  } as React.CSSProperties
+                }
               >
-                {event.description.length > 120
-                  ? `${event.description.substring(0, 120)}...`
-                  : event.description}
+                {event.description}
               </Text>
             )}
           </Box>
-
-          {/* Divider */}
-          <Box height="1px" backgroundColor="gray.200" mb="4" />
-
-          {/* Action Button */}
-          <Button
-            size="md"
-            width="100%"
-            backgroundColor="goc.blue"
-            color="white"
-            borderRadius="lg"
-            fontWeight="600"
-            fontSize="sm"
-            py="6"
-            transition="all 0.2s ease"
-            _hover={{
-              backgroundColor: "goc.dark_blue",
-              transform: "translateY(-1px)",
-              boxShadow: "0 4px 12px rgba(51, 102, 204, 0.3)",
-            }}
-            _active={{
-              transform: "translateY(0)",
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleEventClick();
-            }}
-          >
-            Learn More
-            <Icon as={MdArrowForward} boxSize="4" ml="2" />
-          </Button>
-
-          {/* Admin Actions */}
-          {inATeam && (
-            <Flex gap="2" mt="3">
-              <Button
-                size="sm"
-                variant="outline"
-                color="goc.blue"
-                borderColor="goc.blue"
-                flex="1"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onEditOpen();
-                }}
-              >
-                <Icon as={MdEdit} boxSize="4" mr="1" />
-                Edit
-              </Button>
-            </Flex>
-          )}
-        </Box>
+        </Flex>
       </Box>
 
       {/* Edit Modal */}
@@ -456,9 +430,7 @@ export const EventCard = ({
           alignItems="center"
           justifyContent="center"
           onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              onEditClose();
-            }
+            if (e.target === e.currentTarget) onEditClose();
           }}
         >
           <Box
@@ -472,26 +444,30 @@ export const EventCard = ({
             onClick={(e) => e.stopPropagation()}
           >
             <Flex justify="space-between" align="center" mb="4">
-              <Heading size="md">Edit Event</Heading>
+              <Heading size="md">
+                Edit {event.kind === "event" ? "Event" : "Recurring Event"}
+              </Heading>
               <CloseButton onClick={onEditClose} />
             </Flex>
 
             <Stack gap="4">
               <Box>
                 <Text fontSize="sm" fontWeight="500" mb="2">
-                  Title
+                  {event.kind === "event" ? "Title" : "Name"} *
                 </Text>
                 <Input
                   value={editForm.title}
                   onChange={(e) =>
                     setEditForm({ ...editForm, title: e.target.value })
                   }
-                  placeholder="Event title"
+                  placeholder={
+                    event.kind === "event" ? "Event title" : "Event name"
+                  }
                 />
               </Box>
               <Box>
                 <Text fontSize="sm" fontWeight="500" mb="2">
-                  Description
+                  Description *
                 </Text>
                 <Textarea
                   value={editForm.description}
@@ -502,9 +478,25 @@ export const EventCard = ({
                   rows={3}
                 />
               </Box>
+
+              {event.kind === "recurring" && (
+                <Box>
+                  <Text fontSize="sm" fontWeight="500" mb="2">
+                    Time *
+                  </Text>
+                  <Input
+                    value={editForm.time}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, time: e.target.value })
+                    }
+                    placeholder="e.g., Every Sunday at 10:00 AM"
+                  />
+                </Box>
+              )}
+
               <Box>
                 <Text fontSize="sm" fontWeight="500" mb="2">
-                  Location
+                  Location *
                 </Text>
                 <Input
                   value={editForm.location}
@@ -516,7 +508,7 @@ export const EventCard = ({
               </Box>
               <Box>
                 <Text fontSize="sm" fontWeight="500" mb="2">
-                  Image URL
+                  Image URL *
                 </Text>
                 <Input
                   value={editForm.imageLink}
@@ -526,40 +518,70 @@ export const EventCard = ({
                   placeholder="Image URL"
                 />
               </Box>
-              <HStack gap="4">
-                <Box flex="1">
-                  <Text fontSize="sm" fontWeight="500" mb="2">
-                    Start Date (PST)
-                  </Text>
-                  <Input
-                    type="datetime-local"
-                    value={
-                      editForm.startDate
-                        ? utcToPST(editForm.startDate)
-                        : ""
-                    }
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, startDate: e.target.value })
-                    }
-                  />
-                </Box>
-                <Box flex="1">
-                  <Text fontSize="sm" fontWeight="500" mb="2">
-                    End Date (PST)
-                  </Text>
-                  <Input
-                    type="datetime-local"
-                    value={
-                      editForm.endDate
-                        ? utcToPST(editForm.endDate)
-                        : ""
-                    }
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, endDate: e.target.value })
-                    }
-                  />
-                </Box>
-              </HStack>
+
+              {event.kind === "event" && (
+                <HStack gap="4">
+                  <Box flex="1">
+                    <Text fontSize="sm" fontWeight="500" mb="2">
+                      Start Date (PST)
+                    </Text>
+                    <Input
+                      type="datetime-local"
+                      value={
+                        editForm.startDate ? utcToPST(editForm.startDate) : ""
+                      }
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, startDate: e.target.value })
+                      }
+                    />
+                  </Box>
+                  <Box flex="1">
+                    <Text fontSize="sm" fontWeight="500" mb="2">
+                      End Date (PST)
+                    </Text>
+                    <Input
+                      type="datetime-local"
+                      value={editForm.endDate ? utcToPST(editForm.endDate) : ""}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, endDate: e.target.value })
+                      }
+                    />
+                  </Box>
+                </HStack>
+              )}
+
+              {event.kind === "recurring" && (
+                <>
+                  <Box>
+                    <Text fontSize="sm" fontWeight="500" mb="2">
+                      Signup Link (optional)
+                    </Text>
+                    <Input
+                      value={editForm.signupLink}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, signupLink: e.target.value })
+                      }
+                      placeholder="https://..."
+                    />
+                  </Box>
+                  <Box>
+                    <Text fontSize="sm" fontWeight="500" mb="2">
+                      Signup Deadline (optional)
+                    </Text>
+                    <Input
+                      value={editForm.signupDeadline}
+                      onChange={(e) =>
+                        setEditForm({
+                          ...editForm,
+                          signupDeadline: e.target.value,
+                        })
+                      }
+                      placeholder="e.g., Every Friday at 5:00 PM"
+                    />
+                  </Box>
+                </>
+              )}
+
               <Box>
                 <Text fontSize="sm" fontWeight="500" mb="2">
                   Gallery URL (optional)
@@ -572,29 +594,62 @@ export const EventCard = ({
                   placeholder="Gallery URL"
                 />
               </Box>
-              <Box>
-                <Text fontSize="sm" fontWeight="500" mb="2">
-                  Event Status
-                </Text>
-                <HStack>
-                  <Button
-                    size="sm"
-                    variant={editForm.active ? "solid" : "outline"}
-                    colorScheme={editForm.active ? "green" : "red"}
-                    onClick={() =>
-                      setEditForm({ ...editForm, active: !editForm.active })
-                    }
-                  >
-                    {editForm.active ? "Active" : "Inactive"}
-                  </Button>
-                  <Text
-                    fontSize="sm"
-                    color={editForm.active ? "green.600" : "red.600"}
-                  >
-                    {editForm.active ? "Visible to users" : "Hidden from events (can be found on gallery page)"}
+
+              {event.kind === "event" && (
+                <Box>
+                  <Text fontSize="sm" fontWeight="500" mb="2">
+                    Event Status
                   </Text>
-                </HStack>
-              </Box>
+                  <HStack>
+                    <Button
+                      size="sm"
+                      variant={editForm.active ? "solid" : "outline"}
+                      colorScheme={editForm.active ? "green" : "red"}
+                      onClick={() =>
+                        setEditForm({ ...editForm, active: !editForm.active })
+                      }
+                    >
+                      {editForm.active ? "Active" : "Inactive"}
+                    </Button>
+                    <Text
+                      fontSize="sm"
+                      color={editForm.active ? "green.600" : "red.600"}
+                    >
+                      {editForm.active
+                        ? "Visible to users"
+                        : "Hidden from events (can be found on gallery page)"}
+                    </Text>
+                  </HStack>
+                </Box>
+              )}
+
+              {event.kind === "recurring" && (
+                <Box>
+                  <Checkbox.Root
+                    checked={editForm.addToGoogleCalendar}
+                    onCheckedChange={(details: {
+                      checked: boolean | "indeterminate";
+                    }) =>
+                      setEditForm({
+                        ...editForm,
+                        addToGoogleCalendar: details.checked === true,
+                      })
+                    }
+                    colorPalette="blue"
+                  >
+                    <Checkbox.HiddenInput />
+                    <Checkbox.Control
+                      borderColor="goc.blue"
+                      _checked={{
+                        backgroundColor: "goc.blue",
+                        borderColor: "goc.blue",
+                      }}
+                      _hover={{ borderColor: "goc.dark_blue" }}
+                    />
+                    <Checkbox.Label>Add to Google Calendar</Checkbox.Label>
+                  </Checkbox.Root>
+                </Box>
+              )}
             </Stack>
 
             <Flex gap="3" mt="6" justify="flex-end">
@@ -628,7 +683,7 @@ export const EventCard = ({
         </Box>
       )}
 
-      {/* Delete Confirmation Dialog */}
+      {/* Delete Confirmation */}
       {isDeleteOpen && (
         <Box
           position="fixed"
@@ -642,9 +697,7 @@ export const EventCard = ({
           alignItems="center"
           justifyContent="center"
           onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              onDeleteClose();
-            }
+            if (e.target === e.currentTarget) onDeleteClose();
           }}
         >
           <Box
@@ -656,16 +709,18 @@ export const EventCard = ({
             onClick={(e) => e.stopPropagation()}
           >
             <Heading size="md" mb="4">
-              Delete Event
+              Delete {event.kind === "event" ? "Event" : "Recurring Event"}
             </Heading>
             <Text>
               Are you sure you want to delete "{event.title}"? This action
               cannot be undone.
             </Text>
-            <Text color="red" fontWeight="bold" mb="6">
-              You should set finished events to inactive instead.
-            </Text>
-            <Flex gap="3" justify="flex-end">
+            {event.kind === "event" && (
+              <Text color="red" fontWeight="bold" mb="6">
+                You should set finished events to inactive instead.
+              </Text>
+            )}
+            <Flex gap="3" justify="flex-end" mt="6">
               <Button onClick={onDeleteClose}>Cancel</Button>
               <Button
                 backgroundColor="red.500"
@@ -680,10 +735,13 @@ export const EventCard = ({
         </Box>
       )}
 
-      {/* Event Details Modal */}
-      <DialogRoot open={isDetailsOpen} onOpenChange={(e) => {
-        if (!e.open) onDetailsClose();
-      }}>
+      {/* Details Modal */}
+      <DialogRoot
+        open={isDetailsOpen}
+        onOpenChange={(e) => {
+          if (!e.open) onDetailsClose();
+        }}
+      >
         <DialogContent maxW="800px" width="90%">
           <DialogHeader>
             <DialogTitle fontSize="2xl" color="goc.dark_blue">
@@ -693,7 +751,6 @@ export const EventCard = ({
           </DialogHeader>
           <DialogBody>
             <Stack gap="6">
-              {/* Event Image */}
               {event.imageLink && (
                 <Box borderRadius="lg" overflow="hidden" maxH="400px">
                   <Image
@@ -705,21 +762,22 @@ export const EventCard = ({
                 </Box>
               )}
 
-              {/* Date and Time */}
-              {event.startDate && (
-                <VStack align="start" gap="2">
-                  <HStack gap="2" color="gray.700">
-                    <Icon as={MdCalendarToday} color="goc.blue" boxSize="5" />
-                    <Text fontSize="md" fontWeight="600">
-                      {event.endDate && isSameDay(event.startDate, event.endDate)
+              {/* Time */}
+              <VStack align="start" gap="2">
+                <HStack gap="2" color="gray.700">
+                  <Icon as={timeIcon} color="goc.blue" boxSize="5" />
+                  <Text fontSize="md" fontWeight="600">
+                    {event.kind === "event"
+                      ? event.endDate &&
+                        isSameDay(event.startDate, event.endDate)
                         ? formatDateTime(event.startDate)
                         : event.endDate
-                        ? formatDateRange(event.startDate, event.endDate)
-                        : formatDateTime(event.startDate)}
-                    </Text>
-                  </HStack>
-                </VStack>
-              )}
+                          ? formatDateRange(event.startDate, event.endDate)
+                          : formatDateTime(event.startDate)
+                      : event.time}
+                  </Text>
+                </HStack>
+              </VStack>
 
               {/* Location */}
               {event.location && (
@@ -733,21 +791,70 @@ export const EventCard = ({
                 </VStack>
               )}
 
+              {/* Signup link (recurring only) */}
+              {event.kind === "recurring" && event.signupLink && (
+                <VStack align="start" gap="2">
+                  <HStack gap="2" color="gray.700">
+                    <Icon as={MdLink} color="goc.blue" boxSize="5" />
+                    <Button
+                      size="sm"
+                      backgroundColor="goc.blue"
+                      color="white"
+                      _hover={{ backgroundColor: "goc.dark_blue" }}
+                      onClick={() => window.open(event.signupLink, "_blank")}
+                    >
+                      Sign Up Here
+                    </Button>
+                  </HStack>
+                  {event.signupDeadline && (
+                    <Text fontSize="sm" color="gray.600" ml="7">
+                      Deadline: {event.signupDeadline}
+                    </Text>
+                  )}
+                </VStack>
+              )}
+
               {/* Description */}
               {event.description && (
                 <Box>
                   <Heading size="sm" mb="2" color="goc.dark_blue">
                     Description
                   </Heading>
-                  <Text fontSize="md" color="gray.700" lineHeight="1.6" whiteSpace="pre-wrap">
+                  <Text
+                    fontSize="md"
+                    color="gray.700"
+                    lineHeight="1.6"
+                    whiteSpace="pre-wrap"
+                  >
                     {event.description}
                   </Text>
                 </Box>
               )}
 
-              {/* Status Badge */}
-              {event.active !== true && (
-                <Badge colorScheme="red" variant="solid" fontSize="sm" px="3" py="1" borderRadius="md" width="fit-content">
+              {/* Gallery link */}
+              {event.galleryLink && (
+                <Button
+                  variant="outline"
+                  color="goc.blue"
+                  borderColor="goc.blue"
+                  width="fit-content"
+                  onClick={() => window.open(event.galleryLink, "_blank")}
+                >
+                  View Photo Gallery
+                </Button>
+              )}
+
+              {/* Inactive badge (event only) */}
+              {event.kind === "event" && event.active !== true && (
+                <Badge
+                  colorScheme="red"
+                  variant="solid"
+                  fontSize="sm"
+                  px="3"
+                  py="1"
+                  borderRadius="md"
+                  width="fit-content"
+                >
                   Inactive Event
                 </Badge>
               )}
