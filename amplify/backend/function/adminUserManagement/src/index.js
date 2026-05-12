@@ -18,8 +18,9 @@ const client = new CognitoIdentityProviderClient({
 });
 
 // Use the Amplify-provided environment variable, or fall back to hardcoded value
-const USER_POOL_ID =
-  process.env.AUTH_GOCWEBV3_USERPOOLID || "us-west-2_rZ4wDVksQ";
+// const USER_POOL_ID =
+//   process.env.AUTH_GOCWEBV3_USERPOOLID || "us-west-2_rZ4wDVksQ";
+const USER_POOL_ID = "us-west-2_rZ4wDVksQ";
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
