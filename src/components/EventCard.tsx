@@ -297,65 +297,76 @@ export const EventCard = ({
           justify="space-between"
           minWidth={0}
         >
-          <Box flex="1" minHeight={0} overflow="hidden">
-            {/* Title + badge */}
-            <Flex justify="space-between" align="start" mb="2" gap="2">
-              <Flex mb="2" gap="4">
-                <Heading
+          {/* Title + badge */}
+          <Flex justify="space-between" align="start" mb="2" gap="2">
+            <Flex mb="2" gap="4">
+              <Heading
+                marginY="auto"
+                size={{ base: "md", md: "lg" }}
+                color="goc.dark_blue"
+                fontFamily="Poppins"
+                fontWeight="600"
+                textOverflow="ellipsis"
+                whiteSpace="nowrap"
+                flex="1"
+                minWidth={0}
+              >
+                {event.title}
+              </Heading>
+              {inATeam && (
+                <Icon
                   marginY="auto"
-                  size={{ base: "md", md: "lg" }}
-                  color="goc.dark_blue"
-                  fontFamily="Poppins"
-                  fontWeight="600"
-                  textOverflow="ellipsis"
-                  whiteSpace="nowrap"
-                  overflow="hidden"
-                  flex="1"
-                  minWidth={0}
-                >
-                  {event.title}
-                </Heading>
-                {inATeam && (
-                  <Icon
-                    marginY="auto"
-                    color="goc.blue"
-                    _hover={{ color: "goc.dark_blue" }}
-                    as={MdEdit}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onEditOpen();
-                    }}
-                  />
-                )}
-              </Flex>
-
-              {event.kind === "event" && event.active !== true && (
-                <Badge
-                  marginY="auto"
-                  bgColor="red.500"
-                  variant="solid"
-                  fontSize="xs"
-                  px="2"
-                  py="1"
-                  borderRadius="md"
-                  flexShrink={0}
-                >
-                  Inactive
-                </Badge>
+                  color="goc.blue"
+                  _hover={{ color: "goc.dark_blue" }}
+                  as={MdEdit}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onEditOpen();
+                  }}
+                />
               )}
             </Flex>
 
-            {/* Time + Location */}
-            <HStack gap="4" mb="2" overflow="hidden">
-              <HStack
-                gap="1.5"
-                color="gray.600"
+            {event.kind === "event" && event.active !== true && (
+              <Badge
+                marginY="auto"
+                bgColor="red.500"
+                variant="solid"
+                fontSize="xs"
+                px="2"
+                py="1"
+                borderRadius="md"
                 flexShrink={0}
-                minWidth={0}
-                overflow="hidden"
               >
+                Inactive
+              </Badge>
+            )}
+          </Flex>
+
+          {/* Time + Location */}
+          <HStack gap="4" mb="2" overflow="hidden">
+            <HStack
+              gap="1.5"
+              color="gray.600"
+              flexShrink={0}
+              minWidth={0}
+              overflow="hidden"
+            >
+              <Icon as={timeIcon} color="goc.blue" boxSize="4" flexShrink={0} />
+              <Text
+                fontSize="sm"
+                fontWeight="500"
+                whiteSpace="nowrap"
+                overflow="hidden"
+                textOverflow="ellipsis"
+              >
+                {timeDisplay}
+              </Text>
+            </HStack>
+            {event.location && (
+              <HStack gap="1.5" color="gray.600" minWidth={0} overflow="hidden">
                 <Icon
-                  as={timeIcon}
+                  as={MdLocationPin}
                   color="goc.blue"
                   boxSize="4"
                   flexShrink={0}
@@ -367,54 +378,30 @@ export const EventCard = ({
                   overflow="hidden"
                   textOverflow="ellipsis"
                 >
-                  {timeDisplay}
+                  {event.location}
                 </Text>
               </HStack>
-              {event.location && (
-                <HStack
-                  gap="1.5"
-                  color="gray.600"
-                  minWidth={0}
-                  overflow="hidden"
-                >
-                  <Icon
-                    as={MdLocationPin}
-                    color="goc.blue"
-                    boxSize="4"
-                    flexShrink={0}
-                  />
-                  <Text
-                    fontSize="sm"
-                    fontWeight="500"
-                    whiteSpace="nowrap"
-                    overflow="hidden"
-                    textOverflow="ellipsis"
-                  >
-                    {event.location}
-                  </Text>
-                </HStack>
-              )}
-            </HStack>
-
-            {/* Description */}
-            {event.description && (
-              <Text
-                fontSize="sm"
-                color="gray.700"
-                lineHeight="1.5"
-                overflow="hidden"
-                style={
-                  {
-                    display: "-webkit-box",
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: "vertical",
-                  } as React.CSSProperties
-                }
-              >
-                {event.description}
-              </Text>
             )}
-          </Box>
+          </HStack>
+
+          {/* Description */}
+          {event.description && (
+            <Text
+              fontSize="sm"
+              color="gray.700"
+              lineHeight="1.5"
+              overflow="hidden"
+              style={
+                {
+                  display: "-webkit-box",
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: "vertical",
+                } as React.CSSProperties
+              }
+            >
+              {event.description}
+            </Text>
+          )}
         </Flex>
       </Box>
 
@@ -552,50 +539,20 @@ export const EventCard = ({
                 </HStack>
               )}
 
-              {event.kind === "recurring" && (
-                <>
-                  <Box>
-                    <Text fontSize="sm" fontWeight="500" mb="2">
-                      Signup Link (optional)
-                    </Text>
-                    <Input
-                      value={editForm.signupLink}
-                      onChange={(e) =>
-                        setEditForm({ ...editForm, signupLink: e.target.value })
-                      }
-                      placeholder="https://..."
-                    />
-                  </Box>
-                  <Box>
-                    <Text fontSize="sm" fontWeight="500" mb="2">
-                      Signup Deadline (optional)
-                    </Text>
-                    <Input
-                      value={editForm.signupDeadline}
-                      onChange={(e) =>
-                        setEditForm({
-                          ...editForm,
-                          signupDeadline: e.target.value,
-                        })
-                      }
-                      placeholder="e.g., Every Friday at 5:00 PM"
-                    />
-                  </Box>
-                </>
+              {event.kind === "event" && (
+                <Box>
+                  <Text fontSize="sm" fontWeight="500" mb="2">
+                    Gallery URL (optional)
+                  </Text>
+                  <Input
+                    value={editForm.galleryLink}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, galleryLink: e.target.value })
+                    }
+                    placeholder="Gallery URL"
+                  />
+                </Box>
               )}
-
-              <Box>
-                <Text fontSize="sm" fontWeight="500" mb="2">
-                  Gallery URL (optional)
-                </Text>
-                <Input
-                  value={editForm.galleryLink}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, galleryLink: e.target.value })
-                  }
-                  placeholder="Gallery URL"
-                />
-              </Box>
 
               {event.kind === "event" && (
                 <Box>
@@ -625,7 +582,7 @@ export const EventCard = ({
                 </Box>
               )}
 
-              {event.kind === "recurring" && (
+              {event.kind === "event" && (
                 <Box>
                   <Checkbox.Root
                     checked={editForm.addToGoogleCalendar}
@@ -790,29 +747,6 @@ export const EventCard = ({
                       {event.location}
                     </Text>
                   </HStack>
-                </VStack>
-              )}
-
-              {/* Signup link (recurring only) */}
-              {event.kind === "recurring" && event.signupLink && (
-                <VStack align="start" gap="2">
-                  <HStack gap="2" color="gray.700">
-                    <Icon as={MdLink} color="goc.blue" boxSize="5" />
-                    <Button
-                      size="sm"
-                      backgroundColor="goc.blue"
-                      color="white"
-                      _hover={{ backgroundColor: "goc.dark_blue" }}
-                      onClick={() => window.open(event.signupLink, "_blank")}
-                    >
-                      Sign Up Here
-                    </Button>
-                  </HStack>
-                  {event.signupDeadline && (
-                    <Text fontSize="sm" color="gray.600" ml="7">
-                      Deadline: {event.signupDeadline}
-                    </Text>
-                  )}
                 </VStack>
               )}
 
