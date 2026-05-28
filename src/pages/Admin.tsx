@@ -10,13 +10,14 @@ import {
   Flex,
   Spinner,
   Input,
+  Button,
 } from "@chakra-ui/react";
 import { InputGroup } from "@/components/ui/input-group";
 import { LuSearch } from "react-icons/lu";
 import { NavbarActiveKey } from "@/components/Navbar";
 import { LoginTemplate } from "@/layouts/LoginTemplate";
 import { fetchAuthSession } from "aws-amplify/auth";
-import { get } from "aws-amplify/api";
+import { get, post } from "aws-amplify/api";
 
 type User = {
   username: string;
@@ -44,6 +45,13 @@ const AdminBody = () => {
   const [usersLoading, setUsersLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [availableGroups, setAvailableGroups] = useState<string[]>([]);
+  const [groupsLoading, setGroupsLoading] = useState(false);
+  const [groupsError, setGroupsError] = useState<string | null>(null);
+  const [editingUsername, setEditingUsername] = useState<string | null>(null);
+  const [draftGroups, setDraftGroups] = useState<string[]>([]);
+  const [saveInProgress, setSaveInProgress] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   // Filter users based on search query
   const filteredUsers = users.filter((user) => {
@@ -109,10 +117,92 @@ const AdminBody = () => {
     }
   };
 
-  // Fetch users when admin access is confirmed
+  const fetchGroups = async () => {
+    setGroupsLoading(true);
+    setGroupsError(null);
+    try {
+      const response = await get({
+        apiName: "adminUserManagement",
+        path: "/groups",
+      }).response;
+
+      const data = await response.body.json();
+      if (data && Array.isArray((data as any).groups)) {
+        setAvailableGroups((data as any).groups);
+      } else {
+        setAvailableGroups([]);
+      }
+    } catch (err: any) {
+      console.error("Error fetching groups:", err);
+      setGroupsError(err.message || "Failed to fetch available groups");
+    } finally {
+      setGroupsLoading(false);
+    }
+  };
+
+  const handleEditRow = (user: User) => {
+    setEditingUsername(user.username);
+    setDraftGroups(user.groups);
+    setSaveError(null);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingUsername(null);
+    setDraftGroups([]);
+    setSaveError(null);
+  };
+
+  const toggleDraftGroup = (group: string) => {
+    setDraftGroups((prev) =>
+      prev.includes(group)
+        ? prev.filter((draftGroup) => draftGroup !== group)
+        : [...prev, group]
+    );
+  };
+
+  const handleSaveGroups = async (user: User) => {
+    setSaveInProgress(true);
+    setSaveError(null);
+    try {
+      const originalGroups = new Set(user.groups);
+      const nextGroups = new Set(draftGroups);
+
+      const toAdd = [...nextGroups].filter((group) => !originalGroups.has(group));
+      const toRemove = [...originalGroups].filter(
+        (group) => !nextGroups.has(group)
+      );
+
+      for (const groupName of toAdd) {
+        await post({
+          apiName: "adminUserManagement",
+          path: "/add-to-group",
+          options: { body: { username: user.username, groupName } },
+        }).response;
+      }
+
+      for (const groupName of toRemove) {
+        await post({
+          apiName: "adminUserManagement",
+          path: "/remove-from-group",
+          options: { body: { username: user.username, groupName } },
+        }).response;
+      }
+
+      await fetchUsers();
+      handleCancelEdit();
+    } catch (err: any) {
+      console.error("Error saving group changes:", err);
+      setSaveError(err.message || "Failed to save group changes");
+    } finally {
+      setSaveInProgress(false);
+    }
+  };
+
+  // Fetch users and groups when admin access is confirmed
   useEffect(() => {
     if (isAdmin) {
       fetchUsers();
+      fetchGroups();
     }
   }, [isAdmin]);
 
@@ -172,6 +262,16 @@ const AdminBody = () => {
             borderColor="gray.300"
           />
         </InputGroup>
+        {groupsError ? (
+          <Text width="100%" fontSize="sm" color="orange.600" textAlign="left">
+            Group options failed to load: {groupsError}
+          </Text>
+        ) : null}
+        {saveError ? (
+          <Text width="100%" fontSize="sm" color="red.500" textAlign="left">
+            Save failed: {saveError}
+          </Text>
+        ) : null}
 
         <Box
           width="100%"
@@ -203,6 +303,7 @@ const AdminBody = () => {
                   <Table.ColumnHeader>Email</Table.ColumnHeader>
                   <Table.ColumnHeader>Groups</Table.ColumnHeader>
                   <Table.ColumnHeader>Status</Table.ColumnHeader>
+                  <Table.ColumnHeader>Actions</Table.ColumnHeader>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -213,23 +314,51 @@ const AdminBody = () => {
                     </Table.Cell>
                     <Table.Cell whiteSpace="nowrap">{user.email}</Table.Cell>
                     <Table.Cell>
-                      <Flex gap={1} flexWrap="wrap">
-                        {user.groups.length > 0 ? (
-                          user.groups.map((group) => (
-                            <Badge
-                              key={group}
-                              colorPalette={group === "Admin" ? "red" : "blue"}
-                              size="sm"
-                            >
-                              {group}
-                            </Badge>
-                          ))
-                        ) : (
-                          <Text fontSize="sm" color="gray.400">
-                            None
-                          </Text>
-                        )}
-                      </Flex>
+                      {editingUsername === user.username ? (
+                        <Flex gap={1} flexWrap="wrap">
+                          {groupsLoading ? (
+                            <Spinner size="sm" />
+                          ) : availableGroups.length > 0 ? (
+                            availableGroups.map((group) => {
+                              const selected = draftGroups.includes(group);
+                              return (
+                                <Button
+                                  key={group}
+                                  size="xs"
+                                  variant={selected ? "solid" : "outline"}
+                                  colorPalette={selected ? "blue" : "gray"}
+                                  onClick={() => toggleDraftGroup(group)}
+                                  disabled={saveInProgress}
+                                >
+                                  {group}
+                                </Button>
+                              );
+                            })
+                          ) : (
+                            <Text fontSize="sm" color="gray.400">
+                              No editable groups available
+                            </Text>
+                          )}
+                        </Flex>
+                      ) : (
+                        <Flex gap={1} flexWrap="wrap">
+                          {user.groups.length > 0 ? (
+                            user.groups.map((group) => (
+                              <Badge
+                                key={group}
+                                colorPalette={group === "Admin" ? "red" : "blue"}
+                                size="sm"
+                              >
+                                {group}
+                              </Badge>
+                            ))
+                          ) : (
+                            <Text fontSize="sm" color="gray.400">
+                              None
+                            </Text>
+                          )}
+                        </Flex>
+                      )}
                     </Table.Cell>
                     <Table.Cell>
                       <Badge
@@ -238,6 +367,37 @@ const AdminBody = () => {
                       >
                         {user.status}
                       </Badge>
+                    </Table.Cell>
+                    <Table.Cell>
+                      {editingUsername === user.username ? (
+                        <Flex gap={2}>
+                          <Button
+                            size="xs"
+                            colorPalette="green"
+                            onClick={() => handleSaveGroups(user)}
+                            loading={saveInProgress}
+                          >
+                            Save
+                          </Button>
+                          <Button
+                            size="xs"
+                            variant="outline"
+                            onClick={handleCancelEdit}
+                            disabled={saveInProgress}
+                          >
+                            Cancel
+                          </Button>
+                        </Flex>
+                      ) : (
+                        <Button
+                          size="xs"
+                          variant="outline"
+                          onClick={() => handleEditRow(user)}
+                          disabled={editingUsername !== null || groupsLoading}
+                        >
+                          Edit
+                        </Button>
+                      )}
                     </Table.Cell>
                   </Table.Row>
                 ))}

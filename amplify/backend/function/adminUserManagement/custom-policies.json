@@ -1,6 +1,16 @@
 [
   {
-    "Action": [],
-    "Resource": []
+    "Action": [
+      "cognito-idp:ListUsers",
+      "cognito-idp:ListGroups",
+      "cognito-idp:AdminListGroupsForUser",
+      "cognito-idp:AdminAddUserToGroup",
+      "cognito-idp:AdminRemoveUserFromGroup"
+    ],
+    "Resource": [
+      {
+        "Fn::Sub": "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/*"
+      }
+    ]
   }
 ]
