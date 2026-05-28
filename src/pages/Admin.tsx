@@ -10,7 +10,7 @@ import {
   Flex,
   Spinner,
   Input,
-  Button,
+  Checkbox,
 } from "@chakra-ui/react";
 import { InputGroup } from "@/components/ui/input-group";
 import { LuSearch } from "react-icons/lu";
@@ -141,6 +141,9 @@ const AdminBody = () => {
   };
 
   const handleEditRow = (user: User) => {
+    if (editingUsername !== null || groupsLoading || saveInProgress) {
+      return;
+    }
     setEditingUsername(user.username);
     setDraftGroups(user.groups);
     setSaveError(null);
@@ -158,6 +161,17 @@ const AdminBody = () => {
         ? prev.filter((draftGroup) => draftGroup !== group)
         : [...prev, group]
     );
+  };
+
+  const hasDraftChanges = (user: User) => {
+    const originalGroups = new Set(user.groups);
+    const nextGroups = new Set(draftGroups);
+
+    if (originalGroups.size !== nextGroups.size) {
+      return true;
+    }
+
+    return [...nextGroups].some((group) => !originalGroups.has(group));
   };
 
   const handleSaveGroups = async (user: User) => {
@@ -197,6 +211,41 @@ const AdminBody = () => {
       setSaveInProgress(false);
     }
   };
+
+  useEffect(() => {
+    if (!editingUsername) {
+      return;
+    }
+
+    const handlePointerOutsideEditor = (event: MouseEvent) => {
+      if (saveInProgress) {
+        return;
+      }
+
+      const editingUser = users.find((user) => user.username === editingUsername);
+      if (!editingUser) {
+        return;
+      }
+
+      const target = event.target as Element | null;
+      const editorSelector = `[data-groups-editor="${editingUsername}"]`;
+      if (target?.closest(editorSelector)) {
+        return;
+      }
+
+      if (!hasDraftChanges(editingUser)) {
+        handleCancelEdit();
+        return;
+      }
+
+      void handleSaveGroups(editingUser);
+    };
+
+    document.addEventListener("mousedown", handlePointerOutsideEditor);
+    return () => {
+      document.removeEventListener("mousedown", handlePointerOutsideEditor);
+    };
+  }, [editingUsername, draftGroups, saveInProgress, users]);
 
   // Fetch users and groups when admin access is confirmed
   useEffect(() => {
@@ -303,7 +352,6 @@ const AdminBody = () => {
                   <Table.ColumnHeader>Email</Table.ColumnHeader>
                   <Table.ColumnHeader>Groups</Table.ColumnHeader>
                   <Table.ColumnHeader>Status</Table.ColumnHeader>
-                  <Table.ColumnHeader>Actions</Table.ColumnHeader>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -313,25 +361,35 @@ const AdminBody = () => {
                       {user.name} {user.familyName}
                     </Table.Cell>
                     <Table.Cell whiteSpace="nowrap">{user.email}</Table.Cell>
-                    <Table.Cell>
+                    <Table.Cell
+                      data-groups-editor={user.username}
+                      cursor={
+                        editingUsername === user.username ||
+                        (editingUsername !== null && editingUsername !== user.username)
+                          ? "default"
+                          : "pointer"
+                      }
+                      onClick={() => handleEditRow(user)}
+                    >
                       {editingUsername === user.username ? (
-                        <Flex gap={1} flexWrap="wrap">
+                        <Flex gap={2} flexWrap="wrap">
                           {groupsLoading ? (
                             <Spinner size="sm" />
                           ) : availableGroups.length > 0 ? (
                             availableGroups.map((group) => {
                               const selected = draftGroups.includes(group);
                               return (
-                                <Button
+                                <Checkbox.Root
                                   key={group}
-                                  size="xs"
-                                  variant={selected ? "solid" : "outline"}
-                                  colorPalette={selected ? "blue" : "gray"}
-                                  onClick={() => toggleDraftGroup(group)}
+                                  checked={selected}
+                                  onCheckedChange={() => toggleDraftGroup(group)}
                                   disabled={saveInProgress}
+                                  colorPalette={group === "Admin" ? "red" : "blue"}
                                 >
-                                  {group}
-                                </Button>
+                                  <Checkbox.HiddenInput />
+                                  <Checkbox.Control />
+                                  <Checkbox.Label fontSize="sm">{group}</Checkbox.Label>
+                                </Checkbox.Root>
                               );
                             })
                           ) : (
@@ -367,37 +425,6 @@ const AdminBody = () => {
                       >
                         {user.status}
                       </Badge>
-                    </Table.Cell>
-                    <Table.Cell>
-                      {editingUsername === user.username ? (
-                        <Flex gap={2}>
-                          <Button
-                            size="xs"
-                            colorPalette="green"
-                            onClick={() => handleSaveGroups(user)}
-                            loading={saveInProgress}
-                          >
-                            Save
-                          </Button>
-                          <Button
-                            size="xs"
-                            variant="outline"
-                            onClick={handleCancelEdit}
-                            disabled={saveInProgress}
-                          >
-                            Cancel
-                          </Button>
-                        </Flex>
-                      ) : (
-                        <Button
-                          size="xs"
-                          variant="outline"
-                          onClick={() => handleEditRow(user)}
-                          disabled={editingUsername !== null || groupsLoading}
-                        >
-                          Edit
-                        </Button>
-                      )}
                     </Table.Cell>
                   </Table.Row>
                 ))}
