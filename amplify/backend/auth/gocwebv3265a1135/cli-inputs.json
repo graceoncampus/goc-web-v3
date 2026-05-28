@@ -38,6 +38,7 @@
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "default",
     "userPoolGroupList": [
+      "Admin",
       "RidesTeam"
     ],
     "serviceName": "Cognito",
