@@ -1,0 +1,21 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - yarn install
+        - npx amplify pull --appId d1afaiv4wnjkx7 --envName dev --yes
+        - npx amplify codegen
+    build:
+      commands:
+        - yarn build
+    postBuild:
+      commands:
+        - echo Build completed
+  artifacts:
+    baseDirectory: dist
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*

@@ -20,6 +20,7 @@ import { ProfilePage } from "@/pages/Profile";
 import { NotFoundPage } from "@/pages/NotFound";
 import { WelcomeWeekPage } from "@/pages/WelcomeWeek";
 import { useEffect } from "react";
+import { RecurringEventsPage } from "./pages/RecurringEvents";
 
 // a small component to redirect to an external URL
 const ExternalRedirect: React.FC<{ to: string }> = ({ to }) => {
@@ -42,6 +43,7 @@ const App = () => {
             <Route path={"/about"} element={<AboutUsPage />} />
             <Route path={"/sermons"} element={<SermonsPage />} />
             <Route path={"/events"} element={<EventsPage />} />
+            <Route path={"/recurring-events"} element={<RecurringEventsPage />} />
             <Route path={"/ourbeliefs"} element={<OurBeliefsPage />} />
             <Route path={"/leadership"} element={<LeadershipPage />} />
             <Route path={"/rides"} element={<RidesLandingPage />} />

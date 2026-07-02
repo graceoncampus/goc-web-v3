@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "An auto-generated nested stack.",
+  "Description": "Custom resources stack for RecurringEvent table and resolvers.",
   "Metadata": {},
   "Parameters": {
     "AppSyncApiId": {
@@ -27,9 +27,216 @@
     }
   },
   "Resources": {
-    "EmptyResource": {
-      "Type": "Custom::EmptyResource",
-      "Condition": "AlwaysFalse"
+    "RecurringEventTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": {
+          "Fn::Join": [
+            "-",
+            [
+              "RecurringEvent",
+              {
+                "Ref": "AppSyncApiId"
+              },
+              {
+                "Ref": "env"
+              }
+            ]
+          ]
+        },
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST"
+      }
+    },
+    "RecurringEventDataSource": {
+      "Type": "AWS::AppSync::DataSource",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "Name": "RecurringEventDataSource",
+        "Type": "AMAZON_DYNAMODB",
+        "ServiceRoleArn": {
+          "Fn::GetAtt": [
+            "RecurringEventIAMRole",
+            "Arn"
+          ]
+        },
+        "DynamoDBConfig": {
+          "TableName": {
+            "Ref": "RecurringEventTable"
+          },
+          "AwsRegion": {
+            "Ref": "AWS::Region"
+          }
+        }
+      }
+    },
+    "RecurringEventIAMRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "RecurringEventDynamoDBAccess",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:GetItem",
+                    "dynamodb:PutItem",
+                    "dynamodb:DeleteItem",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:Query",
+                    "dynamodb:Scan"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "RecurringEventTable",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          {
+                            "Fn::GetAtt": [
+                              "RecurringEventTable",
+                              "Arn"
+                            ]
+                          },
+                          "/*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "GetRecurringEventResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Query",
+        "FieldName": "getRecurringEvent",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "RecurringEventDataSource",
+            "Name"
+          ]
+        },
+        "RequestMappingTemplate": "{\n  \"version\": \"2017-02-28\",\n  \"operation\": \"GetItem\",\n  \"key\": {\n    \"id\": $util.dynamodb.toDynamoDBJson($ctx.args.id)\n  }\n}",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)"
+      },
+      "DependsOn": "RecurringEventDataSource"
+    },
+    "ListRecurringEventsResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Query",
+        "FieldName": "listRecurringEvents",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "RecurringEventDataSource",
+            "Name"
+          ]
+        },
+        "RequestMappingTemplate": "{\n  \"version\": \"2017-02-28\",\n  \"operation\": \"Scan\",\n  #if($ctx.args.filter)\n    \"filter\": $util.transform.toDynamoDBFilterExpression($ctx.args.filter),\n  #end\n  #if($ctx.args.limit)\n    \"limit\": $ctx.args.limit,\n  #end\n  #if($ctx.args.nextToken)\n    \"nextToken\": \"$ctx.args.nextToken\"\n  #end\n}",
+        "ResponseMappingTemplate": "{\n  \"items\": $util.toJson($ctx.result.items),\n  \"nextToken\": $util.toJson($ctx.result.nextToken)\n}"
+      },
+      "DependsOn": "RecurringEventDataSource"
+    },
+    "CreateRecurringEventResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Mutation",
+        "FieldName": "createRecurringEvent",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "RecurringEventDataSource",
+            "Name"
+          ]
+        },
+        "RequestMappingTemplate": "{\n  \"version\": \"2017-02-28\",\n  \"operation\": \"PutItem\",\n  \"key\": {\n    \"id\": $util.dynamodb.toDynamoDBJson($ctx.args.input.id)\n  },\n  \"attributeValues\": $util.dynamodb.toMapValuesJson($ctx.args.input)\n}",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)"
+      },
+      "DependsOn": "RecurringEventDataSource"
+    },
+    "UpdateRecurringEventResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Mutation",
+        "FieldName": "updateRecurringEvent",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "RecurringEventDataSource",
+            "Name"
+          ]
+        },
+        "RequestMappingTemplate": "#set($input = $ctx.args.input)\n{\n  \"version\": \"2017-02-28\",\n  \"operation\": \"UpdateItem\",\n  \"key\": {\n    \"id\": $util.dynamodb.toDynamoDBJson($input.id)\n  },\n  \"update\": {\n    \"expression\": \"SET #name = :name, #description = :description, #time = :time, #location = :location, #imageLink = :imageLink, #addToGoogleCalendar = :addToGoogleCalendar\",\n    \"expressionNames\": {\n      \"#name\": \"name\",\n      \"#description\": \"description\",\n      \"#time\": \"time\",\n      \"#location\": \"location\",\n      \"#imageLink\": \"imageLink\",\n      \"#addToGoogleCalendar\": \"addToGoogleCalendar\"\n    },\n    \"expressionValues\": {\n      \":name\": $util.dynamodb.toDynamoDBJson($input.name),\n      \":description\": $util.dynamodb.toDynamoDBJson($input.description),\n      \":time\": $util.dynamodb.toDynamoDBJson($input.time),\n      \":location\": $util.dynamodb.toDynamoDBJson($input.location),\n      \":imageLink\": $util.dynamodb.toDynamoDBJson($input.imageLink),\n      \":addToGoogleCalendar\": $util.dynamodb.toDynamoDBJson($input.addToGoogleCalendar)\n    }\n  }\n}",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)"
+      },
+      "DependsOn": "RecurringEventDataSource"
+    },
+    "DeleteRecurringEventResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Mutation",
+        "FieldName": "deleteRecurringEvent",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "RecurringEventDataSource",
+            "Name"
+          ]
+        },
+        "RequestMappingTemplate": "{\n  \"version\": \"2017-02-28\",\n  \"operation\": \"DeleteItem\",\n  \"key\": {\n    \"id\": $util.dynamodb.toDynamoDBJson($ctx.args.input.id)\n  }\n}",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)"
+      },
+      "DependsOn": "RecurringEventDataSource"
     }
   },
   "Conditions": {
@@ -50,9 +257,20 @@
     }
   },
   "Outputs": {
-    "EmptyOutput": {
-      "Description": "An empty output. You may delete this if you have at least one resource above.",
-      "Value": ""
+    "RecurringEventTableName": {
+      "Description": "The name of the RecurringEvent DynamoDB table",
+      "Value": {
+        "Ref": "RecurringEventTable"
+      }
+    },
+    "RecurringEventTableArn": {
+      "Description": "The ARN of the RecurringEvent DynamoDB table",
+      "Value": {
+        "Fn::GetAtt": [
+          "RecurringEventTable",
+          "Arn"
+        ]
+      }
     }
   }
 }

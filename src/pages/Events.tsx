@@ -1,7 +1,8 @@
 import { NavbarActiveKey } from "@/components/Navbar";
 import { listGOCEvents } from "@/graphql/queries";
+import { listPublicGOCEvents } from "@/utils/eventQueries";
 import { generateClient } from "aws-amplify/api";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Box,
   Flex,
@@ -12,6 +13,11 @@ import {
   Text,
   Container,
   AspectRatio,
+  Input,
+  Textarea,
+  Button,
+  HStack,
+  Checkbox,
 } from "@chakra-ui/react";
 import {
   AccordionItem,
@@ -21,9 +27,32 @@ import {
 } from "@/components/ui/accordion";
 import GOCSpinner from "@/components/GOCSpinner";
 import { BannerTemplate } from "@/layouts/BannerTemplate";
-import { MdAttachMoney, MdLocationPin } from "react-icons/md";
+import { MdAttachMoney, MdLocationPin, MdAdd } from "react-icons/md";
+import { EventList } from "@/components/EventCardList";
+import { checkInATeam, checkIsLoggedIn } from "@/auth/CheckUser";
+import { createGOCEvents } from "@/graphql/mutations";
+import {
+  createGoogleCalendarEvent,
+  generateGoogleCalendarUrl,
+  getGoogleCalendarAccessToken,
+  loadGoogleAPI,
+} from "@/utils/googleCalendar";
+import { pstToUTC } from "@/utils/timezone";
 
 const client = generateClient();
+
+export interface Event {
+  id: string;
+  title: string;
+  startDate: string;
+  endDate: string;
+  price: Number;
+  location: string;
+  description: string;
+  imageLink: string;
+  active?: boolean;
+  galleryLink?: string;
+}
 
 export const EventsPage: React.FC = () => {
   return (
@@ -38,31 +67,26 @@ export const EventsPage: React.FC = () => {
   );
 };
 
-interface Event {
-  id: string;
-  title: string;
-  startDate: string;
-  endDate: string;
-  price: Number;
-  location: string;
-  description: string;
-  imageLink: string;
-}
-
 const EventsBody: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [inATeam, setInATeam] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const result = await client.graphql({ query: listGOCEvents });
-        const eventsData =
-          result.data?.listGOCEvents?.items?.sort(
-            (a: any, b: any) =>
-              new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
-          ) || [];
-        const mappedEvents = eventsData.map((event: any) => ({
+  const fetchEvents = useCallback(async () => {
+    try {
+      const result: any = await client.graphql({
+        query: isLoggedIn ? listGOCEvents : listPublicGOCEvents,
+      });
+      const eventsData =
+        result.data?.listGOCEvents?.items?.sort(
+          (a: any, b: any) =>
+            new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
+        ) || [];
+
+      const mappedEvents = eventsData
+        .map((event: any) => ({
           id: event.id,
           title: event.title,
           startDate: event.startDate,
@@ -71,32 +95,171 @@ const EventsBody: React.FC = () => {
           location: event.location,
           description: event.description,
           imageLink: event.imageLink,
-        }));
-        setEvents(mappedEvents);
-      } catch (reason) {
-        console.error(reason);
+          active: event.active,
+          galleryLink: event.galleryLink,
+        }))
+        .filter((e: Event) => e.active || inATeam);
+      setEvents(mappedEvents);
+    } catch (reason) {
+      console.error(reason);
+    } finally {
+      setLoading(false);
+    }
+  }, [inATeam, isLoggedIn]);
+
+  useEffect(() => {
+    if (authChecked) fetchEvents();
+  }, [authChecked, fetchEvents]);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const loggedIn = await checkIsLoggedIn(setIsLoggedIn);
+        if (loggedIn) {
+          await checkInATeam(setInATeam);
+        } else {
+          setInATeam(false);
+        }
       } finally {
-        setLoading(false);
+        setAuthChecked(true);
       }
     };
-
-    fetchEvents();
+    checkAuth();
   }, []);
+
+  useEffect(() => {
+    // Load Google API when component mounts
+    const initGoogleAPI = async () => {
+      try {
+        await loadGoogleAPI();
+        setIsGoogleAPILoaded(true);
+      } catch (error) {
+        console.error("Failed to load Google API:", error);
+        setCalendarStatus("Failed to load Google Calendar API");
+      }
+    };
+    initGoogleAPI();
+  }, []);
+
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [newEventForm, setNewEventForm] = useState({
+    title: "",
+    description: "",
+    location: "",
+    imageLink: "",
+    startDate: "",
+    endDate: "",
+    addToCalendar: false,
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [calendarStatus, setCalendarStatus] = useState<string>("");
+  const [isGoogleAPILoaded, setIsGoogleAPILoaded] = useState(false);
+
+  const handleCreateEvent = async () => {
+    setIsSubmitting(true);
+    try {
+      // Generate a unique ID for the event
+      const eventId = `event-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+
+      // Convert PST datetime-local values to UTC ISO format for database storage
+      const startDateISO = newEventForm.startDate
+        ? pstToUTC(newEventForm.startDate)
+        : "";
+      const endDateISO = newEventForm.endDate
+        ? pstToUTC(newEventForm.endDate)
+        : undefined;
+
+      await client.graphql({
+        query: createGOCEvents,
+        variables: {
+          input: {
+            id: eventId,
+            title: newEventForm.title,
+            description: newEventForm.description,
+            location: newEventForm.location,
+            imageLink: newEventForm.imageLink,
+            startDate: startDateISO,
+            endDate: endDateISO,
+            price: 0,
+          },
+        },
+      });
+      console.log("Event created successfully");
+
+      if (newEventForm.addToCalendar) {
+        setCalendarStatus("Adding to Google Calendar...");
+        try {
+          if (!isGoogleAPILoaded) {
+            throw new Error("Google API not loaded");
+          }
+
+          // Create the event object for Google Calendar
+          const eventForCalendar: Event = {
+            id: eventId,
+            title: newEventForm.title,
+            description: newEventForm.description,
+            location: newEventForm.location,
+            startDate: startDateISO,
+            endDate: endDateISO || startDateISO,
+            price: 0,
+            imageLink: newEventForm.imageLink,
+          };
+
+          try {
+            // Try to use the API method first
+            const accessToken = await getGoogleCalendarAccessToken();
+            const calendarEventId = await createGoogleCalendarEvent(
+              eventForCalendar,
+              accessToken,
+            );
+            setCalendarStatus(
+              `✅ Event added to Google Calendar (ID: ${calendarEventId})`,
+            );
+          } catch (apiError) {
+            console.warn(
+              "API method failed, falling back to URL method:",
+              apiError,
+            );
+            // Fallback to URL method
+            const calendarUrl = generateGoogleCalendarUrl(eventForCalendar);
+            window.open(calendarUrl, "_blank");
+            setCalendarStatus("✅ Google Calendar opened in new tab");
+          }
+        } catch (error) {
+          console.error("Failed to add to Google Calendar:", error);
+          setCalendarStatus(
+            `❌ Failed to add to Google Calendar: ${error instanceof Error ? error.message : "Unknown error"}`,
+          );
+        }
+      }
+
+      // Reset form
+      setNewEventForm({
+        title: "",
+        description: "",
+        location: "",
+        imageLink: "",
+        startDate: "",
+        endDate: "",
+        addToCalendar: false,
+      });
+      setIsFormOpen(false);
+
+      // Clear calendar status after a delay
+      setTimeout(() => {
+        setCalendarStatus("");
+      }, 5000);
+
+      await fetchEvents();
+    } catch (error) {
+      console.error("Error creating event:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <Container fluid={true} padding={0}>
-      {/* <Heading
-        as="h2"
-        textAlign={"center"}
-        fontSize={{
-          base: "2xl",
-          md: "3xl",
-          lg: "4xl",
-          xl: "4xl",
-        }}
-      >
-        Upcoming Events
-      </Heading> */}
       <Stack
         width={{ sm: "100%", md: "4/5" }}
         marginX={"auto"}
@@ -105,7 +268,13 @@ const EventsBody: React.FC = () => {
         gap={"3rem"}
       >
         {/* <EventList events={events} loading={loading} /> */}
-        <Stack id={"calendar"} as={"section"} width={"100%"} align={"center"}>
+        <Stack
+          id={"calendar"}
+          as={"section"}
+          width={"100%"}
+          maxWidth={{ base: "100%", md: "1200px" }}
+          align={"center"}
+        >
           <Heading
             as="h2"
             textAlign={"center"}
@@ -119,201 +288,240 @@ const EventsBody: React.FC = () => {
           >
             Calendar
           </Heading>
-          <AspectRatio
-            ratio={{ base: 1, md: 4 / 3 }}
-            width={{ base: "100%", lg: "800px" }}
-          >
+          <AspectRatio ratio={{ base: 1, md: 4 / 3 }} width="100%">
             <iframe
               src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FLos_Angeles&showPrint=0&title&showCalendars=0&mode=MONTH&showTz=0&src=Z29jYXRlYW1AZ21haWwuY29t&color=%23C0CA33"
               title="Google Calendar"
             />
           </AspectRatio>
         </Stack>
+
+        {/* Create Event Form - Only visible to ATeam */}
+        {inATeam && (
+          <Stack
+            as={"section"}
+            width={"100%"}
+            maxWidth={{ base: "100%", md: "1200px" }}
+            align={"center"}
+            gap={"1rem"}
+          >
+            <Box
+              width={"100%"}
+              backgroundColor="white"
+              borderRadius="lg"
+              boxShadow="0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
+              p={6}
+              border="1px solid"
+              borderColor="gray.200"
+            >
+              <Flex justify="space-between" align="center" mb={4}>
+                <Heading size="md" color="goc.dark_blue">
+                  Create New Event
+                </Heading>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setIsFormOpen(!isFormOpen)}
+                >
+                  {isFormOpen ? "Hide" : "Show"} Form
+                </Button>
+              </Flex>
+
+              {isFormOpen && (
+                <Stack gap="4">
+                  <Box>
+                    <Text fontSize="sm" fontWeight="500" mb="2">
+                      Title *
+                    </Text>
+                    <Input
+                      value={newEventForm.title}
+                      onChange={(e) =>
+                        setNewEventForm({
+                          ...newEventForm,
+                          title: e.target.value,
+                        })
+                      }
+                      placeholder="Event title"
+                      required
+                    />
+                  </Box>
+                  <Box>
+                    <Text fontSize="sm" fontWeight="500" mb="2">
+                      Description *
+                    </Text>
+                    <Textarea
+                      value={newEventForm.description}
+                      onChange={(e) =>
+                        setNewEventForm({
+                          ...newEventForm,
+                          description: e.target.value,
+                        })
+                      }
+                      placeholder="Event description"
+                      rows={3}
+                      required
+                    />
+                  </Box>
+                  <Box>
+                    <Text fontSize="sm" fontWeight="500" mb="2">
+                      Location *
+                    </Text>
+                    <Input
+                      value={newEventForm.location}
+                      onChange={(e) =>
+                        setNewEventForm({
+                          ...newEventForm,
+                          location: e.target.value,
+                        })
+                      }
+                      placeholder="Event location"
+                      required
+                    />
+                  </Box>
+                  <Box>
+                    <Text fontSize="sm" fontWeight="500" mb="2">
+                      Image URL *
+                    </Text>
+                    <Input
+                      value={newEventForm.imageLink}
+                      onChange={(e) =>
+                        setNewEventForm({
+                          ...newEventForm,
+                          imageLink: e.target.value,
+                        })
+                      }
+                      placeholder="Image URL"
+                      required
+                    />
+                  </Box>
+                  <Flex gap="4" wrap="wrap">
+                    <Box flex="1" minWidth="250px">
+                      <Text fontSize="sm" fontWeight="500" mb="2">
+                        Start Date (PST) *
+                      </Text>
+                      <Input
+                        type="datetime-local"
+                        value={newEventForm.startDate}
+                        onChange={(e) =>
+                          setNewEventForm({
+                            ...newEventForm,
+                            startDate: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </Box>
+                    <Box flex="1" minWidth="250px">
+                      <Text fontSize="sm" fontWeight="500" mb="2">
+                        End Date (PST)
+                      </Text>
+                      <Input
+                        type="datetime-local"
+                        value={newEventForm.endDate}
+                        onChange={(e) =>
+                          setNewEventForm({
+                            ...newEventForm,
+                            endDate: e.target.value,
+                          })
+                        }
+                      />
+                    </Box>
+                  </Flex>
+                  <Box>
+                    <Checkbox.Root
+                      checked={newEventForm.addToCalendar}
+                      onCheckedChange={(details) =>
+                        setNewEventForm({
+                          ...newEventForm,
+                          addToCalendar: details.checked === true,
+                        })
+                      }
+                      colorPalette="blue"
+                    >
+                      <Checkbox.HiddenInput />
+                      <Checkbox.Control
+                        borderColor="goc.blue"
+                        _checked={{
+                          backgroundColor: "goc.blue",
+                          borderColor: "goc.blue",
+                        }}
+                        _hover={{
+                          borderColor: "goc.dark_blue",
+                        }}
+                      />
+                      <Checkbox.Label>Add To Google Calendar</Checkbox.Label>
+                    </Checkbox.Root>
+                    {calendarStatus && (
+                      <Text
+                        fontSize="sm"
+                        mt="2"
+                        color={
+                          calendarStatus.includes("❌")
+                            ? "red.500"
+                            : "green.500"
+                        }
+                      >
+                        {calendarStatus}
+                      </Text>
+                    )}
+                  </Box>
+                  <Flex gap="3" mt="2" justify="flex-end">
+                    <Button
+                      variant="ghost"
+                      onClick={() => {
+                        setIsFormOpen(false);
+                        setCalendarStatus("");
+                        setNewEventForm({
+                          title: "",
+                          description: "",
+                          location: "",
+                          imageLink: "",
+                          startDate: "",
+                          endDate: "",
+                          addToCalendar: false,
+                        });
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      backgroundColor="goc.blue"
+                      color="white"
+                      onClick={handleCreateEvent}
+                      disabled={
+                        isSubmitting ||
+                        !newEventForm.title ||
+                        !newEventForm.description ||
+                        !newEventForm.location ||
+                        !newEventForm.imageLink ||
+                        !newEventForm.startDate
+                      }
+                    >
+                      <Icon as={MdAdd} boxSize="4" mr="2" />
+                      {isSubmitting ? "Creating..." : "Create Event"}
+                    </Button>
+                  </Flex>
+                </Stack>
+              )}
+            </Box>
+          </Stack>
+        )}
+
+        <Stack
+          as={"section"}
+          width={"100%"}
+          maxWidth={{ base: "100%", md: "1200px" }}
+          align={"center"}
+        >
+          <EventList
+            events={events}
+            loading={loading}
+            inATeam={inATeam}
+            galleryAccessContext={{ isLoggedIn }}
+            onEventUpdate={fetchEvents}
+          />
+        </Stack>
       </Stack>
     </Container>
-  );
-};
-
-interface EventListProps {
-  events: Event[];
-  loading: boolean;
-}
-
-const EventList = ({ events, loading }: EventListProps) => {
-  function formatEventDate(startDateString: string, endDateString: string) {
-    const startDate = new Date(startDateString);
-    const endDate = new Date(endDateString);
-    const formattedStartDate = `${startDate.toLocaleString("en-US", {
-      month: "numeric",
-      day: "numeric",
-      year: "2-digit",
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-    })}`;
-    const formattedEndDate = `${endDate.toLocaleString("en-US", {
-      month: "numeric",
-      day: "numeric",
-      year: "2-digit",
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-    })}`;
-
-    return `${formattedStartDate} - ${formattedEndDate}`;
-  }
-
-  function formatEventDateShort(dateString: string) {
-    const date = new Date(dateString);
-    const monthsShort = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    const daysOfWeekShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-    const hour = date.getHours();
-    const minute = date.getMinutes();
-    const ampm = hour >= 12 ? "pm" : "am";
-    const formattedHour = hour % 12 || 12;
-    const formattedMinute = String(minute).padStart(2, "0");
-
-    return `${monthsShort[date.getMonth()]} ${date.getDate()} • ${daysOfWeekShort[date.getDay()]} • ${formattedHour}:${formattedMinute}${ampm}`;
-  }
-
-  if (loading) return <GOCSpinner />;
-
-  if (events.length === 0) {
-    return (
-      <Stack marginY="1rem" align="center">
-        <Text fontSize={{ base: "md", md: "xl" }} color="goc.blue">
-          There are no upcoming events!
-        </Text>
-      </Stack>
-    );
-  }
-
-  return (
-    <AccordionRoot
-      key={events.length}
-      spaceY="1rem"
-      variant="outline"
-      collapsible={true}
-      multiple={true}
-      maxWidth={"60rem"}
-    >
-      {events.map((event, index) => (
-        <AccordionItem key={index} value={event.id}>
-          <AccordionItemTrigger indicatorPlacement="start">
-            <Stack width="100%">
-              <Flex
-                flexDirection={{ base: "column", md: "row" }}
-                justifyContent="space-between"
-                alignItems="center"
-                width="100%"
-                marginLeft="10px"
-              >
-                <Heading
-                  as="h3"
-                  fontSize={{ base: "md", md: "xl", lg: "2xl" }}
-                  margin={0}
-                >
-                  {event.title}
-                </Heading>
-                <Text
-                  fontSize={{ base: "sm", md: "lg" }}
-                  marginRight="10px"
-                  textAlign="right"
-                >
-                  {formatEventDateShort(event.startDate)}
-                </Text>
-              </Flex>
-            </Stack>
-          </AccordionItemTrigger>
-          <AccordionItemContent>
-            <Box marginX="30px">
-              <Flex>
-                <Image
-                  width={{ base: "100px", md: "200px" }}
-                  height={{ base: "150px", md: "200px" }}
-                  borderRadius="20px"
-                  src={event.imageLink}
-                />
-                <Box className="event-description-text" marginLeft="20px">
-                  <Box>
-                    <Heading as="h3" display={{ base: "none", md: "block" }}>
-                      {event.title}
-                    </Heading>
-                    <Box>
-                      <Text fontSize={{ base: "xs", md: "md" }}>
-                        {event.description}
-                      </Text>
-                      {/* <Box className="event-info" marginTop="10px">
-                        <Text fontSize={{ base: "xs", md: "md" }}>
-                          {formatEventDate(event.startDate, event.endDate)}
-                        </Text>
-                      </Box> */}
-                    </Box>
-                  </Box>
-                  {/* Location info for desktop */}
-                  <Flex
-                    className="location-info"
-                    alignItems="center"
-                    marginTop="10px"
-                    display={{ base: "none", md: "flex" }}
-                  >
-                    <Icon fontSize={{ base: "20px", md: "24px" }}>
-                      <MdLocationPin />
-                    </Icon>
-                    <Text
-                      fontSize={{ base: "sm", md: "md" }}
-                      marginRight="10px"
-                    >
-                      {event.location}
-                    </Text>
-                    <Icon fontSize={{ base: "20px", md: "24px" }}>
-                      <MdAttachMoney />
-                    </Icon>
-                    <Text fontSize={{ base: "sm", md: "md" }}>
-                      {event.price === 0 ? "free" : event.price.toString()}
-                    </Text>
-                  </Flex>
-                </Box>
-              </Flex>
-              {/* Location info for mobile */}
-              <Flex
-                className="location-info"
-                alignItems="center"
-                marginTop="10px"
-                justifyContent={"space-evenly"}
-                display={{ base: "flex", md: "none" }}
-              >
-                <Icon fontSize={{ base: "20px", md: "24px" }}>
-                  <MdLocationPin />
-                </Icon>
-                <Text fontSize={{ base: "sm", md: "md" }} marginRight="10px">
-                  {event.location}
-                </Text>
-                <Icon fontSize={{ base: "20px", md: "24px" }}>
-                  <MdAttachMoney />
-                </Icon>
-                <Text fontSize={{ base: "sm", md: "md" }}>
-                  {event.price === 0 ? "free" : event.price.toString()}
-                </Text>
-              </Flex>
-            </Box>
-          </AccordionItemContent>
-        </AccordionItem>
-      ))}
-    </AccordionRoot>
   );
 };
