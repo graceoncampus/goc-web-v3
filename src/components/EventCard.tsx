@@ -35,6 +35,10 @@ import {
   deleteRecurringEvent,
 } from "@/graphql/mutations";
 import {
+  canViewEventGallery,
+  type GalleryAccessContext,
+} from "@/auth/GalleryAccess";
+import {
   DialogRoot,
   DialogContent,
   DialogHeader,
@@ -84,12 +88,14 @@ export type CardEvent = RegularCardEvent | RecurringCardEvent;
 interface EventCardProps {
   event: CardEvent;
   inATeam: boolean;
+  galleryAccessContext: GalleryAccessContext;
   onEventUpdate: () => void;
 }
 
 export const EventCard = ({
   event,
   inATeam,
+  galleryAccessContext,
   onEventUpdate,
 }: EventCardProps) => {
   const client = generateClient();
@@ -172,6 +178,7 @@ export const EventCard = ({
       : event.time;
 
   const timeIcon = event.kind === "event" ? MdCalendarToday : MdAccessTime;
+  const canViewGallery = canViewEventGallery(event, galleryAccessContext);
 
   const handleEdit = async () => {
     setIsSubmitting(true);
@@ -768,7 +775,7 @@ export const EventCard = ({
               )}
 
               {/* Gallery link */}
-              {event.galleryLink && (
+              {canViewGallery && event.galleryLink && (
                 <Button
                   variant="outline"
                   color="goc.blue"

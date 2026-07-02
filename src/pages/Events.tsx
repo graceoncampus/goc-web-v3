@@ -1,7 +1,8 @@
 import { NavbarActiveKey } from "@/components/Navbar";
 import { listGOCEvents } from "@/graphql/queries";
+import { listPublicGOCEvents } from "@/utils/eventQueries";
 import { generateClient } from "aws-amplify/api";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Box,
   Flex,
@@ -29,7 +30,6 @@ import { BannerTemplate } from "@/layouts/BannerTemplate";
 import { MdAttachMoney, MdLocationPin, MdAdd } from "react-icons/md";
 import { EventList } from "@/components/EventCardList";
 import { checkInATeam, checkIsLoggedIn } from "@/auth/CheckUser";
-import { fetchAuthSession } from "aws-amplify/auth";
 import { createGOCEvents } from "@/graphql/mutations";
 import {
   createGoogleCalendarEvent,
@@ -72,55 +72,57 @@ const EventsBody: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [inATeam, setInATeam] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
+
+  const fetchEvents = useCallback(async () => {
+    try {
+      const result: any = await client.graphql({
+        query: isLoggedIn ? listGOCEvents : listPublicGOCEvents,
+      });
+      const eventsData =
+        result.data?.listGOCEvents?.items?.sort(
+          (a: any, b: any) =>
+            new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
+        ) || [];
+
+      const mappedEvents = eventsData
+        .map((event: any) => ({
+          id: event.id,
+          title: event.title,
+          startDate: event.startDate,
+          endDate: event.endDate,
+          price: event.price,
+          location: event.location,
+          description: event.description,
+          imageLink: event.imageLink,
+          active: event.active,
+          galleryLink: event.galleryLink,
+        }))
+        .filter((e: Event) => e.active || inATeam);
+      setEvents(mappedEvents);
+    } catch (reason) {
+      console.error(reason);
+    } finally {
+      setLoading(false);
+    }
+  }, [inATeam, isLoggedIn]);
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const result = await client.graphql({ query: listGOCEvents });
-        const eventsData =
-          result.data?.listGOCEvents?.items?.sort(
-            (a: any, b: any) =>
-              new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
-          ) || [];
-
-        let authorized = false;
-        try {
-          const session = await fetchAuthSession();
-          const groups = session.tokens?.idToken?.payload["cognito:groups"];
-          authorized = Array.isArray(groups) && groups.includes("ATeam");
-        } catch (error) {
-          authorized = false;
-        }
-
-        const mappedEvents = eventsData
-          .map((event: any) => ({
-            id: event.id,
-            title: event.title,
-            startDate: event.startDate,
-            endDate: event.endDate,
-            price: event.price,
-            location: event.location,
-            description: event.description,
-            imageLink: event.imageLink,
-            active: event.active,
-            galleryLink: event.galleryLink,
-          }))
-          .filter((e) => e.active || authorized);
-        setEvents(mappedEvents);
-      } catch (reason) {
-        console.error(reason);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEvents();
-  }, [inATeam, setInATeam]);
+    if (authChecked) fetchEvents();
+  }, [authChecked, fetchEvents]);
 
   useEffect(() => {
     const checkAuth = async () => {
-      await checkIsLoggedIn(setIsLoggedIn);
-      await checkInATeam(setInATeam);
+      try {
+        const loggedIn = await checkIsLoggedIn(setIsLoggedIn);
+        if (loggedIn) {
+          await checkInATeam(setInATeam);
+        } else {
+          setInATeam(false);
+        }
+      } finally {
+        setAuthChecked(true);
+      }
     };
     checkAuth();
   }, []);
@@ -248,44 +250,7 @@ const EventsBody: React.FC = () => {
         setCalendarStatus("");
       }, 5000);
 
-      // Refresh events
-      const fetchEvents = async () => {
-        try {
-          const result = await client.graphql({ query: listGOCEvents });
-          const eventsData =
-            result.data?.listGOCEvents?.items?.sort(
-              (a: any, b: any) =>
-                new Date(b.startDate).getTime() -
-                new Date(a.startDate).getTime(),
-            ) || [];
-          let authorized = false;
-          try {
-            const session = await fetchAuthSession();
-            const groups = session.tokens?.idToken?.payload["cognito:groups"];
-            authorized = Array.isArray(groups) && groups.includes("ATeam");
-          } catch (error) {
-            authorized = false;
-          }
-          const mappedEvents = eventsData
-            .map((event: any) => ({
-              id: event.id,
-              title: event.title,
-              startDate: event.startDate,
-              endDate: event.endDate,
-              price: event.price,
-              location: event.location,
-              description: event.description,
-              imageLink: event.imageLink,
-              active: event.active,
-              galleryLink: event.galleryLink,
-            }))
-            .filter((e) => e.active || authorized);
-          setEvents(mappedEvents);
-        } catch (reason) {
-          console.error(reason);
-        }
-      };
-      fetchEvents();
+      await fetchEvents();
     } catch (error) {
       console.error("Error creating event:", error);
     } finally {
@@ -303,7 +268,13 @@ const EventsBody: React.FC = () => {
         gap={"3rem"}
       >
         {/* <EventList events={events} loading={loading} /> */}
-        <Stack id={"calendar"} as={"section"} width={"100%"} maxWidth={{ base: "100%", md: "1200px" }} align={"center"}>
+        <Stack
+          id={"calendar"}
+          as={"section"}
+          width={"100%"}
+          maxWidth={{ base: "100%", md: "1200px" }}
+          align={"center"}
+        >
           <Heading
             as="h2"
             textAlign={"center"}
@@ -317,10 +288,7 @@ const EventsBody: React.FC = () => {
           >
             Calendar
           </Heading>
-          <AspectRatio
-            ratio={{ base: 1, md: 4 / 3 }}
-            width="100%"
-          >
+          <AspectRatio ratio={{ base: 1, md: 4 / 3 }} width="100%">
             <iframe
               src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FLos_Angeles&showPrint=0&title&showCalendars=0&mode=MONTH&showTz=0&src=Z29jYXRlYW1AZ21haWwuY29t&color=%23C0CA33"
               title="Google Calendar"
@@ -549,48 +517,9 @@ const EventsBody: React.FC = () => {
             events={events}
             loading={loading}
             inATeam={inATeam}
-            onEventUpdate={() => {
-          // Refresh events after update
-          const fetchEvents = async () => {
-            try {
-              const result = await client.graphql({ query: listGOCEvents });
-              const eventsData =
-                result.data?.listGOCEvents?.items?.sort(
-                  (a: any, b: any) =>
-                    new Date(b.startDate).getTime() -
-                    new Date(a.startDate).getTime(),
-                ) || [];
-              let authorized = false;
-              try {
-                const session = await fetchAuthSession();
-                const groups =
-                  session.tokens?.idToken?.payload["cognito:groups"];
-                authorized = Array.isArray(groups) && groups.includes("ATeam");
-              } catch (error) {
-                authorized = false;
-              }
-              const mappedEvents = eventsData
-                .map((event: any) => ({
-                  id: event.id,
-                  title: event.title,
-                  startDate: event.startDate,
-                  endDate: event.endDate,
-                  price: event.price,
-                  location: event.location,
-                  description: event.description,
-                  imageLink: event.imageLink,
-                  active: event.active,
-                  galleryLink: event.galleryLink,
-                }))
-                .filter((e) => e.active || authorized);
-              setEvents(mappedEvents);
-            } catch (reason) {
-              console.error(reason);
-            }
-          };
-          fetchEvents();
-        }}
-      />
+            galleryAccessContext={{ isLoggedIn }}
+            onEventUpdate={fetchEvents}
+          />
         </Stack>
       </Stack>
     </Container>

@@ -1,7 +1,8 @@
 import { NavbarActiveKey } from "@/components/Navbar";
 import { listRecurringEvents } from "@/graphql/queries";
+import { listPublicRecurringEvents } from "@/utils/eventQueries";
 import { generateClient } from "aws-amplify/api";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Box,
   Flex,
@@ -18,7 +19,7 @@ import {
 import GOCSpinner from "@/components/GOCSpinner";
 import { BannerTemplate } from "@/layouts/BannerTemplate";
 import { MdAdd } from "react-icons/md";
-import { checkInATeam } from "@/auth/CheckUser";
+import { checkInATeam, checkIsLoggedIn } from "@/auth/CheckUser";
 import { createRecurringEvent } from "@/graphql/mutations";
 import { EventCard } from "@/components/EventCard";
 
@@ -53,7 +54,9 @@ export const RecurringEventsPage: React.FC = () => {
 const EventsBody: React.FC = () => {
   const [events, setEvents] = useState<RecurringEvent[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [inATeam, setInATeam] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -69,11 +72,11 @@ const EventsBody: React.FC = () => {
     addToGoogleCalendar: false,
   });
 
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     try {
-      const result = await client.graphql({ query: listRecurringEvents });
-
-      console.log("res", result)
+      const result: any = await client.graphql({
+        query: isLoggedIn ? listRecurringEvents : listPublicRecurringEvents,
+      });
 
       const eventsData = result.data?.listRecurringEvents?.items || [];
 
@@ -96,15 +99,24 @@ const EventsBody: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [isLoggedIn]);
 
   useEffect(() => {
-    fetchEvents();
-  }, []);
+    if (authChecked) fetchEvents();
+  }, [authChecked, fetchEvents]);
 
   useEffect(() => {
     const checkAuth = async () => {
-      await checkInATeam(setInATeam);
+      try {
+        const loggedIn = await checkIsLoggedIn(setIsLoggedIn);
+        if (loggedIn) {
+          await checkInATeam(setInATeam);
+        } else {
+          setInATeam(false);
+        }
+      } finally {
+        setAuthChecked(true);
+      }
     };
     checkAuth();
   }, []);
@@ -357,6 +369,7 @@ const EventsBody: React.FC = () => {
                 key={event.id}
                 event={{ kind: "recurring", ...event, title: event.name }}
                 inATeam={inATeam}
+                galleryAccessContext={{ isLoggedIn }}
                 onEventUpdate={fetchEvents}
               />
             ))
