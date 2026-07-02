@@ -51,7 +51,9 @@ const Profile: React.FC<ProfileProps> = ({ src, alt, name, biography }) => {
           <Heading as={"h3"} fontSize={"xl"}>
             {name}
           </Heading>
-          <Text fontSize={"md"}>{biography}</Text>
+          <Text fontSize={"md"} whiteSpace={"pre-line"}>
+            {biography}
+          </Text>
         </Box>
       </Flex>
     </Box>
@@ -66,18 +68,12 @@ const LeadershipBody = () => {
       </Heading>
       <Separator size={"md"} width={"100%"} marginBottom={"2rem"} />
       <Profile
-        src="images/matt.jpg"
-        alt="Matt Ng"
-        name="Matt Ng"
-        biography="Matt was born in San Francisco and raised in a Christian home,
-            coming to saving faith at a young age. He moved to Los Angeles to
-            attend UCLA, and became actively involved at Grace on Campus and
-            Grace Community Church during his college years. A&nbsp;graduate of The
-            Master’s Seminary, he has served as the shepherd of Grace on Campus
-            since 2021. Matt and his wife Kimmie (also from San Francisco and a
-            UCLA alum) are blessed with three boys and a girl. In their spare
-            time, the Ngs enjoy watching the Warriors when they win, visiting
-            coffee shops around town, and smoking meat in their backyard smoker."
+        src="images/callum.jpg"
+        alt="Callum Aiken"
+        name="Callum Aiken"
+        biography={`Callum grew up in rural Northern Ireland where he was raised in a Christian home and came to saving faith at a young age. In 2024, he moved to Los Angeles to train for ministry at The Master’s Seminary and has been part of Grace on Campus since then. Callum’s desire is to help the students of Grace on Campus grow in their love for Jesus, His Word, and His Church.
+
+          Alongside serving at Grace on Campus, he is on the staff of Grace Community Church and the Master’s Seminary where he is also studying for his MDiv. Callum earned his BMus in Music from Queens University Belfast and his MA in Theology from the Irish Baptist College. He is married to Emma and they live in Sawtelle. In his spare time Callum enjoys speciality coffee, history podcasts, and anything musical.`}
       />
       {/* Add more people using <Separator> and <Profile> (also use <Heading> if needed) */}
       {/* <Separator size={"md"} width={"100%"} marginBottom={"2rem"} /> */}
