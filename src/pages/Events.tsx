@@ -1,4 +1,5 @@
 import { NavbarActiveKey } from "@/components/Navbar";
+import { RecurringEventsSection } from "@/components/RecurringEventsSection";
 import { listGOCEvents } from "@/graphql/queries";
 import { listPublicGOCEvents } from "@/utils/eventQueries";
 import { generateClient } from "aws-amplify/api";
@@ -8,7 +9,6 @@ import {
   Flex,
   Heading,
   Icon,
-  Image,
   Stack,
   Text,
   Container,
@@ -16,18 +16,10 @@ import {
   Input,
   Textarea,
   Button,
-  HStack,
   Checkbox,
 } from "@chakra-ui/react";
-import {
-  AccordionItem,
-  AccordionItemContent,
-  AccordionItemTrigger,
-  AccordionRoot,
-} from "@/components/ui/accordion";
-import GOCSpinner from "@/components/GOCSpinner";
 import { BannerTemplate } from "@/layouts/BannerTemplate";
-import { MdAttachMoney, MdLocationPin, MdAdd } from "react-icons/md";
+import { MdAdd } from "react-icons/md";
 import { EventList } from "@/components/EventCardList";
 import { checkInATeam, checkIsLoggedIn } from "@/auth/CheckUser";
 import { createGOCEvents } from "@/graphql/mutations";
@@ -267,33 +259,32 @@ const EventsBody: React.FC = () => {
         align={"center"}
         gap={"3rem"}
       >
-        {/* <EventList events={events} loading={loading} /> */}
+        <RecurringEventsSection access={{ authChecked, inATeam, isLoggedIn }} />
+
         <Stack
-          id={"calendar"}
           as={"section"}
           width={"100%"}
           maxWidth={{ base: "100%", md: "1200px" }}
-          align={"center"}
+          align={"stretch"}
+          gap={"1.5rem"}
         >
           <Heading
             as="h2"
-            textAlign={"center"}
-            marginBottom={{ base: "1rem", md: "2rem" }}
-            fontSize={{
-              base: "2xl",
-              md: "3xl",
-              lg: "4xl",
-              xl: "4xl",
-            }}
+            color="goc.dark_blue"
+            fontFamily="Poppins"
+            fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
+            marginBottom={0}
+            textAlign={{ base: "center", md: "left" }}
           >
-            Calendar
+            Upcoming Events
           </Heading>
-          <AspectRatio ratio={{ base: 1, md: 4 / 3 }} width="100%">
-            <iframe
-              src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FLos_Angeles&showPrint=0&title&showCalendars=0&mode=MONTH&showTz=0&src=Z29jYXRlYW1AZ21haWwuY29t&color=%23C0CA33"
-              title="Google Calendar"
-            />
-          </AspectRatio>
+          <EventList
+            events={events}
+            loading={loading}
+            inATeam={inATeam}
+            galleryAccessContext={{ isLoggedIn }}
+            onEventUpdate={fetchEvents}
+          />
         </Stack>
 
         {/* Create Event Form - Only visible to ATeam */}
@@ -508,18 +499,31 @@ const EventsBody: React.FC = () => {
         )}
 
         <Stack
+          id={"calendar"}
           as={"section"}
           width={"100%"}
           maxWidth={{ base: "100%", md: "1200px" }}
           align={"center"}
         >
-          <EventList
-            events={events}
-            loading={loading}
-            inATeam={inATeam}
-            galleryAccessContext={{ isLoggedIn }}
-            onEventUpdate={fetchEvents}
-          />
+          <Heading
+            as="h2"
+            textAlign={"center"}
+            marginBottom={{ base: "1rem", md: "2rem" }}
+            fontSize={{
+              base: "2xl",
+              md: "3xl",
+              lg: "4xl",
+              xl: "4xl",
+            }}
+          >
+            Calendar
+          </Heading>
+          <AspectRatio ratio={{ base: 1, md: 4 / 3 }} width="100%">
+            <iframe
+              src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FLos_Angeles&showPrint=0&title&showCalendars=0&mode=MONTH&showTz=0&src=Z29jYXRlYW1AZ21haWwuY29t&color=%23C0CA33"
+              title="Google Calendar"
+            />
+          </AspectRatio>
         </Stack>
       </Stack>
     </Container>

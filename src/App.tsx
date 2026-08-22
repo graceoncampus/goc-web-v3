@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Provider } from "provider";
 import ScrollToTop from "@/hooks/ScrollToTop";
 import { LandingPage } from "@/pages/Landing";
@@ -20,7 +20,6 @@ import { ProfilePage } from "@/pages/Profile";
 import { NotFoundPage } from "@/pages/NotFound";
 import { WelcomeWeekPage } from "@/pages/WelcomeWeek";
 import { useEffect } from "react";
-import { RecurringEventsPage } from "./pages/RecurringEvents";
 
 // a small component to redirect to an external URL
 const ExternalRedirect: React.FC<{ to: string }> = ({ to }) => {
@@ -43,7 +42,10 @@ const App = () => {
             <Route path={"/about"} element={<AboutUsPage />} />
             <Route path={"/sermons"} element={<SermonsPage />} />
             <Route path={"/events"} element={<EventsPage />} />
-            <Route path={"/recurring-events"} element={<RecurringEventsPage />} />
+            <Route
+              path={"/recurring-events"}
+              element={<Navigate to="/events" replace />}
+            />
             <Route path={"/ourbeliefs"} element={<OurBeliefsPage />} />
             <Route path={"/leadership"} element={<LeadershipPage />} />
             <Route path={"/rides"} element={<RidesLandingPage />} />
