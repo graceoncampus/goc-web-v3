@@ -6,14 +6,11 @@ Amplify Params - DO NOT EDIT */
 const Parser = require("rss-parser");
 const {
   DynamoDBClient,
-  DeleteTableCommand,
-  DescribeTableCommand,
-  CreateTableCommand,
   PutItemCommand,
   ScanCommand,
 } = require("@aws-sdk/client-dynamodb");
 
-const { v4: uuidv4 } = require("uuid");
+const { randomUUID: uuidv4 } = require("node:crypto");
 
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
@@ -33,7 +30,7 @@ exports.handler = async (event) => {
     const sermons = await loadSermons(client);
 
     const sermonsToAdd = sermons.filter(
-      (sermon) => sermon.date > new Date(latestSermon.date.S),
+      (sermon) => !latestSermon || sermon.date > new Date(latestSermon.date.S),
     );
     await createSermons(sermonsToAdd, client);
 
@@ -67,63 +64,23 @@ exports.handler = async (event) => {
   }
 };
 
-// Delete and Recreate Sermons Table
+// Add new sermons to the existing table.
 const createSermons = async (sermons, client) => {
-  const statusCommand = new DescribeTableCommand({
-    TableName: "Sermons",
-  });
-
-  const maxTries = 1000;
-  let tries = 0;
-  let status = "";
-  while (true && tries < maxTries && status != "ACTIVE") {
-    try {
-      const response = await client.send(statusCommand);
-      status = response.Table.TableStatus;
-      tries += 1;
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  let id = 0;
   await Promise.all(
-    sermons.map(async (sermon) => {
-      const { title, date, speaker, passage, URI } = sermon;
-      console.log("Putting sermon: ", sermon);
-      const putInput = {
+    sermons.map(async ({ title, date, speaker, passage, URI }) => {
+      const putCommand = new PutItemCommand({
         TableName: "Sermons",
         Item: {
-          id: {
-            S: uuidv4(),
-          },
-          title: {
-            S: title,
-          },
-          date: {
-            S: date,
-          },
-          speaker: {
-            S: speaker,
-          },
-          passage: {
-            S: passage,
-          },
-          URI: {
-            S: URI,
-          },
+          id: { S: uuidv4() },
+          title: { S: title },
+          date: { S: date.toISOString() },
+          speaker: { S: speaker },
+          passage: { S: passage },
+          URI: { S: URI },
         },
-      };
-      const putCommand = new PutItemCommand(putInput);
-      id += 1;
-
-      try {
-        await client.send(putCommand);
-        console.log("Added sermon: ", sermon);
-      } catch (err) {
-        console.error(`Failed to add Sermon: ${passage}`);
-        console.log(err);
-      }
+      });
+      await client.send(putCommand);
+      console.log("Added sermon:", title, date.toISOString());
     }),
   );
 };
@@ -147,7 +104,8 @@ const loadSermons = async (client) => {
 
     return sermons;
   } catch (error) {
-    console.log(error);
+    console.error("Error loading sermons:", error);
+    throw error;
   }
 };
 
