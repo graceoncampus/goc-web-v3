@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.901.0",
-    "rss-parser": "^3.13.0"
+    "rss-parser": "^3.13.0",
+    "uuid": "9.0.1"
   }
 }
