@@ -84,3 +84,9 @@ Commit `03c0567` published the recovered backend definitions and helpers while p
 Subsequent read-only checks, authorized with the documentation publication request, show job 178 succeeded in BUILD/DEPLOY/VERIFY and the production root stack is UPDATE_COMPLETE, updated at `2026-10-14T15:48:48.764Z`. These statuses do not establish complete runtime validation or an audit of every resource change. No rollback, cleanup, or production configuration fix was attempted. Review the complete Hosting workflow and backend plan before another application/backend publication; do not infer safety only from the repository YAML.
 
 For documentation-only publication that must not deploy, append `[skip-cd]` to the commit message as documented in [AWS build guidance](https://docs.aws.amazon.com/amplify/latest/userguide/edit-build-settings.html), then verify no new Hosting build or backend update occurred. This does not change the automatic-build setting for future application commits.
+
+## Gamma rebase, October 14, 2026
+
+Git gamma was rebased onto main at 06af751, retaining its existing amplify.yml and main's newer deployment journal. Its source now includes main's Amplify definitions, agent guidance, and documentation. The final publication commit uses [skip-cd], so this history update does not deploy the website or backend; the deployed gamma site remains job 1 until a separately reviewed build. See the [rebase journal](journal/2026-10-14-ejinsw-rebase-gamma-onto-main.md) for conflict resolution and verification.
+
+The preserved gamma build specification conditionally runs amplify/scripts/deploy-backend.sh, which is now present from main. A future unskipped gamma build can therefore deploy backend gamma before building the frontend. Review the complete backend plan and CI credentials before triggering it; resource replacements/deletions require fresh engineer verification. Rebasing the branch is not evidence that this future backend pipeline has been tested.
