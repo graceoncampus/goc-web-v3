@@ -29,6 +29,14 @@
         },
         "NONE"
       ]
+    },
+    "IsGamma": {
+      "Fn::Equals": [
+        {
+          "Ref": "env"
+        },
+        "gamma"
+      ]
     }
   },
   "Resources": {
@@ -76,6 +84,13 @@
             },
             "STORAGE_SERMONS_BUCKETNAME": {
               "Ref": "storagesermonsBucketName"
+            },
+            "SERMONS_TABLE_NAME": {
+              "Fn::If": [
+                "IsGamma",
+                "Sermons-gamma",
+                "Sermons"
+              ]
             }
           }
         },
@@ -179,7 +194,13 @@
         "ScheduleExpression": {
           "Ref": "CloudWatchRule"
         },
-        "State": "ENABLED",
+        "State": {
+          "Fn::If": [
+            "IsGamma",
+            "DISABLED",
+            "ENABLED"
+          ]
+        },
         "Targets": [
           {
             "Arn": {
@@ -227,7 +248,20 @@
                 "dynamodb:Scan"
               ],
               "Resource": [
-                "arn:aws:dynamodb:*:*:table/Sermons"
+                {
+                  "Fn::Sub": [
+                    "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${table}",
+                    {
+                      "table": {
+                        "Fn::If": [
+                          "IsGamma",
+                          "Sermons-gamma",
+                          "Sermons"
+                        ]
+                      }
+                    }
+                  ]
+                }
               ],
               "Effect": "Allow"
             }

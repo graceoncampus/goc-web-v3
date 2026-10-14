@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "strict": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "build",
+    "skipLibCheck": true
+  },
+  "include": [
+    "auth/**/override.ts",
+    "api/**/override.ts",
+    "storage/**/override.ts",
+    "awscloudformation/**/override.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    "function"
+  ]
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "Action": [
+      "cognito-idp:ListUsers",
+      "cognito-idp:ListGroups",
+      "cognito-idp:AdminListGroupsForUser",
+      "cognito-idp:AdminAddUserToGroup",
+      "cognito-idp:AdminRemoveUserFromGroup"
+    ],
+    "Resource": [
+      {
+        "Fn::Sub": "arn:${AWS::Partition}:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${authgocwebv3265a1135UserPoolId}"
+      }
+    ]
+  }
+]

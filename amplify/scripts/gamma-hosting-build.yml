@@ -1,0 +1,77 @@
+version: 1
+backend:
+  phases:
+    build:
+      commands:
+        - nvm install
+        - nvm use
+        - npm install --global yarn@1.22.22
+        - >-
+          if [ -f amplify/scripts/deploy-backend.sh ]; then
+            bash amplify/scripts/deploy-backend.sh;
+          else
+            echo 'Backend deployment skipped until reviewed gamma definitions are committed';
+          fi
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - nvm install
+        - nvm use
+        - npm install --global yarn@1.22.22
+        - yarn install --frozen-lockfile
+        - 'test "$(aws sts get-caller-identity --region us-west-2 --query Account --output text)" = "271755560601"'
+        - aws amplify get-app --app-id d1afaiv4wnjkx7 --region us-west-2 --query app.name --output text
+        - |
+          if [ ! -f amplify/scripts/deploy-backend.sh ]; then
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const os = require('node:os');
+          const assert = require('node:assert/strict');
+          const { execFileSync } = require('node:child_process');
+          async function main() {
+            assert(process.env.AWS_BRANCH && process.env.AWS_BRANCH !== 'main');
+            let credentials;
+            try {
+              const result = JSON.parse(execFileSync('aws', ['configure', 'export-credentials', '--format', 'process'], { encoding: 'utf8' }));
+              credentials = { accessKeyId: result.AccessKeyId, secretAccessKey: result.SecretAccessKey, sessionToken: result.SessionToken };
+            } catch (exportError) {
+              const AWS = require('aws-sdk');
+              try {
+                credentials = await new AWS.CredentialProviderChain().resolvePromise();
+              } catch (error) {
+                error.cause = exportError;
+                throw error;
+              }
+            }
+            assert(credentials.accessKeyId && credentials.secretAccessKey && credentials.sessionToken);
+            const directory = path.join(os.homedir(), '.aws');
+            fs.mkdirSync(directory, { recursive: true, mode: 0o700 });
+            const credentialFile = path.join(directory, 'credentials');
+            const configFile = path.join(directory, 'config');
+            fs.appendFileSync(credentialFile, ['','[gamma-ci]', 'aws_access_key_id=' + credentials.accessKeyId, 'aws_secret_access_key=' + credentials.secretAccessKey, 'aws_session_token=' + credentials.sessionToken, ''].join('\n'), { mode: 0o600 });
+            fs.appendFileSync(configFile, '\n[profile gamma-ci]\nregion=us-west-2\n', { mode: 0o600 });
+            fs.chmodSync(credentialFile, 0o600);
+            fs.chmodSync(configFile, 0o600);
+            console.log('Using existing temporary Hosting credentials in a private gamma-ci profile');
+            execFileSync('amplify', ['pull',
+              '--amplify', JSON.stringify({ projectName: 'gocwebv3', appId: 'd1afaiv4wnjkx7', envName: 'gamma', defaultEditor: 'code' }),
+              '--frontend', JSON.stringify({ frontend: 'javascript', framework: 'react', config: { SourceDir: 'src', DistributionDir: 'dist', BuildCommand: 'yarn build', StartCommand: 'yarn start' } }),
+              '--providers', JSON.stringify({ awscloudformation: { configLevel: 'project', useProfile: true, profileName: 'gamma-ci' } }),
+              '--yes'], { stdio: 'inherit', env: { ...process.env, AWS_PROFILE: 'gamma-ci', AWS_REGION: 'us-west-2', AWS_DEFAULT_REGION: 'us-west-2', CI: '1' } });
+          }
+          main().catch(error => { console.error(error.stack); if (error.cause) console.error(error.cause.stack); process.exitCode = 1; });
+          NODE
+          fi
+        - amplify codegen --maxDepth 4
+    build:
+      commands:
+        - yarn build
+  artifacts:
+    baseDirectory: dist
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*

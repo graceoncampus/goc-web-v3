@@ -8,7 +8,20 @@
       "dynamodb:Scan"
     ],
     "Resource": [
-      "arn:aws:dynamodb:*:*:table/Sermons"
+      {
+        "Fn::Sub": [
+          "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${table}",
+          {
+            "table": {
+              "Fn::If": [
+                "IsGamma",
+                "Sermons-gamma",
+                "Sermons"
+              ]
+            }
+          }
+        ]
+      }
     ]
   }
 ]

@@ -1,5 +1,10 @@
 export type AmplifyDependentResourcesAttributes = {
   "api": {
+    "adminUserManagement": {
+      "ApiId": "string",
+      "ApiName": "string",
+      "RootUrl": "string"
+    },
     "gocbackendv3": {
       "GraphQLAPIEndpointOutput": "string",
       "GraphQLAPIIdOutput": "string",
@@ -23,10 +28,19 @@ export type AmplifyDependentResourcesAttributes = {
       "UserPoolName": "string"
     },
     "userPoolGroups": {
+      "ATeamGroupRole": "string",
+      "AdminGroupRole": "string",
       "RidesTeamGroupRole": "string"
     }
   },
   "function": {
+    "adminUserManagement": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "updateRides": {
       "Arn": "string",
       "LambdaExecutionRole": "string",

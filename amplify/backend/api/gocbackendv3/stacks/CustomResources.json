@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Custom resources stack for RecurringEvent table and resolvers.",
+  "Description": "AppSync tables and resolvers. Legacy production resources remain external; gamma resources are managed here.",
   "Metadata": {},
   "Parameters": {
     "AppSyncApiId": {
@@ -158,7 +158,8 @@
           ]
         },
         "RequestMappingTemplate": "{\n  \"version\": \"2017-02-28\",\n  \"operation\": \"GetItem\",\n  \"key\": {\n    \"id\": $util.dynamodb.toDynamoDBJson($ctx.args.id)\n  }\n}",
-        "ResponseMappingTemplate": "$util.toJson($ctx.result)"
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)",
+        "MaxBatchSize": 0
       },
       "DependsOn": "RecurringEventDataSource"
     },
@@ -177,7 +178,8 @@
           ]
         },
         "RequestMappingTemplate": "{\n  \"version\": \"2017-02-28\",\n  \"operation\": \"Scan\",\n  #if($ctx.args.filter)\n    \"filter\": $util.transform.toDynamoDBFilterExpression($ctx.args.filter),\n  #end\n  #if($ctx.args.limit)\n    \"limit\": $ctx.args.limit,\n  #end\n  #if($ctx.args.nextToken)\n    \"nextToken\": \"$ctx.args.nextToken\"\n  #end\n}",
-        "ResponseMappingTemplate": "{\n  \"items\": $util.toJson($ctx.result.items),\n  \"nextToken\": $util.toJson($ctx.result.nextToken)\n}"
+        "ResponseMappingTemplate": "{\n  \"items\": $util.toJson($ctx.result.items),\n  \"nextToken\": $util.toJson($ctx.result.nextToken)\n}",
+        "MaxBatchSize": 0
       },
       "DependsOn": "RecurringEventDataSource"
     },
@@ -196,7 +198,8 @@
           ]
         },
         "RequestMappingTemplate": "{\n  \"version\": \"2017-02-28\",\n  \"operation\": \"PutItem\",\n  \"key\": {\n    \"id\": $util.dynamodb.toDynamoDBJson($ctx.args.input.id)\n  },\n  \"attributeValues\": $util.dynamodb.toMapValuesJson($ctx.args.input)\n}",
-        "ResponseMappingTemplate": "$util.toJson($ctx.result)"
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)",
+        "MaxBatchSize": 0
       },
       "DependsOn": "RecurringEventDataSource"
     },
@@ -215,7 +218,8 @@
           ]
         },
         "RequestMappingTemplate": "#set($input = $ctx.args.input)\n{\n  \"version\": \"2017-02-28\",\n  \"operation\": \"UpdateItem\",\n  \"key\": {\n    \"id\": $util.dynamodb.toDynamoDBJson($input.id)\n  },\n  \"update\": {\n    \"expression\": \"SET #name = :name, #description = :description, #time = :time, #location = :location, #imageLink = :imageLink, #addToGoogleCalendar = :addToGoogleCalendar\",\n    \"expressionNames\": {\n      \"#name\": \"name\",\n      \"#description\": \"description\",\n      \"#time\": \"time\",\n      \"#location\": \"location\",\n      \"#imageLink\": \"imageLink\",\n      \"#addToGoogleCalendar\": \"addToGoogleCalendar\"\n    },\n    \"expressionValues\": {\n      \":name\": $util.dynamodb.toDynamoDBJson($input.name),\n      \":description\": $util.dynamodb.toDynamoDBJson($input.description),\n      \":time\": $util.dynamodb.toDynamoDBJson($input.time),\n      \":location\": $util.dynamodb.toDynamoDBJson($input.location),\n      \":imageLink\": $util.dynamodb.toDynamoDBJson($input.imageLink),\n      \":addToGoogleCalendar\": $util.dynamodb.toDynamoDBJson($input.addToGoogleCalendar)\n    }\n  }\n}",
-        "ResponseMappingTemplate": "$util.toJson($ctx.result)"
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)",
+        "MaxBatchSize": 0
       },
       "DependsOn": "RecurringEventDataSource"
     },
@@ -234,9 +238,1372 @@
           ]
         },
         "RequestMappingTemplate": "{\n  \"version\": \"2017-02-28\",\n  \"operation\": \"DeleteItem\",\n  \"key\": {\n    \"id\": $util.dynamodb.toDynamoDBJson($ctx.args.input.id)\n  }\n}",
-        "ResponseMappingTemplate": "$util.toJson($ctx.result)"
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)",
+        "MaxBatchSize": 0
       },
       "DependsOn": "RecurringEventDataSource"
+    },
+    "LegacyEventsTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Condition": "IsGamma",
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain",
+      "Properties": {
+        "TableName": {
+          "Fn::Sub": "Events-${env}"
+        },
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST"
+      }
+    },
+    "LegacyEventsTableRole": {
+      "Type": "AWS::IAM::Role",
+      "Condition": "IsGamma",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "EventsAccess",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:GetItem",
+                    "dynamodb:PutItem",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:DeleteItem",
+                    "dynamodb:Query",
+                    "dynamodb:Scan",
+                    "dynamodb:BatchGetItem",
+                    "dynamodb:BatchWriteItem"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "LegacyEventsTable",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "${LegacyEventsTable.Arn}/index/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "LegacyEventsTableDataSource": {
+      "Type": "AWS::AppSync::DataSource",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "Name": "EventsTable",
+        "Type": "AMAZON_DYNAMODB",
+        "ServiceRoleArn": {
+          "Fn::GetAtt": [
+            "LegacyEventsTableRole",
+            "Arn"
+          ]
+        },
+        "DynamoDBConfig": {
+          "TableName": {
+            "Ref": "LegacyEventsTable"
+          },
+          "AwsRegion": {
+            "Ref": "AWS::Region"
+          },
+          "UseCallerCredentials": false,
+          "Versioned": false
+        }
+      }
+    },
+    "LegacyMinistryTeamTableTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Condition": "IsGamma",
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain",
+      "Properties": {
+        "TableName": {
+          "Fn::Sub": "MinistryTeamTable-${env}"
+        },
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST"
+      }
+    },
+    "LegacyMinistryTeamTableRole": {
+      "Type": "AWS::IAM::Role",
+      "Condition": "IsGamma",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "MinistryTeamTableAccess",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:GetItem",
+                    "dynamodb:PutItem",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:DeleteItem",
+                    "dynamodb:Query",
+                    "dynamodb:Scan",
+                    "dynamodb:BatchGetItem",
+                    "dynamodb:BatchWriteItem"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "LegacyMinistryTeamTableTable",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "${LegacyMinistryTeamTableTable.Arn}/index/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "LegacyMinistryTeamTableDataSource": {
+      "Type": "AWS::AppSync::DataSource",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "Name": "MinistryTeamTable",
+        "Type": "AMAZON_DYNAMODB",
+        "ServiceRoleArn": {
+          "Fn::GetAtt": [
+            "LegacyMinistryTeamTableRole",
+            "Arn"
+          ]
+        },
+        "DynamoDBConfig": {
+          "TableName": {
+            "Ref": "LegacyMinistryTeamTableTable"
+          },
+          "AwsRegion": {
+            "Ref": "AWS::Region"
+          },
+          "UseCallerCredentials": false,
+          "Versioned": false
+        }
+      }
+    },
+    "LegacyMinistryTeamsTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Condition": "IsGamma",
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain",
+      "Properties": {
+        "TableName": {
+          "Fn::Sub": "MinistryTeams-${env}"
+        },
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST"
+      }
+    },
+    "LegacyMinistryTeamsRole": {
+      "Type": "AWS::IAM::Role",
+      "Condition": "IsGamma",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "MinistryTeamsAccess",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:GetItem",
+                    "dynamodb:PutItem",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:DeleteItem",
+                    "dynamodb:Query",
+                    "dynamodb:Scan",
+                    "dynamodb:BatchGetItem",
+                    "dynamodb:BatchWriteItem"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "LegacyMinistryTeamsTable",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "${LegacyMinistryTeamsTable.Arn}/index/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "LegacyMinistryTeamsDataSource": {
+      "Type": "AWS::AppSync::DataSource",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "Name": "MinistryTeams",
+        "Type": "AMAZON_DYNAMODB",
+        "ServiceRoleArn": {
+          "Fn::GetAtt": [
+            "LegacyMinistryTeamsRole",
+            "Arn"
+          ]
+        },
+        "DynamoDBConfig": {
+          "TableName": {
+            "Ref": "LegacyMinistryTeamsTable"
+          },
+          "AwsRegion": {
+            "Ref": "AWS::Region"
+          },
+          "UseCallerCredentials": false,
+          "Versioned": false
+        }
+      }
+    },
+    "LegacyPrayerRequestTableTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Condition": "IsGamma",
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain",
+      "Properties": {
+        "TableName": {
+          "Fn::Sub": "PrayerRequestTable-${env}"
+        },
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST"
+      }
+    },
+    "LegacyPrayerRequestTableRole": {
+      "Type": "AWS::IAM::Role",
+      "Condition": "IsGamma",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "PrayerRequestTableAccess",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:GetItem",
+                    "dynamodb:PutItem",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:DeleteItem",
+                    "dynamodb:Query",
+                    "dynamodb:Scan",
+                    "dynamodb:BatchGetItem",
+                    "dynamodb:BatchWriteItem"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "LegacyPrayerRequestTableTable",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "${LegacyPrayerRequestTableTable.Arn}/index/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "LegacyPrayerRequestTableDataSource": {
+      "Type": "AWS::AppSync::DataSource",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "Name": "PrayerRequestTable",
+        "Type": "AMAZON_DYNAMODB",
+        "ServiceRoleArn": {
+          "Fn::GetAtt": [
+            "LegacyPrayerRequestTableRole",
+            "Arn"
+          ]
+        },
+        "DynamoDBConfig": {
+          "TableName": {
+            "Ref": "LegacyPrayerRequestTableTable"
+          },
+          "AwsRegion": {
+            "Ref": "AWS::Region"
+          },
+          "UseCallerCredentials": false,
+          "Versioned": false
+        }
+      }
+    },
+    "LegacyRecurringEventsTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Condition": "IsGamma",
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain",
+      "Properties": {
+        "TableName": {
+          "Fn::Sub": "RecurringEvents-${env}"
+        },
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST"
+      }
+    },
+    "LegacyRecurringEventsTableRole": {
+      "Type": "AWS::IAM::Role",
+      "Condition": "IsGamma",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "RecurringEventsAccess",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:GetItem",
+                    "dynamodb:PutItem",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:DeleteItem",
+                    "dynamodb:Query",
+                    "dynamodb:Scan",
+                    "dynamodb:BatchGetItem",
+                    "dynamodb:BatchWriteItem"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "LegacyRecurringEventsTable",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "${LegacyRecurringEventsTable.Arn}/index/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "LegacyRecurringEventsTableDataSource": {
+      "Type": "AWS::AppSync::DataSource",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "Name": "RecurringEventsTable",
+        "Type": "AMAZON_DYNAMODB",
+        "ServiceRoleArn": {
+          "Fn::GetAtt": [
+            "LegacyRecurringEventsTableRole",
+            "Arn"
+          ]
+        },
+        "DynamoDBConfig": {
+          "TableName": {
+            "Ref": "LegacyRecurringEventsTable"
+          },
+          "AwsRegion": {
+            "Ref": "AWS::Region"
+          },
+          "UseCallerCredentials": false,
+          "Versioned": false
+        }
+      }
+    },
+    "LegacyRideTableTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Condition": "IsGamma",
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain",
+      "Properties": {
+        "TableName": {
+          "Fn::Sub": "RideTable-${env}"
+        },
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST"
+      }
+    },
+    "LegacyRideTableRole": {
+      "Type": "AWS::IAM::Role",
+      "Condition": "IsGamma",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "RideTableAccess",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:GetItem",
+                    "dynamodb:PutItem",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:DeleteItem",
+                    "dynamodb:Query",
+                    "dynamodb:Scan",
+                    "dynamodb:BatchGetItem",
+                    "dynamodb:BatchWriteItem"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "LegacyRideTableTable",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "${LegacyRideTableTable.Arn}/index/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "LegacyRideTableDataSource": {
+      "Type": "AWS::AppSync::DataSource",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "Name": "RideTable",
+        "Type": "AMAZON_DYNAMODB",
+        "ServiceRoleArn": {
+          "Fn::GetAtt": [
+            "LegacyRideTableRole",
+            "Arn"
+          ]
+        },
+        "DynamoDBConfig": {
+          "TableName": {
+            "Ref": "LegacyRideTableTable"
+          },
+          "AwsRegion": {
+            "Ref": "AWS::Region"
+          },
+          "UseCallerCredentials": false,
+          "Versioned": false
+        }
+      }
+    },
+    "LegacySermonsTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Condition": "IsGamma",
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain",
+      "Properties": {
+        "TableName": {
+          "Fn::Sub": "Sermons-${env}"
+        },
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "date",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "date",
+            "KeyType": "RANGE"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST"
+      }
+    },
+    "LegacySermonTableRole": {
+      "Type": "AWS::IAM::Role",
+      "Condition": "IsGamma",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "SermonsAccess",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:GetItem",
+                    "dynamodb:PutItem",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:DeleteItem",
+                    "dynamodb:Query",
+                    "dynamodb:Scan",
+                    "dynamodb:BatchGetItem",
+                    "dynamodb:BatchWriteItem"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "LegacySermonsTable",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "${LegacySermonsTable.Arn}/index/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "LegacySermonTableDataSource": {
+      "Type": "AWS::AppSync::DataSource",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "Name": "SermonTable",
+        "Type": "AMAZON_DYNAMODB",
+        "ServiceRoleArn": {
+          "Fn::GetAtt": [
+            "LegacySermonTableRole",
+            "Arn"
+          ]
+        },
+        "DynamoDBConfig": {
+          "TableName": {
+            "Ref": "LegacySermonsTable"
+          },
+          "AwsRegion": {
+            "Ref": "AWS::Region"
+          },
+          "UseCallerCredentials": false,
+          "Versioned": false
+        }
+      }
+    },
+    "LegacyQueryGetGOCEventsResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Query",
+        "FieldName": "getGOCEvents",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyEventsTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { get } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Sends a request to get an item with id `ctx.args.id` from the DynamoDB table.\n * @param {import('@aws-appsync/utils').Context<{id: unknown;}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBGetItemRequest} the request\n */\nexport function request(ctx) {\n    const { id } = ctx.args;\n    const key = { id };\n    return get({\n        key,\n    })\n}\n\n/**\n * Returns the fetched DynamoDB item.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {*} the DynamoDB item\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    return result;\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacyEventsTableDataSource"
+    },
+    "LegacyQueryGetMinistryTeamResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Query",
+        "FieldName": "getMinistryTeam",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyMinistryTeamTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { get } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Sends a request to get an item with id `ctx.args.id` from the DynamoDB table.\n * @param {import('@aws-appsync/utils').Context<{id: unknown;}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBGetItemRequest} the request\n */\nexport function request(ctx) {\n    const { id } = ctx.args;\n    const key = { id };\n    return get({\n        key,\n    })\n}\n\n/**\n * Returns the fetched DynamoDB item.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {*} the DynamoDB item\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    return result;\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacyMinistryTeamTableDataSource"
+    },
+    "LegacyQueryGetPrayerRequestResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Query",
+        "FieldName": "getPrayerRequest",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyPrayerRequestTableDataSource",
+            "Name"
+          ]
+        },
+        "RequestMappingTemplate": "{\n  \"version\": \"2017-02-28\",\n  \"operation\": \"GetItem\",\n  \"key\": {\n    \"id\": $util.dynamodb.toDynamoDBJson($ctx.args.id),\n  },\n}",
+        "ResponseMappingTemplate": "$util.toJson($context.result)",
+        "MaxBatchSize": 0
+      },
+      "DependsOn": "LegacyPrayerRequestTableDataSource"
+    },
+    "LegacyQueryGetRideResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Query",
+        "FieldName": "getRide",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyRideTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { get } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Sends a request to get an item with id `ctx.args.id` from the DynamoDB table.\n * @param {import('@aws-appsync/utils').Context<{id: unknown;}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBGetItemRequest} the request\n */\nexport function request(ctx) {\n    const { id } = ctx.args;\n    const key = { id };\n    return get({\n        key,\n    })\n}\n\n/**\n * Returns the fetched DynamoDB item.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {*} the DynamoDB item\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    return result;\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacyRideTableDataSource"
+    },
+    "LegacyQueryGetSermonResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Query",
+        "FieldName": "getSermon",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacySermonTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { get } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Sends a request to get an item with id `ctx.args.id` and date `ctx.args.date` from the DynamoDB table.\n * @param {import('@aws-appsync/utils').Context<{id: unknown; date: unknown;}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBGetItemRequest} the request\n */\nexport function request(ctx) {\n    const { id, date } = ctx.args;\n    const key = { id, date };\n    return get({\n        key,\n    })\n}\n\n/**\n * Returns the fetched DynamoDB item.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {*} the DynamoDB item\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    return result;\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacySermonTableDataSource"
+    },
+    "LegacyQueryListGOCEventsResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Query",
+        "FieldName": "listGOCEvents",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyEventsTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { scan } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Scans the DynamoDB datasource. Scans up to the provided `limit` and stards from the provided `NextToken` (optional).\n * @param {import('@aws-appsync/utils').Context<{filter?: any; limit?: number; nextToken?: string}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBScanRequest} the request\n */\nexport function request(ctx) {\n    const { filter, limit, nextToken } = ctx.args;\n    \n    return scan({\n        limit,\n        nextToken,\n        filter,\n    })\n}\n\n/**\n * Returns a list of items and a token.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {{items: any[]; nextToken?: string}} the result\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    const { items = [], nextToken } = result;\n    return { items, nextToken };\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacyEventsTableDataSource"
+    },
+    "LegacyQueryListMinistryTeamsResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Query",
+        "FieldName": "listMinistryTeams",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyMinistryTeamTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { scan } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Scans the DynamoDB datasource. Scans up to the provided `limit` and stards from the provided `NextToken` (optional).\n * @param {import('@aws-appsync/utils').Context<{filter?: any; limit?: number; nextToken?: string}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBScanRequest} the request\n */\nexport function request(ctx) {\n    const { filter, limit, nextToken } = ctx.args;\n    \n    return scan({\n        limit,\n        nextToken,\n        filter,\n    })\n}\n\n/**\n * Returns a list of items and a token.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {{items: any[]; nextToken?: string}} the result\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    const { items = [], nextToken } = result;\n    return { items, nextToken };\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacyMinistryTeamTableDataSource"
+    },
+    "LegacyQueryListPrayerRequestsResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Query",
+        "FieldName": "listPrayerRequests",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyPrayerRequestTableDataSource",
+            "Name"
+          ]
+        },
+        "RequestMappingTemplate": "{\n  \"version\": \"2017-02-28\",\n  \"operation\": \"Scan\",\n  \"filter\": #if($context.args.filter) $util.transform.toDynamoDBFilterExpression($ctx.args.filter) #else null #end,\n  \"limit\": $util.defaultIfNull($ctx.args.limit, 20),\n  \"nextToken\": $util.toJson($util.defaultIfNullOrEmpty($ctx.args.nextToken, null)),\n}",
+        "ResponseMappingTemplate": "$util.toJson($context.result)",
+        "MaxBatchSize": 0
+      },
+      "DependsOn": "LegacyPrayerRequestTableDataSource"
+    },
+    "LegacyQueryListRidesResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Query",
+        "FieldName": "listRides",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyRideTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { scan } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Scans the DynamoDB datasource. Scans up to the provided `limit` and stards from the provided `NextToken` (optional).\n * @param {import('@aws-appsync/utils').Context<{filter?: any; limit?: number; nextToken?: string}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBScanRequest} the request\n */\nexport function request(ctx) {\n    const { filter, limit, nextToken } = ctx.args;\n    \n    return scan({\n        limit,\n        nextToken,\n        filter,\n    })\n}\n\n/**\n * Returns a list of items and a token.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {{id: id, items: any[]; nextToken?: string}} the result\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    const { id, items = [], nextToken } = result;\n    return { id, items, nextToken };\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacyRideTableDataSource"
+    },
+    "LegacyQueryListSermonsResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Query",
+        "FieldName": "listSermons",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacySermonTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { scan } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Scans the DynamoDB datasource. Scans up to the provided `limit` and stards from the provided `NextToken` (optional).\n * @param {import('@aws-appsync/utils').Context<{filter?: any; limit?: number; nextToken?: string}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBScanRequest} the request\n */\nexport function request(ctx) {\n    const { filter, limit, nextToken } = ctx.args;\n    \n    return scan({\n        limit,\n        nextToken,\n        filter,\n    })\n}\n\n/**\n * Returns a list of items and a token.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {{items: any[]; nextToken?: string}} the result\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    const { items = [], nextToken } = result;\n    return { items, nextToken };\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacySermonTableDataSource"
+    },
+    "LegacyMutationCreateGOCEventsResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Mutation",
+        "FieldName": "createGOCEvents",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyEventsTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { put } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Puts an item into the DynamoDB table.\n * @param {import('@aws-appsync/utils').Context<{input: any}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBPutItemRequest} the request\n */\nexport function request(ctx) {\n    const { id } = ctx.args.input;\n    const key = { id };\n    const condition = { and: [] };\n    for (const k in key) {\n        condition.and.push({ [k]: { attributeExists: false } });\n    }\n    \n    return put({\n        key,\n        item: ctx.args.input,\n        condition,\n    })\n}\n\n/**\n * Returns the item or throws an error if the operation failed.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {*} the result\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    return result;\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacyEventsTableDataSource"
+    },
+    "LegacyMutationCreateMinistryTeamResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Mutation",
+        "FieldName": "createMinistryTeam",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyMinistryTeamTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { put } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Puts an item into the DynamoDB table using an auto-generated ID.\n * @param {import('@aws-appsync/utils').Context<{input: any}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBPutItemRequest} the request\n */\nexport function request(ctx) {\n    const { input: values } = ctx.args;\n    const key = { id: util.autoId() };\n    const condition = { and: [{ id: { attributeExists: false } }] };\n    \n    return put({\n        key,\n        item: ctx.args.input,\n        condition,\n    })\n}\n\n/**\n * Returns the item or throws an error if the operation failed.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {*} the result\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    return result;\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacyMinistryTeamTableDataSource"
+    },
+    "LegacyMutationCreatePrayerRequestResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Mutation",
+        "FieldName": "createPrayerRequest",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyPrayerRequestTableDataSource",
+            "Name"
+          ]
+        },
+        "RequestMappingTemplate": "{\n  \"version\": \"2017-02-28\",\n  \"operation\": \"PutItem\",\n  \"key\": {\n    \"id\": $util.dynamodb.toDynamoDBJson($util.autoId()),\n  },\n  \"attributeValues\": $util.dynamodb.toMapValuesJson($ctx.args.input),\n  \"condition\": {\n    \"expression\": \"attribute_not_exists(#id)\",\n    \"expressionNames\": {\n      \"#id\": \"id\",\n    },\n  },\n}",
+        "ResponseMappingTemplate": "$util.toJson($context.result)",
+        "MaxBatchSize": 0
+      },
+      "DependsOn": "LegacyPrayerRequestTableDataSource"
+    },
+    "LegacyMutationCreateRideResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Mutation",
+        "FieldName": "createRide",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyRideTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { put } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Puts an item into the DynamoDB table using an auto-generated ID.\n * @param {import('@aws-appsync/utils').Context<{input: any}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBPutItemRequest} the request\n */\nexport function request(ctx) {\n    const { input: values } = ctx.args;\n    const key = { id: util.autoId() };\n    const condition = { and: [{ id: { attributeExists: false } }] };\n    \n    return put({\n        key,\n        item: ctx.args.input,\n        condition,\n    })\n}\n\n/**\n * Returns the item or throws an error if the operation failed.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {*} the result\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    return result;\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacyRideTableDataSource"
+    },
+    "LegacyMutationCreateSermonResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Mutation",
+        "FieldName": "createSermon",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacySermonTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { put } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Puts an item into the DynamoDB table.\n * @param {import('@aws-appsync/utils').Context<{input: any}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBPutItemRequest} the request\n */\nexport function request(ctx) {\n    const { id, date } = ctx.args.input;\n    const key = { id, date };\n    const condition = { and: [] };\n    for (const k in key) {\n        condition.and.push({ [k]: { attributeExists: false } });\n    }\n    \n    return put({\n        key,\n        item: ctx.args.input,\n        condition,\n    })\n}\n\n/**\n * Returns the item or throws an error if the operation failed.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {*} the result\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    return result;\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacySermonTableDataSource"
+    },
+    "LegacyMutationDeleteGOCEventsResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Mutation",
+        "FieldName": "deleteGOCEvents",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyEventsTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { remove } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Deletes an item with id `ctx.args.input.id` from the DynamoDB table.\n * @param {import('@aws-appsync/utils').Context<{input: {id: unknown;}}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBDeleteItemRequest} the request\n */\nexport function request(ctx) {\n    const { id } = ctx.args.input;\n    const key = { id };\n    return remove({\n        key,\n    })\n}\n\n/**\n * Returns the deleted item. Throws an error if the operation failed.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {*} the deleted item\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    return result;\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacyEventsTableDataSource"
+    },
+    "LegacyMutationDeleteMinistryTeamResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Mutation",
+        "FieldName": "deleteMinistryTeam",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyMinistryTeamTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { remove } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Deletes an item with id `ctx.args.input.id` from the DynamoDB table.\n * @param {import('@aws-appsync/utils').Context<{input: {id: unknown;}}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBDeleteItemRequest} the request\n */\nexport function request(ctx) {\n    const { id } = ctx.args.input;\n    const key = { id };\n    return remove({\n        key,\n    })\n}\n\n/**\n * Returns the deleted item. Throws an error if the operation failed.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {*} the deleted item\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    return result;\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacyMinistryTeamTableDataSource"
+    },
+    "LegacyMutationDeletePrayerRequestResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Mutation",
+        "FieldName": "deletePrayerRequest",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyPrayerRequestTableDataSource",
+            "Name"
+          ]
+        },
+        "RequestMappingTemplate": "{\n  \"version\": \"2017-02-28\",\n  \"operation\": \"DeleteItem\",\n  \"key\": {\n    \"id\": $util.dynamodb.toDynamoDBJson($ctx.args.input.id),\n  },\n}",
+        "ResponseMappingTemplate": "$util.toJson($context.result)",
+        "MaxBatchSize": 0
+      },
+      "DependsOn": "LegacyPrayerRequestTableDataSource"
+    },
+    "LegacyMutationDeleteRideResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Mutation",
+        "FieldName": "deleteRide",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyRideTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { remove } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Deletes an item with id `ctx.args.input.id` from the DynamoDB table.\n * @param {import('@aws-appsync/utils').Context<{input: {id: unknown;}}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBDeleteItemRequest} the request\n */\nexport function request(ctx) {\n    const { id } = ctx.args.input;\n    const key = { id };\n    return remove({\n        key,\n    })\n}\n\n/**\n * Returns the deleted item. Throws an error if the operation failed.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {*} the deleted item\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    return result;\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacyRideTableDataSource"
+    },
+    "LegacyMutationDeleteSermonResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Mutation",
+        "FieldName": "deleteSermon",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacySermonTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { remove } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Deletes an item with id `ctx.args.input.id` and date `ctx.args.input.date` from the DynamoDB table.\n * @param {import('@aws-appsync/utils').Context<{input: {id: unknown; date: unknown;}}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBDeleteItemRequest} the request\n */\nexport function request(ctx) {\n    const { id, date } = ctx.args.input;\n    const key = { id, date };\n    return remove({\n        key,\n    })\n}\n\n/**\n * Returns the deleted item. Throws an error if the operation failed.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {*} the deleted item\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    return result;\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacySermonTableDataSource"
+    },
+    "LegacyMutationUpdateGOCEventsResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Mutation",
+        "FieldName": "updateGOCEvents",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyEventsTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { update } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Updates an item in a DynamoDB table, if an item with the given key exists.\n * @param {import('@aws-appsync/utils').Context<{input: any}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBUpdateItemRequest} the request\n */\nexport function request(ctx) {\n    const { id, ...values } = ctx.args.input;\n    const key = { id };\n    const condition = {};\n    for (const k in key) {\n        condition[k] = { attributeExists: true };\n    }\n    \n    return update({\n        key,\n        update: values,\n        condition,\n    })\n}\n\n/**\n * Returns the updated item or throws an error if the operation failed.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {*} the result\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    return result;\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacyEventsTableDataSource"
+    },
+    "LegacyMutationUpdateMinistryTeamResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Mutation",
+        "FieldName": "updateMinistryTeam",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyMinistryTeamTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { update } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Updates an item in a DynamoDB table, if an item with the given key exists.\n * @param {import('@aws-appsync/utils').Context<{input: any}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBUpdateItemRequest} the request\n */\nexport function request(ctx) {\n    const { id, ...values } = ctx.args.input;\n    const key = { id };\n    const condition = {};\n    for (const k in key) {\n        condition[k] = { attributeExists: true };\n    }\n    \n    return update({\n        key,\n        update: values,\n        condition,\n    })\n}\n\n/**\n * Returns the updated item or throws an error if the operation failed.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {*} the result\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    return result;\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacyMinistryTeamTableDataSource"
+    },
+    "LegacyMutationUpdatePrayerRequestResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Mutation",
+        "FieldName": "updatePrayerRequest",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyPrayerRequestTableDataSource",
+            "Name"
+          ]
+        },
+        "RequestMappingTemplate": "{\n  \"version\": \"2017-02-28\",\n  \"operation\": \"UpdateItem\",\n  \"key\": {\n    \"id\": $util.dynamodb.toDynamoDBJson($ctx.args.input.id),\n  },\n\n  ## Set up some space to keep track of things we're updating **\n  #set( $expNames  = {} )\n  #set( $expValues = {} )\n  #set( $expSet = {} )\n  #set( $expAdd = {} )\n  #set( $expRemove = [] )\n\n  ## Iterate through each argument, skipping keys **\n  #foreach( $entry in $util.map.copyAndRemoveAllKeys($ctx.args.input, [\"id\"]).entrySet() )\n    #if( $util.isNull($entry.value) )\n      ## If the argument is set to \"null\", then remove that attribute from the item in DynamoDB **\n\n      #set( $discard = ${expRemove.add(\"#${entry.key}\")} )\n      $!{expNames.put(\"#${entry.key}\", \"${entry.key}\")}\n    #else\n      ## Otherwise set (or update) the attribute on the item in DynamoDB **\n\n      $!{expSet.put(\"#${entry.key}\", \":${entry.key}\")}\n      $!{expNames.put(\"#${entry.key}\", \"${entry.key}\")}\n      $!{expValues.put(\":${entry.key}\", $util.dynamodb.toDynamoDB($entry.value))}\n    #end\n  #end\n\n  ## Start building the update expression, starting with attributes we're going to SET **\n  #set( $expression = \"\" )\n  #if( !${expSet.isEmpty()} )\n    #set( $expression = \"SET\" )\n    #foreach( $entry in $expSet.entrySet() )\n      #set( $expression = \"${expression} ${entry.key} = ${entry.value}\" )\n      #if ( $foreach.hasNext )\n        #set( $expression = \"${expression},\" )\n      #end\n    #end\n  #end\n\n  ## Continue building the update expression, adding attributes we're going to ADD **\n  #if( !${expAdd.isEmpty()} )\n    #set( $expression = \"${expression} ADD\" )\n    #foreach( $entry in $expAdd.entrySet() )\n      #set( $expression = \"${expression} ${entry.key} ${entry.value}\" )\n      #if ( $foreach.hasNext )\n        #set( $expression = \"${expression},\" )\n      #end\n    #end\n  #end\n\n  ## Continue building the update expression, adding attributes we're going to REMOVE **\n  #if( !${expRemove.isEmpty()} )\n    #set( $expression = \"${expression} REMOVE\" )\n\n    #foreach( $entry in $expRemove )\n      #set( $expression = \"${expression} ${entry}\" )\n      #if ( $foreach.hasNext )\n        #set( $expression = \"${expression},\" )\n      #end\n    #end\n  #end\n\n  ## Finally, write the update expression into the document, along with any expressionNames and expressionValues **\n  \"update\": {\n    \"expression\": \"${expression}\",\n    #if( !${expNames.isEmpty()} )\n      \"expressionNames\": $utils.toJson($expNames),\n    #end\n    #if( !${expValues.isEmpty()} )\n      \"expressionValues\": $utils.toJson($expValues),\n    #end\n  },\n\n  \"condition\": {\n    \"expression\": \"attribute_exists(#id)\",\n    \"expressionNames\": {\n      \"#id\": \"id\",\n    },\n  }\n}",
+        "ResponseMappingTemplate": "$util.toJson($context.result)",
+        "MaxBatchSize": 0
+      },
+      "DependsOn": "LegacyPrayerRequestTableDataSource"
+    },
+    "LegacyMutationUpdateRideResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Mutation",
+        "FieldName": "updateRide",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacyRideTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { update } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Updates an item in a DynamoDB table, if an item with the given key exists.\n * @param {import('@aws-appsync/utils').Context<{input: any}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBUpdateItemRequest} the request\n */\nexport function request(ctx) {\n    const { id, ...values } = ctx.args.input;\n    const key = { id };\n    const condition = {};\n    for (const k in key) {\n        condition[k] = { attributeExists: true };\n    }\n    \n    return update({\n        key,\n        update: values,\n        condition,\n    })\n}\n\n/**\n * Returns the updated item or throws an error if the operation failed.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {*} the result\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    return result;\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacyRideTableDataSource"
+    },
+    "LegacyMutationUpdateSermonResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Condition": "IsGamma",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Mutation",
+        "FieldName": "updateSermon",
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "LegacySermonTableDataSource",
+            "Name"
+          ]
+        },
+        "Code": "import { util } from '@aws-appsync/utils';\nimport { update } from '@aws-appsync/utils/dynamodb';\n\n/**\n * Updates an item in a DynamoDB table, if an item with the given key exists.\n * @param {import('@aws-appsync/utils').Context<{input: any}>} ctx the context\n * @returns {import('@aws-appsync/utils').DynamoDBUpdateItemRequest} the request\n */\nexport function request(ctx) {\n    const { id, date, ...values } = ctx.args.input;\n    const key = { id, date };\n    const condition = {};\n    for (const k in key) {\n        condition[k] = { attributeExists: true };\n    }\n    \n    return update({\n        key,\n        update: values,\n        condition,\n    })\n}\n\n/**\n * Returns the updated item or throws an error if the operation failed.\n * @param {import('@aws-appsync/utils').Context} ctx the context\n * @returns {*} the result\n */\nexport function response(ctx) {\n    const { error, result } = ctx;\n    if (error) {\n        return util.appendError(error.message, error.type, result);\n    }\n    return result;\n}\n",
+        "MaxBatchSize": 0,
+        "Runtime": {
+          "Name": "APPSYNC_JS",
+          "RuntimeVersion": "1.0.0"
+        }
+      },
+      "DependsOn": "LegacySermonTableDataSource"
+    },
+    "LegacyAssetsBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Condition": "IsGamma",
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain",
+      "Properties": {
+        "BucketName": {
+          "Fn::Sub": "gocwebv3-storage-${AWS::AccountId}-${env}"
+        },
+        "CorsConfiguration": {
+          "CorsRules": [
+            {
+              "Id": "S3CORSRuleId1",
+              "AllowedHeaders": [
+                "*"
+              ],
+              "AllowedMethods": [
+                "GET",
+                "HEAD",
+                "PUT",
+                "POST",
+                "DELETE"
+              ],
+              "AllowedOrigins": [
+                "*"
+              ],
+              "ExposedHeaders": [
+                "x-amz-server-side-encryption",
+                "x-amz-request-id",
+                "x-amz-id-2",
+                "ETag"
+              ],
+              "MaxAge": 3000
+            }
+          ]
+        },
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              },
+              "BucketKeyEnabled": false
+            }
+          ]
+        }
+      }
     }
   },
   "Conditions": {
@@ -253,7 +1620,18 @@
       ]
     },
     "AlwaysFalse": {
-      "Fn::Equals": ["true", "false"]
+      "Fn::Equals": [
+        "true",
+        "false"
+      ]
+    },
+    "IsGamma": {
+      "Fn::Equals": [
+        {
+          "Ref": "env"
+        },
+        "gamma"
+      ]
     }
   },
   "Outputs": {
@@ -270,6 +1648,54 @@
           "RecurringEventTable",
           "Arn"
         ]
+      }
+    },
+    "EventsTableName": {
+      "Condition": "IsGamma",
+      "Value": {
+        "Ref": "LegacyEventsTable"
+      }
+    },
+    "MinistryTeamTableTableName": {
+      "Condition": "IsGamma",
+      "Value": {
+        "Ref": "LegacyMinistryTeamTableTable"
+      }
+    },
+    "MinistryTeamsTableName": {
+      "Condition": "IsGamma",
+      "Value": {
+        "Ref": "LegacyMinistryTeamsTable"
+      }
+    },
+    "PrayerRequestTableTableName": {
+      "Condition": "IsGamma",
+      "Value": {
+        "Ref": "LegacyPrayerRequestTableTable"
+      }
+    },
+    "RecurringEventsTableName": {
+      "Condition": "IsGamma",
+      "Value": {
+        "Ref": "LegacyRecurringEventsTable"
+      }
+    },
+    "RideTableTableName": {
+      "Condition": "IsGamma",
+      "Value": {
+        "Ref": "LegacyRideTableTable"
+      }
+    },
+    "SermonsTableName": {
+      "Condition": "IsGamma",
+      "Value": {
+        "Ref": "LegacySermonsTable"
+      }
+    },
+    "AssetsBucketName": {
+      "Condition": "IsGamma",
+      "Value": {
+        "Ref": "LegacyAssetsBucket"
       }
     }
   }

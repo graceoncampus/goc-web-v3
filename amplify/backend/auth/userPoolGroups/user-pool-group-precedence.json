@@ -2,5 +2,13 @@
   {
     "groupName": "RidesTeam",
     "precedence": 1
+  },
+  {
+    "groupName": "Admin",
+    "precedence": 2
+  },
+  {
+    "groupName": "ATeam",
+    "precedence": 3
   }
 ]

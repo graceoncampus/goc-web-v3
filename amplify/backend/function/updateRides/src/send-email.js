@@ -11,6 +11,11 @@ const FROM_EMAIL = `Grace on Campus Rides <rides@${DOMAIN}>`;
 const REPLY_TO = "gocrides@gmail.com";
 
 async function sendDriverEmail(car, date, emailMessage) {
+  if (process.env.ENV === "gamma" && process.env.ENABLE_DRIVER_EMAIL !== "true") {
+    console.log("Driver emails are disabled in gamma.");
+    return false;
+  }
+
   console.log("Attempting to send email", {
     driverExists: !!car.driver,
     driverEmail: car.driver?.email,

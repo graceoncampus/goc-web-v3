@@ -4,6 +4,7 @@
 	STORAGE_SERMONS_BUCKETNAME
 Amplify Params - DO NOT EDIT */
 const Parser = require("rss-parser");
+const SERMONS_TABLE_NAME = process.env.SERMONS_TABLE_NAME || "Sermons";
 const {
   DynamoDBClient,
   PutItemCommand,
@@ -69,7 +70,7 @@ const createSermons = async (sermons, client) => {
   await Promise.all(
     sermons.map(async ({ title, date, speaker, passage, URI }) => {
       const putCommand = new PutItemCommand({
-        TableName: "Sermons",
+        TableName: SERMONS_TABLE_NAME,
         Item: {
           id: { S: uuidv4() },
           title: { S: title },
@@ -111,7 +112,7 @@ const loadSermons = async (client) => {
 
 const getLatestSermon = async (client) => {
   const scanCommand = new ScanCommand({
-    TableName: "Sermons",
+    TableName: SERMONS_TABLE_NAME,
   });
 
   try {
