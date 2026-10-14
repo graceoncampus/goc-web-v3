@@ -41,6 +41,8 @@ Automatic Hosting builds are reserved for Git `main` and `gamma`. Developer bran
 
 Use the reviewed branch-based Amplify pipeline for ordinary releases. Preparing a change is not permission to publish, merge, or trigger a production deployment. Never deploy `dev` from a non-`main` branch. Verify branch, AWS identity, environment, and resource targets before any cloud mutation; never infer safety from the name `dev`.
 
+Amplify Hosting can deploy an associated backend even when `amplify.yml` has no explicit backend phase. An unchanged build file does not prove a push is frontend-only. For documentation-only pushes that must not deploy, put `[skip-cd]` at the end of the commit message and verify that no build started; review other pushes against the complete Hosting workflow.
+
 For **every destructive `gamma` operation**, explain the exact resources, impact, reason, and recovery plan and obtain explicit engineer verification before execution. Prior approval of another operation does not cover a new destructive action. Resource replacement, deletion, data loss, and destructive schema migrations count as destructive changes. All non-main branches share `gamma`; coordinate changes accordingly.
 
 ## Comments
