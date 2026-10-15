@@ -1,0 +1,23 @@
+# Deploy rebased gamma
+
+## Purpose and authorization
+
+After gamma was rebased onto main and published with deployment suppressed, the engineer explicitly authorized letting deployment proceed. Deploy Git gamma commit 79cdb5415865114d6994b2b258e36f10c7125f0b through its existing Amplify Hosting pipeline. Production main/dev and unused prod remain read-only. This does not authorize resource replacements, deletions, data loss, or destructive schema changes in gamma. GitHub username ejinsw was verified earlier in the setup.
+
+## Preflight and scope
+
+Profile goc resolves to account 271755560601 and IAM user ElijahWon in us-west-2. Remote gamma is 79cdb54; remote main remains 06af751. Gamma Hosting references backend gamma, has automatic builds enabled, and its latest completed job is 1 with no overlapping build. The local Amplify environment is gamma. A private Amplify status check reports No Change for every backend resource. Committed backend-config, custom resources, group/storage overrides, and admin/sermon function templates match the previously deployed working definitions. Inherited main dependency packaging may require code/artifact updates, but no resource replacement/deletion is planned.
+
+Use Amplify start-job RELEASE on gamma for the exact rebased commit, preserving its branch backend association and build configuration. The existing build now sees deploy-backend.sh and can execute the gamma backend phase before frontend generation/build. Do not start main, modify production settings, or copy/reset data. Save deployment logs and cloud baselines privately outside the repository; print only operational summaries, not credentials or member data.
+
+## Verification and outcome
+
+Capture dev/prod/gamma stack statuses and production Hosting settings before release. Monitor build logs for actual target selection and unsafe operations; verify the deployed gamma website's API, Cognito, and S3 bindings, route hosting, disabled sermon schedule, and suppressed driver emails. Re-read production timestamps/settings after deployment. Hosting job 2 failed before initialization: pre-push.js required local-env-info.json, which is absent in a fresh checkout. BUILD failed and DEPLOY/VERIFY were cancelled. Read-only checks confirmed dev, unused prod, and gamma root stack timestamps/statuses were unchanged.
+
+The hook now checks the documented stdin environment (or actual headless --amplify envName during initialization), all available local environment metadata, and the exact known stack from local metadata or Hosting STACKINFO. It rejects conflicting environments, stacks, account ARNs, and regions before preparing definitions; it never substitutes the desired environment for a missing selected environment. Official references: [hook input](https://docs.amplify.aws/gen1/react/tools/cli/project/command-hooks/) and [pre-init hook issue](https://github.com/aws-amplify/amplify-cli/issues/12664). Fourteen subprocess tests cover fresh Hosting initialization, initialized metadata, manual developer branches, and rejected unsafe/missing inputs. Frontend and infrastructure definitions are unchanged.
+
+Publish the focused gamma CI fix with [skip-cd], then explicitly release that exact commit. Retry and final verification are pending. No main publication or production build is authorized by this gamma task.
+
+## Recovery and follow-up
+
+Stop on any unexpected production operation or unapproved destructive gamma plan. Retain logs and partially created resources; no cleanup, resource deletion, or automatic rollback repair is authorized. Harmless tooling and non-destructive gamma deployment failures may be investigated under the engineer's existing instructions. Any new destructive gamma operation needs its own exact resource/impact/recovery explanation and explicit verification. Existing local dev checkout and unrelated uncommitted work remain preserved.
