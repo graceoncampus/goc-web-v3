@@ -18,6 +18,8 @@ The hook now checks the documented stdin environment (or actual headless --ampli
 
 Job 3 confirmed that Hosting also does not export STACKINFO to hooks; the strict stack guard stopped before initialization or deployment. The backend wrapper now performs read-only STS, Hosting branch/backend, and CloudFormation lookups, verifies the exact existing account/app/branch/environment/stack and complete status, and explicitly exports the verified stack outputs before calling amplifyPush. This avoids creating local metadata with an assumed target. All 24 subprocess isolation tests pass; the new preflight also passed against real gamma using profile goc without writes.
 
+Job 4 stopped in the first read-only STS command because Hosting uses AWS CLI v1 and rejects --no-cli-pager. The preflight uses AWS_PAGER empty instead, compatible with both CLI generations. No resource mutations ran.
+
 Publish the focused gamma CI fix with [skip-cd], then explicitly release that exact commit. Retry and final verification are pending. No main publication or production build is authorized by this gamma task.
 
 ## Recovery and follow-up
