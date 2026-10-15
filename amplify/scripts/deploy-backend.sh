@@ -15,6 +15,8 @@ if [[ "${1:-}" == "--print-target" ]]; then
 fi
 
 export AWS_MAX_ATTEMPTS=1
+STACKINFO="$(node amplify/scripts/hosting-stack-info.js "$target_env")"
+export STACKINFO
 node amplify/scripts/prepare-environment.js "$target_env"
 # --simple imports the existing environment before deploying the checked-in
 # backend definitions. Do not pull the deployed definitions over this checkout.
