@@ -7,13 +7,17 @@ const { spawnSync } = require('node:child_process');
 const hook = path.resolve(__dirname, '../hooks/pre-push.js');
 const stack = 'amplify-gocwebv3-gamma-a0479';
 
-function run({ branch = 'gamma', selected = 'gamma', headless, local, provider = { StackName: stack }, meta, input } = {}) {
+function run({ branch = 'gamma', selected = 'gamma', headless, local, provider = { StackName: stack }, meta, hosting, input } = {}) {
   const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'goc-hook-test-'));
   try {
     fs.mkdirSync(path.join(cwd, 'amplify/scripts'), { recursive: true });
     fs.writeFileSync(path.join(cwd, 'amplify/scripts/prepare-environment.js'), "require('node:fs').writeFileSync('prepared', process.argv[2]);");
+    if (hosting) {
+      fs.mkdirSync(path.join(cwd, 'amplify/.config'), { recursive: true });
+      fs.writeFileSync(path.join(cwd, 'amplify/.config/local-hosting-stack-info.json'), JSON.stringify(hosting));
+    }
     if (local) {
-      fs.mkdirSync(path.join(cwd, 'amplify/.config'));
+      fs.mkdirSync(path.join(cwd, 'amplify/.config'), { recursive: true });
       fs.writeFileSync(path.join(cwd, 'amplify/.config/local-env-info.json'), JSON.stringify(local));
     }
     if (meta) {
@@ -40,6 +44,10 @@ test('Hosting initialization validates actual headless environment and cached st
   assert.equal(result.status, 0, result.stderr);
   assert.equal(result.prepared, 'gamma');
 });
+test('Hosting verified snapshot survives helpers that discard STACKINFO', () => {
+  const result = run({ provider: null, hosting: { branch: 'gamma', environment: 'gamma', verifiedAt: Date.now(), awscloudformation: { StackName: stack } } });
+  assert.equal(result.status, 0, result.stderr);
+});
 test('initialized local metadata works without Hosting stack cache', () => {
   const result = run({ local: { envName: 'gamma' }, meta: { StackName: stack }, provider: null });
   assert.equal(result.status, 0, result.stderr);
@@ -55,6 +63,8 @@ for (const [name, options] of Object.entries({
   'production stack': { provider: { StackName: 'amplify-gocwebv3-dev-150706' } },
   'foreign account stack ARN': { provider: { StackName: stack, StackId: `arn:aws:cloudformation:us-west-2:000000000000:stack/${stack}/example` } },
   'stale production metadata': { meta: { StackName: 'amplify-gocwebv3-dev-150706' } },
+  'stale Hosting snapshot': { provider: null, hosting: { branch: 'gamma', environment: 'gamma', verifiedAt: 1, awscloudformation: { StackName: stack } } },
+  'wrong Hosting branch': { hosting: { branch: 'main', environment: 'gamma', verifiedAt: Date.now(), awscloudformation: { StackName: stack } } },
   'wrong region': { provider: { StackName: stack, Region: 'us-east-1' } },
   'missing stack metadata': { provider: null },
   'missing selected environment': { selected: null },
