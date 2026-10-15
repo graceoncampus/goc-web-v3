@@ -16,6 +16,8 @@ Capture dev/prod/gamma stack statuses and production Hosting settings before rel
 
 The hook now checks the documented stdin environment (or actual headless --amplify envName during initialization), all available local environment metadata, and the exact known stack from local metadata or Hosting STACKINFO. It rejects conflicting environments, stacks, account ARNs, and regions before preparing definitions; it never substitutes the desired environment for a missing selected environment. Official references: [hook input](https://docs.amplify.aws/gen1/react/tools/cli/project/command-hooks/) and [pre-init hook issue](https://github.com/aws-amplify/amplify-cli/issues/12664). Fourteen subprocess tests cover fresh Hosting initialization, initialized metadata, manual developer branches, and rejected unsafe/missing inputs. Frontend and infrastructure definitions are unchanged.
 
+Job 3 confirmed that Hosting also does not export STACKINFO to hooks; the strict stack guard stopped before initialization or deployment. The backend wrapper now performs read-only STS, Hosting branch/backend, and CloudFormation lookups, verifies the exact existing account/app/branch/environment/stack and complete status, and explicitly exports the verified stack outputs before calling amplifyPush. This avoids creating local metadata with an assumed target. All 24 subprocess isolation tests pass; the new preflight also passed against real gamma using profile goc without writes.
+
 Publish the focused gamma CI fix with [skip-cd], then explicitly release that exact commit. Retry and final verification are pending. No main publication or production build is authorized by this gamma task.
 
 ## Recovery and follow-up
