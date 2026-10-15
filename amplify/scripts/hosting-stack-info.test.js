@@ -8,7 +8,7 @@ const script = path.resolve(__dirname, 'hosting-stack-info.js');
 const stackName = 'amplify-gocwebv3-gamma-a0479';
 const stackId = `arn:aws:cloudformation:us-west-2:271755560601:stack/${stackName}/example`;
 
-function run(change = {}, variables = {}) {
+function run(change = {}, variables = {}, wrapper = false) {
   const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'goc-hosting-test-'));
   try {
     const responses = {
@@ -23,9 +23,22 @@ function run(change = {}, variables = {}) {
     fs.writeFileSync(path.join(cwd, 'responses.json'), JSON.stringify(responses));
     fs.writeFileSync(path.join(cwd, 'aws'), `#!/bin/sh\nexec '${process.execPath}' '${path.join(cwd, 'aws.js')}' "$@"\n`, { mode: 0o700 });
     fs.writeFileSync(path.join(cwd, 'aws.js'), `const fs = require('node:fs'); const key=process.argv.slice(2,4).join(' '); const data=JSON.parse(fs.readFileSync(${JSON.stringify(path.join(cwd, 'responses.json'))},'utf8')); if (!Object.hasOwn(data,key)) throw new Error('Unexpected AWS operation: '+key); process.stdout.write(JSON.stringify(data[key]));`);
-    return spawnSync(process.execPath, [script, 'gamma'], {
-      cwd, encoding: 'utf8', env: { ...process.env, PATH: cwd, AWS_BRANCH: 'gamma', AWS_APP_ID: 'd1afaiv4wnjkx7', ...variables },
+    if (wrapper) {
+      fs.mkdirSync(path.join(cwd, 'bin'));
+      fs.mkdirSync(path.join(cwd, 'amplify/scripts'), { recursive: true });
+      for (const name of ['deploy-backend.sh', 'hosting-stack-info.js']) {
+        fs.copyFileSync(path.join(__dirname, name), path.join(cwd, 'amplify/scripts', name));
+      }
+      fs.writeFileSync(path.join(cwd, 'amplify/scripts/prepare-environment.js'), '');
+      fs.writeFileSync(path.join(cwd, 'amplify-mock.js'), `const fs=require('node:fs');const args=process.argv.slice(2);fs.appendFileSync('calls.jsonl',JSON.stringify(args)+'\\n');if(args[0]===process.env.FAILURE_COMMAND)process.exit(1);`);
+      fs.writeFileSync(path.join(cwd, 'bin/amplify'), `#!/bin/sh\nexec '${process.execPath}' '${path.join(cwd, 'amplify-mock.js')}' "$@"\n`, { mode: 0o700 });
+    }
+    const result = spawnSync(wrapper ? '/bin/bash' : process.execPath, wrapper ? ['amplify/scripts/deploy-backend.sh'] : [script, 'gamma'], {
+      cwd, encoding: 'utf8', env: { ...process.env, PATH: path.join(cwd, 'bin') + path.delimiter + cwd + path.delimiter + path.dirname(process.execPath), AWS_BRANCH: 'gamma', AWS_APP_ID: 'd1afaiv4wnjkx7', ...variables },
     });
+    const log = path.join(cwd, 'calls.jsonl');
+    result.calls = fs.existsSync(log) ? fs.readFileSync(log, 'utf8').trim().split('\n').map(JSON.parse) : [];
+    return result;
   } finally {
     fs.rmSync(cwd, { recursive: true, force: true });
   }
@@ -52,5 +65,23 @@ for (const [name, change, variables] of [
     assert.notEqual(result.status, 0);
     assert.match(result.stderr, /STOP:/);
     assert.equal(result.stdout, '');
+  });
+}
+
+test('wrapper imports verified existing metadata before init and push', () => {
+  const result = run({}, {}, true);
+  assert.equal(result.status, 0, result.stderr);
+  assert.deepEqual(result.calls.map(args => args[0]), ['env', 'init', 'push']);
+  const imported = result.calls[0];
+  assert.equal(imported[1], 'import');
+  assert.equal(JSON.parse(imported[imported.indexOf('--config') + 1]).awscloudformation.StackId, stackId);
+  assert.equal(JSON.parse(result.calls[1][result.calls[1].indexOf('--amplify') + 1]).envName, 'gamma');
+});
+for (const command of ['env', 'init']) {
+  test(`wrapper stops before push when ${command} fails`, () => {
+    const result = run({}, { FAILURE_COMMAND: command }, true);
+    assert.notEqual(result.status, 0);
+    assert.equal(result.calls.some(args => args[0] === 'push'), false);
+    assert.equal(result.calls.at(-1)[0], command);
   });
 }

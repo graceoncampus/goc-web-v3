@@ -18,6 +18,10 @@ export AWS_MAX_ATTEMPTS=1
 STACKINFO="$(node amplify/scripts/hosting-stack-info.js "$target_env")"
 export STACKINFO
 node amplify/scripts/prepare-environment.js "$target_env"
-# --simple imports the existing environment before deploying the checked-in
-# backend definitions. Do not pull the deployed definitions over this checkout.
-amplifyPush --environment "$target_env" --simple
+# Import existing metadata without pulling over repository definitions.
+aws_config='{"configLevel":"project","useProfile":true,"profileName":"default","AmplifyAppId":"d1afaiv4wnjkx7"}'
+amplify env import --name "$target_env" --config "$STACKINFO" --awsInfo "$aws_config" --yes
+amplify init --amplify "{\"envName\":\"$target_env\",\"appId\":\"d1afaiv4wnjkx7\"}" \
+  --providers "{\"awscloudformation\":$aws_config}" \
+  --codegen '{"generateCode":false,"generateDocs":false}' --yes
+amplify push --yes
