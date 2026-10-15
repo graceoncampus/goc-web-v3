@@ -24,7 +24,7 @@ function run(change = {}, variables = {}) {
     fs.writeFileSync(path.join(cwd, 'aws'), `#!/bin/sh\nexec '${process.execPath}' '${path.join(cwd, 'aws.js')}' "$@"\n`, { mode: 0o700 });
     fs.writeFileSync(path.join(cwd, 'aws.js'), `const fs = require('node:fs'); const key=process.argv.slice(2,4).join(' '); const data=JSON.parse(fs.readFileSync(${JSON.stringify(path.join(cwd, 'responses.json'))},'utf8')); if (!Object.hasOwn(data,key)) throw new Error('Unexpected AWS operation: '+key); process.stdout.write(JSON.stringify(data[key]));`);
     return spawnSync(process.execPath, [script, 'gamma'], {
-      encoding: 'utf8', env: { ...process.env, PATH: cwd, AWS_BRANCH: 'gamma', AWS_APP_ID: 'd1afaiv4wnjkx7', ...variables },
+      cwd, encoding: 'utf8', env: { ...process.env, PATH: cwd, AWS_BRANCH: 'gamma', AWS_APP_ID: 'd1afaiv4wnjkx7', ...variables },
     });
   } finally {
     fs.rmSync(cwd, { recursive: true, force: true });

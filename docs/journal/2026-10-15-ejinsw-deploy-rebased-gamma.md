@@ -20,6 +20,8 @@ Job 3 confirmed that Hosting also does not export STACKINFO to hooks; the strict
 
 Job 4 stopped in the first read-only STS command because Hosting uses AWS CLI v1 and rejects --no-cli-pager. The preflight uses AWS_PAGER empty instead, compatible with both CLI generations. No resource mutations ran.
 
+Job 5 passed the live AWS identity/branch/backend/stack checks, but STACKINFO was still absent inside the hook. The helper does not preserve that export end-to-end. The verified preflight now also writes ignored local-hosting-stack-info.json (no credentials), scoped to the actual verified branch/environment with a one-hour expiry; the hook checks that file plus any actual local provider metadata. The selected environment still comes from the actual CLI payload/headless arguments and must match. Twenty-seven isolation tests cover this handoff and stale/mismatched snapshot rejection. No stacks changed in these failed attempts.
+
 Publish the focused gamma CI fix with [skip-cd], then explicitly release that exact commit. Retry and final verification are pending. No main publication or production build is authorized by this gamma task.
 
 ## Recovery and follow-up

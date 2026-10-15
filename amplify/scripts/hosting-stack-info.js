@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { execFileSync } = require('node:child_process');
+const fs = require('node:fs');
 
 const target = process.argv[2];
 const branch = process.env.AWS_BRANCH;
@@ -31,5 +32,9 @@ const provider = Object.fromEntries(stack.Outputs.map(output => [output.OutputKe
 if (provider.StackName !== stackName || provider.StackId !== stack.StackId || provider.Region !== 'us-west-2') {
   throw new Error('STOP: stack outputs do not match the existing backend');
 }
+fs.mkdirSync('amplify/.config', { recursive: true });
+fs.writeFileSync('amplify/.config/local-hosting-stack-info.json', JSON.stringify({
+  branch, environment: target, verifiedAt: Date.now(), awscloudformation: provider,
+}), { mode: 0o600 });
 console.error(`Verified Hosting backend: branch=${branch}, environment=${target}, stack=${stackName}, account=${identity.Account}`);
 process.stdout.write(JSON.stringify({ awscloudformation: provider }));

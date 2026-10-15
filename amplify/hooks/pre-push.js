@@ -26,6 +26,15 @@ const providers = [];
 if (fs.existsSync(metaPath)) {
   providers.push(JSON.parse(fs.readFileSync(metaPath, 'utf8')).providers?.awscloudformation);
 }
+const hostingPath = 'amplify/.config/local-hosting-stack-info.json';
+if (fs.existsSync(hostingPath)) {
+  const hosting = JSON.parse(fs.readFileSync(hostingPath, 'utf8'));
+  const age = Date.now() - hosting.verifiedAt;
+  if (hosting.branch !== branch || hosting.environment !== target || !Number.isFinite(age) || age < 0 || age > 3600000) {
+    throw new Error('STOP: stale or mismatched Hosting preflight metadata');
+  }
+  providers.push(hosting.awscloudformation);
+}
 if (process.env.STACKINFO) {
   providers.push(JSON.parse(process.env.STACKINFO).awscloudformation);
 }
