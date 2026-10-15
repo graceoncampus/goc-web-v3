@@ -22,6 +22,8 @@ Job 4 stopped in the first read-only STS command because Hosting uses AWS CLI v1
 
 Job 5 passed the live AWS identity/branch/backend/stack checks, but STACKINFO was still absent inside the hook. The helper does not preserve that export end-to-end. The verified preflight now also writes ignored local-hosting-stack-info.json (no credentials), scoped to the actual verified branch/environment with a one-hour expiry; the hook checks that file plus any actual local provider metadata. The selected environment still comes from the actual CLI payload/headless arguments and must match. Twenty-seven isolation tests cover this handoff and stale/mismatched snapshot rejection. No stacks changed in these failed attempts.
 
+Job 6 passed both pre-push target checks but the opaque Hosting helper treated its empty environment cache as a new environment and attempted CreateStack for the existing gamma stack. AWS rejected it as already existing. The wrapper now explicitly runs env import with verified live stack outputs, init without force-push, then push --yes, with set -e stopping on the first error. The official env import implementation only writes local team-provider-info/local AWS configuration. This preserves authoritative checked-in backend definitions and avoids the empty-cache creation fallback. All 30 isolation/integration tests pass, including verified import ordering and stopping before push on import/init failures.
+
 Publish the focused gamma CI fix with [skip-cd], then explicitly release that exact commit. Retry and final verification are pending. No main publication or production build is authorized by this gamma task.
 
 ## Recovery and follow-up
