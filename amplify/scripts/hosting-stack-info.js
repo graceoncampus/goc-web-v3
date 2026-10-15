@@ -9,8 +9,8 @@ if (!branch || target !== expected || app !== 'd1afaiv4wnjkx7') {
   throw new Error('STOP: unexpected Hosting app, branch, or backend environment');
 }
 const aws = (...args) => JSON.parse(execFileSync('aws', [
-  ...args, '--region', 'us-west-2', '--output', 'json', '--no-cli-pager',
-], { encoding: 'utf8' }));
+  ...args, '--region', 'us-west-2', '--output', 'json',
+], { encoding: 'utf8', env: { ...process.env, AWS_PAGER: '' } }));
 const identity = aws('sts', 'get-caller-identity');
 if (identity.Account !== '271755560601') throw new Error('STOP: unexpected AWS account');
 const binding = aws('amplify', 'get-branch', '--app-id', app, '--branch-name', branch).branch;
