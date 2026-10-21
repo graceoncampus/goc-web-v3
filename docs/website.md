@@ -6,7 +6,7 @@ Routes below capture the local Git dev `src/App.tsx`. Groupings describe informa
 
 | Area | Route | Purpose and content |
 | --- | --- | --- |
-| Welcome | `/` | Introduction to GOC and ways to participate. |
+| Welcome | `/` | Introduction to GOC and ways to participate, including a WF interest Google Form link ([design](features/wf-interest-form.md)). |
 | Ministry information | `/about` | Ministry mission, church relationship, fellowship, welcome resources. |
 | Ministry information | `/ourbeliefs` | GOC's stated beliefs. |
 | Ministry information | `/leadership` | Ministry leadership information. |

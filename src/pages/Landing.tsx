@@ -18,7 +18,7 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { ContactInfo } from "@/constants/ContactInfo";
-import { SocialMedia } from "@/constants/Links";
+import { SocialMedia, WF_INTEREST_FORM_LINK } from "@/constants/Links";
 import { observer } from "mobx-react-lite";
 import { RiArrowRightLine } from "react-icons/ri";
 
@@ -237,7 +237,7 @@ const LandingBody = observer(() => {
       >
         <Stack
           direction={{ base: "column", lg: "row" }}
-          maxWidth={"70rem"}
+          maxWidth={"80rem"}
           marginX={"auto"}
           gap={1}
           alignItems={"center"}
@@ -269,6 +269,13 @@ const LandingBody = observer(() => {
             description="Come join us!"
             buttonText="LEARN MORE"
             link="/events"
+          />
+          <InfoBox
+            title="Interested?"
+            description="Fill out our interest form!"
+            buttonText="FORM"
+            link={WF_INTEREST_FORM_LINK}
+            isExternal={true}
           />
         </Stack>
       </Box>

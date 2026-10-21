@@ -8,6 +8,7 @@ interface OutlineButtonProps {
   animateIcon?: boolean;
   onWhite?: boolean;
   haveMargin?: boolean;
+  isExternal?: boolean;
 }
 
 const OutlineButton = ({
@@ -17,6 +18,7 @@ const OutlineButton = ({
   animateIcon = false,
   onWhite = false,
   haveMargin = true,
+  isExternal = false,
 }: OutlineButtonProps) => {
   return (
     <Button
@@ -59,6 +61,7 @@ const OutlineButton = ({
     >
       <Link
         href={href}
+        {...(isExternal && { target: "_blank", rel: "noopener noreferrer" })}
         fontSize={{ base: "xs", sm: "xs", md: "sm" }}
         fontWeight="semibold"
         textTransform="uppercase"
