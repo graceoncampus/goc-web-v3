@@ -423,71 +423,67 @@ const RidesList = ({ rides, loading }: RidesProps) => {
   if (loading) return <GOCSpinner text="Loading rides..." />;
 
   return (
-    <Table.Root
-      size="sm"
-      maxWidth={"60rem"}
-      variant="outline"
-      striped
-      stickyHeader
-      tableLayout={"fixed"}
-    >
-      <Table.Header backgroundColor={"goc.blue"}>
-        <Table.Row>
-          <Table.ColumnHeader color={"white"} padding={".75rem"}>
-            <Text fontSize={"sm"}>Driver</Text>
-          </Table.ColumnHeader>
-          <Table.ColumnHeader color={"white"} padding={".75rem"}>
-            <Text fontSize={"sm"}>Rider(s)</Text>
-          </Table.ColumnHeader>
-          <Table.ColumnHeader
-            color={"white"}
-            display={{ base: "none", md: "table-cell" }}
-          >
-            <Text fontSize={"sm"}>Comments</Text>
-          </Table.ColumnHeader>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {/* For each Ride, iterate over its cars */}
-        {rides.map((ride: Ride, rideIndex: number) =>
-          ride.cars?.map((car: Car | null, carIndex: number) => {
-            if (!car) return null;
-            return (
-              <Table.Row key={`${rideIndex}-${carIndex}`}>
-                <Table.Cell verticalAlign={"top"} paddingY={"1rem"}>
-                  <Text fontSize={"sm"}>{car.driver_name}</Text>
-                </Table.Cell>
-                <Table.Cell verticalAlign={"top"} paddingY={"1rem"}>
-                  {car.riders && car.riders.length > 0 ? (
-                    <VStack align="start" gap={0}>
-                      {car.riders.map(
-                        (rider: Rider | null, riderIndex: number) =>
-                          rider ? (
-                            <Text key={riderIndex} fontSize="sm">
-                              {rider.name} {rider.staying ? "(staying)" : ""}
-                            </Text>
-                          ) : null,
-                      )}
-                    </VStack>
-                  ) : (
-                    "No riders"
-                  )}
-                </Table.Cell>
-                <Table.Cell
-                  verticalAlign={"top"}
-                  paddingY={"1rem"}
-                  display={{ base: "none", md: "table-cell" }}
-                >
-                  <Text fontSize="sm">
-                    {car.driver?.comment || "No comments"}
-                  </Text>
-                </Table.Cell>
-              </Table.Row>
-            );
-          }),
-        )}
-      </Table.Body>
-    </Table.Root>
+    <Table.ScrollArea width={"100%"} maxWidth={"60rem"}>
+      <Table.Root
+        size="sm"
+        // Keeps the comments column readable on narrow phones; scroll instead.
+        minWidth={"36rem"}
+        variant="outline"
+        striped
+        stickyHeader
+        tableLayout={"fixed"}
+      >
+        <Table.Header backgroundColor={"goc.blue"}>
+          <Table.Row>
+            <Table.ColumnHeader color={"white"} padding={".75rem"}>
+              <Text fontSize={"sm"}>Driver</Text>
+            </Table.ColumnHeader>
+            <Table.ColumnHeader color={"white"} padding={".75rem"}>
+              <Text fontSize={"sm"}>Rider(s)</Text>
+            </Table.ColumnHeader>
+            <Table.ColumnHeader color={"white"} padding={".75rem"}>
+              <Text fontSize={"sm"}>Comments</Text>
+            </Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {/* For each Ride, iterate over its cars */}
+          {rides.map((ride: Ride, rideIndex: number) =>
+            ride.cars?.map((car: Car | null, carIndex: number) => {
+              if (!car) return null;
+              return (
+                <Table.Row key={`${rideIndex}-${carIndex}`}>
+                  <Table.Cell verticalAlign={"top"} paddingY={"1rem"}>
+                    <Text fontSize={"sm"}>{car.driver_name}</Text>
+                  </Table.Cell>
+                  <Table.Cell verticalAlign={"top"} paddingY={"1rem"}>
+                    {car.riders && car.riders.length > 0 ? (
+                      <VStack align="start" gap={0}>
+                        {car.riders.map(
+                          (rider: Rider | null, riderIndex: number) =>
+                            rider ? (
+                              <Text key={riderIndex} fontSize="sm">
+                                {rider.name} {rider.staying ? "(staying)" : ""}
+                              </Text>
+                            ) : null,
+                        )}
+                      </VStack>
+                    ) : (
+                      "No riders"
+                    )}
+                  </Table.Cell>
+                  <Table.Cell verticalAlign={"top"} paddingY={"1rem"}>
+                    <Text fontSize="sm">
+                      {car.driver?.comment || "No comments"}
+                    </Text>
+                  </Table.Cell>
+                </Table.Row>
+              );
+            }),
+          )}
+        </Table.Body>
+      </Table.Root>
+    </Table.ScrollArea>
   );
 };
 
