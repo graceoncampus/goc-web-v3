@@ -23,3 +23,6 @@ export const RIDES_GOOGLE_FORM_LINK: string =
 
 export const PRAYER_GOOGLE_FORM_LINK: string =
   "https://docs.google.com/forms/d/e/1FAIpQLSc0PR3d6NL1YqWMoYZ9X1Y9aBN4y91FfXz152I2_h7HQaHAwA/viewform?usp=dialog";
+
+export const WF_INTEREST_FORM_LINK: string =
+  "https://docs.google.com/forms/d/e/1FAIpQLSe8i4QytxAZHgI4o-GwqaQjatLU65R3Xiw88tgrXcVgmbU2nA/viewform";

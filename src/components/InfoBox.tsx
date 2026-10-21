@@ -7,6 +7,7 @@ interface InfoBoxProps {
   buttonText: string;
   link: string;
   showBorder?: boolean;
+  isExternal?: boolean;
 }
 
 const InfoBox = ({
@@ -15,6 +16,7 @@ const InfoBox = ({
   buttonText,
   link,
   showBorder = false,
+  isExternal = false,
 }: InfoBoxProps) => {
   return (
     <Box
@@ -24,8 +26,8 @@ const InfoBox = ({
         base: "1rem",
         sm: "2rem",
         md: "3rem",
-        lg: "4rem",
-        xl: "5rem",
+        lg: "2rem",
+        xl: "3rem",
       }}
       paddingY={{
         base: "3rem",
@@ -45,7 +47,7 @@ const InfoBox = ({
         {title}
       </Heading>
       <Text fontSize={{ base: "md", lg: "sm", xl: "md" }}>{description}</Text>
-      <OutlineButton href={link} onWhite={true}>
+      <OutlineButton href={link} onWhite={true} isExternal={isExternal}>
         {buttonText}
       </OutlineButton>
     </Box>
