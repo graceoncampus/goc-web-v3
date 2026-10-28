@@ -14,7 +14,7 @@ The initial inventory comes from checked-in definitions. The October 2026 gamma 
 | DynamoDB | Persistence behind backend workflows; `updateSermons` directly accesses the `Sermons` table. Full physical table and resolver inventory remains to be verified. |
 | Cognito `gocwebv3265a1135` | Website authentication and identities. |
 | Cognito `userPoolGroups` | `RidesTeam`, `Admin`, and `ATeam` memberships for ministry tools. |
-| API Gateway `adminUserManagement` and Lambda of the same name | User and group administration. |
+| API Gateway `adminUserManagement` and Lambda of the same name | User and group administration; the Lambda requires live `Admin` membership. See [admin user management](features/admin-user-management.md). |
 | API Gateway `updateRides` and Lambda of the same name | Ride coordination backend; includes Google Sheets and email-related code. |
 | Lambda `updateSermons` | Imports sermon metadata from the GOC RSS feed into DynamoDB. |
 | S3 `sermons` | Sermon storage; configured for authenticated access in `cli-inputs.json`, without a storage trigger. |
