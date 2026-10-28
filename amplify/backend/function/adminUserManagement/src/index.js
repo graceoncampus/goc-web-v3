@@ -17,9 +17,6 @@ const client = new CognitoIdentityProviderClient({
   region: process.env.REGION || "us-west-2",
 });
 
-// Use the Amplify-provided environment variable, or fall back to hardcoded value
-// const USER_POOL_ID =
-//   process.env.AUTH_GOCWEBV3_USERPOOLID || "us-west-2_rZ4wDVksQ";
 const USER_POOL_ID = process.env.AUTH_GOCWEBV3265A1135_USERPOOLID;
 if (!USER_POOL_ID) throw new Error("Missing environment-specific Cognito user pool");
 
@@ -32,16 +29,27 @@ const cors = {
 // Protected role that cannot be modified through this API
 const PROTECTED_ROLE = "Admin";
 
-exports.handler = async (event) => {
-  console.log(`RECEIVED EVENT: ${JSON.stringify(event)}`);
+// "<issuer>,<issuer>:CognitoSignIn:<sub>" from identity pool IAM auth
+const AUTH_PROVIDER_PATTERN =
+  /^cognito-idp\.[a-z0-9-]+\.amazonaws\.com\/([\w-]+),cognito-idp\.[a-z0-9-]+\.amazonaws\.com\/([\w-]+):CognitoSignIn:([0-9a-f-]{36})$/;
 
+class HttpError extends Error {
+  constructor(statusCode, message) {
+    super(message);
+    this.statusCode = statusCode;
+  }
+}
+
+const respond = (statusCode, body) => ({
+  statusCode,
+  headers: cors,
+  body: JSON.stringify(body),
+});
+
+exports.handler = async (event) => {
   // Handle preflight OPTIONS request
   if (event.httpMethod === "OPTIONS") {
-    return {
-      statusCode: 200,
-      headers: cors,
-      body: JSON.stringify({ message: "OK" }),
-    };
+    return respond(200, { message: "OK" });
   }
 
   // Get path from various possible locations in the event
@@ -56,10 +64,16 @@ exports.handler = async (event) => {
     event.requestContext?.http?.method ||
     event.requestContext?.httpMethod ||
     "GET";
-
-  console.log(`Resolved path: ${path}, method: ${method}`);
+  const context = {
+    method,
+    path,
+    requestId: event.requestContext?.requestId,
+  };
 
   try {
+    context.caller = await requireAdminCaller(event);
+    console.log("Admin request", context);
+
     // Parse body if present
     let body = {};
     if (event.body) {
@@ -69,77 +83,118 @@ exports.handler = async (event) => {
 
     // Route handling
     if (path.includes("/users") && method === "GET") {
-      return await listUsers();
+      return respond(200, { users: await listUsers() });
     }
 
     if (path.includes("/groups") && method === "GET") {
-      return await listGroups();
+      return respond(200, { groups: await listGroups() });
     }
 
     if (path.includes("/add-to-group") && method === "POST") {
-      const { username, groupName } = body;
-      if (!username || !groupName) {
-        return {
-          statusCode: 400,
-          headers: cors,
-          body: JSON.stringify({
-            error: "Missing required fields: username, groupName",
-          }),
-        };
-      }
-      return await addUserToGroup(username, groupName);
+      const { username, groupName } = requireMembershipFields(body);
+      await addUserToGroup(username, groupName, context);
+      return respond(200, {
+        message: `User ${username} added to group ${groupName}`,
+      });
     }
 
     if (path.includes("/remove-from-group") && method === "POST") {
-      const { username, groupName } = body;
-      if (!username || !groupName) {
-        return {
-          statusCode: 400,
-          headers: cors,
-          body: JSON.stringify({
-            error: "Missing required fields: username, groupName",
-          }),
-        };
-      }
-      return await removeUserFromGroup(username, groupName);
+      const { username, groupName } = requireMembershipFields(body);
+      await removeUserFromGroup(username, groupName, context);
+      return respond(200, {
+        message: `User ${username} removed from group ${groupName}`,
+      });
     }
 
-    return {
-      statusCode: 404,
-      headers: cors,
-      body: JSON.stringify({ error: "Not found" }),
-    };
+    throw new HttpError(404, "Not found");
   } catch (error) {
-    console.error("Error:", error);
-    return {
-      statusCode: 500,
-      headers: cors,
-      body: JSON.stringify({ error: error.message }),
-    };
+    if (error instanceof HttpError) {
+      console.warn("Admin request rejected", {
+        ...context,
+        statusCode: error.statusCode,
+        reason: error.message,
+      });
+      return respond(error.statusCode, { error: error.message });
+    }
+    console.error("Admin request failed", context, error);
+    return respond(500, { error: error.message });
   }
 };
 
+// API Gateway IAM auth only proves sign-in; group membership is checked live
+// so a removed admin loses access before their token expires.
+async function requireAdminCaller(event) {
+  const provider =
+    event.requestContext?.identity?.cognitoAuthenticationProvider || "";
+  const match = AUTH_PROVIDER_PATTERN.exec(provider);
+  if (!match || match[1] !== USER_POOL_ID || match[2] !== USER_POOL_ID) {
+    throw new HttpError(403, "Admin access required");
+  }
+  const sub = match[3];
+
+  const { Users = [] } = await client.send(
+    new ListUsersCommand({
+      UserPoolId: USER_POOL_ID,
+      Filter: `sub = "${sub}"`,
+      Limit: 1,
+    }),
+  );
+  if (Users.length !== 1) {
+    throw new HttpError(403, "Admin access required");
+  }
+
+  const groups = await listGroupsForUser(Users[0].Username);
+  if (!groups.includes(PROTECTED_ROLE)) {
+    throw new HttpError(403, "Admin access required");
+  }
+  return sub;
+}
+
+function requireMembershipFields(body) {
+  const { username, groupName } = body;
+  if (!username || !groupName) {
+    throw new HttpError(400, "Missing required fields: username, groupName");
+  }
+  if (groupName === PROTECTED_ROLE) {
+    throw new HttpError(
+      403,
+      `Cannot modify the ${PROTECTED_ROLE} role through this API`,
+    );
+  }
+  return { username, groupName };
+}
+
+async function listGroupsForUser(username) {
+  const groups = [];
+  let NextToken;
+  do {
+    const response = await client.send(
+      new AdminListGroupsForUserCommand({
+        UserPoolId: USER_POOL_ID,
+        Username: username,
+        NextToken,
+      }),
+    );
+    groups.push(...(response.Groups || []).map((g) => g.GroupName));
+    NextToken = response.NextToken;
+  } while (NextToken);
+  return groups;
+}
+
 // List all users with their groups
 async function listUsers() {
-  try {
-    const listUsersCommand = new ListUsersCommand({
-      UserPoolId: USER_POOL_ID,
-      Limit: 60,
-    });
-
-    const usersResponse = await client.send(listUsersCommand);
-    const users = [];
-
-    for (const user of usersResponse.Users || []) {
-      // Get groups for each user
-      const groupsCommand = new AdminListGroupsForUserCommand({
+  const users = [];
+  let PaginationToken;
+  do {
+    const response = await client.send(
+      new ListUsersCommand({
         UserPoolId: USER_POOL_ID,
-        Username: user.Username,
-      });
+        Limit: 60,
+        PaginationToken,
+      }),
+    );
 
-      const groupsResponse = await client.send(groupsCommand);
-      const groups = (groupsResponse.Groups || []).map((g) => g.GroupName);
-
+    for (const user of response.Users || []) {
       // Extract user attributes
       const attributes = {};
       for (const attr of user.Attributes || []) {
@@ -151,130 +206,53 @@ async function listUsers() {
         email: attributes.email || "",
         name: attributes.given_name || attributes.name || "",
         familyName: attributes.family_name || "",
-        groups: groups,
+        groups: await listGroupsForUser(user.Username),
         enabled: user.Enabled,
         status: user.UserStatus,
         created: user.UserCreateDate,
       });
     }
-
-    return {
-      statusCode: 200,
-      headers: cors,
-      body: JSON.stringify({ users }),
-    };
-  } catch (error) {
-    console.error("Error listing users:", error);
-    return {
-      statusCode: 500,
-      headers: cors,
-      body: JSON.stringify({ error: error.message }),
-    };
-  }
+    PaginationToken = response.PaginationToken;
+  } while (PaginationToken);
+  return users;
 }
 
 // List all available groups (excluding Admin)
 async function listGroups() {
-  try {
-    const command = new ListGroupsCommand({
-      UserPoolId: USER_POOL_ID,
-      Limit: 60,
-    });
-
-    const response = await client.send(command);
-    const groups = (response.Groups || [])
-      .map((g) => g.GroupName)
-      .filter((name) => name !== PROTECTED_ROLE);
-
-    return {
-      statusCode: 200,
-      headers: cors,
-      body: JSON.stringify({ groups }),
-    };
-  } catch (error) {
-    console.error("Error listing groups:", error);
-    return {
-      statusCode: 500,
-      headers: cors,
-      body: JSON.stringify({ error: error.message }),
-    };
-  }
+  const groups = [];
+  let NextToken;
+  do {
+    const response = await client.send(
+      new ListGroupsCommand({
+        UserPoolId: USER_POOL_ID,
+        Limit: 60,
+        NextToken,
+      }),
+    );
+    groups.push(...(response.Groups || []).map((g) => g.GroupName));
+    NextToken = response.NextToken;
+  } while (NextToken);
+  return groups.filter((name) => name !== PROTECTED_ROLE);
 }
 
-// Add user to a group
-async function addUserToGroup(username, groupName) {
-  // Prevent adding to Admin group
-  if (groupName === PROTECTED_ROLE) {
-    return {
-      statusCode: 403,
-      headers: cors,
-      body: JSON.stringify({
-        error: `Cannot modify the ${PROTECTED_ROLE} role through this API`,
-      }),
-    };
-  }
-
-  try {
-    const command = new AdminAddUserToGroupCommand({
+async function addUserToGroup(username, groupName, context) {
+  await client.send(
+    new AdminAddUserToGroupCommand({
       UserPoolId: USER_POOL_ID,
       Username: username,
       GroupName: groupName,
-    });
-
-    await client.send(command);
-
-    return {
-      statusCode: 200,
-      headers: cors,
-      body: JSON.stringify({
-        message: `User ${username} added to group ${groupName}`,
-      }),
-    };
-  } catch (error) {
-    console.error("Error adding user to group:", error);
-    return {
-      statusCode: 500,
-      headers: cors,
-      body: JSON.stringify({ error: error.message }),
-    };
-  }
+    }),
+  );
+  console.log("Group membership added", { ...context, username, groupName });
 }
 
-// Remove user from a group
-async function removeUserFromGroup(username, groupName) {
-  // Prevent removing from Admin group
-  if (groupName === PROTECTED_ROLE) {
-    return {
-      statusCode: 403,
-      headers: cors,
-      body: JSON.stringify({
-        error: `Cannot modify the ${PROTECTED_ROLE} role through this API`,
-      }),
-    };
-  }
-
-  try {
-    const command = new AdminRemoveUserFromGroupCommand({
+async function removeUserFromGroup(username, groupName, context) {
+  await client.send(
+    new AdminRemoveUserFromGroupCommand({
       UserPoolId: USER_POOL_ID,
       Username: username,
       GroupName: groupName,
-    });
-
-    await client.send(command);
-
-    return {
-      statusCode: 200,
-      headers: cors,
-      body: JSON.stringify({
-        message: `User ${username} removed from group ${groupName}`,
-      }),
-    };
-  } catch (error) {
-    console.error("Error removing user from group:", error);
-    return {
-      statusCode: 500,
-      headers: cors,
-      body: JSON.stringify({ error: error.message }),
-    };
-  }
+    }),
+  );
+  console.log("Group membership removed", { ...context, username, groupName });
 }
