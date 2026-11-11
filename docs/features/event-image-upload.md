@@ -12,6 +12,8 @@ The browser requests a five-minute presigned POST from the IAM-authenticated adm
 
 Use a dedicated bucket owned by the existing adminUserManagement function stack, isolated by CloudFormation stack/environment. This avoids granting writes to the manually managed 2026–2027 bucket, changing sermon storage, or accidentally sending gamma uploads to production. Existing image links continue to work; this feature does not migrate them. The bucket permits anonymous reads only under public/event-images/, uses SSE-S3, disables ACLs, requires HTTPS, and retains images if the stack is removed or replaced. Only the Lambda role receives PutObject on that prefix. Browser CORS permits the site origins and local development. Account-level public-access restrictions must permit the reviewed bucket policy before deployment.
 
+The new bucket relies on S3 defaults for bucket-owner-enforced ownership (ACLs disabled) and SSE-S3 encryption. The Hosting role still needs permission to read and set Block Public Access for this bucket only; public ACLs remain blocked and the bucket policy limits anonymous reads to the image prefix.
+
 ## Operational behavior
 
 No database/schema change is required: existing imageLink fields store the permanent HTTPS object URL. Uploaded photos are public and may exist before the event is saved. Cancelling, replacing, or deleting an event does not delete images; orphan cleanup and retention decisions remain manual. Metadata/type restrictions are not malware scanning or server-side image decoding. No SVG/HTML uploads are offered. The signing API is an extension of an existing Lambda/API to reuse its live group authorization; administration routes retain their current authorization.
