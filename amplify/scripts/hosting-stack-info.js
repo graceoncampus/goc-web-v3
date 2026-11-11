@@ -24,9 +24,12 @@ if (backend.environmentName !== target || backend.stackName !== stackName) {
   throw new Error('STOP: Amplify backend references an unexpected stack');
 }
 const stack = aws('cloudformation', 'describe-stacks', '--stack-name', stackName).Stacks[0];
-if (stack.StackName !== stackName || !stack.StackId.startsWith(`arn:aws:cloudformation:us-west-2:271755560601:stack/${stackName}/`)
-  || !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(stack.StackStatus)) {
-  throw new Error('STOP: unexpected stack identity or incomplete deployment');
+if (stack.StackName !== stackName || !stack.StackId.startsWith(`arn:aws:cloudformation:us-west-2:271755560601:stack/${stackName}/`)) {
+  throw new Error('STOP: unexpected stack identity');
+}
+const canRetryGamma = target === 'gamma' && stack.StackStatus === 'UPDATE_ROLLBACK_COMPLETE';
+if (!canRetryGamma && !['CREATE_COMPLETE', 'UPDATE_COMPLETE'].includes(stack.StackStatus)) {
+  throw new Error(`STOP: backend stack is not ready for updates (${stack.StackStatus})`);
 }
 const provider = Object.fromEntries(stack.Outputs.map(output => [output.OutputKey, output.OutputValue]));
 if (provider.StackName !== stackName || provider.StackId !== stack.StackId || provider.Region !== 'us-west-2') {

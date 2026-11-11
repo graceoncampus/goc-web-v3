@@ -7,17 +7,20 @@ const { spawnSync } = require('node:child_process');
 const script = path.resolve(__dirname, 'hosting-stack-info.js');
 const stackName = 'amplify-gocwebv3-gamma-a0479';
 const stackId = `arn:aws:cloudformation:us-west-2:271755560601:stack/${stackName}/example`;
+const stackResponse = (status, name = stackName, id = stackId) => ({
+  Stacks: [{ StackName: name, StackId: id, StackStatus: status, Outputs: [
+    { OutputKey: 'StackName', OutputValue: name }, { OutputKey: 'StackId', OutputValue: id }, { OutputKey: 'Region', OutputValue: 'us-west-2' },
+  ] }],
+});
 
-function run(change = {}, variables = {}, wrapper = false) {
+function run(change = {}, variables = {}, wrapper = false, target = 'gamma') {
   const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'goc-hosting-test-'));
   try {
     const responses = {
       'sts get-caller-identity': { Account: '271755560601' },
       'amplify get-branch': { branch: { backendEnvironmentArn: 'arn:aws:amplify:us-west-2:271755560601:apps/d1afaiv4wnjkx7/backendenvironments/gamma' } },
       'amplify get-backend-environment': { backendEnvironment: { environmentName: 'gamma', stackName } },
-      'cloudformation describe-stacks': { Stacks: [{ StackName: stackName, StackId: stackId, StackStatus: 'UPDATE_COMPLETE', Outputs: [
-        { OutputKey: 'StackName', OutputValue: stackName }, { OutputKey: 'StackId', OutputValue: stackId }, { OutputKey: 'Region', OutputValue: 'us-west-2' },
-      ] }] },
+      'cloudformation describe-stacks': stackResponse('UPDATE_COMPLETE'),
       ...change,
     };
     fs.writeFileSync(path.join(cwd, 'responses.json'), JSON.stringify(responses));
@@ -33,7 +36,7 @@ function run(change = {}, variables = {}, wrapper = false) {
       fs.writeFileSync(path.join(cwd, 'amplify-mock.js'), `const fs=require('node:fs');const args=process.argv.slice(2);fs.appendFileSync('calls.jsonl',JSON.stringify(args)+'\\n');if(args[0]===process.env.FAILURE_COMMAND)process.exit(1);`);
       fs.writeFileSync(path.join(cwd, 'bin/amplify'), `#!/bin/sh\nexec '${process.execPath}' '${path.join(cwd, 'amplify-mock.js')}' "$@"\n`, { mode: 0o700 });
     }
-    const result = spawnSync(wrapper ? '/bin/bash' : process.execPath, wrapper ? ['amplify/scripts/deploy-backend.sh'] : [script, 'gamma'], {
+    const result = spawnSync(wrapper ? '/bin/bash' : process.execPath, wrapper ? ['amplify/scripts/deploy-backend.sh'] : [script, target], {
       cwd, encoding: 'utf8', env: { ...process.env, PATH: path.join(cwd, 'bin') + path.delimiter + cwd + path.delimiter + path.dirname(process.execPath), AWS_BRANCH: 'gamma', AWS_APP_ID: 'd1afaiv4wnjkx7', ...variables },
     });
     const log = path.join(cwd, 'calls.jsonl');
@@ -49,12 +52,31 @@ test('exports verified gamma stack information using read-only operations', () =
   assert.equal(result.status, 0, result.stderr);
   assert.equal(JSON.parse(result.stdout).awscloudformation.StackId, stackId);
 });
+test('allows gamma retry after a completed update rollback', () => {
+  const result = run({ 'cloudformation describe-stacks': stackResponse('UPDATE_ROLLBACK_COMPLETE') });
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(JSON.parse(result.stdout).awscloudformation.StackId, stackId);
+});
+test('keeps production blocked after a completed update rollback', () => {
+  const name = 'amplify-gocwebv3-dev-150706';
+  const id = stackId.replace(stackName, name);
+  const result = run({
+    'amplify get-branch': { branch: { backendEnvironmentArn: 'arn:aws:amplify:us-west-2:271755560601:apps/d1afaiv4wnjkx7/backendenvironments/dev' } },
+    'amplify get-backend-environment': { backendEnvironment: { environmentName: 'dev', stackName: name } },
+    'cloudformation describe-stacks': stackResponse('UPDATE_ROLLBACK_COMPLETE', name, id),
+  }, { AWS_BRANCH: 'main' }, false, 'dev');
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /stack is not ready.*UPDATE_ROLLBACK_COMPLETE/);
+  assert.equal(result.stdout, '');
+});
 for (const [name, change, variables] of [
   ['wrong account', { 'sts get-caller-identity': { Account: '000000000000' } }],
   ['production Hosting binding', { 'amplify get-branch': { branch: { backendEnvironmentArn: 'arn:aws:amplify:us-west-2:271755560601:apps/d1afaiv4wnjkx7/backendenvironments/dev' } } }],
   ['production stack', { 'amplify get-backend-environment': { backendEnvironment: { environmentName: 'gamma', stackName: 'amplify-gocwebv3-dev-150706' } } }],
   ['foreign stack identity', { 'cloudformation describe-stacks': { Stacks: [{ StackName: stackName, StackId: stackId.replace('271755560601','000000000000'), StackStatus: 'UPDATE_COMPLETE' }] } }],
   ['incomplete stack update', { 'cloudformation describe-stacks': { Stacks: [{ StackName: stackName, StackId: stackId, StackStatus: 'UPDATE_IN_PROGRESS' }] } }],
+  ['failed gamma update rollback', { 'cloudformation describe-stacks': stackResponse('UPDATE_ROLLBACK_FAILED') }],
+  ['gamma rollback still cleaning up', { 'cloudformation describe-stacks': stackResponse('UPDATE_ROLLBACK_COMPLETE_CLEANUP_IN_PROGRESS') }],
   ['missing stack outputs', { 'cloudformation describe-stacks': { Stacks: [{ StackName: stackName, StackId: stackId, StackStatus: 'UPDATE_COMPLETE', Outputs: [] }] } }],
   ['wrong app', {}, { AWS_APP_ID: 'other' }],
   ['main branch with gamma target', {}, { AWS_BRANCH: 'main' }],
