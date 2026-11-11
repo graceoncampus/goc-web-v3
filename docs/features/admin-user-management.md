@@ -28,7 +28,13 @@ Deployed in both environments: gamma (`adminUserManagement-gamma`, API `vj4i5m1x
 
 ## Frontend details
 
-The `/admin` page and its login-menu link exist only on `feature/admin-user-management` and are not yet on `gamma` or `main`; they will be integrated in a separate UI branch. The page calls the API with Amplify `get`/`post` (`apiName: "adminUserManagement"`) and expects `{ users }` and `{ groups }` response bodies. Its client-side `Admin` check is for navigation only; the Lambda enforces access.
+- `/admin` (`src/pages/Admin.tsx`, routed in `src/App.tsx`) uses `BannerTemplate` so the table has full page width. It lists users with name, email, groups, and status, plus a search box over name, email, username, and group.
+- Each row has an **Edit** button. Editing shows checkboxes for assignable groups; `Admin` stays a read-only badge. Changes apply only on **Save**; **Cancel** discards them. One row is edited at a time.
+- Save sends one `/add-to-group` or `/remove-from-group` call per change, stops at the first failure, reports which change failed with the API's reason, and always reloads users so partial saves are visible.
+- Errors show the Lambda's `{ error }` body when present and are logged with stacks; user data is not logged to the console.
+- The table scrolls horizontally on narrow screens (`minWidth` 44rem).
+- The "Hello, name" menu (`src/components/LoginButton.tsx`) shows an **Admin** link when `checkIsAdmin` (`src/auth/CheckUser.tsx`) finds `Admin` in the ID token's groups. Signed-out visitors are sent to `/login`, non-admins to `/`, after a short notice.
+- Client-side checks are for navigation only; the Lambda enforces access. Token groups refresh on sign-in, so a newly granted admin must log out and back in to see the link.
 
 ## Validation and deployment
 
