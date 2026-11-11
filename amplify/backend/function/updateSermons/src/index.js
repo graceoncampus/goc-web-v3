@@ -25,15 +25,18 @@ exports.handler = async (event) => {
       region: process.env.AWS_REGION || "us-west-2",
     });
 
-    // Get the latest sermon from the table
-    const latestSermon = await getLatestSermon(client);
+    const existingURIs = await getExistingURIs(client);
 
     const sermons = await loadSermons(client);
 
-    const sermonsToAdd = sermons.filter(
-      (sermon) => !latestSermon || sermon.date > new Date(latestSermon.date.S),
-    );
-    await createSermons(sermonsToAdd, client);
+    const sermonsToAdd = sermons.filter((sermon) => {
+      const uri = normalizeURI(sermon.URI);
+      if (existingURIs.has(uri)) return false;
+      existingURIs.add(uri);
+      return true;
+    });
+    console.log(`Feed: ${sermons.length}; missing: ${sermonsToAdd.length}`);
+    if (!event?.dryRun) await createSermons(sermonsToAdd, client);
 
     return {
       statusCode: 200,
@@ -110,25 +113,26 @@ const loadSermons = async (client) => {
   }
 };
 
-const getLatestSermon = async (client) => {
-  const scanCommand = new ScanCommand({
-    TableName: SERMONS_TABLE_NAME,
-  });
+const normalizeURI = (uri) => {
+  const url = new URL(uri);
+  return `${url.host.toLowerCase()}${url.pathname}${url.search}`;
+};
 
-  try {
-    const response = await client.send(scanCommand);
-    if (response.Items && response.Items.length > 0) {
-      const sortedSermons = response.Items.sort(
-        (a, b) => new Date(b.date.S) - new Date(a.date.S),
-      );
-
-      const latestSermon = sortedSermons[0];
-
-      return latestSermon;
+const getExistingURIs = async (client) => {
+  const uris = new Set();
+  let key;
+  do {
+    const response = await client.send(new ScanCommand({
+      TableName: SERMONS_TABLE_NAME,
+      ProjectionExpression: "#uri",
+      ExpressionAttributeNames: { "#uri": "URI" },
+      ExclusiveStartKey: key,
+    }));
+    for (const item of response.Items || []) {
+      if (!item.URI?.S) throw new Error("Existing sermon is missing its URI");
+      uris.add(normalizeURI(item.URI.S));
     }
-    return null;
-  } catch (error) {
-    console.error("Error getting latest sermon:", error);
-    throw error;
-  }
+    key = response.LastEvaluatedKey;
+  } while (key);
+  return uris;
 };
