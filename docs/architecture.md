@@ -14,12 +14,18 @@ The initial inventory comes from checked-in definitions. The October 2026 gamma 
 | DynamoDB | Persistence behind backend workflows; `updateSermons` directly accesses the `Sermons` table. Full physical table and resolver inventory remains to be verified. |
 | Cognito `gocwebv3265a1135` | Website authentication and identities. |
 | Cognito `userPoolGroups` | `RidesTeam`, `Admin`, and `ATeam` memberships for ministry tools. |
-| API Gateway `adminUserManagement` and Lambda of the same name | User and group administration. |
+| API Gateway `adminUserManagement` and Lambda of the same name | User and group administration; the Lambda requires live `Admin` membership. See [admin user management](features/admin-user-management.md). |
 | API Gateway `updateRides` and Lambda of the same name | Ride coordination backend; includes Google Sheets and email-related code. |
 | Lambda `updateSermons` | Imports sermon metadata from the GOC RSS feed into DynamoDB. |
 | S3 `sermons` | Sermon storage; configured for authenticated access in `cli-inputs.json`, without a storage trigger. |
 
 Do not infer that sermon imports use S3 merely because the storage resource exists. Describe actual code paths and verify deployed behavior separately.
+
+### Event image upload (prepared locally, not deployed)
+
+The `adminUserManagement` function stack adds an environment-isolated `EventImagesBucket` and a Lambda-only PutObject policy for `public/event-images/*`. It retains the bucket on stack deletion/replacement, uses S3 defaults for SSE-S3 and disabled ACLs, enforces HTTPS, and publishes only that prefix for anonymous image reads. Its CORS list supports the production/gamma hostnames and localhost port 3000; add reviewed manual Hosting preview origins if needed. Account/organization Block Public Access settings may prevent the bucket policy from deploying. The gamma Hosting role must be allowed to read and set Block Public Access on this dedicated bucket.
+
+The API adds IAM-authenticated `POST /event-image-upload`. Lambda checks live `ATeam` membership and returns a five-minute, type/size-restricted presigned POST and permanent image URL. Existing admin routes continue requiring `Admin`; the shared Lambda template moves to Node 22 with packaged SDK dependencies. The frontend sends image bytes directly to S3, then saves the returned URL through existing event mutations. No schema change, sermon bucket change, old-bucket adoption, or photo migration is included. See [feature design and release checks](features/event-image-upload.md).
 
 ## Deployment
 
@@ -27,7 +33,7 @@ Both backend and frontend use Amplify Gen 1. Gen 2 migration is future work requ
 
 `dev` is finalized production and must remain available. Only `main` may deploy to it. Every non-main branch uses shared `gamma`. Agents must never execute manual or destructive production changes; an engineer must personally perform any necessary such actions. Every destructive gamma change requires explicit engineer verification for that operation. See [AGENTS.md](../AGENTS.md) for the full rules.
 
-Git gamma’s `amplify.yml` invokes `amplify/scripts/deploy-backend.sh`, which maps `AWS_BRANCH=main` to `dev` and all other branches to `gamma`. It fails when `AWS_BRANCH` is absent. The gamma wrapper verifies live AWS identity and existing stack bindings, imports local environment metadata, initializes without force-push, then runs `amplify push --yes`. Frontend phases use Yarn, generate GraphQL operations, build with Vite, and publish `dist`. Gamma Hosting job 7 verified this flow on October 15. Main’s root build specification remains unchanged; its associated backend may deploy implicitly as described below. The gamma CI fixes have not been published to main.
+Git gamma’s `amplify.yml` invokes `amplify/scripts/deploy-backend.sh`, which maps `AWS_BRANCH=main` to `dev` and all other branches to `gamma`. It fails when `AWS_BRANCH` is absent. The gamma wrapper verifies live AWS identity and existing stack bindings, imports local environment metadata, initializes without force-push, then runs `amplify push --yes`. Gamma may retry from `UPDATE_ROLLBACK_COMPLETE`, a working stack after a finished rollback. The production status checks are unchanged, and failed or ongoing rollbacks still stop the build. Frontend phases use Yarn, generate GraphQL operations, build with Vite, and publish `dist`. Gamma Hosting job 7 verified this flow on October 15. Main’s root build specification remains unchanged; its associated backend may deploy implicitly as described below. The gamma CI fixes have not been published to main.
 
 `amplify/.config/project-config.json` still names `build` and Windows-style npm commands. Verify which configuration a workflow uses before changing it; do not silently reconcile configurations as part of unrelated work.
 

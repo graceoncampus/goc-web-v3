@@ -1,0 +1,27 @@
+# Event image upload
+
+## Purpose and ministry responsibilities
+
+Help ATeam publish accurate event information by uploading an event image within the event form. ATeam still chooses the photo, checks permission to publish it, writes event details, and decides when to save or publish. This automates file transfer only; it does not replace ministry judgment or select photos.
+
+## Design
+
+Add a Choose image control above the editable Image URL field in regular-event creation, recurring-event creation, and the shared edit dialog. Accept JPEG, PNG, WebP, and GIF, up to 10 MiB. Selection keeps the file in the browser. Create Event or Save Changes uploads it directly to S3 before saving the event with the returned URL. Closing before submission discards the selection. A failed upload prevents the event save and keeps the file available for retry. If storage succeeds but the event save fails, retry uses the returned URL without uploading again. Manual URL entry replaces a pending selection.
+
+The browser requests a five-minute presigned POST from the IAM-authenticated adminUserManagement API at POST /event-image-upload. The Lambda checks live ATeam membership using the environment's Cognito pool. Existing user/group administration routes still require Admin. Lambda signs a unique public/event-images/<uuid>.<extension> key with an exact content type and a 1-byte–10-MiB policy range. Image bytes travel directly from the browser to S3; AWS credentials are never embedded in frontend source.
+
+Use a dedicated bucket owned by the existing adminUserManagement function stack, isolated by CloudFormation stack/environment. This avoids granting writes to the manually managed 2026–2027 bucket, changing sermon storage, or accidentally sending gamma uploads to production. Existing image links continue to work; this feature does not migrate them. The bucket permits anonymous reads only under public/event-images/, uses SSE-S3, disables ACLs, requires HTTPS, and retains images if the stack is removed or replaced. Only the Lambda role receives PutObject on that prefix. Browser CORS permits the site origins and local development. Account-level public-access restrictions must permit the reviewed bucket policy before deployment.
+
+The new bucket relies on S3 defaults for bucket-owner-enforced ownership (ACLs disabled) and SSE-S3 encryption. The Hosting role still needs permission to read and set Block Public Access for this bucket only; public ACLs remain blocked and the bucket policy limits anonymous reads to the image prefix.
+
+## Operational behavior
+
+If a photo upload fails, the form explains that the event was not saved and offers retry or manual URL entry. The selected file stays in the form.
+
+No database/schema change is required: existing imageLink fields store the permanent HTTPS object URL. Uploaded photos become public during submission. A failed event save can still leave an uploaded object; retry reuses it, and orphan cleanup and retention decisions remain manual. Metadata/type restrictions are not malware scanning or server-side image decoding. No SVG/HTML uploads are offered. The signing API is an extension of an existing Lambda/API to reuse its live group authorization; administration routes retain their current authorization.
+
+## Validation and release
+
+The function template moves from Node 18 to Node 22, matching the site's Node 22 toolchain and supporting the explicitly bundled AWS SDK dependencies. Review this runtime update together with both admin and upload workflows on gamma. The frontend adds no dependencies.
+
+Run focused local authorization/upload-policy tests, TypeScript checks, and a Vite build. Verify success, size/type rejection, upload failure, URL editing, and cancellation locally with mocked AWS responses. After reviewed gamma backend deployment and an Amplify pull targeting gamma, verify actual ATeam upload, anonymous image rendering, rejected non-ATeam access, create/edit/save, and gamma bucket isolation. Generated aws-exports.js must target gamma before live testing. A frontend-only deployment cannot enable the new endpoint/bucket. Do not deploy, push, or modify production as part of implementation. New backend resources and public-read policy need review through the existing branch/environment pipeline.

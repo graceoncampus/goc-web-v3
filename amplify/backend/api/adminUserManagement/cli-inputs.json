@@ -52,6 +52,16 @@
           "delete"
         ]
       }
+    },
+    "/event-image-upload": {
+      "name": "/event-image-upload",
+      "lambdaFunction": "adminUserManagement",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create"
+        ]
+      }
     }
   }
 }

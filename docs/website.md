@@ -31,4 +31,8 @@ Update this inventory for every route, hierarchy, or content change. Detailed pa
 
 ## Feature design documents
 
+### Event images on `/events`
+
+ATeam's regular and recurring event creation forms and their shared edit dialog include **Choose image** above the editable **Image URL** field. Selection stays local until **Create Event** or **Save Changes**. Submission uploads the photo to S3 first, then saves the returned URL. A failed upload stops the event save and allows retry or manual URL entry. Existing public event cards continue rendering `imageLink`. See [event image upload design](features/event-image-upload.md) for format and size limits, authorization, and gamma deployment.
+
 Every new feature requires `docs/features/<short-descriptive-title>.md` with purpose and relationship to the mission, proposed features, human decisions preserved, frontend details, infrastructure/backend details, validation, and deployment implications. Explain how the feature supports existing ministry work and why any proposed automation preserves opportunities for personal care and service. Efficiency alone does not justify replacing human responsibilities. State explicitly when no frontend or infrastructure change is needed. Major changes also need alternatives, risks, and engineer agreement before implementation.
