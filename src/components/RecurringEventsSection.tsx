@@ -1,3 +1,4 @@
+import { EventImageField } from "@/components/EventImageField";
 import { EventCard } from "@/components/EventCard";
 import GOCSpinner from "@/components/GOCSpinner";
 import { checkInATeam, checkIsLoggedIn } from "@/auth/CheckUser";
@@ -70,6 +71,7 @@ export const RecurringEventsSection = ({
   const [localInATeam, setLocalInATeam] = useState(false);
   const [localAuthChecked, setLocalAuthChecked] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isImageUploading, setIsImageUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [newEventForm, setNewEventForm] = useState(emptyRecurringEventForm);
 
@@ -320,22 +322,15 @@ export const RecurringEventsSection = ({
                     required
                   />
                 </Box>
-                <Box>
-                  <Text fontSize="sm" fontWeight="500" mb="2">
-                    Image URL *
-                  </Text>
-                  <Input
-                    value={newEventForm.imageLink}
-                    onChange={(e) =>
-                      setNewEventForm({
-                        ...newEventForm,
-                        imageLink: e.target.value,
-                      })
-                    }
-                    placeholder="Image URL"
-                    required
-                  />
-                </Box>
+                <EventImageField
+                  value={newEventForm.imageLink}
+                  onChange={(imageLink) =>
+                    setNewEventForm((current) => ({ ...current, imageLink }))
+                  }
+                  onUploadingChange={setIsImageUploading}
+                  disabled={isSubmitting}
+                  active={isFormOpen}
+                />
                 <Box>
                   <Text fontSize="sm" fontWeight="500" mb="2">
                     Signup URL
@@ -422,6 +417,7 @@ export const RecurringEventsSection = ({
                     onClick={handleCreateEvent}
                     disabled={
                       isSubmitting ||
+                      isImageUploading ||
                       !newEventForm.name ||
                       !newEventForm.description ||
                       !newEventForm.location ||

@@ -18,7 +18,9 @@ const client = new CognitoIdentityProviderClient({
 });
 
 const USER_POOL_ID = process.env.AUTH_GOCWEBV3265A1135_USERPOOLID;
-if (!USER_POOL_ID) throw new Error("Missing environment-specific Cognito user pool");
+if (!USER_POOL_ID)
+  throw new Error("Missing environment-specific Cognito user pool");
+const { createEventImageUpload } = require("./event-image-upload");
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
@@ -71,14 +73,29 @@ exports.handler = async (event) => {
   };
 
   try {
-    context.caller = await requireAdminCaller(event);
+    const isImageUpload = path === "/event-image-upload" && method === "POST";
+    context.caller = await requireGroupCaller(
+      event,
+      isImageUpload ? "ATeam" : PROTECTED_ROLE,
+    );
     console.log("Admin request", context);
 
     // Parse body if present
     let body = {};
     if (event.body) {
-      body =
-        typeof event.body === "string" ? JSON.parse(event.body) : event.body;
+      try {
+        body =
+          typeof event.body === "string" ? JSON.parse(event.body) : event.body;
+      } catch {
+        throw new HttpError(400, "Request body must be valid JSON");
+      }
+    }
+    if (!body || typeof body !== "object" || Array.isArray(body)) {
+      throw new HttpError(400, "Request body must be an object");
+    }
+
+    if (isImageUpload) {
+      return respond(200, await createEventImageUpload(body, context));
     }
 
     // Route handling
@@ -107,28 +124,35 @@ exports.handler = async (event) => {
     }
 
     throw new HttpError(404, "Not found");
-  } catch (error) {
-    if (error instanceof HttpError) {
+  } catch (reason) {
+    const error =
+      reason instanceof Error
+        ? reason
+        : new Error("Admin request failed", { cause: reason });
+    if (error instanceof HttpError || error.statusCode === 400) {
       console.warn("Admin request rejected", {
         ...context,
         statusCode: error.statusCode,
         reason: error.message,
+        stack: error.stack,
       });
       return respond(error.statusCode, { error: error.message });
     }
     console.error("Admin request failed", context, error);
-    return respond(500, { error: error.message });
+    return respond(500, {
+      error: "Request failed. Please try again or contact the web team.",
+    });
   }
 };
 
 // API Gateway IAM auth only proves sign-in; group membership is checked live
 // so a removed admin loses access before their token expires.
-async function requireAdminCaller(event) {
+async function requireGroupCaller(event, requiredGroup) {
   const provider =
     event.requestContext?.identity?.cognitoAuthenticationProvider || "";
   const match = AUTH_PROVIDER_PATTERN.exec(provider);
   if (!match || match[1] !== USER_POOL_ID || match[2] !== USER_POOL_ID) {
-    throw new HttpError(403, "Admin access required");
+    throw new HttpError(403, `${requiredGroup} access required`);
   }
   const sub = match[3];
 
@@ -140,12 +164,12 @@ async function requireAdminCaller(event) {
     }),
   );
   if (Users.length !== 1) {
-    throw new HttpError(403, "Admin access required");
+    throw new HttpError(403, `${requiredGroup} access required`);
   }
 
   const groups = await listGroupsForUser(Users[0].Username);
-  if (!groups.includes(PROTECTED_ROLE)) {
-    throw new HttpError(403, "Admin access required");
+  if (!groups.includes(requiredGroup)) {
+    throw new HttpError(403, `${requiredGroup} access required`);
   }
   return sub;
 }

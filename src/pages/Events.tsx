@@ -1,3 +1,4 @@
+import { EventImageField } from "@/components/EventImageField";
 import { NavbarActiveKey } from "@/components/Navbar";
 import { RecurringEventsSection } from "@/components/RecurringEventsSection";
 import { listGOCEvents } from "@/graphql/queries";
@@ -143,6 +144,7 @@ const EventsBody: React.FC = () => {
     endDate: "",
     addToCalendar: false,
   });
+  const [isImageUploading, setIsImageUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [calendarStatus, setCalendarStatus] = useState<string>("");
   const [isGoogleAPILoaded, setIsGoogleAPILoaded] = useState(false);
@@ -369,22 +371,15 @@ const EventsBody: React.FC = () => {
                       required
                     />
                   </Box>
-                  <Box>
-                    <Text fontSize="sm" fontWeight="500" mb="2">
-                      Image URL *
-                    </Text>
-                    <Input
-                      value={newEventForm.imageLink}
-                      onChange={(e) =>
-                        setNewEventForm({
-                          ...newEventForm,
-                          imageLink: e.target.value,
-                        })
-                      }
-                      placeholder="Image URL"
-                      required
-                    />
-                  </Box>
+                  <EventImageField
+                    value={newEventForm.imageLink}
+                    onChange={(imageLink) =>
+                      setNewEventForm((current) => ({ ...current, imageLink }))
+                    }
+                    onUploadingChange={setIsImageUploading}
+                    disabled={isSubmitting}
+                    active={isFormOpen}
+                  />
                   <Flex gap="4" wrap="wrap">
                     <Box flex="1" minWidth="250px">
                       <Text fontSize="sm" fontWeight="500" mb="2">
@@ -481,6 +476,7 @@ const EventsBody: React.FC = () => {
                       onClick={handleCreateEvent}
                       disabled={
                         isSubmitting ||
+                        isImageUploading ||
                         !newEventForm.title ||
                         !newEventForm.description ||
                         !newEventForm.location ||

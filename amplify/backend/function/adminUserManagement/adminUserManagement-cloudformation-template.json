@@ -75,6 +75,9 @@
             },
             "AUTH_GOCWEBV3265A1135_USERPOOLID": {
               "Ref": "authgocwebv3265a1135UserPoolId"
+            },
+            "EVENT_IMAGES_BUCKET": {
+              "Ref": "EventImagesBucket"
             }
           }
         },
@@ -84,7 +87,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs22.x",
         "Layers": [],
         "Timeout": 25
       }
@@ -202,6 +205,122 @@
         ]
       },
       "DependsOn": "LambdaExecutionRole"
+    },
+    "EventImagesBucket": {
+      "Type": "AWS::S3::Bucket",
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain",
+      "Properties": {
+        "OwnershipControls": {
+          "Rules": [
+            {
+              "ObjectOwnership": "BucketOwnerEnforced"
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": false,
+          "RestrictPublicBuckets": false
+        },
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        },
+        "CorsConfiguration": {
+          "CorsRules": [
+            {
+              "AllowedHeaders": [
+                "*"
+              ],
+              "AllowedMethods": [
+                "GET",
+                "HEAD",
+                "POST"
+              ],
+              "AllowedOrigins": [
+                "https://graceoncampus.org",
+                "https://www.graceoncampus.org",
+                "https://gamma.graceoncampus.org",
+                "http://localhost:3000",
+                "http://127.0.0.1:3000"
+              ],
+              "MaxAge": 300
+            }
+          ]
+        }
+      }
+    },
+    "EventImagesBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "EventImagesBucket"
+        },
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": "s3:GetObject",
+              "Resource": {
+                "Fn::Sub": "${EventImagesBucket.Arn}/public/event-images/*"
+              }
+            },
+            {
+              "Effect": "Deny",
+              "Principal": "*",
+              "Action": "s3:*",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "EventImagesBucket",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Sub": "${EventImagesBucket.Arn}/*"
+                }
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "EventImageUploadPolicy": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "event-image-upload",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "s3:PutObject",
+              "Resource": {
+                "Fn::Sub": "${EventImagesBucket.Arn}/public/event-images/*"
+              }
+            }
+          ]
+        }
+      }
     }
   },
   "Outputs": {
@@ -234,6 +353,11 @@
           "LambdaExecutionRole",
           "Arn"
         ]
+      }
+    },
+    "EventImagesBucketName": {
+      "Value": {
+        "Ref": "EventImagesBucket"
       }
     }
   }

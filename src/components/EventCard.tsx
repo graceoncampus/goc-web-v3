@@ -1,3 +1,4 @@
+import { EventImageField } from "@/components/EventImageField";
 import {
   Box,
   Heading,
@@ -133,6 +134,7 @@ export const EventCard = ({
     addToGoogleCalendar:
       event.kind === "recurring" ? event.addToGoogleCalendar : false,
   });
+  const [isImageUploading, setIsImageUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formatDateTime = (dateString: string) =>
@@ -502,18 +504,15 @@ export const EventCard = ({
                   placeholder="Event location"
                 />
               </Box>
-              <Box>
-                <Text fontSize="sm" fontWeight="500" mb="2">
-                  Image URL *
-                </Text>
-                <Input
-                  value={editForm.imageLink}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, imageLink: e.target.value })
-                  }
-                  placeholder="Image URL"
-                />
-              </Box>
+              <EventImageField
+                value={editForm.imageLink}
+                onChange={(imageLink) =>
+                  setEditForm((current) => ({ ...current, imageLink }))
+                }
+                onUploadingChange={setIsImageUploading}
+                disabled={isSubmitting}
+                active={isEditOpen}
+              />
 
               {event.kind === "event" && (
                 <HStack gap="4">
@@ -640,7 +639,7 @@ export const EventCard = ({
                 backgroundColor="goc.blue"
                 color="white"
                 onClick={handleEdit}
-                disabled={isSubmitting}
+                disabled={isSubmitting || isImageUploading}
               >
                 {isSubmitting ? "Saving..." : "Save Changes"}
               </Button>
@@ -692,7 +691,7 @@ export const EventCard = ({
                 backgroundColor="red.500"
                 color="white"
                 onClick={handleDelete}
-                disabled={isSubmitting}
+                disabled={isSubmitting || isImageUploading}
               >
                 {isSubmitting ? "Deleting..." : "Delete"}
               </Button>
