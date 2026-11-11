@@ -16,6 +16,8 @@ The new bucket relies on S3 defaults for bucket-owner-enforced ownership (ACLs d
 
 ## Operational behavior
 
+If a photo upload fails, the form explains that the event was not saved and offers retry or manual URL entry. The selected file stays in the form.
+
 No database/schema change is required: existing imageLink fields store the permanent HTTPS object URL. Uploaded photos become public during submission. A failed event save can still leave an uploaded object; retry reuses it, and orphan cleanup and retention decisions remain manual. Metadata/type restrictions are not malware scanning or server-side image decoding. No SVG/HTML uploads are offered. The signing API is an extension of an existing Lambda/API to reuse its live group authorization; administration routes retain their current authorization.
 
 ## Validation and release

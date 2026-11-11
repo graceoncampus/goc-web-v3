@@ -82,7 +82,7 @@ export function useEventImage() {
       return uploadedUrl;
     } catch (reason) {
       setError(
-        "Image upload failed. Try submitting again, or remove the file and use an image URL.",
+        "Image upload failed, so the event wasn’t saved. Your photo is still selected. Try submitting again, or remove the photo and paste an image URL.",
       );
       throw reason instanceof Error
         ? reason
