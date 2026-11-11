@@ -1,4 +1,4 @@
-import { EventImageField } from "@/components/EventImageField";
+import { EventImageField, useEventImage } from "@/components/EventImageField";
 import { EventCard } from "@/components/EventCard";
 import GOCSpinner from "@/components/GOCSpinner";
 import { checkInATeam, checkIsLoggedIn } from "@/auth/CheckUser";
@@ -71,7 +71,8 @@ export const RecurringEventsSection = ({
   const [localInATeam, setLocalInATeam] = useState(false);
   const [localAuthChecked, setLocalAuthChecked] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isImageUploading, setIsImageUploading] = useState(false);
+  const eventImage = useEventImage();
+  const [saveError, setSaveError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [newEventForm, setNewEventForm] = useState(emptyRecurringEventForm);
 
@@ -132,8 +133,15 @@ export const RecurringEventsSection = ({
   }, [authChecked, fetchEvents]);
 
   const handleCreateEvent = async () => {
+    if (isSubmitting) return;
+    setSaveError("");
     setIsSubmitting(true);
+    let imageReady = false;
     try {
+      const imageLink = await eventImage.resolveUrl(newEventForm.imageLink);
+      imageReady = true;
+      if (eventImage.file)
+        setNewEventForm((current) => ({ ...current, imageLink }));
       const eventId = `recurring-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
 
       await client.graphql({
@@ -144,7 +152,7 @@ export const RecurringEventsSection = ({
             name: newEventForm.name,
             description: newEventForm.description,
             location: newEventForm.location,
-            imageLink: newEventForm.imageLink,
+            imageLink,
             time: newEventForm.time,
             signupLink: newEventForm.signupLink || undefined,
             signupDeadline: newEventForm.signupDeadline || undefined,
@@ -160,6 +168,8 @@ export const RecurringEventsSection = ({
 
       await fetchEvents();
     } catch (error) {
+      if (imageReady)
+        setSaveError("Could not save the event. Please try again.");
       console.error("Error creating recurring event:", error);
     } finally {
       setIsSubmitting(false);
@@ -249,7 +259,14 @@ export const RecurringEventsSection = ({
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => setIsFormOpen(!isFormOpen)}
+                disabled={isSubmitting}
+                onClick={() => {
+                  if (isFormOpen) {
+                    eventImage.clear();
+                    setSaveError("");
+                  }
+                  setIsFormOpen(!isFormOpen);
+                }}
               >
                 {isFormOpen ? "Hide" : "Show"} Form
               </Button>
@@ -322,14 +339,18 @@ export const RecurringEventsSection = ({
                     required
                   />
                 </Box>
+                {saveError && (
+                  <Text role="alert" color="red.600">
+                    {saveError}
+                  </Text>
+                )}
                 <EventImageField
                   value={newEventForm.imageLink}
                   onChange={(imageLink) =>
                     setNewEventForm((current) => ({ ...current, imageLink }))
                   }
-                  onUploadingChange={setIsImageUploading}
+                  image={eventImage}
                   disabled={isSubmitting}
-                  active={isFormOpen}
                 />
                 <Box>
                   <Text fontSize="sm" fontWeight="500" mb="2">
@@ -404,7 +425,10 @@ export const RecurringEventsSection = ({
                 <Flex gap="3" mt="2" justify="flex-end">
                   <Button
                     variant="ghost"
+                    disabled={isSubmitting}
                     onClick={() => {
+                      eventImage.clear();
+                      setSaveError("");
                       setIsFormOpen(false);
                       setNewEventForm(emptyRecurringEventForm);
                     }}
@@ -417,11 +441,10 @@ export const RecurringEventsSection = ({
                     onClick={handleCreateEvent}
                     disabled={
                       isSubmitting ||
-                      isImageUploading ||
                       !newEventForm.name ||
                       !newEventForm.description ||
                       !newEventForm.location ||
-                      !newEventForm.imageLink ||
+                      (!newEventForm.imageLink.trim() && !eventImage.file) ||
                       !newEventForm.time
                     }
                   >

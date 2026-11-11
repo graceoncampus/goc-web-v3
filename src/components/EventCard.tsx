@@ -1,4 +1,4 @@
-import { EventImageField } from "@/components/EventImageField";
+import { EventImageField, useEventImage } from "@/components/EventImageField";
 import {
   Box,
   Heading,
@@ -134,7 +134,8 @@ export const EventCard = ({
     addToGoogleCalendar:
       event.kind === "recurring" ? event.addToGoogleCalendar : false,
   });
-  const [isImageUploading, setIsImageUploading] = useState(false);
+  const eventImage = useEventImage();
+  const [saveError, setSaveError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formatDateTime = (dateString: string) =>
@@ -182,16 +183,30 @@ export const EventCard = ({
   const timeIcon = event.kind === "event" ? MdCalendarToday : MdAccessTime;
   const canViewGallery = canViewEventGallery(event, galleryAccessContext);
 
+  const closeEdit = () => {
+    if (isSubmitting) return;
+    eventImage.clear();
+    setSaveError("");
+    onEditClose();
+  };
+
   const handleEdit = async () => {
+    if (isSubmitting) return;
+    setSaveError("");
     setIsSubmitting(true);
+    let imageReady = false;
     try {
+      const imageLink = await eventImage.resolveUrl(editForm.imageLink);
+      imageReady = true;
+      if (eventImage.file)
+        setEditForm((current) => ({ ...current, imageLink }));
       if (event.kind === "event") {
         const updateData: any = {
           id: event.id,
           title: editForm.title,
           description: editForm.description,
           location: editForm.location,
-          imageLink: editForm.imageLink,
+          imageLink,
           active: editForm.active,
           startDate: editForm.startDate,
           endDate: editForm.endDate || undefined,
@@ -217,7 +232,7 @@ export const EventCard = ({
               name: editForm.title,
               description: editForm.description,
               location: editForm.location,
-              imageLink: editForm.imageLink,
+              imageLink,
               time: editForm.time,
               signupLink: editForm.signupLink || undefined,
               signupDeadline: editForm.signupDeadline || undefined,
@@ -230,6 +245,8 @@ export const EventCard = ({
       onEditClose();
       onEventUpdate();
     } catch (error) {
+      if (imageReady)
+        setSaveError("Could not save the event. Please try again.");
       console.error("Error updating event:", error);
     } finally {
       setIsSubmitting(false);
@@ -428,7 +445,7 @@ export const EventCard = ({
           alignItems="center"
           justifyContent="center"
           onClick={(e) => {
-            if (e.target === e.currentTarget) onEditClose();
+            if (e.target === e.currentTarget) closeEdit();
           }}
         >
           <Box
@@ -445,7 +462,7 @@ export const EventCard = ({
               <Heading size="md">
                 Edit {event.kind === "event" ? "Event" : "Recurring Event"}
               </Heading>
-              <CloseButton onClick={onEditClose} />
+              <CloseButton disabled={isSubmitting} onClick={closeEdit} />
             </Flex>
 
             <Stack gap="4">
@@ -504,14 +521,18 @@ export const EventCard = ({
                   placeholder="Event location"
                 />
               </Box>
+              {saveError && (
+                <Text role="alert" color="red.600">
+                  {saveError}
+                </Text>
+              )}
               <EventImageField
                 value={editForm.imageLink}
                 onChange={(imageLink) =>
                   setEditForm((current) => ({ ...current, imageLink }))
                 }
-                onUploadingChange={setIsImageUploading}
+                image={eventImage}
                 disabled={isSubmitting}
-                active={isEditOpen}
               />
 
               {event.kind === "event" && (
@@ -632,14 +653,18 @@ export const EventCard = ({
                 <Icon as={MdDelete} boxSize="4" mr="1" />
                 Delete
               </Button>
-              <Button variant="ghost" onClick={onEditClose}>
+              <Button
+                variant="ghost"
+                disabled={isSubmitting}
+                onClick={closeEdit}
+              >
                 Cancel
               </Button>
               <Button
                 backgroundColor="goc.blue"
                 color="white"
                 onClick={handleEdit}
-                disabled={isSubmitting || isImageUploading}
+                disabled={isSubmitting}
               >
                 {isSubmitting ? "Saving..." : "Save Changes"}
               </Button>
@@ -691,7 +716,7 @@ export const EventCard = ({
                 backgroundColor="red.500"
                 color="white"
                 onClick={handleDelete}
-                disabled={isSubmitting || isImageUploading}
+                disabled={isSubmitting}
               >
                 {isSubmitting ? "Deleting..." : "Delete"}
               </Button>

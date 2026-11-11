@@ -1,4 +1,4 @@
-import { EventImageField } from "@/components/EventImageField";
+import { EventImageField, useEventImage } from "@/components/EventImageField";
 import { NavbarActiveKey } from "@/components/Navbar";
 import { RecurringEventsSection } from "@/components/RecurringEventsSection";
 import { listGOCEvents } from "@/graphql/queries";
@@ -144,14 +144,22 @@ const EventsBody: React.FC = () => {
     endDate: "",
     addToCalendar: false,
   });
-  const [isImageUploading, setIsImageUploading] = useState(false);
+  const eventImage = useEventImage();
+  const [saveError, setSaveError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [calendarStatus, setCalendarStatus] = useState<string>("");
   const [isGoogleAPILoaded, setIsGoogleAPILoaded] = useState(false);
 
   const handleCreateEvent = async () => {
+    if (isSubmitting) return;
+    setSaveError("");
     setIsSubmitting(true);
+    let imageReady = false;
     try {
+      const imageLink = await eventImage.resolveUrl(newEventForm.imageLink);
+      imageReady = true;
+      if (eventImage.file)
+        setNewEventForm((current) => ({ ...current, imageLink }));
       // Generate a unique ID for the event
       const eventId = `event-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
 
@@ -171,7 +179,7 @@ const EventsBody: React.FC = () => {
             title: newEventForm.title,
             description: newEventForm.description,
             location: newEventForm.location,
-            imageLink: newEventForm.imageLink,
+            imageLink,
             startDate: startDateISO,
             endDate: endDateISO,
             price: 0,
@@ -196,7 +204,7 @@ const EventsBody: React.FC = () => {
             startDate: startDateISO,
             endDate: endDateISO || startDateISO,
             price: 0,
-            imageLink: newEventForm.imageLink,
+            imageLink,
           };
 
           try {
@@ -246,6 +254,8 @@ const EventsBody: React.FC = () => {
 
       await fetchEvents();
     } catch (error) {
+      if (imageReady)
+        setSaveError("Could not save the event. Please try again.");
       console.error("Error creating event:", error);
     } finally {
       setIsSubmitting(false);
@@ -314,7 +324,14 @@ const EventsBody: React.FC = () => {
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => setIsFormOpen(!isFormOpen)}
+                  disabled={isSubmitting}
+                  onClick={() => {
+                    if (isFormOpen) {
+                      eventImage.clear();
+                      setSaveError("");
+                    }
+                    setIsFormOpen(!isFormOpen);
+                  }}
                 >
                   {isFormOpen ? "Hide" : "Show"} Form
                 </Button>
@@ -371,14 +388,18 @@ const EventsBody: React.FC = () => {
                       required
                     />
                   </Box>
+                  {saveError && (
+                    <Text role="alert" color="red.600">
+                      {saveError}
+                    </Text>
+                  )}
                   <EventImageField
                     value={newEventForm.imageLink}
                     onChange={(imageLink) =>
                       setNewEventForm((current) => ({ ...current, imageLink }))
                     }
-                    onUploadingChange={setIsImageUploading}
+                    image={eventImage}
                     disabled={isSubmitting}
-                    active={isFormOpen}
                   />
                   <Flex gap="4" wrap="wrap">
                     <Box flex="1" minWidth="250px">
@@ -454,7 +475,10 @@ const EventsBody: React.FC = () => {
                   <Flex gap="3" mt="2" justify="flex-end">
                     <Button
                       variant="ghost"
+                      disabled={isSubmitting}
                       onClick={() => {
+                        eventImage.clear();
+                        setSaveError("");
                         setIsFormOpen(false);
                         setCalendarStatus("");
                         setNewEventForm({
@@ -476,11 +500,10 @@ const EventsBody: React.FC = () => {
                       onClick={handleCreateEvent}
                       disabled={
                         isSubmitting ||
-                        isImageUploading ||
                         !newEventForm.title ||
                         !newEventForm.description ||
                         !newEventForm.location ||
-                        !newEventForm.imageLink ||
+                        (!newEventForm.imageLink.trim() && !eventImage.file) ||
                         !newEventForm.startDate
                       }
                     >

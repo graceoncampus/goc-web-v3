@@ -6,7 +6,7 @@ Help ATeam publish accurate event information by uploading an event image within
 
 ## Design
 
-Add an Upload image control above the editable Image URL field in regular-event creation, recurring-event creation, and the shared edit dialog. Accept JPEG, PNG, WebP, and GIF, up to 10 MiB. Upload immediately after selection; fill the URL only after S3 acknowledges success. Keep the old URL on failure. Disable saving while uploading and ignore late results after a form is closed. Show upload progress/status and actionable errors.
+Add a Choose image control above the editable Image URL field in regular-event creation, recurring-event creation, and the shared edit dialog. Accept JPEG, PNG, WebP, and GIF, up to 10 MiB. Selection keeps the file in the browser. Create Event or Save Changes uploads it directly to S3 before saving the event with the returned URL. Closing before submission discards the selection. A failed upload prevents the event save and keeps the file available for retry. If storage succeeds but the event save fails, retry uses the returned URL without uploading again. Manual URL entry replaces a pending selection.
 
 The browser requests a five-minute presigned POST from the IAM-authenticated adminUserManagement API at POST /event-image-upload. The Lambda checks live ATeam membership using the environment's Cognito pool. Existing user/group administration routes still require Admin. Lambda signs a unique public/event-images/<uuid>.<extension> key with an exact content type and a 1-byte–10-MiB policy range. Image bytes travel directly from the browser to S3; AWS credentials are never embedded in frontend source.
 
@@ -16,7 +16,7 @@ The new bucket relies on S3 defaults for bucket-owner-enforced ownership (ACLs d
 
 ## Operational behavior
 
-No database/schema change is required: existing imageLink fields store the permanent HTTPS object URL. Uploaded photos are public and may exist before the event is saved. Cancelling, replacing, or deleting an event does not delete images; orphan cleanup and retention decisions remain manual. Metadata/type restrictions are not malware scanning or server-side image decoding. No SVG/HTML uploads are offered. The signing API is an extension of an existing Lambda/API to reuse its live group authorization; administration routes retain their current authorization.
+No database/schema change is required: existing imageLink fields store the permanent HTTPS object URL. Uploaded photos become public during submission. A failed event save can still leave an uploaded object; retry reuses it, and orphan cleanup and retention decisions remain manual. Metadata/type restrictions are not malware scanning or server-side image decoding. No SVG/HTML uploads are offered. The signing API is an extension of an existing Lambda/API to reuse its live group authorization; administration routes retain their current authorization.
 
 ## Validation and release
 
