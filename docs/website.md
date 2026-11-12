@@ -2,7 +2,7 @@
 
 The website places Christ first, welcomes students seeking Him, makes GOC information accessible, and supports the body's ministry work. Every new feature must support personal service, care, and judgment. Preserve spiritually meaningful human responsibilities even when automation could improve efficiency or outcomes. The rides team's car organization is an example and precedent for this philosophy, which applies across all ministries and features. See [AGENTS.md](../AGENTS.md) for mission and engineering requirements.
 
-Routes below capture the local Git dev `src/App.tsx`. Groupings describe information hierarchy; they are not a verified inventory of navbar order or access permissions. The main-based Amplify publication preserves main's frontend: main and the gamma website built from it do not yet include the gallery or admin routes below, and main includes a `/recurring-events` redirect to `/events`. Publishing backend definitions alone does not enable the missing frontend pages. Page descriptions are an initial purpose/content inventory to expand when inspecting each page.
+Routes below capture the local Git dev `src/App.tsx`. Groupings describe information hierarchy; they are not a verified inventory of navbar order or access permissions. The main-based Amplify publication preserves main's frontend: main and the gamma website built from it do not yet include the gallery route below; gamma includes `/admin` from `feature/admin-ui`, and main includes a `/recurring-events` redirect to `/events`. Publishing backend definitions alone does not enable the missing frontend pages. Page descriptions are an initial purpose/content inventory to expand when inspecting each page.
 
 | Area | Route | Purpose and content |
 | --- | --- | --- |
@@ -21,7 +21,7 @@ Routes below capture the local Git dev `src/App.tsx`. Groupings describe informa
 | External resources | `/links` | Redirect to GOC's Linktree. |
 | Account | `/login`, `/signup`, `/reset` | Sign-in, account creation, password reset. |
 | Account | `/profile` | Member profile. |
-| Administration | `/admin` | User/group administration in Git dev; checks `Admin` membership. Absent from the preserved main frontend. |
+| Administration | `/admin` | User/group administration for `Admin` members; see [admin user management](features/admin-user-management.md). On gamma via `feature/admin-ui`; not yet on main. |
 | Redirect | `/recurring-events` | Main redirects this older URL to `/events`. |
 | Fallback | Unmatched routes | Not-found page. |
 

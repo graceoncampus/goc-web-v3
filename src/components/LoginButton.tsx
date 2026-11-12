@@ -7,8 +7,10 @@ import {
 } from "@/components/ui/menu";
 import { signOut } from "aws-amplify/auth";
 import { FaUser } from "react-icons/fa6";
-import { MdLogout } from "react-icons/md";
+import { MdAdminPanelSettings, MdLogout } from "react-icons/md";
 import { RiArrowDropDownLine } from "react-icons/ri";
+import { useEffect, useState } from "react";
+import { checkIsAdmin } from "@/auth/CheckUser";
 
 interface LoginButtonProps {
   username: string | null | undefined;
@@ -20,6 +22,13 @@ const LoginButton = ({ username, drawerOpen = false }: LoginButtonProps) => {
   const isMobile = window.matchMedia(
     "(hover: none) and (pointer: coarse)",
   ).matches;
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (username) {
+      checkIsAdmin(setIsAdmin);
+    }
+  }, [username]);
 
   return (
     <>
@@ -80,6 +89,14 @@ const LoginButton = ({ username, drawerOpen = false }: LoginButtonProps) => {
                 Profile
               </Link>
             </MenuItem>
+            {isAdmin && (
+              <MenuItem asChild value="Admin">
+                <Link href="/admin" color={"white"} cursor={"pointer"}>
+                  <MdAdminPanelSettings />
+                  Admin
+                </Link>
+              </MenuItem>
+            )}
             <MenuItem asChild value="Log out" color={"white"}>
               <Link
                 cursor={"pointer"}
